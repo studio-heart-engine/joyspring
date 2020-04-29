@@ -1,8 +1,9 @@
 extends KinematicBody2D
 
-export var speed = 200
-export var acc = 20
-var x_vel = 0
+export var speed = 500 # how fast he can run
+export var acc = 50 # how fast he can change directions
+export var gravity = 50
+onready var velocity = Vector2.ZERO
 
 func _physics_process(delta):
 	var dir = 0
@@ -12,14 +13,18 @@ func _physics_process(delta):
 		dir -= 1
 	
 	if dir == 1:
-		x_vel = min(x_vel + acc, speed)
+		velocity.x = min(velocity.x + acc, speed)
 	elif dir == -1:
-		x_vel = max(x_vel - acc, -speed)
-	elif x_vel > 0:
-		x_vel -= acc
-	elif x_vel < 0:
-		x_vel += acc
+		velocity.x = max(velocity.x - acc, -speed)
+	elif velocity.x > 0:
+		velocity.x -= acc
+	elif velocity.x < 0:
+		velocity.x += acc
 	
-	print(x_vel)
+	if is_on_floor() and Input.is_action_pressed("ui_up"):
+		velocity.y = -20 * gravity
 	
-	move_and_slide(x_vel * Vector2.RIGHT, Vector2.UP)
+	velocity.y += gravity
+	
+	velocity = move_and_slide(velocity, Vector2.UP)
+	
