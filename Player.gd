@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
-export var speed = 500 # how fast he can run
-export var acc = 50 # how fast he can change directions
+export var speed = 200 # how fast he can run
+export var acc = 20 # how fast he can change directions
 export var gravity = 50
 
 onready var velocity = Vector2.ZERO
@@ -19,10 +19,10 @@ func _physics_process(delta):
 	
 	if dir == 1:
 		velocity.x = min(velocity.x + acc, speed)
-		animated_sprite.scale.x = 5
+		$AnimatedSprite/Sprite.flip_h = false
 	elif dir == -1:
 		velocity.x = max(velocity.x - acc, -speed)
-		animated_sprite.scale.x = -5
+		$AnimatedSprite/Sprite.flip_h = true
 	elif velocity.x > 0:
 		velocity.x -= acc
 	elif velocity.x < 0:
@@ -39,9 +39,6 @@ func _physics_process(delta):
 	velocity.y += gravity
 	
 	velocity = move_and_slide(velocity, Vector2.UP)
-	
-	if particle_emitter.emitting:
-		particle_emitter.process_material.initial_velocity = velocity.x / 1.5
 	
 
 func _on_Feet_body_entered(body):
