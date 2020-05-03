@@ -3,10 +3,14 @@ extends KinematicBody2D
 export var speed = 200 # how fast he can run
 export var acc = 20 # how fast he can change directions
 export var gravity = 50
+var Coin = preload("res://Coin.tscn")
 
 onready var velocity = Vector2.ZERO
-onready var animated_sprite = $"AnimatedSprite"
+onready var anim_player = $AnimatedSprite/AnimationPlayer
 onready var particle_emitter = $Particles
+
+
+
 
 func _physics_process(delta):
 	var dir = 0
@@ -16,6 +20,7 @@ func _physics_process(delta):
 		dir -= 1
 	
 	particle_emitter.emitting = dir != 0 && is_on_floor()
+	anim_player.play("stand" if dir == 0 else "run")
 	
 	if dir == 1:
 		velocity.x = min(velocity.x + acc, speed)
@@ -39,10 +44,3 @@ func _physics_process(delta):
 	velocity.y += gravity
 	
 	velocity = move_and_slide(velocity, Vector2.UP)
-	
-
-func _on_Feet_body_entered(body):
-	particle_emitter.emitting = true
-
-func _on_Feet_body_exited(body):
-	particle_emitter.emitting = false
