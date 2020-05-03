@@ -35,11 +35,11 @@ position = Vector2( 0, -32 )
 scale = Vector2( 4, 4 )
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( 0, -32 )
 shape = SubResource( 1 )
 
 [node name="Camera" type="Camera2D" parent="."]
-visible = false
 current = true
 limit_left = 0
 smoothing_enabled = true
@@ -56,9 +56,18 @@ local_coords = false
 process_material = SubResource( 4 )
 
 [node name="Light2D" type="Light2D" parent="."]
+visible = false
 position = Vector2( 0, -32 )
 texture = ExtResource( 3 )
 range_layer_min = -1
 shadow_enabled = true
+shadow_filter = 5
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Hitbox"]
+visible = false
+position = Vector2( 0, -32 )
+shape = SubResource( 1 )
 
 [editable path="AnimatedSprite"]
