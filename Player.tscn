@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://Riley.tscn" type="PackedScene" id=2]
-[ext_resource path="res://WarmLight.tscn" type="PackedScene" id=3]
+[ext_resource path="res://white-radial-gradient.png" type="Texture" id=3]
 
 [sub_resource type="Animation" id=1]
 length = 0.7
@@ -120,8 +120,15 @@ visible = false
 position = Vector2( 0, -32 )
 shape = SubResource( 4 )
 
-[node name="Light" parent="." instance=ExtResource( 3 )]
+[node name="Light2D" type="Light2D" parent="."]
 position = Vector2( 0, -32 )
-energy = 0.3
+texture = ExtResource( 3 )
+color = Color( 1, 0.631373, 0, 1 )
+energy = 1.2
+range_layer_min = -1
+shadow_enabled = true
+shadow_gradient_length = 0.1
+shadow_filter = 5
+shadow_filter_smooth = 2.0
 
 [editable path="AnimatedSprite"]
