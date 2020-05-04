@@ -63,13 +63,13 @@ colors = PoolColorArray( 0.890196, 0.890196, 0.890196, 1, 0.890196, 0.890196, 0.
 [sub_resource type="GradientTexture" id=6]
 gradient = SubResource( 5 )
 
-[sub_resource type="Curve" id=8]
+[sub_resource type="Curve" id=7]
 _data = [ Vector2( 0.00154813, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.926675, 0.499417 ), 0.0501548, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=9]
-curve = SubResource( 8 )
+[sub_resource type="CurveTexture" id=8]
+curve = SubResource( 7 )
 
-[sub_resource type="ParticlesMaterial" id=7]
+[sub_resource type="ParticlesMaterial" id=9]
 emission_shape = 2
 emission_box_extents = Vector3( 16, 5, 0 )
 flag_disable_z = true
@@ -80,7 +80,7 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 5.0
 scale_random = 0.3
-scale_curve = SubResource( 9 )
+scale_curve = SubResource( 8 )
 color_ramp = SubResource( 6 )
 
 [node name="Player" type="KinematicBody2D"]
@@ -109,7 +109,6 @@ visible = false
 current = true
 limit_left = 0
 smoothing_enabled = true
-smoothing_speed = 10.0
 drag_margin_left = 0.4
 drag_margin_right = 0.0
 editor_draw_limits = true
@@ -121,7 +120,7 @@ amount = 10
 lifetime = 0.4
 randomness = 1.0
 local_coords = false
-process_material = SubResource( 7 )
+process_material = SubResource( 9 )
 texture = ExtResource( 3 )
 
 [node name="Hitbox" type="Area2D" parent="."]
