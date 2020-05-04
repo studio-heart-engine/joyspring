@@ -10,7 +10,6 @@ onready var velocity = Vector2.ZERO
 onready var anim_player = $AnimatedSprite/AnimationPlayer
 onready var squish_stretch_player = $AnimatedSprite/SquishStretchPlayer
 onready var particle_emitter = $Particles
-onready var raycast = $RayCast
 onready var was_on_floor = is_on_floor()
 
 func _physics_process(delta):
