@@ -1,56 +1,40 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
-[ext_resource path="res://Riley.tscn" type="PackedScene" id=2]
+[ext_resource path="res://riley.json" type="PackedScene" id=2]
 [ext_resource path="res://graphics/dust.png" type="Texture" id=3]
 [ext_resource path="res://white-radial-gradient.png" type="Texture" id=4]
 
-[sub_resource type="Animation" id=1]
-length = 0.7
-loop = true
+[sub_resource type="Animation" id=10]
+resource_name = "squish"
+length = 0.14
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:region_rect")
-tracks/0/interp = 0
+tracks/0/path = NodePath("Sprite:scale")
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
-tracks/0/imported = true
+tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.15, 0.35, 0.5 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 1,
-"values": [ Rect2( 128, 0, 16, 16 ), Rect2( 144, 0, 16, 16 ), Rect2( 160, 0, 16, 16 ), Rect2( 176, 0, 16, 16 ) ]
+"times": PoolRealArray( 0, 0.07, 0.14 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.1, 0.9 ), Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=2]
-length = 1.9
-loop = true
+[sub_resource type="Animation" id=11]
+resource_name = "stretch"
+length = 0.2
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:region_rect")
-tracks/0/interp = 0
+tracks/0/path = NodePath("Sprite:scale")
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
-tracks/0/imported = true
+tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.8, 0.9, 1.7 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 1,
-"values": [ Rect2( 0, 0, 16, 16 ), Rect2( 16, 0, 16, 16 ), Rect2( 32, 0, 16, 16 ), Rect2( 48, 0, 16, 16 ) ]
-}
-
-[sub_resource type="Animation" id=3]
-length = 0.95
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:region_rect")
-tracks/0/interp = 0
-tracks/0/loop_wrap = true
-tracks/0/imported = true
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.475, 0.675 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 1,
-"values": [ Rect2( 64, 0, 16, 16 ), Rect2( 80, 0, 16, 16 ), Rect2( 96, 0, 16, 16 ), Rect2( 112, 0, 16, 16 ) ]
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 0.8, 1.2 ), Vector2( 1, 1 ) ]
 }
 
 [sub_resource type="RectangleShape2D" id=4]
@@ -93,12 +77,13 @@ scale = Vector2( 4, 4 )
 
 [node name="Sprite" parent="AnimatedSprite" index="0"]
 light_mask = 0
-scale = Vector2( 1.11429, 0.885714 )
+offset = Vector2( 0, -8 )
+flip_h = true
+region_rect = Rect2( 256, 0, 16, 16 )
 
-[node name="AnimationPlayer" parent="AnimatedSprite" index="1"]
-anims/run = SubResource( 1 )
-anims/stand = SubResource( 2 )
-anims/walk = SubResource( 3 )
+[node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
+anims/squish = SubResource( 10 )
+anims/stretch = SubResource( 11 )
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 visible = false
@@ -116,6 +101,7 @@ editor_draw_limits = true
 editor_draw_drag_margin = true
 
 [node name="Particles" type="Particles2D" parent="."]
+visible = false
 light_mask = 0
 amount = 10
 lifetime = 0.4
@@ -128,6 +114,7 @@ texture = ExtResource( 3 )
 visible = false
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Hitbox"]
+visible = false
 position = Vector2( 0, -32 )
 shape = SubResource( 4 )
 

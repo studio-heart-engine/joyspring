@@ -25,13 +25,15 @@ func _physics_process(delta):
 	if not is_on_floor():
 		anim = "jump"
 	elif dir == 0:
-		anim = "stand"
+		anim = "idle"
 	elif Input.is_action_pressed("sneak"):
 		anim = "walk"
 	else:
 		anim = "run"
 	
 	anim_player.play(anim)
+	if anim == "jump" and velocity.y == 0:
+		anim_player.seek(0.5)
 	
 	if dir == 1:
 		velocity.x = min(velocity.x + acc, get_move_vel())
