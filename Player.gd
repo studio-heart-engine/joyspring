@@ -23,7 +23,7 @@ func _physics_process(delta):
 	
 	var anim = ""
 	if not is_on_floor():
-		anim = "run"
+		anim = "jump"
 	elif dir == 0:
 		anim = "stand"
 	elif Input.is_action_pressed("sneak"):
