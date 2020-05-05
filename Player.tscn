@@ -5,7 +5,7 @@
 [ext_resource path="res://graphics/dust.png" type="Texture" id=3]
 [ext_resource path="res://white-radial-gradient.png" type="Texture" id=4]
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=1]
 resource_name = "squish"
 length = 0.14
 tracks/0/type = "value"
@@ -21,7 +21,7 @@ tracks/0/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 1.2, 0.9 ), Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=2]
 resource_name = "stretch"
 length = 0.2
 tracks/0/type = "value"
@@ -37,23 +37,23 @@ tracks/0/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 0.7, 1.4 ), Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 18.9298, 31.7632 )
 
-[sub_resource type="Gradient" id=5]
+[sub_resource type="Gradient" id=4]
 offsets = PoolRealArray( 0.00892857, 1 )
 colors = PoolColorArray( 0.890196, 0.890196, 0.890196, 1, 0.890196, 0.890196, 0.890196, 1 )
 
-[sub_resource type="GradientTexture" id=6]
-gradient = SubResource( 5 )
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
 
-[sub_resource type="Curve" id=7]
+[sub_resource type="Curve" id=6]
 _data = [ Vector2( 0.00154813, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.926675, 0.499417 ), 0.0501548, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=8]
-curve = SubResource( 7 )
+[sub_resource type="CurveTexture" id=7]
+curve = SubResource( 6 )
 
-[sub_resource type="ParticlesMaterial" id=9]
+[sub_resource type="ParticlesMaterial" id=8]
 emission_shape = 2
 emission_box_extents = Vector3( 16, 5, 0 )
 flag_disable_z = true
@@ -64,8 +64,8 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 5.0
 scale_random = 0.3
-scale_curve = SubResource( 8 )
-color_ramp = SubResource( 6 )
+scale_curve = SubResource( 7 )
+color_ramp = SubResource( 5 )
 
 [node name="Player" type="KinematicBody2D"]
 light_mask = 0
@@ -77,19 +77,18 @@ scale = Vector2( 4, 4 )
 
 [node name="Sprite" parent="AnimatedSprite" index="0"]
 light_mask = 0
-scale = Vector2( 1.06589, 0.934111 )
 offset = Vector2( 0, -8 )
 flip_h = true
 region_rect = Rect2( 256, 0, 16, 16 )
 
 [node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
-anims/squish = SubResource( 10 )
-anims/stretch = SubResource( 11 )
+anims/squish = SubResource( 1 )
+anims/stretch = SubResource( 2 )
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 0, -32 )
-shape = SubResource( 4 )
+shape = SubResource( 3 )
 
 [node name="Camera" type="Camera2D" parent="."]
 visible = false
@@ -108,7 +107,7 @@ amount = 10
 lifetime = 0.4
 randomness = 1.0
 local_coords = false
-process_material = SubResource( 9 )
+process_material = SubResource( 8 )
 texture = ExtResource( 3 )
 
 [node name="Hitbox" type="Area2D" parent="."]
@@ -117,7 +116,7 @@ visible = false
 [node name="CollisionShape" type="CollisionShape2D" parent="Hitbox"]
 visible = false
 position = Vector2( 0, -32 )
-shape = SubResource( 4 )
+shape = SubResource( 3 )
 
 [node name="Light2D" type="Light2D" parent="."]
 visible = false
