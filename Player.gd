@@ -11,6 +11,8 @@ onready var anim_player = $AnimatedSprite/AnimationPlayer
 onready var squish_stretch_player = $AnimatedSprite/SquishStretchPlayer
 onready var particle_emitter = $Particles
 onready var was_on_floor = is_on_floor()
+onready var was_falling = false
+onready var is_falling = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
@@ -25,18 +27,6 @@ func _physics_process(delta):
 	
 	particle_emitter.emitting = dir != 0 and is_on_floor()
 	
-	var anim = ""
-	if !is_on_floor():
-		anim = "jump"
-	elif dir == 0:
-		anim = "idle"
-	elif Input.is_action_pressed("sneak"):
-		anim = "walk"
-	else:
-		anim = "run"
-	
-	anim_player.play(anim)
-	
 	if dir == 1:
 		velocity.x = min(velocity.x + acc, get_move_vel())
 		$AnimatedSprite/Sprite.flip_h = false
@@ -49,11 +39,26 @@ func _physics_process(delta):
 		velocity.x += acc
 	
 	if is_on_floor():
+		var anim = ""
+		if dir == 0:
+			anim = "idle"
+		elif Input.is_action_pressed("sneak"):
+			anim = "walk"
+		else:
+			anim = "run"
+		anim_player.play(anim)
+		
 		if Input.is_action_pressed("jump"):
 			velocity.y = -jump_height * gravity
 			squish_stretch_player.play("stretch")
-		elif not was_on_floor:
+			anim_player.play("jump")
+		elif !was_on_floor:
 			squish_stretch_player.play("squish")
+	else:
+		is_falling = velocity.y > 0
+		if is_falling and (!was_falling or was_on_floor):
+			anim_player.play("fall")
+		was_falling = is_falling
 	
 	was_on_floor = is_on_floor()
 	
