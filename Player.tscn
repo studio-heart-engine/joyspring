@@ -1,9 +1,9 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://riley.json" type="PackedScene" id=2]
-[ext_resource path="res://graphics/dust.png" type="Texture" id=3]
-[ext_resource path="res://white-radial-gradient.png" type="Texture" id=4]
+[ext_resource path="res://white-radial-gradient.png" type="Texture" id=3]
+[ext_resource path="res://Dust.tscn" type="PackedScene" id=4]
 
 [sub_resource type="Animation" id=1]
 resource_name = "squish"
@@ -40,33 +40,6 @@ tracks/0/keys = {
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 18.9298, 31.7632 )
 
-[sub_resource type="Gradient" id=4]
-offsets = PoolRealArray( 0.00892857, 1 )
-colors = PoolColorArray( 0.890196, 0.890196, 0.890196, 1, 0.890196, 0.890196, 0.890196, 1 )
-
-[sub_resource type="GradientTexture" id=5]
-gradient = SubResource( 4 )
-
-[sub_resource type="Curve" id=6]
-_data = [ Vector2( 0.00154813, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.926675, 0.499417 ), 0.0501548, 0.0, 0, 0 ]
-
-[sub_resource type="CurveTexture" id=7]
-curve = SubResource( 6 )
-
-[sub_resource type="ParticlesMaterial" id=8]
-emission_shape = 2
-emission_box_extents = Vector3( 16, 5, 0 )
-flag_disable_z = true
-gravity = Vector3( 0, 30, 0 )
-angular_velocity = 0.0
-angular_velocity_random = 1.0
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-scale = 5.0
-scale_random = 0.3
-scale_curve = SubResource( 7 )
-color_ramp = SubResource( 5 )
-
 [node name="Player" type="KinematicBody2D"]
 light_mask = 0
 collision_mask = 14
@@ -99,16 +72,6 @@ drag_margin_right = 0.0
 editor_draw_limits = true
 editor_draw_drag_margin = true
 
-[node name="Particles" type="Particles2D" parent="."]
-visible = false
-light_mask = 0
-amount = 10
-lifetime = 0.4
-randomness = 1.0
-local_coords = false
-process_material = SubResource( 8 )
-texture = ExtResource( 3 )
-
 [node name="Hitbox" type="Area2D" parent="."]
 visible = false
 
@@ -120,7 +83,7 @@ shape = SubResource( 3 )
 [node name="Light2D" type="Light2D" parent="."]
 visible = false
 position = Vector2( 0, -32 )
-texture = ExtResource( 4 )
+texture = ExtResource( 3 )
 color = Color( 1, 0.631373, 0, 1 )
 energy = 1.2
 range_layer_min = -1
@@ -129,4 +92,8 @@ shadow_gradient_length = 2.0
 shadow_filter = 5
 shadow_filter_smooth = 10.0
 
+[node name="Dust" parent="." instance=ExtResource( 4 )]
+
 [editable path="AnimatedSprite"]
+
+[editable path="Dust"]
