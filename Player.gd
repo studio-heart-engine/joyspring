@@ -6,18 +6,16 @@ export var walk_slowness = 0.3
 export var gravity = 50
 export var jump_height = 20
 
+onready var LandingDust = preload("res://LandingDust.tscn")
 onready var velocity = Vector2.ZERO
 onready var anim_player = $AnimatedSprite/AnimationPlayer
 onready var squish_stretch_player = $AnimatedSprite/SquishStretchPlayer
-onready var dust_anim = $"../Dust/AnimationPlayer"
-onready var dust = $"../Dust/Sprite"
 onready var was_on_floor = is_on_floor()
 onready var was_falling = false
 onready var is_falling = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	dust_anim.stop()
 
 func _physics_process(delta):
 	
@@ -50,9 +48,7 @@ func _physics_process(delta):
 		
 		if !was_on_floor:
 			squish_stretch_player.play("squish")
-			dust_anim.stop()
-			dust.position = position
-			dust_anim.play(["dust1", "dust2"][randi() % 2])
+			get_parent().add_child(LandingDust.instance())
 		
 		if Input.is_action_pressed("jump"):
 			velocity.y = -jump_height * gravity
