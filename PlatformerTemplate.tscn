@@ -101,7 +101,7 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 4/shapes = [  ]
 4/z_index = 0
 
-[sub_resource type="DynamicFont" id=23]
+[sub_resource type="DynamicFont" id=31]
 size = 20
 font_data = ExtResource( 8 )
 
@@ -161,11 +161,12 @@ __meta__ = {
 
 [node name="Player" parent="." instance=ExtResource( 5 )]
 light_mask = 2
-position = Vector2( 101, 377 )
+position = Vector2( 30, 400 )
 speed = 300
 
 [node name="Sprite" parent="Player/AnimatedSprite" index="0"]
-region_rect = Rect2( 256, 0, 16, 16 )
+flip_h = false
+region_rect = Rect2( 192, 0, 16, 16 )
 
 [node name="Camera" parent="Player" index="2"]
 limit_right = 2000
@@ -184,28 +185,9 @@ shadow_gradient_length = 3.0
 shadow_filter_smooth = 5.0
 
 [node name="Coins" type="Node" parent="."]
-editor/display_folded = true
 
 [node name="Coin" parent="Coins" instance=ExtResource( 6 )]
 position = Vector2( 260, 360 )
-
-[node name="Coin2" parent="Coins" instance=ExtResource( 6 )]
-position = Vector2( 350, 190 )
-
-[node name="Coin3" parent="Coins" instance=ExtResource( 6 )]
-position = Vector2( 570, 200 )
-
-[node name="Coin4" parent="Coins" instance=ExtResource( 6 )]
-position = Vector2( 690, 150 )
-
-[node name="Coin5" parent="Coins" instance=ExtResource( 6 )]
-position = Vector2( 800, 220 )
-
-[node name="Coin6" parent="Coins" instance=ExtResource( 6 )]
-position = Vector2( 1520, 270 )
-
-[node name="Coin7" parent="Coins" instance=ExtResource( 6 )]
-position = Vector2( 1400, 240 )
 
 [node name="HUD" type="CanvasLayer" parent="."]
 editor/display_folded = true
@@ -227,7 +209,7 @@ margin_top = 20.0
 margin_right = 974.0
 margin_bottom = 41.0
 size_flags_vertical = 0
-custom_fonts/font = SubResource( 23 )
+custom_fonts/font = SubResource( 31 )
 text = "Joy: 0"
 align = 2
 
