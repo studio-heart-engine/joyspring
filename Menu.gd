@@ -9,4 +9,4 @@ func _on_AboutButton_pressed():
 
 
 func _on_MoreButton_pressed():
-	SceneChanger.change_scene("res://More.tscn")
+	SceneChanger.change_scene("res://HowTo.tscn")

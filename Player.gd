@@ -9,14 +9,15 @@ export var jump_height = 20
 onready var velocity = Vector2.ZERO
 onready var anim_player = $AnimatedSprite/AnimationPlayer
 onready var squish_stretch_player = $AnimatedSprite/SquishStretchPlayer
-onready var dust_anim = $Dust/AnimationPlayer
-onready var dust = $Dust/Sprite
+onready var dust_anim = $"../Dust/AnimationPlayer"
+onready var dust = $"../Dust/Sprite"
 onready var was_on_floor = is_on_floor()
 onready var was_falling = false
 onready var is_falling = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	dust_anim.stop()
 
 func _physics_process(delta):
 	
@@ -25,13 +26,6 @@ func _physics_process(delta):
 		dir += 1
 	if Input.is_action_pressed("ui_left"):
 		dir -= 1
-	
-	if dir != 0 and is_on_floor():
-		dust_anim.play("dust1")
-		dust.show()
-	else:
-		dust_anim.stop(false)
-		dust.hide()
 	
 	if dir == 1:
 		velocity.x = min(velocity.x + acc, get_move_vel())
@@ -54,12 +48,18 @@ func _physics_process(delta):
 			anim = "run"
 		anim_player.play(anim)
 		
+		if !was_on_floor:
+			squish_stretch_player.play("squish")
+			dust_anim.stop()
+			dust.position = position
+			dust_anim.play(["dust1", "dust2"][randi() % 2])
+		
 		if Input.is_action_pressed("jump"):
 			velocity.y = -jump_height * gravity
 			squish_stretch_player.play("stretch")
+			anim_player.stop()
 			anim_player.play("jump")
-		elif !was_on_floor:
-			squish_stretch_player.play("squish")
+		
 	else:
 		is_falling = velocity.y > 0
 		if is_falling and (!was_falling or was_on_floor):
