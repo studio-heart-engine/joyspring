@@ -11,6 +11,11 @@ onready var anim_player = $AnimatedSprite/AnimationPlayer
 onready var squish_stretch_player = $AnimatedSprite/SquishStretchPlayer
 onready var particle_emitter = $Particles
 onready var was_on_floor = is_on_floor()
+onready var falling = false
+onready var pfalling = false
+
+func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 func _physics_process(delta):
 	var dir = 0
@@ -32,8 +37,13 @@ func _physics_process(delta):
 		anim = "run"
 	
 	anim_player.play(anim)
-	if anim == "jump" and velocity.y == 0:
+	
+	if anim == "jump" and falling and not pfalling:
 		anim_player.seek(0.5)
+		print("a")
+	
+	pfalling = falling
+	falling = not is_on_floor() and velocity.y > 0
 	
 	if dir == 1:
 		velocity.x = min(velocity.x + acc, get_move_vel())
