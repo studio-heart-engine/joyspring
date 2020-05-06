@@ -51,7 +51,10 @@ func _input(event):
 
 func _physics_process(delta):
 	
-	print(wall_time_left)
+	is_on_wall = false
+	if can_attach_to_wall and Input.is_action_pressed("wall") and snap_to_wall():
+		is_on_wall = true
+		player_sprite.flip_h = is_near_left_wall()
 	
 	if is_on_wall:
 		update_wall_velocity()
@@ -69,6 +72,15 @@ func _physics_process(delta):
 		update_floor_air_velocity()
 		velocity = move_and_slide(velocity, Vector2.UP)
 	
+	if Input.is_action_pressed("up") and is_on_floor() or !is_on_wall and was_on_wall and Input.is_action_pressed("wall") and can_attach_to_wall and velocity.y < 0:
+		squish_stretch_player.play("stretch")
+		anim_player.play("jump")
+		var jump_particles = JumpParticles.instance()
+		jump_particles.position = position
+		get_parent().add_child(jump_particles)
+		velocity.y = jump_vel
+		velocity = move_and_slide(velocity)
+	
 	if is_on_floor():
 		
 		if !was_on_floor and !is_on_wall: # so they just hit the floor
@@ -85,25 +97,10 @@ func _physics_process(delta):
 		if was_on_floor: # so it just got off the floor
 			can_dash = true
 	
-	if Input.is_action_pressed("up") and is_on_floor():
-		velocity.y = jump_vel
-		if !is_on_wall:
-			squish_stretch_player.play("stretch")
-		anim_player.play("jump")
-		var jump_particles = JumpParticles.instance()
-		jump_particles.position = position
-		get_parent().add_child(jump_particles)
-	
 	is_falling = velocity.y > 0 and !is_on_floor() and !is_on_wall
 	if is_falling and !was_falling:
 		anim_player.play("fall")
 	was_falling = is_falling
-	
-	is_on_wall = false
-	if can_attach_to_wall and Input.is_action_pressed("wall") and snap_to_wall():
-		is_on_wall = true
-		player_sprite.flip_h = is_near_left_wall()
-		
 	
 	was_on_floor = is_on_floor()
 	was_on_wall = is_on_wall
