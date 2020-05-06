@@ -26,6 +26,7 @@ func _input(event):
 	if event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right"):
 		var acc_particles = AccParticles.instance()
 		acc_particles.position = position
+		acc_particles.scale.x = -1 if event.is_action_pressed("ui_right") else 1
 		get_parent().add_child(acc_particles)
 
 
@@ -62,6 +63,7 @@ func _physics_process(delta):
 			squish_stretch_player.play("squish")
 			var fall_particles = FallParticles.instance()
 			fall_particles.position = position
+			fall_particles.scale.x = -1 if velocity.x < 0 else 1
 			get_parent().add_child(fall_particles)
 		
 		if Input.is_action_pressed("jump"):
