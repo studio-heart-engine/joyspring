@@ -5,6 +5,7 @@ export var acc = 20 # how fast you can change directions
 export var walk_slowness = 0.3
 export var gravity = 50
 export var jump_height = 20
+export var dash_distance = 100
 
 export (PackedScene) var FallParticles
 export (PackedScene) var JumpParticles
@@ -16,17 +17,22 @@ onready var squish_stretch_player = $AnimatedSprite/SquishStretchPlayer
 onready var was_on_floor = is_on_floor()
 onready var was_falling = false
 onready var is_falling = false
+onready var can_dash = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
 func _input(event):
-	if !is_on_floor(): return
-	if event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right"):
+	if can_dash and event.is_action_pressed("dash"):
+		dash()
+	
+	if is_on_floor() and (event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right")):
 		var acc_particles = AccParticles.instance()
 		acc_particles.position = position
+		acc_particles.scale.x = -1 if event.is_action_pressed("ui_right") else 1
 		get_parent().add_child(acc_particles)
+	
 
 
 func _physics_process(delta):
@@ -49,6 +55,9 @@ func _physics_process(delta):
 		velocity.x += acc
 	
 	if is_on_floor():
+		
+		can_dash = false
+		
 		var anim = ""
 		if dir == 0:
 			anim = "idle"
@@ -62,6 +71,7 @@ func _physics_process(delta):
 			squish_stretch_player.play("squish")
 			var fall_particles = FallParticles.instance()
 			fall_particles.position = position
+			fall_particles.scale.x = -1 if velocity.x < 0 else 1
 			get_parent().add_child(fall_particles)
 		
 		if Input.is_action_pressed("jump"):
@@ -74,6 +84,9 @@ func _physics_process(delta):
 			get_parent().add_child(jump_particles)
 		
 	else:
+		
+		if was_on_floor: can_dash = true
+		
 		is_falling = velocity.y > 0
 		if is_falling and (!was_falling or was_on_floor):
 			anim_player.play("fall")
@@ -89,6 +102,26 @@ func _physics_process(delta):
 
 func get_move_vel():
 	return speed * (walk_slowness if Input.is_action_pressed("sneak") else 1)
+
+
+
+func dash():
+	var dir = Vector2.ZERO
+	if Input.is_action_pressed("ui_up"):
+		dir += Vector2.UP
+	if Input.is_action_pressed("ui_down"):
+		dir += Vector2.DOWN
+	if Input.is_action_pressed("ui_left"):
+		dir += Vector2.LEFT
+	if Input.is_action_pressed("ui_right"):
+		dir += Vector2.RIGHT
 	
+	var delta_pos = dash_distance * dir.normalized()
+	var raycast = get_world_2d().direct_space_state.intersect_ray(position, position + delta_pos, [self])
 	
+	if raycast:
+		position = raycast.position
+	else:
+		position += delta_pos
 	
+	can_dash = false
