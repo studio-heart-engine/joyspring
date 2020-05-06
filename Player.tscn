@@ -1,8 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
-[ext_resource path="res://riley.json" type="PackedScene" id=2]
-[ext_resource path="res://white-radial-gradient.png" type="Texture" id=3]
+[ext_resource path="res://FallParticles.tscn" type="PackedScene" id=2]
+[ext_resource path="res://JumpParticles.tscn" type="PackedScene" id=3]
+[ext_resource path="res://AccParticles.tscn" type="PackedScene" id=4]
+[ext_resource path="res://riley.json" type="PackedScene" id=5]
+[ext_resource path="res://white-radial-gradient.png" type="Texture" id=6]
 
 [sub_resource type="Animation" id=1]
 resource_name = "squish"
@@ -43,8 +46,11 @@ extents = Vector2( 18.9298, 31.7632 )
 light_mask = 0
 collision_mask = 14
 script = ExtResource( 1 )
+FallParticles = ExtResource( 2 )
+JumpParticles = ExtResource( 3 )
+AccParticles = ExtResource( 4 )
 
-[node name="AnimatedSprite" parent="." instance=ExtResource( 2 )]
+[node name="AnimatedSprite" parent="." instance=ExtResource( 5 )]
 scale = Vector2( 4, 4 )
 
 [node name="Sprite" parent="AnimatedSprite" index="0"]
@@ -82,7 +88,7 @@ shape = SubResource( 3 )
 [node name="Light2D" type="Light2D" parent="."]
 visible = false
 position = Vector2( 0, -32 )
-texture = ExtResource( 3 )
+texture = ExtResource( 6 )
 color = Color( 1, 0.631373, 0, 1 )
 energy = 1.2
 range_layer_min = -1

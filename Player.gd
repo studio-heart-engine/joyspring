@@ -6,7 +6,10 @@ export var walk_slowness = 0.3
 export var gravity = 50
 export var jump_height = 20
 
-onready var LandingDust = preload("res://LandingDust.tscn")
+export (PackedScene) var FallParticles
+export (PackedScene) var JumpParticles
+export (PackedScene) var AccParticles
+
 onready var velocity = Vector2.ZERO
 onready var anim_player = $AnimatedSprite/AnimationPlayer
 onready var squish_stretch_player = $AnimatedSprite/SquishStretchPlayer
@@ -16,6 +19,15 @@ onready var is_falling = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+func _input(event):
+	if !is_on_floor(): return
+	if event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right"):
+		var acc_particles = AccParticles.instance()
+		acc_particles.position = position
+		get_parent().add_child(acc_particles)
+
 
 func _physics_process(delta):
 	
@@ -48,13 +60,18 @@ func _physics_process(delta):
 		
 		if !was_on_floor:
 			squish_stretch_player.play("squish")
-			get_parent().add_child(LandingDust.instance())
+			var fall_particles = FallParticles.instance()
+			fall_particles.position = position
+			get_parent().add_child(fall_particles)
 		
 		if Input.is_action_pressed("jump"):
 			velocity.y = -jump_height * gravity
 			squish_stretch_player.play("stretch")
 			anim_player.stop()
 			anim_player.play("jump")
+			var jump_particles = JumpParticles.instance()
+			jump_particles.position = position
+			get_parent().add_child(jump_particles)
 		
 	else:
 		is_falling = velocity.y > 0
