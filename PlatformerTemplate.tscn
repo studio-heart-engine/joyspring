@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://PlatformerTemplate.gd" type="Script" id=1]
 [ext_resource path="res://graphics/background/background-bottom.png" type="Texture" id=2]
@@ -7,10 +7,9 @@
 [ext_resource path="res://graphics/tileset-forest.png" type="Texture" id=5]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Coin.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Leaves.tscn" type="PackedScene" id=8]
-[ext_resource path="res://HUD.gd" type="Script" id=9]
-[ext_resource path="res://slkscre.ttf" type="DynamicFontData" id=10]
-[ext_resource path="res://PauseScreen.tscn" type="PackedScene" id=11]
+[ext_resource path="res://HUD.gd" type="Script" id=8]
+[ext_resource path="res://graphics/04B_03__.TTF" type="DynamicFontData" id=9]
+[ext_resource path="res://PauseScreen.tscn" type="PackedScene" id=10]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
@@ -490,7 +489,7 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 
 [sub_resource type="DynamicFont" id=38]
 size = 20
-font_data = ExtResource( 10 )
+font_data = ExtResource( 9 )
 
 [node name="PlatformerTemplate" type="Node2D"]
 script = ExtResource( 1 )
@@ -598,13 +597,8 @@ position = Vector2( 785.015, -190 )
 [node name="Coin8" parent="Coins" instance=ExtResource( 7 )]
 position = Vector2( 290, -60 )
 
-[node name="Leaves" parent="." instance=ExtResource( 8 )]
-position = Vector2( 1000, -20 )
-amount = 20
-preprocess = 5.0
-
 [node name="HUD" type="CanvasLayer" parent="."]
-script = ExtResource( 9 )
+script = ExtResource( 8 )
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD"]
 anchor_left = 1.0
@@ -620,13 +614,13 @@ custom_constants/margin_bottom = 20
 margin_left = 50.0
 margin_top = 20.0
 margin_right = 974.0
-margin_bottom = 22.0
+margin_bottom = 40.0
 size_flags_vertical = 0
 custom_fonts/font = SubResource( 38 )
 text = "Joy: 0"
 align = 2
 
-[node name="PauseScreen" parent="." instance=ExtResource( 11 )]
+[node name="PauseScreen" parent="." instance=ExtResource( 10 )]
 layer = 2
 
 [editable path="Player"]
