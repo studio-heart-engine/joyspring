@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 
+
 export var speed = 50 # how fast you can run
 export var acc = 5 # how fast you can change directions
 export var walk_slowness = 0.3 # how much slower walking is
