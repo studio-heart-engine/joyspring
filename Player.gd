@@ -169,7 +169,7 @@ func update_wall_velocity():
 		# climb
 		velocity.x = 0
 		velocity.y = ydir * wall_climb_speed
-		anim_player.play("climb")
+		anim_player.play("climb" if ydir == -1 else "slide")
 
 
 func get_on_floor_anim():

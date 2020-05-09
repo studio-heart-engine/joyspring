@@ -4,8 +4,8 @@
 [ext_resource path="res://FallParticles.tscn" type="PackedScene" id=2]
 [ext_resource path="res://JumpParticles.tscn" type="PackedScene" id=3]
 [ext_resource path="res://AccParticles.tscn" type="PackedScene" id=4]
-[ext_resource path="res://riley.json" type="PackedScene" id=5]
-[ext_resource path="res://white-radial-gradient.png" type="Texture" id=6]
+[ext_resource path="res://graphics/riley.json" type="PackedScene" id=5]
+[ext_resource path="res://graphics/white-radial-gradient.png" type="Texture" id=6]
 
 [sub_resource type="Animation" id=1]
 resource_name = "squish"
@@ -51,12 +51,11 @@ JumpParticles = ExtResource( 3 )
 AccParticles = ExtResource( 4 )
 
 [node name="AnimatedSprite" parent="." instance=ExtResource( 5 )]
+position = Vector2( 0, -32 )
 scale = Vector2( 4, 4 )
 
 [node name="Sprite" parent="AnimatedSprite" index="0"]
 light_mask = 0
-offset = Vector2( 0, -8 )
-region_rect = Rect2( 272, 0, 16, 16 )
 
 [node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
 anims/squish = SubResource( 1 )

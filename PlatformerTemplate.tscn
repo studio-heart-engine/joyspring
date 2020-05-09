@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://PlatformerTemplate.gd" type="Script" id=1]
 [ext_resource path="res://graphics/background/background-bottom.png" type="Texture" id=2]
@@ -7,9 +7,10 @@
 [ext_resource path="res://graphics/tileset-forest.png" type="Texture" id=5]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Coin.tscn" type="PackedScene" id=7]
-[ext_resource path="res://HUD.gd" type="Script" id=8]
-[ext_resource path="res://slkscre.ttf" type="DynamicFontData" id=9]
-[ext_resource path="res://PauseScreen.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Leaves.tscn" type="PackedScene" id=8]
+[ext_resource path="res://HUD.gd" type="Script" id=9]
+[ext_resource path="res://slkscre.ttf" type="DynamicFontData" id=10]
+[ext_resource path="res://PauseScreen.tscn" type="PackedScene" id=11]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
@@ -489,7 +490,7 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 
 [sub_resource type="DynamicFont" id=38]
 size = 20
-font_data = ExtResource( 9 )
+font_data = ExtResource( 10 )
 
 [node name="PlatformerTemplate" type="Node2D"]
 script = ExtResource( 1 )
@@ -546,7 +547,6 @@ __meta__ = {
 }
 
 [node name="Player" parent="." instance=ExtResource( 6 )]
-light_mask = 2
 position = Vector2( 70, 400 )
 speed = 300
 
@@ -573,7 +573,6 @@ shadow_gradient_length = 3.0
 shadow_filter_smooth = 5.0
 
 [node name="Coins" type="Node" parent="."]
-editor/display_folded = true
 
 [node name="Coin" parent="Coins" instance=ExtResource( 7 )]
 position = Vector2( 260, 360 )
@@ -599,8 +598,10 @@ position = Vector2( 785.015, -190 )
 [node name="Coin8" parent="Coins" instance=ExtResource( 7 )]
 position = Vector2( 290, -60 )
 
+[node name="Leaves" parent="." instance=ExtResource( 8 )]
+
 [node name="HUD" type="CanvasLayer" parent="."]
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD"]
 anchor_left = 1.0
@@ -622,9 +623,8 @@ custom_fonts/font = SubResource( 38 )
 text = "Joy: 0"
 align = 2
 
-[node name="ForegroundParticles" type="CanvasLayer" parent="."]
-
-[node name="PauseScreen" parent="." instance=ExtResource( 10 )]
+[node name="PauseScreen" parent="." instance=ExtResource( 11 )]
+layer = 2
 
 [editable path="Player"]
 
