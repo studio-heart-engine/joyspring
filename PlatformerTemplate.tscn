@@ -537,16 +537,23 @@ __meta__ = {
 }
 
 [node name="Player" parent="." instance=ExtResource( 6 )]
-position = Vector2( 30, 120 )
+position = Vector2( 30, 0 )
 
 [node name="CollisionShape" parent="Player" index="1"]
 visible = false
 
 [node name="Camera" parent="Player" index="2"]
-limit_smoothed = true
+smoothing_enabled = false
+smoothing_speed = 10.0
 
 [node name="Hitbox" parent="Player" index="3"]
 visible = false
+
+[node name="Light2D" parent="Player" index="4"]
+position = Vector2( 0, -8.21464 )
+shadow_gradient_length = 16.0
+shadow_filter = 0
+shadow_filter_smooth = 0.0
 
 [node name="Coins" type="Node" parent="."]
 editor/display_folded = true
@@ -581,6 +588,10 @@ script = ExtResource( 8 )
 [node name="MarginContainer" type="MarginContainer" parent="HUD"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -0.21463
+margin_top = -0.214638
+margin_right = -0.21463
+margin_bottom = -0.21463
 custom_constants/margin_right = 10
 custom_constants/margin_top = 5
 custom_constants/margin_left = 10
