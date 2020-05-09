@@ -49,7 +49,7 @@ func _input(event):
 	if can_dash and event.is_action_pressed("dash") and !is_on_wall:
 		dash()
 	
-	if is_on_floor() and (event.is_action_pressed("left") or event.is_action_pressed("right")) and !Input.is_action_pressed("down"):
+	if is_on_floor() and (event.is_action_pressed("left") and velocity.x > speed * walk_slowness or event.is_action_pressed("right") and velocity.x < -speed * walk_slowness) and !Input.is_action_pressed("down"):
 		var acc_particles = AccParticles.instance()
 		acc_particles.position = position
 		acc_particles.scale.x = -1 if event.is_action_pressed("right") else 1
