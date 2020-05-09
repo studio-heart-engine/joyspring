@@ -1,18 +1,18 @@
 extends KinematicBody2D
 
 
-export var speed = 200 # how fast you can run
-export var acc = 20 # how fast you can change directions
+export var speed = 50 # how fast you can run
+export var acc = 5 # how fast you can change directions
 export var walk_slowness = 0.3 # how much slower walking is
 export var air_slowness = 0.8 # how much slower changing direction is midair
 
-export var gravity = 50
-export var jump_power = 20 # actually is jump initial velocity
+export var gravity = 12
+export var jump_power = 20
 
-export var dash_distance = 100
+export var dash_distance = 25
 
-export var wall_climb_speed = 120
-export var wall_slide_speed = 70
+export var wall_climb_speed = 30
+export var wall_slide_speed = 20
 export var wall_time = 3 # seconds
 
 
@@ -93,6 +93,7 @@ func _physics_process(delta):
 		get_parent().add_child(jump_particles)
 		velocity.y = jump_vel
 		velocity = move_and_slide(velocity)
+		print(is_on_floor())
 	
 	if is_on_floor() and !was_on_floor and !is_on_wall: # so they just hit the floor
 		can_attach_to_wall = true
@@ -200,12 +201,12 @@ func dash():
 
 
 func snap_to_wall():
-	if move_and_collide(Vector2(2, 0)):
+	if move_and_collide(Vector2(0.5, 0)):
 		return true
-	position.x -= 2
-	if move_and_collide(Vector2(-2, 0)):
+	position.x -= 0.5
+	if move_and_collide(Vector2(-0.5, 0)):
 		return true
-	position.x += 2
+	position.x += 0.5
 	return false
 
 
@@ -214,13 +215,13 @@ func is_near_wall():
 
 func is_near_left_wall():
 	var temp = position
-	var ret = move_and_collide(Vector2(-2, 0))
+	var ret = move_and_collide(Vector2(-0.5, 0))
 	position = temp
 	return true if ret else false
 
 func is_near_right_wall():
 	var temp = position
-	var ret = move_and_collide(Vector2(2, 0))
+	var ret = move_and_collide(Vector2(0.5, 0))
 	position = temp
 	return true if ret else false
 
