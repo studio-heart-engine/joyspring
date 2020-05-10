@@ -1,19 +1,16 @@
 extends CanvasLayer
 
-func _ready():
-	$MarginContainer.hide()
-
 func _input(event):
 	if event.is_action_pressed("pause"):
 		if get_tree().paused:
 			resume()
-			#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		else:
 			pause()
 
 func _on_ResumeButton_pressed():
 	resume()
-	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
 func _on_MenuButton_pressed():
