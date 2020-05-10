@@ -1,5 +1,8 @@
 extends CanvasLayer
 
+func _ready():
+	$MarginContainer.hide()
+
 func _input(event):
 	if event.is_action_pressed("pause"):
 		if get_tree().paused:
