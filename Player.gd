@@ -94,7 +94,6 @@ func _physics_process(delta):
 		get_parent().add_child(jump_particles)
 		velocity.y = jump_vel
 		velocity = move_and_slide(velocity)
-		print(is_on_floor())
 	
 	if is_on_floor() and !was_on_floor and !is_on_wall: # so they just hit the floor
 		can_attach_to_wall = true
