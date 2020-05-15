@@ -1,11 +1,23 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://graphics/joy.json" type="PackedScene" id=1]
+[ext_resource path="res://Joy.gd" type="Script" id=2]
 
-[node name="Node2D" instance=ExtResource( 1 )]
+[sub_resource type="CircleShape2D" id=1]
+radius = 3.67797
+
+[node name="Joy" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
 
 [node name="Sprite" parent="." index="0"]
-region_rect = Rect2( 16, 0, 8, 8 )
+region_rect = Rect2( 56, 0, 8, 8 )
 
 [node name="AnimationPlayer" parent="." index="1"]
 autoplay = "float"
+
+[node name="Hitbox" type="Area2D" parent="." index="2"]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" index="0"]
+shape = SubResource( 1 )
+[connection signal="area_entered" from="Hitbox" to="." method="_on_Hitbox_area_entered"]

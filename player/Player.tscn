@@ -13,8 +13,8 @@
 [ext_resource path="res://player/states/motion/in_air/fall.gd" type="Script" id=11]
 [ext_resource path="res://player/states/motion/in_air/glide.gd" type="Script" id=12]
 [ext_resource path="res://player/states/dead.gd" type="Script" id=13]
-[ext_resource path="res://graphics/riley.json" type="PackedScene" id=14]
-[ext_resource path="res://graphics/white-radial-gradient.png" type="Texture" id=15]
+[ext_resource path="res://graphics/white-radial-gradient.png" type="Texture" id=14]
+[ext_resource path="res://graphics/riley.json" type="PackedScene" id=15]
 [ext_resource path="res://graphics/glider.json" type="PackedScene" id=16]
 
 [sub_resource type="Animation" id=1]
@@ -91,7 +91,19 @@ script = ExtResource( 12 )
 [node name="Dead" type="Node" parent="States"]
 script = ExtResource( 13 )
 
-[node name="AnimatedSprite" parent="." instance=ExtResource( 14 )]
+[node name="Light2D" type="Light2D" parent="."]
+position = Vector2( 0, -8 )
+texture = ExtResource( 14 )
+texture_scale = 0.13
+color = Color( 1, 0.984314, 0.576471, 1 )
+energy = 1.2
+range_layer_min = -1
+shadow_enabled = true
+shadow_gradient_length = 2.0
+shadow_filter = 5
+shadow_filter_smooth = 10.0
+
+[node name="AnimatedSprite" parent="." instance=ExtResource( 15 )]
 position = Vector2( 0, -8 )
 
 [node name="Sprite" parent="AnimatedSprite" index="0"]
@@ -124,18 +136,6 @@ editor_draw_drag_margin = true
 visible = false
 position = Vector2( 0, -7.5 )
 shape = SubResource( 3 )
-
-[node name="Light2D" type="Light2D" parent="."]
-position = Vector2( 0, -8 )
-texture = ExtResource( 15 )
-texture_scale = 0.13
-color = Color( 1, 0.984314, 0.576471, 1 )
-energy = 1.2
-range_layer_min = -1
-shadow_enabled = true
-shadow_gradient_length = 2.0
-shadow_filter = 5
-shadow_filter_smooth = 10.0
 
 [node name="Glider" parent="." instance=ExtResource( 16 )]
 light_mask = 0

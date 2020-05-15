@@ -1,4 +1,4 @@
 extends Node
 
-onready var score = 0
-onready var high_score = 0
+var score = 0
+var high_score = 0
