@@ -35,6 +35,14 @@ func is_near_wall():
 	return false
 
 
+func is_near_floor():
+	var original_position = owner.position
+	if owner.move_and_collide(Vector2.DOWN):
+		return true
+	owner.position = original_position
+	return false
+
+
 func get_wall_state():
 	var dir = get_input_direction().y
 	if dir == -1: return "climb"

@@ -15,8 +15,3 @@ func update(delta):
 	if owner.velocity.x == 0:
 		emit_signal("finished", "idle")
 	.update(delta)
-
-func handle_input(event):
-	if event.is_action_pressed("down"):
-		emit_signal("finished", "walk")
-	.handle_input(event)
