@@ -1,30 +1,42 @@
 extends KinematicBody2D
 
 
-export var speed = 200 # how fast you can run
-export var acc = 20 # how fast you can change directions
+
+export var speed = 50 # how fast you can run
+export var acc = 5 # how fast you can change directions
 export var walk_slowness = 0.3 # how much slower walking is
 export var air_slowness = 0.8 # how much slower changing direction is midair
-export var gravity = 50
-export var jump_power = 20 # actually is jump initial velocity
-export var dash_distance = 100
-export var wall_climb_speed = 120
-export var wall_slide_speed = 70
+
+export var gravity = 12
+export var jump_power = 20
+
+export var dash_distance = 25
+
+export var wall_climb_speed = 30
+export var wall_slide_speed = 20
 export var wall_time = 3 # seconds
-export var wall_cling_slowness = 0.5 # how much slower wall climbing while pressing into the wall is
+
 
 export (PackedScene) var FallParticles
 export (PackedScene) var JumpParticles
 export (PackedScene) var AccParticles
 
+
 var jump_vel = -jump_power * gravity
 var is_falling = false
 var was_falling = is_falling
+
 var is_on_wall = false
 var was_on_wall = is_on_wall
-var wall_time_left = wall_time
-var can_dash = false
+var is_wall_climbing = false
+var was_wall_climbing = is_wall_climbing
+var is_wall_sliding = false
 var can_attach_to_wall = true
+
+var wall_time_left = wall_time
+
+var can_dash = false
+
 
 onready var velocity = Vector2.ZERO
 onready var anim_player = $AnimatedSprite/AnimationPlayer
@@ -33,16 +45,12 @@ onready var player_sprite = $AnimatedSprite/Sprite
 onready var was_on_floor = is_on_floor()
 
 
-
-func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
-
 func _input(event):
-	if can_dash and event.is_action_pressed("dash"):
+	
+	if can_dash and event.is_action_pressed("dash") and !is_on_wall:
 		dash()
 	
-	if is_on_floor() and (event.is_action_pressed("left") or event.is_action_pressed("right")) and !Input.is_action_pressed("down"):
+	if is_on_floor() and (event.is_action_pressed("left") and velocity.x > speed * walk_slowness or event.is_action_pressed("right") and velocity.x < -speed * walk_slowness) and !Input.is_action_pressed("down"):
 		var acc_particles = AccParticles.instance()
 		acc_particles.position = position
 		acc_particles.scale.x = -1 if event.is_action_pressed("right") else 1
@@ -51,14 +59,18 @@ func _input(event):
 
 func _physics_process(delta):
 	
-	print(anim_player.current_animation)
-	
-	is_on_wall = false
-	if can_attach_to_wall and Input.is_action_pressed("wall") and snap_to_wall():
-		is_on_wall = true
+	if can_attach_to_wall and Input.is_action_pressed("wall") and is_near_wall():
+		snap_to_wall()
+		is_wall_climbing = true
 		player_sprite.flip_h = is_near_left_wall()
+	else:
+		is_wall_climbing = false
+		
+	
+	is_on_wall = is_wall_climbing or is_wall_sliding
 	
 	if is_on_wall:
+		snap_to_wall()
 		update_wall_velocity()
 		velocity = move_and_slide(velocity)
 		wall_time_left -= delta
@@ -74,7 +86,7 @@ func _physics_process(delta):
 		update_floor_air_velocity()
 		velocity = move_and_slide(velocity, Vector2.UP)
 	
-	if Input.is_action_pressed("up") and is_on_floor() or !is_on_wall and was_on_wall and Input.is_action_pressed("wall") and can_attach_to_wall and velocity.y < 0:
+	if Input.is_action_just_pressed("up") and is_on_floor() or !is_on_wall and was_on_wall and Input.is_action_pressed("wall") and can_attach_to_wall and velocity.y < 0:
 		squish_stretch_player.play("stretch")
 		anim_player.play("jump")
 		var jump_particles = JumpParticles.instance()
@@ -83,21 +95,17 @@ func _physics_process(delta):
 		velocity.y = jump_vel
 		velocity = move_and_slide(velocity)
 	
-	if is_on_floor():
+	if is_on_floor() and !was_on_floor and !is_on_wall: # so they just hit the floor
+		can_attach_to_wall = true
+		wall_time_left = wall_time
+		squish_stretch_player.play("squish")
+		var fall_particles = FallParticles.instance()
+		fall_particles.position = position
+		fall_particles.scale.x = -1 if velocity.x < 0 else 1
+		get_parent().add_child(fall_particles)
 		
-		if !was_on_floor and !is_on_wall: # so they just hit the floor
-			can_attach_to_wall = true
-			wall_time_left = wall_time
-			squish_stretch_player.play("squish")
-			var fall_particles = FallParticles.instance()
-			fall_particles.position = position
-			fall_particles.scale.x = -1 if velocity.x < 0 else 1
-			get_parent().add_child(fall_particles)
-		
-	else:
-		
-		if was_on_floor: # so it just got off the floor
-			can_dash = true
+	if !is_on_floor() and was_on_floor: # so it just got off the floor
+		can_dash = true
 	
 	is_falling = velocity.y > 0 and !is_on_floor() and !is_on_wall
 	if is_falling and !was_falling:
@@ -135,49 +143,34 @@ func get_x_acc():
 
 func update_wall_velocity():
 	
-	var ydir = 0
-	if Input.is_action_pressed("down"):
-		ydir += 1
-	if Input.is_action_pressed("up"):
-		ydir -= 1
-	
 	var xdir = get_x_dir()
 	var xdir_relative = xdir * (-1 if is_near_right_wall() else 1) # -1 is towards the wall, 1 is away
+	var ydir = get_y_dir()
 	
-	# wall jump
+	if is_wall_sliding:
+		# sliding down
+		velocity.x = 0
+		velocity.y = wall_slide_speed
+		anim_player.play("slide")
+	
 	if xdir_relative == 1:
+		# wall jump
 		velocity.x = xdir * speed
 		velocity.y = ydir * -jump_vel
 		velocity = move_and_slide(velocity)
 		if ydir == -1: anim_player.play("jump")
 	
-	if ydir == 0:
-	
-		# sliding down
-		if xdir == 0:
-			velocity.x = 0
-			velocity.y = wall_slide_speed
-			anim_player.play("hang")
-		
-		# clinging on
-		elif xdir_relative == -1:
-			velocity.x = 0
-			velocity.y = 0
-			anim_player.play("hang-tired")
+	elif ydir == 0:
+		# cling
+		velocity.x = 0
+		velocity.y = 0
+		anim_player.play("hang-tired")
 	
 	else:
-	
-		# climbing slowly
-		if xdir_relative == -1:
-			velocity.x = 0
-			velocity.y = ydir * wall_climb_speed * wall_cling_slowness
-			anim_player.play("climb")
-		
-		# climbing normally
-		elif xdir_relative == 0:
-			velocity.x = 0
-			velocity.y = ydir * wall_climb_speed
-			anim_player.play("climb")
+		# climb
+		velocity.x = 0
+		velocity.y = ydir * wall_climb_speed
+		anim_player.play("climb" if ydir == -1 else "slide")
 
 
 func get_on_floor_anim():
@@ -206,14 +199,14 @@ func dash():
 	
 	can_dash = false
 
-# returns success
+
 func snap_to_wall():
-	if move_and_collide(Vector2(2, 0)):
+	if move_and_collide(Vector2(0.5, 0)):
 		return true
-	position.x -= 2
-	if move_and_collide(Vector2(-2, 0)):
+	position.x -= 0.5
+	if move_and_collide(Vector2(-0.5, 0)):
 		return true
-	position.x += 2
+	position.x += 0.5
 	return false
 
 
@@ -222,13 +215,13 @@ func is_near_wall():
 
 func is_near_left_wall():
 	var temp = position
-	var ret = move_and_collide(Vector2(-2, 0))
+	var ret = move_and_collide(Vector2(-0.5, 0))
 	position = temp
 	return true if ret else false
 
 func is_near_right_wall():
 	var temp = position
-	var ret = move_and_collide(Vector2(2, 0))
+	var ret = move_and_collide(Vector2(0.5, 0))
 	position = temp
 	return true if ret else false
 
@@ -240,3 +233,10 @@ func get_x_dir():
 		dir += 1
 	return dir
 	
+func get_y_dir():
+	var dir = 0
+	if Input.is_action_pressed("up"):
+		dir -= 1
+	if Input.is_action_pressed("down"):
+		dir += 1
+	return dir
