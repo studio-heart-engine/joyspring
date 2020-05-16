@@ -1,21 +1,20 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://player/player_state_machine.gd" type="Script" id=1]
 [ext_resource path="res://player/state.gd" type="Script" id=2]
 [ext_resource path="res://player/states/motion/on_ground/idle.gd" type="Script" id=3]
 [ext_resource path="res://player/states/motion/dash.gd" type="Script" id=4]
-[ext_resource path="res://player/states/motion/on_ground/walk.gd" type="Script" id=5]
-[ext_resource path="res://player/states/motion/on_ground/run.gd" type="Script" id=6]
-[ext_resource path="res://player/states/motion/on_wall/cling.gd" type="Script" id=7]
-[ext_resource path="res://player/states/motion/on_wall/climb.gd" type="Script" id=8]
-[ext_resource path="res://player/states/motion/on_wall/slide.gd" type="Script" id=9]
-[ext_resource path="res://player/states/motion/in_air/jump.gd" type="Script" id=10]
-[ext_resource path="res://player/states/motion/in_air/fall.gd" type="Script" id=11]
-[ext_resource path="res://player/states/motion/in_air/glide.gd" type="Script" id=12]
-[ext_resource path="res://player/states/dead.gd" type="Script" id=13]
-[ext_resource path="res://graphics/white-radial-gradient.png" type="Texture" id=14]
-[ext_resource path="res://graphics/riley.json" type="PackedScene" id=15]
-[ext_resource path="res://graphics/glider.json" type="PackedScene" id=16]
+[ext_resource path="res://player/states/motion/on_ground/run.gd" type="Script" id=5]
+[ext_resource path="res://player/states/motion/on_wall/cling.gd" type="Script" id=6]
+[ext_resource path="res://player/states/motion/on_wall/climb.gd" type="Script" id=7]
+[ext_resource path="res://player/states/motion/on_wall/slide.gd" type="Script" id=8]
+[ext_resource path="res://player/states/motion/in_air/jump.gd" type="Script" id=9]
+[ext_resource path="res://player/states/motion/in_air/fall.gd" type="Script" id=10]
+[ext_resource path="res://player/states/motion/in_air/glide.gd" type="Script" id=11]
+[ext_resource path="res://player/states/dead.gd" type="Script" id=12]
+[ext_resource path="res://graphics/white-radial-gradient.png" type="Texture" id=13]
+[ext_resource path="res://graphics/riley.json" type="PackedScene" id=14]
+[ext_resource path="res://graphics/glider.json" type="PackedScene" id=15]
 
 [sub_resource type="Animation" id=1]
 length = 0.14
@@ -64,36 +63,33 @@ script = ExtResource( 3 )
 [node name="Dash" type="Node" parent="States"]
 script = ExtResource( 4 )
 
-[node name="Walk" type="Node" parent="States"]
+[node name="Run" type="Node" parent="States"]
 script = ExtResource( 5 )
 
-[node name="Run" type="Node" parent="States"]
+[node name="Cling" type="Node" parent="States"]
 script = ExtResource( 6 )
 
-[node name="Cling" type="Node" parent="States"]
+[node name="Climb" type="Node" parent="States"]
 script = ExtResource( 7 )
 
-[node name="Climb" type="Node" parent="States"]
+[node name="Slide" type="Node" parent="States"]
 script = ExtResource( 8 )
 
-[node name="Slide" type="Node" parent="States"]
+[node name="Jump" type="Node" parent="States"]
 script = ExtResource( 9 )
 
-[node name="Jump" type="Node" parent="States"]
+[node name="Fall" type="Node" parent="States"]
 script = ExtResource( 10 )
 
-[node name="Fall" type="Node" parent="States"]
+[node name="Glide" type="Node" parent="States"]
 script = ExtResource( 11 )
 
-[node name="Glide" type="Node" parent="States"]
-script = ExtResource( 12 )
-
 [node name="Dead" type="Node" parent="States"]
-script = ExtResource( 13 )
+script = ExtResource( 12 )
 
 [node name="Light2D" type="Light2D" parent="."]
 position = Vector2( 0, -8 )
-texture = ExtResource( 14 )
+texture = ExtResource( 13 )
 texture_scale = 0.13
 color = Color( 1, 0.984314, 0.576471, 1 )
 energy = 1.2
@@ -103,12 +99,11 @@ shadow_gradient_length = 2.0
 shadow_filter = 5
 shadow_filter_smooth = 10.0
 
-[node name="AnimatedSprite" parent="." instance=ExtResource( 15 )]
+[node name="AnimatedSprite" parent="." instance=ExtResource( 14 )]
 position = Vector2( 0, -8 )
 
 [node name="Sprite" parent="AnimatedSprite" index="0"]
 light_mask = 0
-region_rect = Rect2( 480, 0, 16, 16 )
 
 [node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
 anims/squish = SubResource( 1 )
@@ -137,7 +132,7 @@ visible = false
 position = Vector2( 0, -7.5 )
 shape = SubResource( 3 )
 
-[node name="Glider" parent="." instance=ExtResource( 16 )]
+[node name="Glider" parent="." instance=ExtResource( 15 )]
 light_mask = 0
 
 [node name="Sprite" parent="Glider" index="0"]

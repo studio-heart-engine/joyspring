@@ -8,7 +8,6 @@ var previous_state = null
 onready var states = {
 	"idle": $States/Idle,
 	"dash": $States/Dash,
-	"walk": $States/Walk,
 	"run": $States/Run,
 	"cling": $States/Cling,
 	"climb": $States/Climb,

@@ -9,5 +9,5 @@ func exit():
 
 func update(delta):
 	if get_input_direction().x != 0:
-		emit_signal("finished", "walk" if Input.is_action_pressed("down") else "run")
+		emit_signal("finished", "run")
 	.update(delta)

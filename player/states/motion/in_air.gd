@@ -16,8 +16,6 @@ func update(delta):
 		var next_state = ""
 		if owner.velocity.x == 0:
 			next_state = "idle"
-		elif Input.is_action_pressed("down"):
-			next_state = "walk"
 		else:
 			next_state = "run"
 		emit_signal("finished", next_state)
@@ -30,5 +28,5 @@ func handle_input(event):
 		emit_signal("finished", "dash")
 	elif event.is_action_pressed("wall") and is_near_wall():
 		emit_signal("finished", get_wall_state())
-	elif event.is_action_pressed("up") and owner.current_state != "glide":
+	elif event.is_action_pressed("glide") and owner.current_state != "glide":
 		emit_signal("finished", "glide")
