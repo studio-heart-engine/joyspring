@@ -5,15 +5,13 @@ export var INITIAL_JUMP_SPEED = 240
 func enter():
 	.enter()
 	play_anim("jump")
+	spawn_jump_particles()
 	owner.velocity.y = -INITIAL_JUMP_SPEED
 
 func reenter():
 	.enter()
 	play_anim("jump")
 	anim_player.advance(1)
-
-func exit():
-	.exit()
 
 func update(delta):
 	owner.velocity.y += GRAVITY

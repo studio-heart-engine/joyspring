@@ -49,3 +49,22 @@ func get_wall_state():
 	if dir == 0: return "cling"
 	if dir == 1: return "slide"
 	return null
+
+
+func spawn_jump_particles():
+	var jump_particles = JumpParticles.instance()
+	jump_particles.position = owner.position
+	owner.get_parent().add_child(jump_particles)
+
+
+func spawn_fall_particles():
+	var fall_particles = FallParticles.instance()
+	fall_particles.position = owner.position
+	owner.get_parent().add_child(fall_particles)
+
+
+func spawn_skid_particles():
+	var skid_particles = SkidParticles.instance()
+	skid_particles.position = owner.position
+	skid_particles.scale.x = -get_input_direction().x
+	owner.get_parent().add_child(skid_particles)
