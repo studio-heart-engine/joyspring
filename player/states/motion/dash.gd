@@ -7,6 +7,7 @@ var direction
 var timer
 
 func enter():
+	spawn_jump_particles()
 	play_anim("idle")
 	owner.can_dash = false
 	direction = get_input_direction().normalized()
@@ -19,9 +20,10 @@ func enter():
 	
 
 func update(delta):
-	if owner.move_and_collide(direction * DASH_SPEED * delta):
+	owner.velocity = direction * DASH_SPEED
+	if owner.move_and_collide(owner.velocity * delta):
 		finish()
 
 func finish():
 	timer.stop()
-	emit_signal("finished", "fall")
+	emit_signal("finished", "previous")

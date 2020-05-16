@@ -5,7 +5,7 @@ func enter():
 	play_anim("fall")
 
 func reenter():
-	enter()
+	play_anim("fall")
 	anim_player.advance(1)
 
 func update(delta):

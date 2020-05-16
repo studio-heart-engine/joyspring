@@ -4,6 +4,7 @@ signal finished(next_state)
 
 var is_looking_right = true setget set_looking_right
 onready var anim_player = owner.get_node("AnimatedSprite/AnimationPlayer")
+onready var squish_stretch_player = owner.get_node("AnimatedSprite/SquishStretchPlayer")
 onready var player_sprite = owner.get_node("AnimatedSprite/Sprite")
 onready var glider = owner.get_node("Glider")
 onready var glider_anim_player = glider.get_node("AnimationPlayer")
