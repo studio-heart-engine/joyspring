@@ -1,3 +1,3 @@
 extends Node
 
-signal coin_collected
+signal joy_collected
