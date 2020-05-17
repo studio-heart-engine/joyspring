@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://player/player_state_machine.gd" type="Script" id=1]
 [ext_resource path="res://player/state.gd" type="Script" id=2]
@@ -13,11 +13,40 @@
 [ext_resource path="res://player/states/motion/in_air/glide.gd" type="Script" id=11]
 [ext_resource path="res://player/states/dead.gd" type="Script" id=12]
 [ext_resource path="res://graphics/white-radial-gradient.png" type="Texture" id=13]
-[ext_resource path="res://graphics/riley.json" type="PackedScene" id=14]
-[ext_resource path="res://camera_shake.gd" type="Script" id=15]
-[ext_resource path="res://graphics/glider.json" type="PackedScene" id=16]
+[ext_resource path="res://player/glow.gd" type="Script" id=14]
+[ext_resource path="res://graphics/riley.json" type="PackedScene" id=15]
+[ext_resource path="res://camera.gd" type="Script" id=16]
+[ext_resource path="res://graphics/glider.json" type="PackedScene" id=17]
 
 [sub_resource type="Animation" id=1]
+resource_name = "glow"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.5, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 0.294118, 1 ), Color( 1, 1, 0, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:energy")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.8, 1.1, 0.8 ]
+}
+
+[sub_resource type="Animation" id=2]
 length = 0.14
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:scale")
@@ -32,7 +61,7 @@ tracks/0/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 1.2, 0.9 ), Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=3]
 length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:scale")
@@ -47,7 +76,7 @@ tracks/0/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 0.7, 1.4 ), Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 4.2, 7.5 )
 
 [node name="Player" type="KinematicBody2D"]
@@ -91,29 +120,32 @@ script = ExtResource( 12 )
 [node name="Light2D" type="Light2D" parent="."]
 position = Vector2( 0, -7.92011 )
 texture = ExtResource( 13 )
-texture_scale = 0.13
-color = Color( 1, 0.984314, 0.576471, 1 )
-energy = 1.2
+texture_scale = 0.7
+energy = 0.8
 range_layer_min = -1
 shadow_enabled = true
 shadow_gradient_length = 2.0
 shadow_filter = 5
 shadow_filter_smooth = 10.0
 
-[node name="AnimatedSprite" parent="." instance=ExtResource( 14 )]
+[node name="GlowAnimationPlayer" type="AnimationPlayer" parent="Light2D"]
+anims/glow = SubResource( 1 )
+script = ExtResource( 14 )
+
+[node name="AnimatedSprite" parent="." instance=ExtResource( 15 )]
 
 [node name="Sprite" parent="AnimatedSprite" index="0"]
 light_mask = 0
 offset = Vector2( 0, -8 )
 
 [node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
-anims/squish = SubResource( 1 )
-anims/stretch = SubResource( 2 )
+anims/squish = SubResource( 2 )
+anims/stretch = SubResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 0, -7.5 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="Camera" type="Camera2D" parent="."]
 visible = false
@@ -125,7 +157,7 @@ drag_margin_top = 0.4
 drag_margin_bottom = 0.4
 editor_draw_limits = true
 editor_draw_drag_margin = true
-script = ExtResource( 15 )
+script = ExtResource( 16 )
 
 [node name="CameraShakeTimer" type="Timer" parent="Camera"]
 one_shot = true
@@ -135,9 +167,9 @@ one_shot = true
 [node name="CollisionShape" type="CollisionShape2D" parent="Hitbox"]
 visible = false
 position = Vector2( 0, -7.5 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
-[node name="Glider" parent="." instance=ExtResource( 16 )]
+[node name="Glider" parent="." instance=ExtResource( 17 )]
 visible = false
 light_mask = 0
 
