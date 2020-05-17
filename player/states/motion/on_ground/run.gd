@@ -1,13 +1,10 @@
 extends "../on_ground.gd"
 
-export var MAX_RUN_SPEED = 50
+export var MAX_RUN_SPEED = 80
 
 func enter():
 	.enter()
 	play_anim("run")
-
-func exit():
-	.exit()
 
 func update(delta):
 	owner.velocity.x = move_smoothly(
@@ -15,3 +12,8 @@ func update(delta):
 	if owner.velocity.x == 0:
 		emit_signal("finished", "idle")
 	.update(delta)
+
+func handle_input(event):
+	if sign(get_input_direction().x) == -sign(owner.velocity.x):
+		spawn_skid_particles()
+	.handle_input(event)

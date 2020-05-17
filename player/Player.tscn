@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://player/player_state_machine.gd" type="Script" id=1]
 [ext_resource path="res://player/state.gd" type="Script" id=2]
@@ -14,7 +14,8 @@
 [ext_resource path="res://player/states/dead.gd" type="Script" id=12]
 [ext_resource path="res://graphics/white-radial-gradient.png" type="Texture" id=13]
 [ext_resource path="res://graphics/riley.json" type="PackedScene" id=14]
-[ext_resource path="res://graphics/glider.json" type="PackedScene" id=15]
+[ext_resource path="res://camera_shake.gd" type="Script" id=15]
+[ext_resource path="res://graphics/glider.json" type="PackedScene" id=16]
 
 [sub_resource type="Animation" id=1]
 length = 0.14
@@ -88,7 +89,7 @@ script = ExtResource( 11 )
 script = ExtResource( 12 )
 
 [node name="Light2D" type="Light2D" parent="."]
-position = Vector2( 0, -8 )
+position = Vector2( 0, -7.92011 )
 texture = ExtResource( 13 )
 texture_scale = 0.13
 color = Color( 1, 0.984314, 0.576471, 1 )
@@ -100,10 +101,10 @@ shadow_filter = 5
 shadow_filter_smooth = 10.0
 
 [node name="AnimatedSprite" parent="." instance=ExtResource( 14 )]
-position = Vector2( 0, -8 )
 
 [node name="Sprite" parent="AnimatedSprite" index="0"]
 light_mask = 0
+offset = Vector2( 0, -8 )
 
 [node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
 anims/squish = SubResource( 1 )
@@ -124,6 +125,10 @@ drag_margin_top = 0.4
 drag_margin_bottom = 0.4
 editor_draw_limits = true
 editor_draw_drag_margin = true
+script = ExtResource( 15 )
+
+[node name="CameraShakeTimer" type="Timer" parent="Camera"]
+one_shot = true
 
 [node name="Hitbox" type="Area2D" parent="."]
 
@@ -132,10 +137,12 @@ visible = false
 position = Vector2( 0, -7.5 )
 shape = SubResource( 3 )
 
-[node name="Glider" parent="." instance=ExtResource( 15 )]
+[node name="Glider" parent="." instance=ExtResource( 16 )]
+visible = false
 light_mask = 0
 
 [node name="Sprite" parent="Glider" index="0"]
+light_mask = 0
 offset = Vector2( -3, -11 )
 region_rect = Rect2( 16, 0, 16, 16 )
 

@@ -5,6 +5,7 @@ onready var anim_player = $AnimationPlayer
 
 func _ready():
 	anim_player.get_animation("collect1").set_loop(false)
+	anim_player.advance(rand_range(0, anim_player.get_animation(anim_player.current_animation).length))
 
 
 func _on_Hitbox_area_entered(area):

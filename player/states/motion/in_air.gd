@@ -1,7 +1,7 @@
 extends "../motion.gd"
 
 export var GRAVITY = 12
-export var MAX_IN_AIR_SPEED = 50
+export var MAX_IN_AIR_SPEED = 80
 export var IN_AIR_ACCELERATION = 4
 
 func update(delta):
@@ -13,6 +13,7 @@ func update(delta):
 		set_looking_right(owner.velocity.x > 0)
 	
 	if owner.is_on_floor():
+		spawn_fall_particles()
 		var next_state = ""
 		if owner.velocity.x == 0:
 			next_state = "idle"
