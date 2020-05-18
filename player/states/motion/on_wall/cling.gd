@@ -14,6 +14,10 @@ func handle_input(event):
 		emit_signal("finished", "slide")
 	
 	if input_direction.x == -wall_direction:
+		
+		# prevent immediately clinging back to wall by moving away from it by 1 pixel
+		owner.move_and_collide(Vector2(-wall_direction, 0)) 
+		
 		emit_signal("finished", "fall")
 		return
 	

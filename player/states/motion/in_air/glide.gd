@@ -1,13 +1,13 @@
 extends "../in_air.gd"
 
-export var MAX_GLIDE_FALL_SPEED = 10
-export var GLIDE_FALL_ACCELERATION = 2
+export var MAX_GLIDE_FALL_SPEED = 15
+export var GLIDE_FALL_ACCELERATION = 3
 
 
 func enter():
 	glider.show()
 	play_anim("glide")
-	glider_anim_player.play("open")
+	glider_anim_player.play("open", -1, 1.3)
 	glider_anim_player.queue("glide")
 	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
 
