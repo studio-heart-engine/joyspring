@@ -1,6 +1,14 @@
 extends "../state.gd"
 
 
+func _ready():
+	Events.connect("player_died", self, "on_player_died")
+
+
+func on_player_died():
+	emit_signal("finished", "dead")
+
+
 func get_input_direction():
 	var dir = Vector2()
 	dir.x = int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left"))

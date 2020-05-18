@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://graphics/blobs/Blob.gd" type="Script" id=1]
 [ext_resource path="res://graphics/blobs/blob_noise_offset.gd" type="Script" id=2]
+[ext_resource path="res://graphics/blobs/Hitbox.gd" type="Script" id=3]
 
 [sub_resource type="Shader" id=1]
 code = "
@@ -32,6 +33,9 @@ shader = SubResource( 1 )
 shader_param/width = 1.0
 shader_param/outline_color = Color( 0.909804, 0.254902, 0.811765, 1 )
 
+[sub_resource type="CircleShape2D" id=3]
+radius = 6.0
+
 [node name="Blob" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -43,3 +47,12 @@ material = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="NoiseOffset"]
 z_index = 1
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 2
+script = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+z_index = 2
+shape = SubResource( 3 )
+[connection signal="area_entered" from="Hitbox" to="Hitbox" method="_on_Hitbox_area_entered"]

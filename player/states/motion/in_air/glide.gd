@@ -29,7 +29,7 @@ func update(delta):
 		owner.velocity.y, 1, MAX_GLIDE_FALL_SPEED, GLIDE_FALL_ACCELERATION)
 	.update(delta)
 	
-	if is_near_wall() or is_near_floor():
+	if is_near_floor():
 		emit_signal("finished", "fall")
 
 
