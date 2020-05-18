@@ -5,7 +5,7 @@ func _ready():
 	Events.connect("player_died", self, "on_player_died")
 
 
-func on_player_died():
+func on_player_died(position):
 	emit_signal("finished", "dead")
 
 
