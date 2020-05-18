@@ -18,6 +18,7 @@ onready var SkidParticles = preload("res://graphics/particles/SkidParticles.tscn
 func _ready():
 	glider_anim_player.get_animation("open").set_loop(false)
 
+
 func play_anim(anim_name):
 	anim_player.play(anim_name + ("-d" if owner.can_dash else "-nd"))
 
