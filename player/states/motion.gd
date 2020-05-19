@@ -76,3 +76,13 @@ func spawn_skid_particles():
 	skid_particles.position = owner.position
 	skid_particles.scale.x = -get_input_direction().x
 	owner.get_parent().add_child(skid_particles)
+
+func spawn_dash_start_particles():
+	var dash_start_particles = DashStartParticles.instance()
+	dash_start_particles.init(get_input_direction())
+	dash_start_particles.position = owner.position
+	owner.get_parent().add_child(dash_start_particles)
+	
+	
+	
+	

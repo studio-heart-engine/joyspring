@@ -7,7 +7,7 @@ var direction
 var timer
 
 func enter():
-	spawn_jump_particles()
+	spawn_dash_start_particles()
 	camera.shake_camera()
 	owner.can_dash = false
 	

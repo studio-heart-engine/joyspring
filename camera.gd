@@ -1,7 +1,7 @@
 extends Camera2D
 
 export var CAMERA_SHAKE_DURATION = 0.3
-export var CAMERA_SHAKE_AMPLITUDE = 2
+export var CAMERA_SHAKE_AMPLITUDE = 4
 
 var is_shaking = false
 

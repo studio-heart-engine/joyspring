@@ -12,6 +12,7 @@ func on_player_died(position):
 	anim_player.play("shrink-circle")
 	yield(anim_player, "animation_finished")
 	get_parent().respawn()
+	camera.reset_smoothing()
 	yield(get_tree().create_timer(0.1), "timeout")
 	offset = get_parent().position - camera.get_camera_screen_center() + HALF_WINDOW_SIZE
 	anim_player.play_backwards("shrink-circle")
