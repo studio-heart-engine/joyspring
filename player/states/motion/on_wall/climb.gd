@@ -16,8 +16,9 @@ func update(delta):
 
 
 func handle_input(event):
+	.handle_input(event)
+	
 	var input_direction = get_input_direction()
-	var wall_direction = get_wall_direction()
 	
 	if input_direction.y == 0:
 		emit_signal("finished", "cling")
@@ -27,6 +28,3 @@ func handle_input(event):
 	if input_direction.x == -wall_direction:
 		owner.velocity.x = -wall_direction * INITIAL_WALL_JUMP_SPEED
 		emit_signal("finished", "jump")
-		return
-	
-	.handle_input(event)

@@ -83,7 +83,7 @@ extents = Vector2( 4.2, 7.5 )
 
 [sub_resource type="Animation" id=5]
 resource_name = "shrink-circle"
-length = 0.2
+length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("Light2D:texture_scale")
 tracks/0/interp = 1
@@ -91,7 +91,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2 ),
+"times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ 12.0, 0.01 ]
@@ -204,26 +204,27 @@ light_mask = 0
 offset = Vector2( -3, -11 )
 region_rect = Rect2( 16, 0, 16, 16 )
 
-[node name="PlayerRespawnTransition" type="CanvasLayer" parent="."]
+[node name="RespawnTransition" type="CanvasLayer" parent="."]
+layer = 2
 script = ExtResource( 18 )
 
-[node name="ColorRect" type="ColorRect" parent="PlayerRespawnTransition"]
+[node name="ColorRect" type="ColorRect" parent="RespawnTransition"]
 light_mask = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -320.0
 margin_top = -180.0
-margin_right = 320.0
-margin_bottom = 180.0
 color = Color( 0, 0, 0, 1 )
 
-[node name="Light2D" type="Light2D" parent="PlayerRespawnTransition"]
+[node name="Light2D" type="Light2D" parent="RespawnTransition"]
 texture = ExtResource( 19 )
-texture_scale = 12.0
+texture_scale = 6.005
 mode = 3
+range_layer_min = 2
+range_layer_max = 2
 range_item_cull_mask = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerRespawnTransition"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RespawnTransition"]
 anims/shrink-circle = SubResource( 5 )
 
 [editable path="AnimatedSprite"]

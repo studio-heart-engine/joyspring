@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 var velocity = Vector2.ZERO
 var can_dash = true
+var is_dead = false
 var current_state = null
 var previous_state = null
 
@@ -49,5 +50,13 @@ func change_state(next_state):
 		previous_state = current_state
 		current_state = next_state
 		states[current_state].enter()
-	
-	print(current_state)
+
+
+
+func respawn():
+	position = $"../PlayerStartPosition".position
+	print($Camera.get_camera_position())
+	$Camera.reset_smoothing()
+	change_state("idle")
+	previous_state = null
+	velocity = Vector2.ZERO
