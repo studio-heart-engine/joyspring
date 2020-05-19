@@ -14,6 +14,7 @@ onready var JumpParticles = preload("res://graphics/particles/JumpParticles.tscn
 onready var FallParticles = preload("res://graphics/particles/FallParticles.tscn")
 onready var SkidParticles = preload("res://graphics/particles/SkidParticles.tscn")
 onready var DashStartParticles = preload("res://graphics/particles/DashStartParticles.tscn")
+onready var DashRingParticles = preload("res://graphics/particles/DashRingParticles.tscn")
 
 
 func _ready():

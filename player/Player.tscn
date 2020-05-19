@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://player/player_state_machine.gd" type="Script" id=1]
 [ext_resource path="res://player/state.gd" type="Script" id=2]
@@ -19,6 +19,7 @@
 [ext_resource path="res://graphics/glider.json" type="PackedScene" id=17]
 [ext_resource path="res://PlayerRespawnTransition.gd" type="Script" id=18]
 [ext_resource path="res://graphics/inside-out-circle.png" type="Texture" id=19]
+[ext_resource path="res://graphics/cave-light.png" type="Texture" id=20]
 
 [sub_resource type="Animation" id=1]
 resource_name = "glow"
@@ -83,7 +84,7 @@ extents = Vector2( 4.2, 7.5 )
 
 [sub_resource type="Animation" id=5]
 resource_name = "shrink-circle"
-length = 0.3
+length = 0.4
 tracks/0/type = "value"
 tracks/0/path = NodePath("Light2D:texture_scale")
 tracks/0/interp = 1
@@ -91,7 +92,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3 ),
+"times": PoolRealArray( 0, 0.4 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ 2.0, 0.01 ]
@@ -226,6 +227,10 @@ range_item_cull_mask = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="RespawnTransition"]
 anims/shrink-circle = SubResource( 5 )
+
+[node name="cave-light" type="Sprite" parent="."]
+z_index = 4
+texture = ExtResource( 20 )
 
 [editable path="AnimatedSprite"]
 

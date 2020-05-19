@@ -34,10 +34,12 @@ func enter():
 	timer.connect("timeout", self, "finish")
 	add_child(timer)
 	timer.start()
+	
+	yield(get_tree().create_timer(0.07), "timeout")
+	spawn_dash_ring_particles()
 
 func exit():
 	timer.stop()
-	spawn_jump_particles()
 
 func update(delta):
 	owner.velocity = direction * DASH_SPEED
