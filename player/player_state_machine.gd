@@ -6,6 +6,9 @@ var is_dead = false
 var current_state = null
 var previous_state = null
 
+onready var sprite = $AnimatedSprite/Sprite
+
+onready var parent_state = $States
 onready var states = {
 	"idle": $States/Idle,
 	"dash": $States/Dash,
@@ -35,6 +38,7 @@ func _input(event):
 
 func _physics_process(delta):
 	states[current_state].update(delta)
+	print(velocity)
 
 
 func change_state(next_state):
@@ -45,18 +49,25 @@ func change_state(next_state):
 		var temp = current_state
 		current_state = previous_state
 		previous_state = temp
+		states[current_state].input_direction = states[previous_state].input_direction
 		states[current_state].reenter()
 	else:
 		previous_state = current_state
 		current_state = next_state
+		if not previous_state in [null, "dead"] and current_state != "dead":
+			states[current_state].input_direction = states[previous_state].input_direction
 		states[current_state].enter()
+	
+	print(current_state)
 
 
 
 func respawn():
 	position = $"../PlayerStartPosition".position
-	print($Camera.get_camera_position())
+	$Camera.align()
 	$Camera.reset_smoothing()
 	change_state("idle")
+	states[current_state].input_direction = Vector2.ZERO
 	previous_state = null
 	velocity = Vector2.ZERO
+	

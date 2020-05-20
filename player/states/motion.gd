@@ -1,5 +1,6 @@
 extends "../state.gd"
 
+var input_direction = Vector2.ZERO setget ,get_input_direction
 
 func _ready():
 	Events.connect("player_died", self, "on_player_died")
@@ -9,11 +10,13 @@ func on_player_died(position):
 	emit_signal("finished", "dead")
 
 
+func handle_input(event):
+	input_direction.x = int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left"))
+	input_direction.y = int(Input.is_action_pressed("down")) - int(Input.is_action_pressed("up"))
+
+
 func get_input_direction():
-	var dir = Vector2()
-	dir.x = int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left"))
-	dir.y = int(Input.is_action_pressed("down")) - int(Input.is_action_pressed("up"))
-	return dir
+	return input_direction
 
 
 # accelerates or decelerates in one dimension
@@ -52,11 +55,7 @@ func is_near_floor():
 
 
 func get_wall_state():
-	var dir = get_input_direction().y
-	if dir == -1: return "climb"
-	if dir == 0: return "cling"
-	if dir == 1: return "slide"
-	return null
+	return "cling" if input_direction.y == 0 else "climb"
 
 
 func spawn_jump_particles():
@@ -74,18 +73,18 @@ func spawn_fall_particles():
 func spawn_skid_particles():
 	var skid_particles = SkidParticles.instance()
 	skid_particles.position = owner.position
-	skid_particles.scale.x = -get_input_direction().x
+	skid_particles.scale.x = -input_direction.x
 	owner.get_parent().add_child(skid_particles)
 
 func spawn_dash_start_particles():
 	var dash_start_particles = DashStartParticles.instance()
-	dash_start_particles.init(get_input_direction())
+	dash_start_particles.init(input_direction)
 	dash_start_particles.position = owner.position
 	owner.get_parent().add_child(dash_start_particles)
 	
 func spawn_dash_ring_particles():
 	var dash_ring_particles = DashRingParticles.instance()
-	dash_ring_particles.init(get_input_direction())
+	dash_ring_particles.init(input_direction)
 	dash_ring_particles.position = owner.position
 	owner.get_parent().add_child(dash_ring_particles)
 	

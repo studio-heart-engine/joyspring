@@ -4,9 +4,18 @@ export var GRAVITY = 12
 export var MAX_IN_AIR_SPEED = 80
 export var IN_AIR_ACCELERATION = 4
 
+
+func enter():
+	owner.velocity.x = clamp(owner.velocity.x, -MAX_IN_AIR_SPEED, MAX_IN_AIR_SPEED)
+
+
+func reenter():
+	owner.velocity.x = clamp(owner.velocity.x, -MAX_IN_AIR_SPEED, MAX_IN_AIR_SPEED)
+
+
 func update(delta):
 	owner.velocity.x = move_smoothly(
-			owner.velocity.x, get_input_direction().x, MAX_IN_AIR_SPEED, IN_AIR_ACCELERATION)
+			owner.velocity.x, self.input_direction.x, MAX_IN_AIR_SPEED, IN_AIR_ACCELERATION)
 	owner.velocity = owner.move_and_slide(owner.velocity, Vector2.UP)
 	
 	if owner.velocity.x != 0:
@@ -27,7 +36,8 @@ func update(delta):
 
 
 func handle_input(event):
-	if event.is_action_pressed("dash") and owner.can_dash and get_input_direction() != Vector2.ZERO:
+	.handle_input(event)
+	if event.is_action_pressed("dash") and owner.can_dash and self.input_direction != Vector2.ZERO:
 		emit_signal("finished", "dash")
 	elif event.is_action_pressed("glide") and owner.current_state != "glide":
 		emit_signal("finished", "glide")

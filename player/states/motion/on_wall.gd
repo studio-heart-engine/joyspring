@@ -14,8 +14,8 @@ func update(delta):
 
 
 func handle_input(event):
-	
-	if get_input_direction().x == -wall_direction:
+	.handle_input(event)
+	if self.input_direction.x == -wall_direction:
 		owner.move_and_collide(Vector2(-wall_direction, 0))
 	
 	if event.is_action_released("wall"):

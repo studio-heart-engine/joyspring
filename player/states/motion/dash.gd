@@ -11,18 +11,17 @@ func enter():
 	camera.shake_camera()
 	owner.can_dash = false
 	
-	var input_direction = get_input_direction()
-	direction = input_direction.normalized()
-	if input_direction.x != 0:
-		set_looking_right(input_direction.x == 1)
+	direction = self.input_direction.normalized()
+	if self.input_direction.x != 0:
+		set_looking_right(self.input_direction.x == 1)
 	
 	anim_player.play("dash")
 	anim_player.stop(false)
-	if input_direction.x == 0:
+	if self.input_direction.x == 0:
 		anim_player.advance(0)
-	elif input_direction.y == -1:
+	elif self.input_direction.y == -1:
 		anim_player.advance(1)
-	elif input_direction.y == 0:
+	elif self.input_direction.y == 0:
 		anim_player.advance(2)
 	else:
 		anim_player.advance(3)

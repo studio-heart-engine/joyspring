@@ -5,6 +5,7 @@ export var GLIDE_FALL_ACCELERATION = 3
 
 
 func enter():
+	.enter()
 	glider.show()
 	play_anim("glide")
 	glider_anim_player.play("open", -1, 1.3)
@@ -13,6 +14,7 @@ func enter():
 
 
 func reenter():
+	.reenter()
 	glider.show()
 	play_anim("glide")
 	glider_anim_player.play("glide")
@@ -34,5 +36,6 @@ func update(delta):
 
 
 func handle_input(event):
+	.handle_input(event)
 	if event.is_action_pressed("glide"):
 		emit_signal("finished", "fall")

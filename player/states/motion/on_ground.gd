@@ -20,5 +20,6 @@ func update(delta):
 
 
 func handle_input(event):
+	.handle_input(event)
 	if event.is_action_pressed("up"):
 		emit_signal("finished", "jump")

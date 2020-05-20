@@ -17,12 +17,10 @@ func update(delta):
 func handle_input(event):
 	.handle_input(event)
 	
-	var input_direction = get_input_direction()
-	
-	if input_direction.y == 0:
+	if self.input_direction.y == 0:
 		emit_signal("finished", "cling")
-	elif input_direction.y == -1:
+	elif self.input_direction.y == -1:
 		emit_signal("finished", "climb")
 	
-	if input_direction.x == -wall_direction:
+	if self.input_direction.x == -wall_direction:
 		emit_signal("finished", "fall")
