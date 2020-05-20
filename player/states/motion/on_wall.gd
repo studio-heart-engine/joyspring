@@ -2,19 +2,32 @@ extends "../motion.gd"
 
 var wall_direction
 
+
+func _ready():
+	on_wall_timer.connect("timeout", self, "start_slide")
+
+
+func start_slide():
+	emit_signal("finished", "slide")
+
+
 func enter():
 	wall_direction = get_wall_direction()
 	set_looking_right(wall_direction == 1)
 	owner.velocity = Vector2.ZERO
+	if on_wall_timer.is_stopped():
+		on_wall_timer.start()
 
 
 func update(delta):
-	owner.velocity = owner.move_and_slide(
-			owner.velocity, Vector2(-wall_direction, 0))
+	owner.velocity = owner.move_and_slide(owner.velocity, Vector2(-wall_direction, 0))
 
 
 func handle_input(event):
 	.handle_input(event)
+	
+	# Prevent immediately attaching back onto wall by
+	# moving the player 1 pixel away from it
 	if self.input_direction.x == -wall_direction:
 		owner.move_and_collide(Vector2(-wall_direction, 0))
 	

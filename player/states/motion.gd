@@ -63,12 +63,10 @@ func spawn_jump_particles():
 	jump_particles.position = owner.position
 	owner.get_parent().add_child(jump_particles)
 
-
 func spawn_fall_particles():
 	var fall_particles = FallParticles.instance()
 	fall_particles.position = owner.position
 	owner.get_parent().add_child(fall_particles)
-
 
 func spawn_skid_particles():
 	var skid_particles = SkidParticles.instance()
@@ -81,12 +79,11 @@ func spawn_dash_start_particles():
 	dash_start_particles.init(input_direction)
 	dash_start_particles.position = owner.position
 	owner.get_parent().add_child(dash_start_particles)
-	
+
 func spawn_dash_ring_particles():
 	var dash_ring_particles = DashRingParticles.instance()
 	dash_ring_particles.init(input_direction)
 	dash_ring_particles.position = owner.position
 	owner.get_parent().add_child(dash_ring_particles)
-	
-	
-	
+
+

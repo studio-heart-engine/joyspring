@@ -9,12 +9,12 @@ onready var player_sprite = owner.get_node("AnimatedSprite/Sprite")
 onready var glider = owner.get_node("Glider")
 onready var glider_anim_player = glider.get_node("AnimationPlayer")
 onready var glider_sprite = glider.get_node("Sprite")
-onready var camera = owner.get_node("Camera")
 onready var JumpParticles = preload("res://graphics/particles/JumpParticles.tscn")
 onready var FallParticles = preload("res://graphics/particles/FallParticles.tscn")
 onready var SkidParticles = preload("res://graphics/particles/SkidParticles.tscn")
 onready var DashStartParticles = preload("res://graphics/particles/DashStartParticles.tscn")
 onready var DashRingParticles = preload("res://graphics/particles/DashRingParticles.tscn")
+onready var on_wall_timer = owner.get_node("OnWallTimer")
 
 
 func _ready():

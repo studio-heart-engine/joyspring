@@ -6,9 +6,12 @@ export var MAX_DASH_TIME = 0.2
 var direction
 var timer
 
+signal player_dashed
+
 func enter():
+	emit_signal("player_dashed")
+	
 	spawn_dash_start_particles()
-	camera.shake_camera()
 	owner.can_dash = false
 	
 	direction = self.input_direction.normalized()

@@ -4,6 +4,7 @@ export var ON_GROUND_ACCELERATION = 6
 
 func enter():
 	owner.can_dash = true
+	on_wall_timer.stop()
 	if owner.previous_state == "fall":
 		squish_stretch_player.play("squish")
 

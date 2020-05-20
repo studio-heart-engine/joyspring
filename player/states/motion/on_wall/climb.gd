@@ -5,14 +5,14 @@ export var INITIAL_WALL_JUMP_SPEED = 50
 
 func enter():
 	.enter()
-	owner.velocity.y = -WALL_CLIMB_SPEED
+	owner.velocity.y = self.input_direction.y * WALL_CLIMB_SPEED
 	play_anim("climb")
 
 
 func update(delta):
 	.update(delta)
 	if not is_near_wall():
-		emit_signal("finished", "jump")
+		emit_signal("finished", "jump" if input_direction.y == -1 else "fall")
 
 
 func handle_input(event):
@@ -20,9 +20,10 @@ func handle_input(event):
 	
 	if self.input_direction.y == 0:
 		emit_signal("finished", "cling")
-	elif self.input_direction.y == 1:
-		emit_signal("finished", "slide")
 	
 	if self.input_direction.x == -wall_direction:
-		owner.velocity.x = -wall_direction * INITIAL_WALL_JUMP_SPEED
-		emit_signal("finished", "jump")
+		if self.input_direction.y == -1:
+			owner.velocity.x = -wall_direction * INITIAL_WALL_JUMP_SPEED
+			emit_signal("finished", "jump")
+		else:
+			emit_signal("finished", "fall")

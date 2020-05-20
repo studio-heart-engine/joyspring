@@ -5,3 +5,4 @@ func _ready():
 
 func update_score_label():
 	$MarginContainer/ScoreLabel.text = "Joy: " + str(PlayerData.score)
+	$AnimationPlayer.play("joy-label-blink")

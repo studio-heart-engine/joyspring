@@ -7,3 +7,6 @@ func _ready():
 func glow():
 	stop()
 	play("glow")
+
+func _on_player_dashed():
+	play("dash-glow")

@@ -4,6 +4,7 @@ export var WALL_SLIDE_SPEED = 40
 
 func enter():
 	.enter()
+	on_wall_timer.stop()
 	owner.velocity.y = WALL_SLIDE_SPEED
 	play_anim("slide")
 
@@ -16,11 +17,6 @@ func update(delta):
 
 func handle_input(event):
 	.handle_input(event)
-	
-	if self.input_direction.y == 0:
-		emit_signal("finished", "cling")
-	elif self.input_direction.y == -1:
-		emit_signal("finished", "climb")
 	
 	if self.input_direction.x == -wall_direction:
 		emit_signal("finished", "fall")
