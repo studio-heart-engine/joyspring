@@ -13,7 +13,7 @@ resource_name = "opening"
 length = 40.0
 step = 1.0
 tracks/0/type = "value"
-tracks/0/path = NodePath("ColorRect:material:shader_param/cutoff")
+tracks/0/path = NodePath("ShaderRect:material:shader_param/cutoff")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -67,28 +67,28 @@ Descend into the depths", "
 And revive the Joyspring" ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("Background:modulate")
+tracks/3/path = NodePath("SkipLabel:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0, 1, 37, 40 ),
-"transitions": PoolRealArray( 1, 1, 4.14105, 1 ),
+"times": PoolRealArray( 0, 29, 31 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 10, 10, 10, 1 ) ]
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 tracks/4/type = "value"
-tracks/4/path = NodePath("SkipLabel:modulate")
+tracks/4/path = NodePath("WhiteRect:color")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0, 1, 29, 31 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 37, 40 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 
 [sub_resource type="DynamicFont" id=1]
@@ -101,7 +101,7 @@ font_data = ExtResource( 5 )
 
 [sub_resource type="ShaderMaterial" id=5]
 shader = ExtResource( 6 )
-shader_param/cutoff = 0.0
+shader_param/cutoff = 1.0
 shader_param/smooth_size = 0.5
 shader_param/mask = ExtResource( 7 )
 
@@ -115,10 +115,9 @@ autoplay = "opening"
 anims/opening = SubResource( 3 )
 
 [node name="Background" type="TextureRect" parent="."]
-modulate = Color( 10, 10, 10, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-texture = ExtResource( 4 )
+texture = ExtResource( 2 )
 
 [node name="Text" type="Label" parent="."]
 anchor_left = 1.0
@@ -130,17 +129,16 @@ margin_bottom = 110.0
 size_flags_horizontal = 4
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
-text = "
-
-
-
-And revive the Joyspring"
+text = "Once upon a time
+Deep in the tallest peak
+There was a spring with droplets of gold
+Spreading joy and propersity to all
+"
 align = 2
 autowrap = true
 clip_text = true
 
 [node name="SkipLabel" type="Label" parent="."]
-modulate = Color( 1, 1, 1, 0 )
 margin_left = 8.0
 margin_top = 10.0
 margin_right = 94.0
@@ -149,7 +147,7 @@ custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 1, 1, 1, 0.419608 )
 text = "Press space to skip"
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ShaderRect" type="ColorRect" parent="."]
 material = SubResource( 5 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -159,4 +157,9 @@ color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="WhiteRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 1, 1, 1, 0 )
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

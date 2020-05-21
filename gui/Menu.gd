@@ -2,10 +2,7 @@ extends Control
 
 
 func _ready():
-	if globals.has_played_startup_animation:
-		$AnimationPlayer.play_backwards("startup")
-		$AnimationPlayer.stop(false)
-	else:
+	if not globals.has_played_startup_animation:
 		$AnimationPlayer.play("startup")
 		globals.has_played_startup_animation = true
 
