@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://player/player_state_machine.gd" type="Script" id=1]
 [ext_resource path="res://player/state.gd" type="Script" id=2]
@@ -14,12 +14,12 @@
 [ext_resource path="res://player/states/dead.gd" type="Script" id=12]
 [ext_resource path="res://graphics/white-radial-gradient.png" type="Texture" id=13]
 [ext_resource path="res://player/glow.gd" type="Script" id=14]
-[ext_resource path="res://graphics/riley.json" type="PackedScene" id=15]
-[ext_resource path="res://camera.gd" type="Script" id=16]
-[ext_resource path="res://graphics/glider.json" type="PackedScene" id=17]
-[ext_resource path="res://PlayerRespawnTransition.gd" type="Script" id=18]
-[ext_resource path="res://graphics/circle-transition.png" type="Texture" id=19]
-[ext_resource path="res://graphics/cave-light.png" type="Texture" id=20]
+[ext_resource path="res://camera.gd" type="Script" id=15]
+[ext_resource path="res://graphics/glider.json" type="PackedScene" id=16]
+[ext_resource path="res://PlayerRespawnTransition.gd" type="Script" id=17]
+[ext_resource path="res://graphics/circle-transition.png" type="Texture" id=18]
+[ext_resource path="res://graphics/cave-light.png" type="Texture" id=19]
+[ext_resource path="res://graphics/riley.json" type="PackedScene" id=20]
 
 [sub_resource type="Animation" id=1]
 resource_name = "dash-glow"
@@ -76,21 +76,41 @@ tracks/1/keys = {
 "values": [ 0.4, 0.6, 0.4 ]
 }
 
-[sub_resource type="Animation" id=9]
-resource_name = "idle-nd"
-length = 1.9
-loop = true
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 4.2, 7.5 )
+
+[sub_resource type="Shader" id=7]
+code = "shader_type canvas_item;
+
+uniform sampler2D mask;
+uniform float cutoff: hint_range(0f, 1f);
+uniform float smooth_size: hint_range(0f, 1f);
+
+void fragment() {
+	float value = texture(mask, UV).r;
+	float alpha = smoothstep(cutoff + smooth_size, cutoff, value * (1f - smooth_size) + smooth_size);
+	COLOR = vec4(COLOR.rgb, alpha);
+}"
+
+[sub_resource type="ShaderMaterial" id=8]
+shader = SubResource( 7 )
+shader_param/cutoff = 0.0
+shader_param/smooth_size = 0.03
+shader_param/mask = ExtResource( 18 )
+
+[sub_resource type="Animation" id=6]
+length = 0.5
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:region_rect")
-tracks/0/interp = 0
+tracks/0/path = NodePath("ColorRect:material:shader_param/cutoff")
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = true
+tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.8, 0.9, 1.7 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 1,
-"values": [ Rect2( 0, 0, 16, 16 ), Rect2( 16, 0, 16, 16 ), Rect2( 32, 0, 16, 16 ), Rect2( 48, 0, 16, 16 ) ]
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -121,43 +141,6 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 1, 1 ), Vector2( 0.7, 1.4 ), Vector2( 1, 1 ) ]
-}
-
-[sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 4.2, 7.5 )
-
-[sub_resource type="Shader" id=7]
-code = "shader_type canvas_item;
-
-uniform sampler2D mask;
-uniform float cutoff: hint_range(0f, 1f);
-uniform float smooth_size: hint_range(0f, 1f);
-
-void fragment() {
-	float value = texture(mask, UV).r;
-	float alpha = smoothstep(cutoff + smooth_size, cutoff, value * (1f - smooth_size) + smooth_size);
-	COLOR = vec4(COLOR.rgb, alpha);
-}"
-
-[sub_resource type="ShaderMaterial" id=8]
-shader = SubResource( 7 )
-shader_param/cutoff = 0.0
-shader_param/smooth_size = 0.03
-shader_param/mask = ExtResource( 19 )
-
-[sub_resource type="Animation" id=6]
-length = 0.5
-tracks/0/type = "value"
-tracks/0/path = NodePath("ColorRect:material:shader_param/cutoff")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.4 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ 0.0, 1.0 ]
 }
 
 [node name="Player" type="KinematicBody2D"]
@@ -221,19 +204,6 @@ anims/dash-glow = SubResource( 1 )
 anims/glow = SubResource( 2 )
 script = ExtResource( 14 )
 
-[node name="AnimatedSprite" parent="." instance=ExtResource( 15 )]
-
-[node name="Sprite" parent="AnimatedSprite" index="0"]
-light_mask = 0
-offset = Vector2( 0, -8 )
-
-[node name="AnimationPlayer" parent="AnimatedSprite" index="1"]
-anims/idle-nd = SubResource( 9 )
-
-[node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
-anims/squish = SubResource( 3 )
-anims/stretch = SubResource( 4 )
-
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 0, -7.5 )
@@ -249,7 +219,7 @@ drag_margin_top = 0.5
 drag_margin_bottom = 0.0
 editor_draw_limits = true
 editor_draw_drag_margin = true
-script = ExtResource( 16 )
+script = ExtResource( 15 )
 
 [node name="CameraShakeTimer" type="Timer" parent="Camera"]
 one_shot = true
@@ -262,7 +232,7 @@ visible = false
 position = Vector2( 0, -7.5 )
 shape = SubResource( 5 )
 
-[node name="Glider" parent="." instance=ExtResource( 17 )]
+[node name="Glider" parent="." instance=ExtResource( 16 )]
 editor/display_folded = true
 visible = false
 light_mask = 0
@@ -274,7 +244,7 @@ region_rect = Rect2( 16, 0, 16, 16 )
 
 [node name="RespawnTransition" type="CanvasLayer" parent="."]
 layer = 2
-script = ExtResource( 18 )
+script = ExtResource( 17 )
 
 [node name="ColorRect" type="ColorRect" parent="RespawnTransition"]
 light_mask = 2
@@ -292,11 +262,17 @@ anims/shrink-circle = SubResource( 6 )
 [node name="cave-darkness" type="Sprite" parent="."]
 visible = false
 z_index = 4
-texture = ExtResource( 20 )
-[connection signal="ready" from="." to="RespawnTransition" method="_on_Player_ready"]
-[connection signal="player_dashed" from="States/Dash" to="Light2D/GlowAnimationPlayer" method="_on_player_dashed"]
-[connection signal="player_dashed" from="States/Dash" to="Camera" method="shake_camera"]
+texture = ExtResource( 19 )
 
-[editable path="AnimatedSprite"]
+[node name="AnimatedSprite" parent="." instance=ExtResource( 20 )]
+
+[node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
+anims/squish = SubResource( 3 )
+anims/stretch = SubResource( 4 )
+[connection signal="ready" from="." to="RespawnTransition" method="_on_Player_ready"]
+[connection signal="player_dashed" from="States/Dash" to="Camera" method="shake_camera"]
+[connection signal="player_dashed" from="States/Dash" to="Light2D/GlowAnimationPlayer" method="_on_player_dashed"]
 
 [editable path="Glider"]
+
+[editable path="AnimatedSprite"]
