@@ -7,7 +7,8 @@ export var GLIDE_FALL_ACCELERATION = 3
 func enter():
 	.enter()
 	glider.show()
-	play_anim("glide")
+	squish_stretch_player.play("squish")
+	play_anim("openglide")
 	glider_anim_player.play("open", -1, 1.3)
 	glider_anim_player.queue("glide")
 	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
@@ -16,7 +17,7 @@ func enter():
 func reenter():
 	.reenter()
 	glider.show()
-	play_anim("glide")
+	play_anim("openglide")
 	glider_anim_player.play("glide")
 	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
 

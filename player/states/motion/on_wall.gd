@@ -8,6 +8,9 @@ func _ready():
 
 
 func start_slide():
+	blink_anim_player.play("blink")
+	yield(get_tree().create_timer(1), "timeout")
+	blink_anim_player.stop()
 	emit_signal("finished", "slide")
 
 
