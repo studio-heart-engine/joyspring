@@ -8,7 +8,7 @@
 [ext_resource path="res://graphics/circle-transition.shader" type="Shader" id=6]
 [ext_resource path="res://graphics/circle-transition.png" type="Texture" id=7]
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=1]
 resource_name = "opening"
 length = 40.0
 step = 1.0
@@ -91,15 +91,15 @@ tracks/4/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="DynamicFont" id=1]
-size = 8
-font_data = ExtResource( 5 )
-
 [sub_resource type="DynamicFont" id=2]
 size = 8
 font_data = ExtResource( 5 )
 
-[sub_resource type="ShaderMaterial" id=5]
+[sub_resource type="DynamicFont" id=3]
+size = 8
+font_data = ExtResource( 5 )
+
+[sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 6 )
 shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.5
@@ -112,7 +112,7 @@ script = ExtResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "opening"
-anims/opening = SubResource( 3 )
+anims/opening = SubResource( 1 )
 
 [node name="Background" type="TextureRect" parent="."]
 anchor_right = 1.0
@@ -127,7 +127,7 @@ margin_top = 10.0
 margin_right = -30.0
 margin_bottom = 110.0
 size_flags_horizontal = 4
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "
 
@@ -144,12 +144,12 @@ margin_left = 8.0
 margin_top = 10.0
 margin_right = 94.0
 margin_bottom = 31.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 1, 1, 1, 0.419608 )
 text = "Press space to skip"
 
 [node name="ShaderRect" type="ColorRect" parent="."]
-material = SubResource( 5 )
+material = SubResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -70.0
