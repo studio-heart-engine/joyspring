@@ -13,6 +13,8 @@ func update(delta):
 	.update(delta)
 	if not is_near_wall():
 		emit_signal("finished", "fall")
+	elif is_near_floor():
+		emit_signal("finished", "idle")
 
 
 func handle_input(event):

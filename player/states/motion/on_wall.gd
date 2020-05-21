@@ -31,8 +31,8 @@ func handle_input(event):
 	if self.input_direction.x == -wall_direction:
 		owner.move_and_collide(Vector2(-wall_direction, 0))
 	
-	if event.is_action_released("wall"):
-		emit_signal("finished", "fall")
+	if event.is_action_released("wall") and owner.current_state != "slide":
+		emit_signal("finished", "slide")
 
 
 func get_wall_direction():
