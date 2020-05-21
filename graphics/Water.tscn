@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+render_mode unshaded;
+uniform float amplitude = 3;
+
+void fragment() {
+	float theta = texture(TEXTURE, UV).r * 360.0;
+	vec2 offset = amplitude * SCREEN_PIXEL_SIZE * vec2(cos(theta), sin(theta));
+	COLOR = texture(SCREEN_TEXTURE, SCREEN_UV + offset);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+render_priority = -1
+shader = SubResource( 1 )
+shader_param/amplitude = 1.0
+
+[sub_resource type="OpenSimplexNoise" id=3]
+octaves = 1
+
+[sub_resource type="NoiseTexture" id=4]
+width = 50
+height = 50
+noise = SubResource( 3 )
+
+[node name="Water" type="Sprite"]
+material = SubResource( 2 )
+scale = Vector2( 2, 2 )
+texture = SubResource( 4 )
+centered = false
