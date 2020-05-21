@@ -18,4 +18,6 @@ func update(delta):
 	owner.velocity.y += GRAVITY
 	if owner.velocity.y >= 0:
 		emit_signal("finished", "fall")
+	owner.velocity.x = move_smoothly(
+			owner.velocity.x, self.input_direction.x, MAX_IN_AIR_SPEED, IN_AIR_ACCELERATION)
 	.update(delta)

@@ -9,7 +9,7 @@ onready var anim_player = owner.get_node("AnimatedSprite/AnimationPlayer")
 onready var squish_stretch_player = owner.get_node("AnimatedSprite/SquishStretchPlayer")
 onready var blink_anim_player = owner.get_node("AnimatedSprite/BlinkAnimationPlayer")
 
-onready var player_sprite = owner.get_node("AnimatedSprite/Sprite")
+onready var player_sprite = owner.get_node("AnimatedSprite")
 
 onready var glider = owner.get_node("AnimatedSprite/Glider")
 onready var glider_anim_player = glider.get_node("AnimationPlayer")
@@ -35,7 +35,7 @@ func play_anim(anim_name):
 func set_looking_right(value):
 	is_looking_right = value
 	player_sprite.flip_h = not value
-	glider.scale.x = 1 if value else -1
+	
 
 
 func enter():

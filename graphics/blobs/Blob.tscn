@@ -5,8 +5,7 @@
 [ext_resource path="res://graphics/blobs/Hitbox.gd" type="Script" id=3]
 
 [sub_resource type="Shader" id=1]
-code = "
-shader_type canvas_item;
+code = "shader_type canvas_item;
 render_mode unshaded;
  
 uniform float width : hint_range(0.0, 16.0);
@@ -23,10 +22,10 @@ void fragment()
     alpha += texture(TEXTURE, UV + vec2(size.x, size.y)).a;
     alpha += texture(TEXTURE, UV + vec2(-size.x, size.y)).a;
     alpha += texture(TEXTURE, UV + vec2(-size.x, -size.y)).a;
-   
-    vec3 final_color = mix(outline_color.rgb, sprite_color.rgb, sprite_color.a);
-    COLOR = vec4(final_color, clamp(alpha, 0.0, 1.0));
-}"
+	
+    COLOR = vec4(outline_color.rgb, clamp(alpha, 0.0, 1.0));
+}
+"
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )

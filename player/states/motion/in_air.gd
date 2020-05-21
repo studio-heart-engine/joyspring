@@ -6,6 +6,10 @@ export var IN_AIR_ACCELERATION = 4
 
 
 func enter():
+	# from coming off wall
+	blink_anim_player.stop()
+	player_sprite.visible = true
+	
 	owner.velocity.x = clamp(owner.velocity.x, -MAX_IN_AIR_SPEED, MAX_IN_AIR_SPEED)
 
 
@@ -14,8 +18,6 @@ func reenter():
 
 
 func update(delta):
-	owner.velocity.x = move_smoothly(
-			owner.velocity.x, self.input_direction.x, MAX_IN_AIR_SPEED, IN_AIR_ACCELERATION)
 	owner.velocity = owner.move_and_slide(owner.velocity, Vector2.UP)
 	
 	if owner.velocity.x != 0:

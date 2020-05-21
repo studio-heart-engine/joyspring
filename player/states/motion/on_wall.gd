@@ -10,8 +10,8 @@ func _ready():
 func start_slide():
 	blink_anim_player.play("blink")
 	yield(get_tree().create_timer(1), "timeout")
-	blink_anim_player.stop()
-	emit_signal("finished", "slide")
+	if owner.current_state in ["cling", "climb"]:
+		emit_signal("finished", "slide")
 
 
 func enter():
@@ -20,7 +20,6 @@ func enter():
 	owner.velocity = Vector2.ZERO
 	if on_wall_timer.is_stopped():
 		on_wall_timer.start()
-
 
 func update(delta):
 	owner.velocity = owner.move_and_slide(owner.velocity, Vector2(-wall_direction, 0))

@@ -12,4 +12,6 @@ func reenter():
 
 func update(delta):
 	owner.velocity.y += GRAVITY
+	owner.velocity.x = move_smoothly(
+			owner.velocity.x, self.input_direction.x, MAX_IN_AIR_SPEED, IN_AIR_ACCELERATION)
 	.update(delta)

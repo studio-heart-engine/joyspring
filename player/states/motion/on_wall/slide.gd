@@ -1,12 +1,23 @@
 extends "../on_wall.gd"
 
 export var WALL_SLIDE_SPEED = 40
+onready var wall_slide_particles = preload("res://graphics/particles/WallSlideParticles.tscn")
+var particles_instance
 
 func enter():
 	.enter()
 	on_wall_timer.stop()
+	blink_anim_player.stop()
+	player_sprite.visible = true
 	owner.velocity.y = WALL_SLIDE_SPEED
 	play_anim("slide")
+	particles_instance = wall_slide_particles.instance()
+	player_sprite.add_child(particles_instance)
+
+
+func exit():
+	.exit()
+	particles_instance.queue_free()
 
 
 func update(delta):
