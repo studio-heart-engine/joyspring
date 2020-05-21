@@ -20,8 +20,9 @@
 [ext_resource path="res://player/player_dash.shader" type="Shader" id=18]
 [ext_resource path="res://graphics/glider.json" type="PackedScene" id=19]
 [ext_resource path="res://PlayerRespawnTransition.gd" type="Script" id=20]
-[ext_resource path="res://graphics/circle-transition.png" type="Texture" id=21]
-[ext_resource path="res://graphics/cave-light.png" type="Texture" id=22]
+[ext_resource path="res://graphics/circle-transition.shader" type="Shader" id=21]
+[ext_resource path="res://graphics/circle-transition.png" type="Texture" id=22]
+[ext_resource path="res://graphics/cave-light.png" type="Texture" id=23]
 
 [sub_resource type="Animation" id=1]
 resource_name = "dash-glow"
@@ -160,24 +161,11 @@ tracks/0/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="Shader" id=4]
-code = "shader_type canvas_item;
-
-uniform sampler2D mask;
-uniform float cutoff: hint_range(0f, 1f);
-uniform float smooth_size: hint_range(0f, 1f);
-
-void fragment() {
-	float value = texture(mask, UV).r;
-	float alpha = smoothstep(cutoff + smooth_size, cutoff, value * (1f - smooth_size) + smooth_size);
-	COLOR = vec4(COLOR.rgb, alpha);
-}"
-
-[sub_resource type="ShaderMaterial" id=5]
-shader = SubResource( 4 )
+[sub_resource type="ShaderMaterial" id=12]
+shader = ExtResource( 21 )
 shader_param/cutoff = 0.0
-shader_param/smooth_size = 0.03
-shader_param/mask = ExtResource( 21 )
+shader_param/smooth_size = 0.1
+shader_param/mask = ExtResource( 22 )
 
 [sub_resource type="Animation" id=6]
 length = 0.8
@@ -316,7 +304,7 @@ script = ExtResource( 20 )
 
 [node name="ColorRect" type="ColorRect" parent="RespawnTransition"]
 light_mask = 2
-material = SubResource( 5 )
+material = SubResource( 12 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -320.0
@@ -333,7 +321,7 @@ anims/shrink-circle = SubResource( 6 )
 [node name="cave-darkness" type="Sprite" parent="."]
 visible = false
 z_index = 4
-texture = ExtResource( 22 )
+texture = ExtResource( 23 )
 [connection signal="ready" from="." to="RespawnTransition" method="_on_Player_ready"]
 [connection signal="player_dashed" from="States/Dash" to="Light2D" method="_on_Dash_player_dashed"]
 [connection signal="player_dashed" from="States/Dash" to="Camera" method="shake_camera"]
