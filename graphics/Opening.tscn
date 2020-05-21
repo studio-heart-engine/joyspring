@@ -19,10 +19,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 1, 2, 10, 11, 12, 13, 21, 22, 23, 24, 32, 33, 35, 38 ),
-"transitions": PoolRealArray( 0.5, 1, 1, 2, 1, 0.5, 1, 2, 1, 0.5, 1, 2, 1, 0.5, 1 ),
+"times": PoolRealArray( 0, 1, 2, 10, 11, 12, 21, 22, 23, 32, 33, 34, 38 ),
+"transitions": PoolRealArray( 0.5, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1 ),
 "update": 0,
-"values": [ 1.0, 1.0, 0.5, 0.3, 1.0, 1.0, 0.5, 0.3, 1.0, 1.0, 0.5, 0.3, 1.0, 1.0, 0.0 ]
+"values": [ 1.0, 1.0, 0.5, 0.3, 1.0, 0.5, 0.3, 1.0, 0.5, 0.3, 1.0, 0.5, 0.0 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("Background:texture")
@@ -43,7 +43,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 1, 11, 22, 35 ),
+"times": PoolRealArray( 0, 1, 11, 22, 33 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ "Once upon a time
@@ -85,7 +85,7 @@ tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0, 37, 40 ),
+"times": PoolRealArray( 0, 36, 39 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
@@ -101,7 +101,7 @@ font_data = ExtResource( 5 )
 
 [sub_resource type="ShaderMaterial" id=5]
 shader = ExtResource( 6 )
-shader_param/cutoff = 1.0
+shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.5
 shader_param/mask = ExtResource( 7 )
 
@@ -117,7 +117,7 @@ anims/opening = SubResource( 3 )
 [node name="Background" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-texture = ExtResource( 2 )
+texture = ExtResource( 4 )
 
 [node name="Text" type="Label" parent="."]
 anchor_left = 1.0
@@ -129,16 +129,17 @@ margin_bottom = 110.0
 size_flags_horizontal = 4
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
-text = "Once upon a time
-Deep in the tallest peak
-There was a spring with droplets of gold
-Spreading joy and propersity to all
-"
+text = "
+
+
+
+And revive the Joyspring"
 align = 2
 autowrap = true
 clip_text = true
 
 [node name="SkipLabel" type="Label" parent="."]
+modulate = Color( 1, 1, 1, 0 )
 margin_left = 8.0
 margin_top = 10.0
 margin_right = 94.0
@@ -161,5 +162,4 @@ __meta__ = {
 [node name="WhiteRect" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 1, 1, 1, 0 )
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
