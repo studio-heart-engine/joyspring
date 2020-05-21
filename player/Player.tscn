@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://player/player_state_machine.gd" type="Script" id=1]
 [ext_resource path="res://player/state.gd" type="Script" id=2]
@@ -18,39 +18,38 @@
 [ext_resource path="res://camera.gd" type="Script" id=16]
 [ext_resource path="res://graphics/glider.json" type="PackedScene" id=17]
 [ext_resource path="res://PlayerRespawnTransition.gd" type="Script" id=18]
-[ext_resource path="res://graphics/inside-out-circle.png" type="Texture" id=19]
+[ext_resource path="res://graphics/circle-transition.png" type="Texture" id=19]
 [ext_resource path="res://graphics/cave-light.png" type="Texture" id=20]
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=1]
 resource_name = "dash-glow"
 length = 0.7
 tracks/0/type = "value"
-tracks/0/path = NodePath(".:color")
-tracks/0/interp = 2
+tracks/0/path = NodePath(".:energy")
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.5, 0.7 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 0.294118, 1 ), Color( 1, 1, 0, 1 ), Color( 1, 1, 1, 1 ) ]
+"values": [ 1.0, 0.4 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath(".:energy")
-tracks/1/interp = 2
+tracks/1/path = NodePath(".:color")
+tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.3, 0.7 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ 0.8, 1.8, 0.8 ]
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=1]
-resource_name = "glow"
+[sub_resource type="Animation" id=2]
 length = 0.7
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:color")
@@ -74,10 +73,27 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.3, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ 0.8, 1.1, 0.8 ]
+"values": [ 0.4, 0.6, 0.4 ]
 }
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=9]
+resource_name = "idle-nd"
+length = 1.9
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.8, 0.9, 1.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 0, 0, 16, 16 ), Rect2( 16, 0, 16, 16 ), Rect2( 32, 0, 16, 16 ), Rect2( 48, 0, 16, 16 ) ]
+}
+
+[sub_resource type="Animation" id=3]
 length = 0.14
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:scale")
@@ -92,7 +108,7 @@ tracks/0/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 1.2, 0.9 ), Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=4]
 length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:scale")
@@ -107,23 +123,41 @@ tracks/0/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 0.7, 1.4 ), Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 4.2, 7.5 )
 
-[sub_resource type="Animation" id=5]
-resource_name = "shrink-circle"
+[sub_resource type="Shader" id=7]
+code = "shader_type canvas_item;
+
+uniform sampler2D mask;
+uniform float cutoff: hint_range(0f, 1f);
+uniform float smooth_size: hint_range(0f, 1f);
+
+void fragment() {
+	float value = texture(mask, UV).r;
+	float alpha = smoothstep(cutoff + smooth_size, cutoff, value * (1f - smooth_size) + smooth_size);
+	COLOR = vec4(COLOR.rgb, alpha);
+}"
+
+[sub_resource type="ShaderMaterial" id=8]
+shader = SubResource( 7 )
+shader_param/cutoff = 0.0
+shader_param/smooth_size = 0.03
+shader_param/mask = ExtResource( 19 )
+
+[sub_resource type="Animation" id=6]
 length = 0.5
 tracks/0/type = "value"
-tracks/0/path = NodePath("Light2D:texture_scale")
+tracks/0/path = NodePath("ColorRect:material:shader_param/cutoff")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5 ),
+"times": PoolRealArray( 0, 0.4 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ 2.0, 0.01 ]
+"values": [ 0.0, 1.0 ]
 }
 
 [node name="Player" type="KinematicBody2D"]
@@ -172,7 +206,7 @@ one_shot = true
 position = Vector2( 0, -7.92011 )
 texture = ExtResource( 13 )
 texture_scale = 0.7
-energy = 0.8
+energy = 0.4
 range_layer_min = -1
 shadow_enabled = true
 shadow_gradient_length = 2.0
@@ -183,8 +217,8 @@ __meta__ = {
 }
 
 [node name="GlowAnimationPlayer" type="AnimationPlayer" parent="Light2D"]
-anims/dash-glow = SubResource( 6 )
-anims/glow = SubResource( 1 )
+anims/dash-glow = SubResource( 1 )
+anims/glow = SubResource( 2 )
 script = ExtResource( 14 )
 
 [node name="AnimatedSprite" parent="." instance=ExtResource( 15 )]
@@ -193,14 +227,17 @@ script = ExtResource( 14 )
 light_mask = 0
 offset = Vector2( 0, -8 )
 
+[node name="AnimationPlayer" parent="AnimatedSprite" index="1"]
+anims/idle-nd = SubResource( 9 )
+
 [node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
-anims/squish = SubResource( 2 )
-anims/stretch = SubResource( 3 )
+anims/squish = SubResource( 3 )
+anims/stretch = SubResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 0, -7.5 )
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="Camera" type="Camera2D" parent="."]
 editor/display_folded = true
@@ -223,7 +260,7 @@ editor/display_folded = true
 [node name="CollisionShape" type="CollisionShape2D" parent="Hitbox"]
 visible = false
 position = Vector2( 0, -7.5 )
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="Glider" parent="." instance=ExtResource( 17 )]
 editor/display_folded = true
@@ -241,27 +278,22 @@ script = ExtResource( 18 )
 
 [node name="ColorRect" type="ColorRect" parent="RespawnTransition"]
 light_mask = 2
+material = SubResource( 8 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -320.0
-margin_top = -180.0
+margin_top = -320.0
+margin_bottom = 140.0
 color = Color( 0, 0, 0, 1 )
 
-[node name="Light2D" type="Light2D" parent="RespawnTransition"]
-texture = ExtResource( 19 )
-texture_scale = 2.0
-mode = 3
-range_layer_min = 2
-range_layer_max = 2
-range_item_cull_mask = 2
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="RespawnTransition"]
-anims/shrink-circle = SubResource( 5 )
+anims/shrink-circle = SubResource( 6 )
 
 [node name="cave-darkness" type="Sprite" parent="."]
 visible = false
 z_index = 4
 texture = ExtResource( 20 )
+[connection signal="ready" from="." to="RespawnTransition" method="_on_Player_ready"]
 [connection signal="player_dashed" from="States/Dash" to="Light2D/GlowAnimationPlayer" method="_on_player_dashed"]
 [connection signal="player_dashed" from="States/Dash" to="Camera" method="shake_camera"]
 

@@ -11,6 +11,6 @@ func _ready():
 	noise.period = 20.0
 
 func _process(delta):
-	position = 0.3 * Vector2(noise.get_noise_2d(t1, 0) - 0.5, noise.get_noise_2d(0, t2) - 0.5)
+	position = 0.5 * Vector2(noise.get_noise_2d(t1, 0) - 0.5, noise.get_noise_2d(0, t2) - 0.5)
 	t1 += 1.3
 	t2 += 1.3
