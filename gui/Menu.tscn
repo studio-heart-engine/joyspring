@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://gui/Menu.gd" type="Script" id=1]
 [ext_resource path="res://graphics/mountain2.png" type="Texture" id=2]
@@ -60,45 +60,6 @@ tracks/3/keys = {
 "values": [ Color( 0.482353, 0.545098, 0.827451, 1 ), Color( 0.482353, 0.545098, 0.827451, 1 ), Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 1 ) ]
 }
 
-[sub_resource type="Animation" id=3]
-length = 7.0
-tracks/0/type = "value"
-tracks/0/path = NodePath("mountain2:rect_position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 7 ),
-"transitions": PoolRealArray( -2.73208, 1 ),
-"update": 0,
-"values": [ Vector2( 0, -140 ), Vector2( 0, 0 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("VBoxContainer/BeginButton:self_modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 6.3, 6.96774 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("title2:self_modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0, 5.5, 6.99172 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
-}
-
 [node name="Menu" type="Control"]
 anchor_left = 0.5
 anchor_top = 0.5
@@ -144,6 +105,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -49.0
+margin_bottom = 3.05176e-05
 custom_constants/separation = 0
 alignment = 1
 
@@ -165,5 +127,4 @@ flat = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/start-fall = SubResource( 2 )
-anims/startup = SubResource( 3 )
 [connection signal="pressed" from="VBoxContainer/BeginButton" to="." method="_on_BeginButton_pressed"]
