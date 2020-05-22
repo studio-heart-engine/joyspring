@@ -10,8 +10,13 @@ func _ready():
 
 func _input(event):
 	if event.is_action_pressed("ui_select"):
-		SceneChanger.change_scene("res://PlatformerTemplate.tscn")
+		begin()
 
 
 func _on_BeginButton_pressed():
-	SceneChanger.change_scene("res://PlatformerTemplate.tscn")
+	begin()
+
+func begin():
+	$AnimationPlayer.play("start-fall")
+	yield($AnimationPlayer, "animation_finished")
+	SceneChanger.change_scene("res://platformer/levels/Level01.tscn")

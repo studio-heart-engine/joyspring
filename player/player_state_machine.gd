@@ -24,8 +24,6 @@ onready var states = {
 
 
 func _ready():
-	position = get_parent().get_node("PlayerStartPosition").position
-	
 	for state_node in states.values():
 		state_node.connect("finished", self, "change_state")
 	

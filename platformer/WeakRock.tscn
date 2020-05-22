@@ -1,16 +1,16 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://WeakRock.gd" type="Script" id=1]
+[ext_resource path="res://platformer/WeakRock.gd" type="Script" id=1]
 [ext_resource path="res://graphics/weak-rock-outline.png" type="Texture" id=2]
 [ext_resource path="res://graphics/weakRocks.png" type="Texture" id=3]
 
-[sub_resource type="BitMap" id=6]
+[sub_resource type="BitMap" id=1]
 data = {
 "data": PoolByteArray(  ),
 "size": Vector2( 0, 0 )
 }
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="Animation" id=2]
 length = 0.7
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:region_rect")
@@ -49,7 +49,7 @@ tracks/2/keys = {
 "values": [ Vector2( 4, 4 ), Vector2( 4, 8 ) ]
 }
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=3]
 length = 0.6
 loop = true
 tracks/0/type = "value"
@@ -89,7 +89,7 @@ tracks/2/keys = {
 "values": [ Vector2( 4, 4 ), Vector2( 4, 4 ), Vector2( 4, 8 ) ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=4]
 resource_name = "wiggle"
 step = 0.05
 tracks/0/type = "value"
@@ -105,17 +105,17 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, 2 ), Vector2( 0, 0 ), Vector2( 0, -1 ), Vector2( 0, 0 ), Vector2( 0, 1 ), Vector2( 0, 0 ), Vector2( 0, -1 ), Vector2( 0, 0 ), Vector2( 0, 1 ), Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 4, 1 )
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=6]
 resource_local_to_scene = true
 extents = Vector2( 4, 4 )
 
 [node name="WeakRock" type="StaticBody2D"]
 collision_layer = 8
 script = ExtResource( 1 )
-BITMASK = SubResource( 6 )
+BITMASK = SubResource( 1 )
 
 [node name="weak-rock-outline" type="Sprite" parent="."]
 visible = false
@@ -132,9 +132,9 @@ __meta__ = {
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/rock1 = SubResource( 1 )
-anims/rock2 = SubResource( 2 )
-anims/wiggle = SubResource( 5 )
+anims/rock1 = SubResource( 2 )
+anims/rock2 = SubResource( 3 )
+anims/wiggle = SubResource( 4 )
 __meta__ = {
 "_ase_imported": true
 }
@@ -143,10 +143,12 @@ __meta__ = {
 collision_layer = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TopArea"]
+visible = false
 position = Vector2( 4, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( 4, 4 )
-shape = SubResource( 4 )
+shape = SubResource( 6 )
 [connection signal="area_entered" from="TopArea" to="." method="_on_Area2D_area_entered"]
