@@ -4,6 +4,7 @@ extends Control
 func _ready():
 	if not globals.has_played_startup_animation:
 		$AnimationPlayer.play("startup")
+		$AnimationPlayer.advance(5)
 		globals.has_played_startup_animation = true
 
 

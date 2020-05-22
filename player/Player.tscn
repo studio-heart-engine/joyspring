@@ -107,11 +107,11 @@ tracks/2/keys = {
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 4.2, 7.5 )
 
-[sub_resource type="ShaderMaterial" id=11]
+[sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 18 )
 shader_param/shirt_vibrance = 0.0
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=5]
 length = 0.2
 step = 0.01
 tracks/0/type = "value"
@@ -127,7 +127,7 @@ tracks/0/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 1.2, 0.8 ), Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=6]
 length = 0.2
 step = 0.01
 tracks/0/type = "value"
@@ -143,7 +143,7 @@ tracks/0/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 0.7, 1.4 ), Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=7]
 resource_name = "blink"
 length = 0.2
 loop = true
@@ -161,13 +161,13 @@ tracks/0/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="ShaderMaterial" id=12]
+[sub_resource type="ShaderMaterial" id=8]
 shader = ExtResource( 21 )
 shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.1
 shader_param/mask = ExtResource( 22 )
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=9]
 length = 0.8
 step = 0.05
 tracks/0/type = "value"
@@ -270,16 +270,16 @@ script = ExtResource( 17 )
 
 [node name="Sprite" parent="AnimatedSprite" index="0"]
 light_mask = 0
-material = SubResource( 11 )
+material = SubResource( 4 )
 offset = Vector2( 0, -8 )
 region_rect = Rect2( 256, 0, 16, 16 )
 
 [node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
-anims/squish = SubResource( 7 )
-anims/stretch = SubResource( 8 )
+anims/squish = SubResource( 5 )
+anims/stretch = SubResource( 6 )
 
 [node name="BlinkAnimationPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
-anims/blink = SubResource( 9 )
+anims/blink = SubResource( 7 )
 
 [node name="Glider" parent="AnimatedSprite" instance=ExtResource( 19 )]
 light_mask = 0
@@ -304,7 +304,7 @@ script = ExtResource( 20 )
 
 [node name="ColorRect" type="ColorRect" parent="RespawnTransition"]
 light_mask = 2
-material = SubResource( 12 )
+material = SubResource( 8 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -320.0
@@ -316,7 +316,7 @@ __meta__ = {
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="RespawnTransition"]
-anims/shrink-circle = SubResource( 6 )
+anims/shrink-circle = SubResource( 9 )
 
 [node name="cave-darkness" type="Sprite" parent="."]
 visible = false
