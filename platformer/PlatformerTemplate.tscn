@@ -1,4 +1,4 @@
-[gd_scene load_steps=631 format=2]
+[gd_scene load_steps=632 format=2]
 
 [ext_resource path="res://platformer/PlatformerTemplate.gd" type="Script" id=1]
 [ext_resource path="res://graphics/background/narrow.png" type="Texture" id=2]
@@ -15,9 +15,10 @@
 [ext_resource path="res://graphics/tilesets/grassGreen.png" type="Texture" id=13]
 [ext_resource path="res://platformer/WeakRock.tscn" type="PackedScene" id=14]
 [ext_resource path="res://platformer/Joy.tscn" type="PackedScene" id=15]
-[ext_resource path="res://gui/HUD.gd" type="Script" id=16]
-[ext_resource path="res://graphics/font.tres" type="DynamicFont" id=17]
-[ext_resource path="res://gui/PauseScreen.tscn" type="PackedScene" id=18]
+[ext_resource path="res://platformer/EndPosition.gd" type="Script" id=16]
+[ext_resource path="res://gui/HUD.gd" type="Script" id=17]
+[ext_resource path="res://graphics/font.tres" type="DynamicFont" id=18]
+[ext_resource path="res://gui/PauseScreen.tscn" type="PackedScene" id=19]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
@@ -3945,9 +3946,13 @@ __meta__ = {
 [node name="Joy_01" parent="Joys" instance=ExtResource( 15 )]
 position = Vector2( 76, 53 )
 
+[node name="EndPosition" type="Position2D" parent="."]
+position = Vector2( 32, 728 )
+script = ExtResource( 16 )
+
 [node name="HUD" type="CanvasLayer" parent="."]
 editor/display_folded = true
-script = ExtResource( 16 )
+script = ExtResource( 17 )
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD"]
 visible = false
@@ -3967,14 +3972,14 @@ margin_top = 5.0
 margin_right = 310.0
 margin_bottom = 13.0
 size_flags_vertical = 0
-custom_fonts/font = ExtResource( 17 )
+custom_fonts/font = ExtResource( 18 )
 text = "Joy: 0"
 align = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="HUD"]
 anims/joy-label-blink = SubResource( 612 )
 
-[node name="PauseScreen" parent="." instance=ExtResource( 18 )]
+[node name="PauseScreen" parent="." instance=ExtResource( 19 )]
 editor/display_folded = true
 
 [node name="MarginContainer" parent="PauseScreen" index="0"]
