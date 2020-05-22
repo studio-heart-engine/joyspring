@@ -1,5 +1,7 @@
 extends "../in_air.gd"
 
+export var TERMINAL_VELOCITY = 400
+
 func enter():
 	.enter()
 	owner.velocity.y = 0
@@ -11,7 +13,7 @@ func reenter():
 	anim_player.advance(1)
 
 func update(delta):
-	owner.velocity.y += GRAVITY
+	owner.velocity.y = min(owner.velocity.y + GRAVITY, TERMINAL_VELOCITY)
 	owner.velocity.x = move_smoothly(
 			owner.velocity.x, self.input_direction.x, MAX_IN_AIR_SPEED, IN_AIR_ACCELERATION)
 	.update(delta)
