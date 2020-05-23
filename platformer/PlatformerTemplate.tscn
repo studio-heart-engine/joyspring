@@ -1,4 +1,4 @@
-[gd_scene load_steps=632 format=2]
+[gd_scene load_steps=635 format=2]
 
 [ext_resource path="res://platformer/PlatformerTemplate.gd" type="Script" id=1]
 [ext_resource path="res://graphics/background/narrow.png" type="Texture" id=2]
@@ -3828,6 +3828,25 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 7/shapes = [  ]
 7/z_index = 0
 
+[sub_resource type="Gradient" id=616]
+offsets = PoolRealArray( 0, 0.286022, 0.716129, 1 )
+colors = PoolColorArray( 0.388235, 0.388235, 0.388235, 0, 0.388235, 0.388235, 0.388235, 1, 0.388235, 0.388235, 0.388235, 1, 0.984314, 0.984314, 0.984314, 0 )
+
+[sub_resource type="GradientTexture" id=614]
+gradient = SubResource( 616 )
+
+[sub_resource type="ParticlesMaterial" id=615]
+emission_shape = 2
+emission_box_extents = Vector3( 320, 180, 1 )
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 10, 0 )
+initial_velocity = 10.0
+angular_velocity = -1.0842e-19
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color_ramp = SubResource( 614 )
+
 [sub_resource type="Animation" id=612]
 length = 0.3
 tracks/0/type = "value"
@@ -3950,6 +3969,12 @@ position = Vector2( 76, 53 )
 position = Vector2( 32, 728 )
 script = ExtResource( 16 )
 
+[node name="Foreground" type="CanvasLayer" parent="."]
+
+[node name="Particles2D" type="Particles2D" parent="Foreground"]
+position = Vector2( 160, 90 )
+process_material = SubResource( 615 )
+
 [node name="HUD" type="CanvasLayer" parent="."]
 editor/display_folded = true
 script = ExtResource( 17 )
@@ -3981,6 +4006,7 @@ anims/joy-label-blink = SubResource( 612 )
 
 [node name="PauseScreen" parent="." instance=ExtResource( 19 )]
 editor/display_folded = true
+layer = 3
 
 [node name="MarginContainer" parent="PauseScreen" index="0"]
 visible = false
