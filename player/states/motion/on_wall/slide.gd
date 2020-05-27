@@ -6,7 +6,6 @@ var particles_instance
 
 func enter():
 	.enter()
-	on_wall_timer.stop()
 	blink_anim_player.stop()
 	player_sprite.visible = true
 	owner.velocity.y = WALL_SLIDE_SPEED

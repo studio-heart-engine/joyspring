@@ -55,6 +55,8 @@ func is_near_floor():
 
 
 func get_wall_state():
+	if not owner.can_wall_climb:
+		return "slide"
 	return "cling" if input_direction.y == 0 else "climb"
 
 

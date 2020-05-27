@@ -4,22 +4,30 @@ var wall_direction
 
 
 func _ready():
-	on_wall_timer.connect("timeout", self, "start_slide")
+	on_wall_timer.connect("timeout", self, "on_wall_timer_timeout")
 
 
-func start_slide():
-	blink_anim_player.play("blink")
-	yield(get_tree().create_timer(1), "timeout")
-	if owner.current_state in ["cling", "climb"]:
-		emit_signal("finished", "slide")
+func on_wall_timer_timeout():
+	owner.can_wall_climb = false
+	emit_signal("finished", "slide")
 
 
 func enter():
 	wall_direction = get_wall_direction()
 	set_looking_right(wall_direction == 1)
 	owner.velocity = Vector2.ZERO
-	if on_wall_timer.is_stopped():
-		on_wall_timer.start()
+	if owner.current_state in ["climb", "cling"]:
+		if on_wall_timer.is_stopped():
+			on_wall_timer.start()
+			print("start")
+		else:
+			on_wall_timer.set_paused(false)
+			print("unpause")
+
+func exit():
+	if owner.current_state in ["climb", "cling"]:
+		on_wall_timer.set_paused(true)
+		print("pause")
 
 func update(delta):
 	owner.velocity = owner.move_and_slide(owner.velocity, Vector2(-wall_direction, 0))

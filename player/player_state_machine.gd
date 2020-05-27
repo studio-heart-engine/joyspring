@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 var velocity = Vector2.ZERO
 var can_dash = true
+var can_wall_climb = true
 var is_dead = false
 var current_state = null
 var previous_state = null
@@ -38,6 +39,7 @@ func _input(event):
 
 func _physics_process(delta):
 	states[current_state].update(delta)
+	# print($OnWallTimer.time_left)
 
 
 func change_state(next_state):

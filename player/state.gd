@@ -35,7 +35,13 @@ func play_anim(anim_name):
 func set_looking_right(value):
 	is_looking_right = value
 	player_sprite.flip_h = not value
-	
+
+
+func start_blink():
+	blink_anim_player.play("blink")
+
+func stop_blink():
+	blink_anim_player.stop()
 
 
 func enter():

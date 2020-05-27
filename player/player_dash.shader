@@ -17,6 +17,8 @@ void fragment() {
 			COLOR.rgb = mix(cur_color, vec3(255f/255f, 182f/255f, 67f/255f), shirt_vibrance);
 		} else if(length(cur_color - vec3(110f/255f, 78f/255f, 154f/255f)) < 0.15) {
 			COLOR.rgb = mix(cur_color, vec3(222f/255f, 60f/255f, 138f/255f), shirt_vibrance);
+		} else if(length(cur_color - vec3(81f/255f, 58f/255f, 113f/255f)) < 0.15) {
+			COLOR.rgb = mix(cur_color, vec3(185f/255f, 62f/255f, 155f/255f), shirt_vibrance);
 		} else {
 			COLOR.rgb = cur_color;
 		}
