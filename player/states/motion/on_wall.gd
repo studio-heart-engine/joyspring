@@ -23,14 +23,19 @@ func enter():
 		else:
 			on_wall_timer.set_paused(false)
 			print("unpause")
+	elif on_wall_timer.time_left < 1:
+		start_blink()
 
 func exit():
 	if owner.current_state in ["climb", "cling"]:
 		on_wall_timer.set_paused(true)
 		print("pause")
+	stop_blink()
 
 func update(delta):
 	owner.velocity = owner.move_and_slide(owner.velocity, Vector2(-wall_direction, 0))
+	if on_wall_timer.time_left < 1 and not on_wall_timer.is_stopped():
+		start_blink()
 
 
 func handle_input(event):
