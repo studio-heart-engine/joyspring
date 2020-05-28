@@ -4,6 +4,13 @@ func enter():
 	.enter()
 	play_anim("hang")
 
+
+func update(delta):
+	.update(delta)
+	if not is_near_wall():
+		emit_signal("finished", "fall")
+
+
 func handle_input(event):
 	.handle_input(event)
 	

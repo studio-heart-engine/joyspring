@@ -26,9 +26,16 @@ func _process(delta):
 		var i = player.joy_followers.find(self)
 		if i == 0: follow(player.position + Vector2(0, -8), 13)
 		else: follow(player.joy_followers[i-1].position, 8)
+		avoid(player.position, 20)
 
 
 func follow(target_pos, radius):
 	var diff = target_pos - self.position
 	diff = (diff.length() - radius) * diff.normalized()
 	self.position += 0.1 * diff
+
+func avoid(target_pos, radius):
+	if position.distance_to(target_pos) < radius:
+		var diff = self.position - target_pos
+		diff = (radius - diff.length()) * diff.normalized()
+		self.position += 0.05 * diff

@@ -1,28 +1,11 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://graphics/joy.json" type="PackedScene" id=1]
 [ext_resource path="res://platformer/Joy.gd" type="Script" id=2]
 
-[sub_resource type="Gradient" id=3]
-colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
-
-[sub_resource type="GradientTexture" id=4]
-gradient = SubResource( 3 )
-
-[sub_resource type="ParticlesMaterial" id=5]
-resource_local_to_scene = true
-flag_disable_z = true
-spread = 180.0
-gravity = Vector3( 0, 0, 0 )
-initial_velocity = 2.0
-initial_velocity_random = 0.3
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-color_ramp = SubResource( 4 )
-hue_variation = 1.0
-
 [sub_resource type="Gradient" id=6]
-colors = PoolColorArray( 1, 0.807843, 0.262745, 1, 1, 0.807843, 0.262745, 0 )
+offsets = PoolRealArray( 0, 0.477352, 1 )
+colors = PoolColorArray( 1, 0.807843, 0.262745, 0.784314, 1, 0.807843, 0.262745, 0.588235, 1, 0.807843, 0.262745, 0 )
 
 [sub_resource type="GradientTexture" id=7]
 gradient = SubResource( 6 )
@@ -44,26 +27,21 @@ radius = 3.67797
 [node name="Joy" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 
-[node name="WhiteParticles" type="Particles2D" parent="." index="0"]
-amount = 5
-lifetime = 0.5
-local_coords = false
-process_material = SubResource( 5 )
-
-[node name="YellowParticles" type="Particles2D" parent="." index="1"]
+[node name="YellowParticles" type="Particles2D" parent="." index="0"]
 amount = 5
 lifetime = 0.5
 preprocess = 0.01
+visibility_rect = Rect2( -20, -20, 40, 40 )
 local_coords = false
 process_material = SubResource( 8 )
 
-[node name="Sprite" parent="." index="2"]
+[node name="Sprite" parent="." index="1"]
 region_rect = Rect2( 24, 0, 8, 8 )
 
-[node name="AnimationPlayer" parent="." index="3"]
+[node name="AnimationPlayer" parent="." index="2"]
 autoplay = "float"
 
-[node name="Hitbox" type="Area2D" parent="." index="4"]
+[node name="Hitbox" type="Area2D" parent="." index="3"]
 collision_layer = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" index="0"]

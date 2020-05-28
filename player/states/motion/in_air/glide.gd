@@ -35,6 +35,8 @@ func update(delta):
 	owner.velocity.x = move_smoothly(
 		owner.velocity.x, input_direction.x, MAX_GLIDE_HORIZONTAL_SPEED, GLIDE_HORIZONTAL_ACCELERATION)
 	.update(delta)
+	if input_direction.x != 0:
+		set_looking_right(input_direction.x == 1)
 	
 	if is_near_floor():
 		emit_signal("finished", "fall")
