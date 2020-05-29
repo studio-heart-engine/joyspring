@@ -40,7 +40,6 @@ func _input(event):
 
 func _physics_process(delta):
 	states[current_state].update(delta)
-	# print($OnWallTimer.time_left)
 
 
 func change_state(next_state):

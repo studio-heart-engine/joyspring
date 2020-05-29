@@ -19,17 +19,14 @@ func enter():
 	if owner.current_state in ["climb", "cling"]:
 		if on_wall_timer.is_stopped():
 			on_wall_timer.start()
-			print("start")
 		else:
 			on_wall_timer.set_paused(false)
-			print("unpause")
 	elif on_wall_timer.time_left < 1:
 		start_blink()
 
 func exit():
 	if owner.current_state in ["climb", "cling"]:
 		on_wall_timer.set_paused(true)
-		print("pause")
 	stop_blink()
 
 func update(delta):

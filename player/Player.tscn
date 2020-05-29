@@ -226,7 +226,6 @@ wait_time = 2.0
 one_shot = true
 
 [node name="Light2D" type="Light2D" parent="."]
-editor/display_folded = true
 position = Vector2( 0, -7.92011 )
 texture = ExtResource( 13 )
 texture_scale = 0.7
@@ -326,8 +325,8 @@ visible = false
 z_index = 4
 texture = ExtResource( 23 )
 [connection signal="ready" from="." to="RespawnTransition" method="_on_Player_ready"]
-[connection signal="player_dashed" from="States/Dash" to="Light2D" method="_on_Dash_player_dashed"]
 [connection signal="player_dashed" from="States/Dash" to="Camera" method="shake_camera"]
+[connection signal="player_dashed" from="States/Dash" to="Light2D" method="_on_Dash_player_dashed"]
 
 [editable path="AnimatedSprite"]
 

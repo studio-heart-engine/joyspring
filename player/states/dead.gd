@@ -2,6 +2,7 @@ extends "../state.gd"
 
 func enter():
 	anim_player.stop(false)
+	owner.find_node("GlowAnimationPlayer").stop()
 	squish_stretch_player.stop()
 	owner.get_node("AnimatedSprite/Sprite").modulate = Color(10, 10, 10, 10)
 	start_blink()
