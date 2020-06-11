@@ -1,38 +1,17 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://graphics/blobs/Blob.gd" type="Script" id=1]
 [ext_resource path="res://graphics/blobs/blob_noise_offset.gd" type="Script" id=2]
-[ext_resource path="res://graphics/blobs/Hitbox.gd" type="Script" id=3]
+[ext_resource path="res://graphics/outline-shader.shader" type="Shader" id=3]
+[ext_resource path="res://graphics/blobs/blobs1.png" type="Texture" id=4]
+[ext_resource path="res://graphics/blobs/Hitbox.gd" type="Script" id=5]
 
-[sub_resource type="Shader" id=1]
-code = "shader_type canvas_item;
-render_mode unshaded;
- 
-uniform float width : hint_range(0.0, 16.0);
-uniform vec4 outline_color : hint_color;
- 
-void fragment()
-{
-    vec2 size = vec2(width) / vec2(textureSize(TEXTURE, 0));
-   
-    vec4 sprite_color = texture(TEXTURE, UV);
-   
-    float alpha = sprite_color.a;
-    alpha += texture(TEXTURE, UV + vec2(size.x, -size.y)).a;
-    alpha += texture(TEXTURE, UV + vec2(size.x, size.y)).a;
-    alpha += texture(TEXTURE, UV + vec2(-size.x, size.y)).a;
-    alpha += texture(TEXTURE, UV + vec2(-size.x, -size.y)).a;
-	
-    COLOR = vec4(outline_color.rgb, clamp(alpha, 0.0, 1.0));
-}
-"
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 3 )
 shader_param/width = 1.0
 shader_param/outline_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="CircleShape2D" id=3]
+[sub_resource type="CircleShape2D" id=2]
 radius = 6.0
 
 [node name="Blob" type="Node2D"]
@@ -43,17 +22,18 @@ script = ExtResource( 2 )
 
 [node name="Outline" type="Sprite" parent="NoiseOffset"]
 modulate = Color( 0.972549, 0.184314, 0.635294, 1 )
-material = SubResource( 2 )
+material = SubResource( 1 )
+texture = ExtResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="NoiseOffset"]
 z_index = 1
+texture = ExtResource( 4 )
 
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 2
-script = ExtResource( 3 )
+script = ExtResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-visible = false
 z_index = 2
-shape = SubResource( 3 )
+shape = SubResource( 2 )
 [connection signal="area_entered" from="Hitbox" to="Hitbox" method="_on_Hitbox_area_entered"]
