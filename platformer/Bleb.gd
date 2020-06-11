@@ -32,10 +32,10 @@ func _physics_process(delta):
 	match state:
 		states.CRAWL:
 			if not down.is_colliding():
-				anim_player.play("obtuse-turn")
+				anim_player.play("obtuse-turn", -1, 2)
 				state = states.TURN_OBTUSE
 			elif forward.is_colliding():
-				anim_player.play("acute-turn")
+				anim_player.play("acute-turn", -1, 2)
 				state = states.TURN_ACUTE
 			else:
 				var dir = rotation_degrees + (0 if facing_right else 180)

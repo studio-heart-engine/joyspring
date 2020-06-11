@@ -5,13 +5,13 @@ func enter():
 	owner.find_node("GlowAnimationPlayer").stop()
 	squish_stretch_player.stop()
 	owner.get_node("AnimatedSprite/Sprite").modulate = Color(10, 10, 10, 10)
-	owner.get_node("Scarf").modulate = Color(0, 0, 0, 0)
+	owner.get_node("Cape").modulate = Color(0, 0, 0, 0)
 	start_blink()
 
 
 func exit():
 	owner.get_node("AnimatedSprite/Sprite").modulate = Color(1, 1, 1, 1)
-	owner.get_node("Scarf").modulate = Color(1, 1, 1, 1)
+	owner.get_node("Cape").modulate = Color(1, 1, 1, 1)
 	
 	blink_anim_player.stop()
 

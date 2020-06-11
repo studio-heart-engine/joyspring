@@ -15,6 +15,8 @@ onready var glider = owner.get_node("AnimatedSprite/Glider")
 onready var glider_anim_player = glider.get_node("AnimationPlayer")
 onready var glider_sprite = glider.get_node("Sprite")
 
+onready var cape = owner.get_node("Cape")
+
 onready var JumpParticles = preload("res://graphics/particles/JumpParticles.tscn")
 onready var FallParticles = preload("res://graphics/particles/FallParticles.tscn")
 onready var SkidParticles = preload("res://graphics/particles/SkidParticles.tscn")

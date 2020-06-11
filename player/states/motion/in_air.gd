@@ -9,6 +9,7 @@ func enter():
 	# from coming off wall
 	blink_anim_player.stop()
 	player_sprite.visible = true
+	cape.visible = true
 	
 	owner.velocity.x = clamp(owner.velocity.x, -MAX_IN_AIR_SPEED, MAX_IN_AIR_SPEED)
 
