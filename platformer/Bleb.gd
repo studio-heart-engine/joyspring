@@ -1,15 +1,22 @@
 extends KinematicBody2D
 
-export var GRAVITY = 12
 export var SPEED = 10
 
-enum states {CRAWL, TURN, FALL}
+enum states {CRAWL, TURN_ACUTE, TURN_OBTUSE}
 
-onready var anim_player = $AnimationPlayer
-
-var facing_right = [true, false][randi() % 2]
+export var facing_right = true setget set_facing_right
 var velocity = Vector2(SPEED if facing_right else -SPEED, 0)
 var state = states.CRAWL
+
+onready var down = $RayCasts/Down
+onready var forward = $RayCasts/Forward
+onready var anim_player = $AnimationPlayer
+
+
+func set_facing_right(value):
+	facing_right = value
+	scale.x = 1 if facing_right else -1
+	print("set facing right to " + str(value))
 
 
 func _on_Hitbox_area_entered(area):
@@ -17,31 +24,44 @@ func _on_Hitbox_area_entered(area):
 
 
 func _ready():
-	$Sprite.flip_h = facing_right
 	anim_player.play("crawl")
 
 
 func _physics_process(delta):
+	
 	match state:
 		states.CRAWL:
-			velocity = move_and_slide(velocity, Vector2.UP)
-			if velocity.x == 0:
-				state = states.TURN
-				anim_player.play("turn")
-			elif not is_on_floor():
-				velocity.y = 0
-				state = states.FALL
-				anim_player.play("fall")
-		states.FALL:
-			velocity.y += GRAVITY
-			velocity = move_and_slide(velocity, Vector2.UP)
-			if velocity.y == 0:
+			if not down.is_colliding():
+				anim_player.play("obtuse-turn")
+				state = states.TURN_OBTUSE
+			elif forward.is_colliding():
+				anim_player.play("acute-turn")
+				state = states.TURN_ACUTE
+			else:
+				var dir = rotation_degrees + (0 if facing_right else 180)
+				dir = deg2rad(dir)
+				position += SPEED * Vector2(cos(dir), sin(dir)) * delta
+		states.TURN_ACUTE:
+			anim_player.queue("crawl")
+			if anim_player.current_animation == "crawl":
+				turn_acute()
 				state = states.CRAWL
-				anim_player.play("crawl")
-		states.TURN:
-			if not anim_player.is_playing():
+		states.TURN_OBTUSE:
+			anim_player.queue("crawl")
+			if anim_player.current_animation == "crawl":
+				turn_obtuse()
 				state = states.CRAWL
-				facing_right = not facing_right
-				$Sprite.flip_h = facing_right
-				anim_player.play("crawl")
-				velocity.x = SPEED if facing_right else -SPEED
+
+
+func turn_acute():
+	var coef = 1 if facing_right else -1
+	var dir = deg2rad(rotation_degrees)
+	position += Vector2(coef * 8, -8).rotated(dir)
+	rotation_degrees -= coef * 90
+
+
+func turn_obtuse():
+	var coef = 1 if facing_right else -1
+	var dir = deg2rad(rotation_degrees)
+	position += Vector2(coef * 8, 8).rotated(dir)
+	rotation_degrees += coef * 90
