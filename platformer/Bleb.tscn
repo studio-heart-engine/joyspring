@@ -44,7 +44,6 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id=2]
 length = 1.2
-loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:region_rect")
 tracks/0/interp = 0
@@ -142,10 +141,10 @@ extents = Vector2( 7, 4 )
 
 [sub_resource type="RectangleShape2D" id=6]
 resource_local_to_scene = true
-extents = Vector2( 3, 6 )
+extents = Vector2( 6, 3 )
 
 [node name="Bleb" type="KinematicBody2D"]
-collision_layer = 0
+collision_layer = 16
 collision_mask = 8
 script = ExtResource( 1 )
 
@@ -154,7 +153,7 @@ position = Vector2( 8, 8 )
 texture = ExtResource( 2 )
 offset = Vector2( 0, -8 )
 region_enabled = true
-region_rect = Rect2( 434, 0, 31, 32 )
+region_rect = Rect2( 186, 0, 31, 32 )
 __meta__ = {
 "_ase_imported": true
 }
@@ -169,7 +168,6 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2( 0, -4 )
 shape = SubResource( 5 )
 
@@ -177,23 +175,35 @@ shape = SubResource( 5 )
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2( 5, -8 )
+position = Vector2( 0, -3 )
 shape = SubResource( 6 )
 
 [node name="RayCasts" type="Node2D" parent="."]
 
-[node name="Down" type="RayCast2D" parent="RayCasts"]
-visible = false
+[node name="Down1" type="RayCast2D" parent="RayCasts"]
 modulate = Color( 0, 1, 0.0156863, 1 )
-position = Vector2( 8, 0 )
+position = Vector2( 8, -1 )
 enabled = true
 cast_to = Vector2( 0, 8 )
 collision_mask = 8
 collide_with_areas = true
 
-[node name="Forward" type="RayCast2D" parent="RayCasts"]
-visible = false
+[node name="Down2" type="RayCast2D" parent="RayCasts"]
+modulate = Color( 0, 1, 0.0156863, 1 )
+position = Vector2( 8, -1 )
+enabled = true
+cast_to = Vector2( 0, 16 )
+collision_mask = 8
+collide_with_areas = true
+
+[node name="ForwardBottom" type="RayCast2D" parent="RayCasts"]
 position = Vector2( 7, -4 )
+enabled = true
+cast_to = Vector2( 1, 0 )
+collision_mask = 8
+
+[node name="ForwardTop" type="RayCast2D" parent="RayCasts"]
+position = Vector2( 7, -10 )
 enabled = true
 cast_to = Vector2( 1, 0 )
 collision_mask = 8

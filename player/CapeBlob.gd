@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-export (float) var WIND_SPEED = 80.0
+export (float) var WIND_SPEED = 40.0
 
 func ready():
 	rotation_degrees = randi() % 360
@@ -17,10 +17,7 @@ func follow(target_pos, min_dist, max_dist, speed):
 	diff = target_pos - position
 	mag = diff.length()
 	if mag > max_dist:
-		print(position.distance_to(target_pos))
 		position += (mag - max_dist) * dir
-		print(position.distance_to(target_pos))
-		print("\n")
 
 func _process(delta):
 	position.x += WIND_SPEED * delta * (1 if $"../../AnimatedSprite".flip_h else -1)

@@ -6,7 +6,6 @@ var can_wall_climb = true
 var is_dead = false
 var current_state = null
 var previous_state = null
-var joy_followers = []
 
 onready var sprite = $AnimatedSprite/Sprite
 
