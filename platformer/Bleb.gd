@@ -71,11 +71,6 @@ func _physics_process(delta):
 				state = states.CRAWL
 
 
-func _process(delta):
-	print("down1 " + str(down1.is_colliding()))
-	print("down2 " + str(down2.is_colliding()))
-
-
 func turn_acute():
 	var coef = 1 if facing_right else -1
 	var dir = deg2rad(rotation_degrees)

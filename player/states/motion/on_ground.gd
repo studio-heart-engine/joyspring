@@ -1,6 +1,6 @@
 extends "../motion.gd"
 
-export var ON_GROUND_ACCELERATION = 6
+export var ON_GROUND_ACCELERATION = 7
 
 func enter():
 	owner.can_dash = true

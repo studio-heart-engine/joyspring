@@ -2,7 +2,7 @@ extends "../motion.gd"
 
 export var GRAVITY = 12
 export var MAX_IN_AIR_SPEED = 80
-export var IN_AIR_ACCELERATION = 4
+export var IN_AIR_ACCELERATION = 6
 
 
 func enter():

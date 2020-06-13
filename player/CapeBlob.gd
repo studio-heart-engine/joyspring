@@ -9,7 +9,6 @@ func ready():
 	$Sprite.region_rect.position.x = region_x
 
 func follow(target_pos, min_dist, max_dist, speed):
-	
 	var diff = target_pos - position
 	var dir = diff.normalized()
 	var mag = diff.length()
@@ -19,5 +18,5 @@ func follow(target_pos, min_dist, max_dist, speed):
 	if mag > max_dist:
 		position += (mag - max_dist) * dir
 
-func _process(delta):
+func _process(delta): 
 	position.x += WIND_SPEED * delta * (1 if $"../../AnimatedSprite".flip_h else -1)
