@@ -12,9 +12,6 @@ onready var cape = $"../../Player/Cape"
 export (float) var CAPE_WIND_SPEED = 10.0
 
 
-signal attached_to_cape
-
-
 func _ready():
 	rotation_degrees = randi() % 4 * 90
 	anim_player.get_animation("collect1").set_loop(false)
@@ -53,6 +50,7 @@ func follow(target_pos, min_dist, max_dist, speed):
 	mag = diff.length()
 	if mag <= max_dist and not is_on_cape:
 		self.is_on_cape = true
+		Events.emit_signal("joy_attached_to_cape")
 
 func _process(delta):
 	if is_following_player:
