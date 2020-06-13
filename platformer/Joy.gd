@@ -42,7 +42,7 @@ func _on_Hitbox_area_entered(area):
 
 
 func follow(target_pos, min_dist, max_dist, speed):
-	if not is_on_cape: speed /= 3
+	if not is_on_cape: speed /= 5
 	var diff = target_pos - position
 	var dir = diff.normalized()
 	var mag = diff.length()

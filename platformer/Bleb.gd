@@ -8,6 +8,12 @@ export var facing_right = true setget set_facing_right
 var velocity = Vector2(SPEED if facing_right else -SPEED, 0)
 var state = states.CRAWL
 
+var possible_colors = [
+	"#f82f68",
+	"#f82fa2",
+	"#e841cf"
+]
+
 onready var down1 = $RayCasts/Down1
 onready var down2 = $RayCasts/Down2
 onready var forward_bottom = $RayCasts/ForwardBottom
@@ -26,6 +32,7 @@ func _on_Hitbox_area_entered(area):
 
 func _ready():
 	anim_player.play("crawl")
+	$Sprite.material.set_shader_param("outline_color", Color(possible_colors[randi() % len(possible_colors)]))
 
 
 func _physics_process(delta):
