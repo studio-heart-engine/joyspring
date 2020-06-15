@@ -27,7 +27,7 @@ func _process(delta):
 	
 	var n = get_child_count()
 	
-	var horizontal_noise_offset = 60 * noise.get_noise_2d(0, 60 * time_elapsed)
+	var horizontal_noise_offset =  noise.get_noise_2d(150 * time_elapsed, 0)
 	var vertical_noise_offset =  noise.get_noise_2d(0, 150 * time_elapsed)
 	
 	# move the last joy thats on the cape randomly centered around the middle joy
@@ -36,7 +36,7 @@ func _process(delta):
 		j -= 1
 	
 	for i in range(j+1):
-		get_child(i).position.y += vertical_noise_offset
+		get_child(i).position += Vector2(horizontal_noise_offset, vertical_noise_offset)
 	
 	# follow first joy after following the last one so the max_dist is correctly enforced
 	
