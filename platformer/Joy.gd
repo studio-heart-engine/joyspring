@@ -7,9 +7,7 @@ var is_following_player = false setget set_following_player
 var is_on_cape = false setget set_on_cape
 
 onready var anim_player = $AnimationPlayer
-onready var cape = $"../../Player/Cape"
-
-export (float) var CAPE_WIND_SPEED = 10.0
+onready var cape_joys = $"../../Player/Cape/Joys"
 
 
 func _ready():
@@ -37,7 +35,7 @@ func _on_Hitbox_area_entered(area):
 	$Hitbox.set_deferred("monitoring", false)
 	Events.emit_signal("joy_collected")
 	get_parent().call_deferred("remove_child", self)
-	cape.call_deferred("add_child", self)
+	cape_joys.call_deferred("add_child", self)
 	set_following_player(true)
 
 
@@ -56,7 +54,3 @@ func follow(target_pos, min_dist, max_dist, speed):
 	
 	if mag > max_dist and is_on_cape:
 		position += (mag - max_dist) * dir
-
-func _process(delta):
-	if is_following_player:
-		position.x += CAPE_WIND_SPEED * delta * (1 if $"../../AnimatedSprite".flip_h else -1)

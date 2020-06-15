@@ -7,6 +7,9 @@ export var GLIDE_HORIZONTAL_ACCELERATION = 1
 
 
 func enter():
+	if not owner.has_node("Cape"):
+		emit_signal("finished", "previous")
+		return
 	.enter()
 	glider.show()
 	squish_stretch_player.play("squish")

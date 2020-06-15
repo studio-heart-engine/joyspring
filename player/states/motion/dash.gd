@@ -2,6 +2,7 @@ extends "../motion.gd"
 
 export var DASH_SPEED = 300
 export var MAX_DASH_TIME = 0.2
+export var MAX_UP_DASH_TIME = 0.01
 
 var direction
 var timer
@@ -15,6 +16,7 @@ func enter():
 	owner.can_dash = false
 	
 	direction = self.input_direction.normalized()
+	
 	if self.input_direction.x != 0:
 		set_looking_right(self.input_direction.x == 1)
 	
@@ -31,7 +33,7 @@ func enter():
 	
 	
 	timer = Timer.new()
-	timer.set_wait_time(MAX_DASH_TIME)
+	timer.set_wait_time(MAX_UP_DASH_TIME if direction == Vector2.UP else MAX_DASH_TIME)
 	timer.set_one_shot(true)
 	timer.connect("timeout", self, "finish")
 	add_child(timer)

@@ -19,6 +19,7 @@ func enter():
 	if owner.current_state in ["climb", "cling"]:
 		if on_wall_timer.is_stopped():
 			on_wall_timer.start()
+			on_wall_timer.set_paused(false)
 		else:
 			on_wall_timer.set_paused(false)
 	elif on_wall_timer.time_left < 1:
@@ -31,7 +32,7 @@ func exit():
 
 func update(delta):
 	owner.velocity = owner.move_and_slide(owner.velocity, Vector2(-wall_direction, 0))
-	if on_wall_timer.time_left < 1 and not on_wall_timer.is_stopped():
+	if on_wall_timer.time_left < 1 and not on_wall_timer.is_stopped() and not blink_anim_player.is_playing():
 		start_blink()
 
 

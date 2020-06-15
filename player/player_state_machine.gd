@@ -60,12 +60,12 @@ func change_state(next_state):
 
 
 
-func respawn():
-	position = $"../PlayerStartPosition".position
-	$Camera.align()
-	$Camera.reset_smoothing()
-	change_state("idle")
-	states[current_state].input_direction = Vector2.ZERO
-	previous_state = null
-	velocity = Vector2.ZERO
+#func respawn():
+#	position = $"../PlayerStartPosition".position
+#	$Camera.align()
+#	$Camera.reset_smoothing()
+#	change_state("idle")
+#	states[current_state].input_direction = Vector2.ZERO
+#	previous_state = null
+#	velocity = Vector2.ZERO
 	
