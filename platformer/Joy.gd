@@ -23,13 +23,13 @@ func set_following_player(value):
 	if value:
 		anim_player.stop(false)
 		$Hitbox/CollisionShape2D.set_deferred("disabled", true)
-		$YellowParticles.emitting = true
+		$Particles.emitting = true
 
 
 func set_on_cape(value):
 	is_on_cape = value
 	if value:
-		$YellowParticles.emitting = false
+		$Particles.emitting = false
 
 
 func _on_Hitbox_area_entered(area):
@@ -47,10 +47,15 @@ func follow(target_pos, min_dist, max_dist, speed):
 	var dir = diff.normalized()
 	var mag = diff.length()
 	position += speed * min(mag - min_dist, 10) * dir
+	diff = target_pos - position
 	mag = diff.length()
+	
 	if mag <= max_dist and not is_on_cape:
 		self.is_on_cape = true
 		Events.emit_signal("joy_attached_to_cape")
+	
+	if mag > max_dist and is_on_cape:
+		position += (mag - max_dist) * dir
 
 func _process(delta):
 	if is_following_player:

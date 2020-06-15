@@ -1,15 +1,9 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://graphics/joy.json" type="PackedScene" id=1]
 [ext_resource path="res://platformer/Joy.gd" type="Script" id=2]
 [ext_resource path="res://graphics/outline-shader.shader" type="Shader" id=3]
 [ext_resource path="res://graphics/joy.png" type="Texture" id=4]
-
-[sub_resource type="Gradient" id=1]
-colors = PoolColorArray( 1, 0.807843, 0.262745, 0.784314, 1, 0.904297, 0.632812, 0 )
-
-[sub_resource type="GradientTexture" id=2]
-gradient = SubResource( 1 )
 
 [sub_resource type="ParticlesMaterial" id=3]
 flag_disable_z = true
@@ -20,7 +14,6 @@ initial_velocity_random = 0.3
 angular_velocity = 4.57384e-41
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-color_ramp = SubResource( 2 )
 
 [sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 3 )
@@ -33,10 +26,9 @@ radius = 3.67797
 [node name="Joy" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 
-[node name="YellowParticles" type="Particles2D" parent="." index="0"]
+[node name="Particles" type="Particles2D" parent="." index="0"]
 z_index = -1
-emitting = false
-amount = 100
+amount = 10
 preprocess = 0.01
 visibility_rect = Rect2( -20, -20, 40, 40 )
 local_coords = false
