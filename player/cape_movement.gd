@@ -51,7 +51,7 @@ func _process(delta):
 			# offset all joys on cape
 			for i in range(n):
 				if get_child(i).is_on_cape:
-					get_child(i).position += 3 * Vector2(horizontal_noise_offset, vertical_noise_offset)
+					get_child(i).position += 1.8 * Vector2(horizontal_noise_offset, vertical_noise_offset)
 		
 		MovementType.NOT_FLOATING:
 			var horizontal_noise_offset =  noise.get_noise_2d(100 * time_elapsed, 0)

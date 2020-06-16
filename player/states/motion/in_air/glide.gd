@@ -3,7 +3,7 @@ extends "../in_air.gd"
 export var MAX_GLIDE_FALL_SPEED = 20
 export var GLIDE_FALL_ACCELERATION = 3
 export var MAX_GLIDE_HORIZONTAL_SPEED = 90
-export var GLIDE_HORIZONTAL_ACCELERATION = 2
+export var GLIDE_HORIZONTAL_ACCELERATION = 3
 
 func enter():
 	if not owner.has_node("Cape"):
@@ -14,6 +14,7 @@ func enter():
 	#glider.show()
 #	squish_stretch_player.play("squish")
 	play_anim("openglide")
+	anim_player.queue("glide")
 #	glider_anim_player.play("open", -1, 1.3)
 #	glider_anim_player.queue("glide")
 	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
@@ -24,6 +25,7 @@ func reenter():
 	Events.emit_signal("glide_started")
 #	glider.show()
 	play_anim("openglide")
+	anim_player.queue("glide")
 #	glider_anim_player.play("glide")
 	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
 

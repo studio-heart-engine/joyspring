@@ -28,6 +28,7 @@ onready var on_wall_timer = owner.get_node("OnWallTimer")
 
 func _ready():
 	glider_anim_player.get_animation("open").set_loop(false)
+	anim_player.get_animation("openglide").set_loop(false)
 
 
 func play_anim(anim_name):
