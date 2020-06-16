@@ -6,3 +6,7 @@ A quick platformer about spreading positivity.
 3. Open the PlatformerTemplate.tscn file using the Godot file system on the lower left
 4. Click the Play Scene button on the top right (it's the fourth button)
 5. Enjoy :)
+
+### How to Make Levelsa
+1. Duplicate PlatformerTemplate.tscn and call it MyLevel.tscn or something
+2. aaaaaaaaaaaaa
