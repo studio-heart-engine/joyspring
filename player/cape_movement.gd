@@ -45,8 +45,8 @@ func _process(delta):
 	
 	match movement_type:
 		MovementType.FLOATING:
-			var horizontal_noise_offset =  noise.get_noise_2d(200 * time_elapsed, 0)
-			var vertical_noise_offset =  noise.get_noise_2d(0, 200 * time_elapsed)
+			var horizontal_noise_offset =  noise.get_noise_2d(100 * time_elapsed, 0)
+			var vertical_noise_offset =  noise.get_noise_2d(0, 100 * time_elapsed)
 			
 			# offset all joys on cape
 			for i in range(n):
