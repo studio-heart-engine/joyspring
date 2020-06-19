@@ -10,28 +10,28 @@ func enter():
 		emit_signal("finished", "previous")
 		return
 	.enter()
-	Events.emit_signal("glide_started")
+	Events.emit_signal("float_started")
 	#glider.show()
 #	squish_stretch_player.play("squish")
-	play_anim("glide")
+	play_anim("float")
 #	glider_anim_player.play("open", -1, 1.3)
-#	glider_anim_player.queue("glide")
+#	glider_anim_player.queue("float")
 	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
 
 
 func reenter():
 	.reenter()
-	Events.emit_signal("glide_started")
+	Events.emit_signal("float_started")
 #	glider.show()
-	play_anim("glide")
-#	glider_anim_player.play("glide")
+	play_anim("float")
+#	glider_anim_player.play("float")
 	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
 
 
 func exit():
 #	glider.hide()
 #	glider_anim_player.stop()
-	Events.emit_signal("glide_ended")
+	Events.emit_signal("float_ended")
 
 
 func update(delta):
@@ -49,5 +49,5 @@ func update(delta):
 
 func handle_input(event):
 	.handle_input(event)
-	if event.is_action_pressed("glide"):
+	if event.is_action_pressed("float"):
 		emit_signal("finished", "fall")

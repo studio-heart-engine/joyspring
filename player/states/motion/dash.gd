@@ -51,4 +51,4 @@ func update(delta):
 		finish()
 
 func finish():
-	emit_signal("finished", "fall" if owner.previous_state == "glide" else "previous")
+	emit_signal("finished", "fall" if owner.previous_state == "float" else "previous")

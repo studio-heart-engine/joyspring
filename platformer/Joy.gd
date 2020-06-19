@@ -7,6 +7,7 @@ var is_following_player = false setget set_following_player
 var is_on_cape = false setget set_on_cape
 
 onready var anim_player = $AnimationPlayer
+onready var player = $"../../Player"
 onready var cape_joys = $"../../Player/Cape/Joys"
 
 
@@ -31,6 +32,7 @@ func set_on_cape(value):
 
 
 func _on_Hitbox_area_entered(area):
+	
 	PlayerData.score += POINTS_PER_COIN
 	$Hitbox.set_deferred("monitoring", false)
 	Events.emit_signal("joy_collected")

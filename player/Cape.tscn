@@ -1,12 +1,14 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://player/cape_movement.gd" type="Script" id=1]
+[ext_resource path="res://player/Cape.gd" type="Script" id=1]
+[ext_resource path="res://player/cape_movement.gd" type="Script" id=2]
+[ext_resource path="res://graphics/cape.json" type="PackedScene" id=3]
 
 [sub_resource type="Animation" id=1]
 resource_name = "fade-white"
 length = 0.6
 tracks/0/type = "value"
-tracks/0/path = NodePath("Joys:modulate")
+tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -19,9 +21,19 @@ tracks/0/keys = {
 }
 
 [node name="Cape" type="Node2D"]
+script = ExtResource( 1 )
 
 [node name="Joys" type="Node2D" parent="."]
-script = ExtResource( 1 )
+z_index = -1
+script = ExtResource( 2 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/fade-white = SubResource( 1 )
+
+[node name="CapeFrontOffset" type="Position2D" parent="."]
+position = Vector2( 0, -8 )
+
+[node name="Front" parent="CapeFrontOffset" instance=ExtResource( 3 )]
+z_index = 1
+
+[editable path="CapeFrontOffset/Front"]

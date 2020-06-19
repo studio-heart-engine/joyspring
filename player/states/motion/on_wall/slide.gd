@@ -9,7 +9,8 @@ func enter():
 	blink_anim_player.stop()
 	on_wall_timer.stop()
 	player_sprite.visible = true
-	cape.visible = true
+	if cape != null:
+		cape.visible = true
 	owner.velocity.y = WALL_SLIDE_SPEED
 	play_anim("slide")
 	particles_instance = wall_slide_particles.instance()

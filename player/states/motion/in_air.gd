@@ -9,7 +9,8 @@ func enter():
 	# from coming off wall
 	blink_anim_player.stop()
 	player_sprite.visible = true
-	cape.visible = true
+	if cape != null:
+		cape.visible = true
 	
 	owner.velocity.x = clamp(owner.velocity.x, -MAX_IN_AIR_SPEED, MAX_IN_AIR_SPEED)
 
@@ -42,5 +43,5 @@ func handle_input(event):
 	.handle_input(event)
 	if event.is_action_pressed("dash") and owner.can_dash and self.input_direction != Vector2.ZERO:
 		emit_signal("finished", "dash")
-	elif event.is_action_pressed("glide") and owner.current_state != "glide":
-		emit_signal("finished", "glide")
+	elif event.is_action_pressed("float") and owner.current_state != "float":
+		emit_signal("finished", "float")

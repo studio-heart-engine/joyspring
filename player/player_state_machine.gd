@@ -19,7 +19,7 @@ onready var states = {
 	"slide": $States/Slide,
 	"jump": $States/Jump,
 	"fall": $States/Fall,
-	"glide": $States/Glide,
+	"float": $States/Float,
 	"dead": $States/Dead,
 }
 

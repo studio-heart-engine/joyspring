@@ -25,15 +25,15 @@ func _ready():
 		joy.is_on_cape = true
 	set_process(true)
 	
-	Events.connect("glide_started", self, "_on_glide_started")
-	Events.connect("glide_ended", self, "_on_glide_ended")
+	Events.connect("float_started", self, "_on_float_started")
+	Events.connect("float_ended", self, "_on_float_ended")
 
 
-func _on_glide_started():
+func _on_float_started():
 	movement_type = MovementType.FLOATING
 	anim_player.play("fade-white")
 
-func _on_glide_ended():
+func _on_float_ended():
 	movement_type = MovementType.NOT_FLOATING
 	anim_player.play_backwards()
 
