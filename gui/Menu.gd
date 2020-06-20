@@ -21,5 +21,5 @@ func begin():
 	$AnimationPlayer.stop(false)
 	$AnimationPlayer.play("start-fall")
 	yield($AnimationPlayer, "animation_finished")
-	SceneChanger.change_scene("res://platformer/levels/Level01.tscn")
+	SceneChanger.change_scene("res://platformer/levels/Level_01.tscn")
 	
