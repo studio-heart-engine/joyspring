@@ -1,4 +1,4 @@
-[gd_scene load_steps=657 format=2]
+[gd_scene load_steps=659 format=2]
 
 [ext_resource path="res://platformer/PlatformerTemplate.gd" type="Script" id=1]
 [ext_resource path="res://graphics/background/background1.png" type="Texture" id=2]
@@ -11,23 +11,24 @@
 [ext_resource path="res://graphics/blobs/blobs3.png" type="Texture" id=9]
 [ext_resource path="res://graphics/blobs/blobs4.png" type="Texture" id=10]
 [ext_resource path="res://graphics/blobs/blobs5.png" type="Texture" id=11]
-[ext_resource path="res://platformer/Bleb.tscn" type="PackedScene" id=12]
-[ext_resource path="res://platformer/Joy.tscn" type="PackedScene" id=13]
-[ext_resource path="res://platformer/WeakRock.tscn" type="PackedScene" id=14]
-[ext_resource path="res://platformer/MovableTile.tscn" type="PackedScene" id=15]
-[ext_resource path="res://player/Player.tscn" type="PackedScene" id=16]
-[ext_resource path="res://player/Cape.tscn" type="PackedScene" id=17]
-[ext_resource path="res://graphics/tilesets/grassBlue.png" type="Texture" id=18]
-[ext_resource path="res://graphics/tilesets/rocksPurple.png" type="Texture" id=19]
-[ext_resource path="res://graphics/tilesets/rocksYellow.png" type="Texture" id=20]
-[ext_resource path="res://graphics/tilesets/grassGreen.png" type="Texture" id=21]
-[ext_resource path="res://platformer/MovingPlatform.tscn" type="PackedScene" id=22]
-[ext_resource path="res://platformer/Particles2D.gd" type="Script" id=23]
-[ext_resource path="res://graphics/white-radial-gradient.png" type="Texture" id=24]
-[ext_resource path="res://platformer/EndPosition.gd" type="Script" id=25]
-[ext_resource path="res://gui/HUD.gd" type="Script" id=26]
-[ext_resource path="res://graphics/font.tres" type="DynamicFont" id=27]
-[ext_resource path="res://gui/PauseScreen.tscn" type="PackedScene" id=28]
+[ext_resource path="res://platformer/MovingBlob.tscn" type="PackedScene" id=12]
+[ext_resource path="res://platformer/Bleb.tscn" type="PackedScene" id=13]
+[ext_resource path="res://platformer/Joy.tscn" type="PackedScene" id=14]
+[ext_resource path="res://platformer/WeakRock.tscn" type="PackedScene" id=15]
+[ext_resource path="res://platformer/MovableTile.tscn" type="PackedScene" id=16]
+[ext_resource path="res://player/Player.tscn" type="PackedScene" id=17]
+[ext_resource path="res://player/Cape.tscn" type="PackedScene" id=18]
+[ext_resource path="res://graphics/tilesets/grassBlue.png" type="Texture" id=19]
+[ext_resource path="res://graphics/tilesets/rocksPurple.png" type="Texture" id=20]
+[ext_resource path="res://graphics/tilesets/rocksYellow.png" type="Texture" id=21]
+[ext_resource path="res://graphics/tilesets/grassGreen.png" type="Texture" id=22]
+[ext_resource path="res://platformer/MovingPlatform.tscn" type="PackedScene" id=23]
+[ext_resource path="res://platformer/Particles2D.gd" type="Script" id=24]
+[ext_resource path="res://graphics/white-radial-gradient.png" type="Texture" id=25]
+[ext_resource path="res://platformer/EndPosition.gd" type="Script" id=26]
+[ext_resource path="res://gui/HUD.gd" type="Script" id=27]
+[ext_resource path="res://graphics/font.tres" type="DynamicFont" id=28]
+[ext_resource path="res://gui/PauseScreen.tscn" type="PackedScene" id=29]
 
 [sub_resource type="TileSet" id=621]
 0/name = "Dark"
@@ -1992,7 +1993,7 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 
 [sub_resource type="TileSet" id=620]
 0/name = "Blue Grass Tiles"
-0/texture = ExtResource( 18 )
+0/texture = ExtResource( 19 )
 0/tex_offset = Vector2( 0, 0 )
 0/modulate = Color( 1, 1, 1, 1 )
 0/region = Rect2( 0, 0, 80, 64 )
@@ -2479,7 +2480,7 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 } ]
 0/z_index = 0
 1/name = "Blue Grass Props"
-1/texture = ExtResource( 18 )
+1/texture = ExtResource( 19 )
 1/tex_offset = Vector2( 0, 0 )
 1/modulate = Color( 1, 1, 1, 1 )
 1/region = Rect2( 0, 64, 80, 16 )
@@ -2495,7 +2496,7 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 1/shapes = [  ]
 1/z_index = 0
 2/name = "Purple Rocks Tiles"
-2/texture = ExtResource( 19 )
+2/texture = ExtResource( 20 )
 2/tex_offset = Vector2( 0, 0 )
 2/modulate = Color( 1, 1, 1, 1 )
 2/region = Rect2( 0, 0, 80, 64 )
@@ -2976,7 +2977,7 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 } ]
 2/z_index = 0
 3/name = "Purple Rocks Props"
-3/texture = ExtResource( 19 )
+3/texture = ExtResource( 20 )
 3/tex_offset = Vector2( 0, 0 )
 3/modulate = Color( 1, 1, 1, 1 )
 3/region = Rect2( 0, 64, 80, 16 )
@@ -2992,7 +2993,7 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 3/shapes = [  ]
 3/z_index = 0
 4/name = "Yellow Rocks Tiles"
-4/texture = ExtResource( 20 )
+4/texture = ExtResource( 21 )
 4/tex_offset = Vector2( 0, 0 )
 4/modulate = Color( 1, 1, 1, 1 )
 4/region = Rect2( 0, 0, 80, 64 )
@@ -3473,7 +3474,7 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 } ]
 4/z_index = 0
 5/name = "Yellow Rocks Props"
-5/texture = ExtResource( 20 )
+5/texture = ExtResource( 21 )
 5/tex_offset = Vector2( 0, 0 )
 5/modulate = Color( 1, 1, 1, 1 )
 5/region = Rect2( 0, 64, 80, 16 )
@@ -3489,7 +3490,7 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 5/shapes = [  ]
 5/z_index = 0
 6/name = "Green Grass Tiles"
-6/texture = ExtResource( 21 )
+6/texture = ExtResource( 22 )
 6/tex_offset = Vector2( 0, 0 )
 6/modulate = Color( 1, 1, 1, 1 )
 6/region = Rect2( 0, 0, 80, 64 )
@@ -3976,7 +3977,7 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 } ]
 6/z_index = 0
 7/name = "Green Grass Props"
-7/texture = ExtResource( 21 )
+7/texture = ExtResource( 22 )
 7/tex_offset = Vector2( 0, 0 )
 7/modulate = Color( 1, 1, 1, 1 )
 7/region = Rect2( 0, 64, 80, 16 )
@@ -3991,6 +3992,12 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 7/navigation_offset = Vector2( 0, 0 )
 7/shapes = [  ]
 7/z_index = 0
+
+[sub_resource type="Curve2D" id=630]
+resource_local_to_scene = true
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0 )
+}
 
 [sub_resource type="Curve2D" id=629]
 resource_local_to_scene = true
@@ -4114,13 +4121,22 @@ texture = ExtResource( 10 )
 position = Vector2( 56, 24 )
 texture = ExtResource( 11 )
 
+[node name="MovingBlobs" type="Node2D" parent="."]
+editor/display_folded = true
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="MovingBlob" parent="MovingBlobs" instance=ExtResource( 12 )]
+position = Vector2( 56, 136 )
+
 [node name="Blebs" type="Node2D" parent="."]
 editor/display_folded = true
 __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Bleb_03" parent="Blebs" instance=ExtResource( 12 )]
+[node name="Bleb_03" parent="Blebs" instance=ExtResource( 13 )]
 position = Vector2( 104, 56 )
 facing_right = false
 
@@ -4130,25 +4146,25 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Joy_01" parent="Joys" instance=ExtResource( 13 )]
+[node name="Joy_01" parent="Joys" instance=ExtResource( 14 )]
 position = Vector2( 164.749, 41.7319 )
 
-[node name="Joy_02" parent="Joys" instance=ExtResource( 13 )]
+[node name="Joy_02" parent="Joys" instance=ExtResource( 14 )]
 position = Vector2( 177.347, 49.2906 )
 
-[node name="Joy_03" parent="Joys" instance=ExtResource( 13 )]
+[node name="Joy_03" parent="Joys" instance=ExtResource( 14 )]
 position = Vector2( 175.187, 28.0543 )
 
-[node name="Joy_04" parent="Joys" instance=ExtResource( 13 )]
+[node name="Joy_04" parent="Joys" instance=ExtResource( 14 )]
 position = Vector2( 147.112, 34.1732 )
 
-[node name="Joy_05" parent="Joys" instance=ExtResource( 13 )]
+[node name="Joy_05" parent="Joys" instance=ExtResource( 14 )]
 position = Vector2( 195.703, 38.4925 )
 
-[node name="Joy_06" parent="Joys" instance=ExtResource( 13 )]
+[node name="Joy_06" parent="Joys" instance=ExtResource( 14 )]
 position = Vector2( 201.102, 49.2906 )
 
-[node name="Joy_07" parent="Joys" instance=ExtResource( 13 )]
+[node name="Joy_07" parent="Joys" instance=ExtResource( 14 )]
 position = Vector2( 242.495, 42.0919 )
 
 [node name="WeakRocks" type="Node2D" parent="."]
@@ -4157,10 +4173,10 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="WeakRock_01" parent="WeakRocks" instance=ExtResource( 14 )]
+[node name="WeakRock_01" parent="WeakRocks" instance=ExtResource( 15 )]
 position = Vector2( 120, 88 )
 
-[node name="WeakRock_02" parent="WeakRocks" instance=ExtResource( 14 )]
+[node name="WeakRock_02" parent="WeakRocks" instance=ExtResource( 15 )]
 position = Vector2( 168.749, 88 )
 
 [node name="MovableTiles" type="Node2D" parent="."]
@@ -4169,13 +4185,16 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="MovableTile" parent="MovableTiles" instance=ExtResource( 15 )]
+[node name="MovableTile" parent="MovableTiles" instance=ExtResource( 16 )]
 position = Vector2( 144, 28.0543 )
 
-[node name="Player" parent="." instance=ExtResource( 16 )]
+[node name="Player" parent="." instance=ExtResource( 17 )]
 editor/display_folded = true
 light_mask = 1
 position = Vector2( 80, 64 )
+
+[node name="OnWallTimer" parent="Player" index="1"]
+wait_time = 20.0
 
 [node name="Light2D" parent="Player" index="2"]
 texture_scale = 0.05
@@ -4191,7 +4210,7 @@ limit_bottom = 860
 visible = true
 position = Vector2( 6, 0 )
 
-[node name="Cape" parent="Player" instance=ExtResource( 17 )]
+[node name="Cape" parent="Player" instance=ExtResource( 18 )]
 
 [node name="TileMap" type="TileMap" parent="."]
 z_index = 1
@@ -4212,13 +4231,21 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="MovingPlatform" parent="MovingPlatforms" instance=ExtResource( 22 )]
+[node name="MovingPlatform" parent="MovingPlatforms" instance=ExtResource( 23 )]
+editor/display_folded = true
 position = Vector2( 48, 112 )
 
-[node name="MovingPlatform2" parent="MovingPlatforms" instance=ExtResource( 22 )]
+[node name="Path2D" parent="MovingPlatforms/MovingPlatform" index="0"]
+curve = SubResource( 630 )
+
+[node name="PathFollow2D" parent="MovingPlatforms/MovingPlatform/Path2D" index="0"]
+position = Vector2( 0, 0 )
+offset = 0.0
+
+[node name="MovingPlatform2" parent="MovingPlatforms" instance=ExtResource( 23 )]
 editor/display_folded = true
 position = Vector2( 144, 136 )
-LOOP_TIME = 4.0
+LOOP_TIME = 8.0
 
 [node name="Path2D" parent="MovingPlatforms/MovingPlatform2" index="0"]
 curve = SubResource( 629 )
@@ -4235,7 +4262,7 @@ position = Vector2( 160, 90 )
 z_index = 1
 local_coords = false
 process_material = SubResource( 624 )
-script = ExtResource( 23 )
+script = ExtResource( 24 )
 
 [node name="LightParticles" type="Particles2D" parent="."]
 position = Vector2( 160, 90 )
@@ -4244,16 +4271,16 @@ amount = 2
 lifetime = 7.0
 local_coords = false
 process_material = SubResource( 627 )
-texture = ExtResource( 24 )
-script = ExtResource( 23 )
+texture = ExtResource( 25 )
+script = ExtResource( 24 )
 
 [node name="EndPosition" type="Position2D" parent="."]
 position = Vector2( 288, 184 )
-script = ExtResource( 25 )
+script = ExtResource( 26 )
 
 [node name="HUD" type="CanvasLayer" parent="."]
 editor/display_folded = true
-script = ExtResource( 26 )
+script = ExtResource( 27 )
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD"]
 visible = false
@@ -4273,14 +4300,14 @@ margin_top = 5.0
 margin_right = 310.0
 margin_bottom = 13.0
 size_flags_vertical = 0
-custom_fonts/font = ExtResource( 27 )
+custom_fonts/font = ExtResource( 28 )
 text = "Joy: 0"
 align = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="HUD"]
 anims/joy-label-blink = SubResource( 628 )
 
-[node name="PauseScreen" parent="." instance=ExtResource( 28 )]
+[node name="PauseScreen" parent="." instance=ExtResource( 29 )]
 editor/display_folded = true
 layer = 3
 
@@ -4290,6 +4317,8 @@ visible = false
 [editable path="Player"]
 
 [editable path="Player/AnimatedSprite"]
+
+[editable path="MovingPlatforms/MovingPlatform"]
 
 [editable path="MovingPlatforms/MovingPlatform2"]
 

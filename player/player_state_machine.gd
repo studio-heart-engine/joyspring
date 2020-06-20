@@ -41,6 +41,10 @@ func _physics_process(delta):
 	states[current_state].update(delta)
 
 
+func _process(delta):
+	print(velocity)
+
+
 func change_state(next_state):
 	if current_state != null:
 		states[current_state].exit()
