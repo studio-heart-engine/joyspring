@@ -13,7 +13,7 @@ func update(delta):
 	owner.velocity = owner.move_and_slide_with_snap(owner.velocity, Vector2.DOWN * 4, Vector2.UP)
 	
 	if owner.velocity.x != 0:
-		set_looking_right(owner.velocity.x > 0)
+		owner.is_looking_right = owner.velocity.x > 0
 	
 	if not owner.move_and_collide(Vector2.DOWN): # walked off ledge
 		emit_signal("finished", "fall")

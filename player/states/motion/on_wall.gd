@@ -14,7 +14,7 @@ func on_wall_timer_timeout():
 
 func enter():
 	wall_direction = get_wall_direction()
-	set_looking_right(wall_direction == 1)
+	owner.is_looking_right = wall_direction == 1
 	owner.velocity = Vector2.ZERO
 	if owner.current_state in ["climb", "cling"]:
 		if on_wall_timer.is_stopped():

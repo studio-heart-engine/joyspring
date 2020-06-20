@@ -2,9 +2,6 @@ extends Node
 
 signal finished(next_state)
 
-var is_looking_right = true setget set_looking_right
-
-
 onready var anim_player = owner.get_node("AnimatedSprite/AnimationPlayer")
 onready var squish_stretch_player = owner.get_node("AnimatedSprite/SquishStretchPlayer")
 onready var blink_anim_player = owner.get_node("AnimatedSprite/BlinkAnimationPlayer")
@@ -32,11 +29,6 @@ func _ready():
 
 func play_anim(anim_name):
 	anim_player.play(anim_name)
-
-
-func set_looking_right(value):
-	is_looking_right = value
-	player_sprite.get_node("Sprite").flip_h = not value
 
 
 func start_blink():

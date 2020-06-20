@@ -6,6 +6,7 @@ var can_wall_climb = true
 var is_dead = false
 var current_state = null
 var previous_state = null
+var is_looking_right = true setget set_looking_right
 
 onready var sprite = $AnimatedSprite/Sprite
 
@@ -58,6 +59,9 @@ func change_state(next_state):
 		states[current_state].enter()
 
 
+func set_looking_right(value):
+	is_looking_right = value
+	sprite.scale.x = 1 if value else -1
 
 #func respawn():
 #	position = $"../PlayerStartPosition".position

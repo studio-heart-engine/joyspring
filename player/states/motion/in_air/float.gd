@@ -35,13 +35,18 @@ func exit():
 
 
 func update(delta):
+	print(owner.current_state)
 	owner.velocity.y = move_smoothly(
 		owner.velocity.y, 1, MAX_GLIDE_FALL_SPEED, GLIDE_FALL_ACCELERATION)
 	owner.velocity.x = move_smoothly(
 		owner.velocity.x, input_direction.x, MAX_GLIDE_HORIZONTAL_SPEED, GLIDE_HORIZONTAL_ACCELERATION)
 	.update(delta)
 	if input_direction.x != 0:
-		set_looking_right(input_direction.x == 1)
+		owner.is_looking_right = input_direction.x == 1
+	
+	var is_slow = owner.velocity.x < MAX_GLIDE_HORIZONTAL_SPEED * 0.9
+	if (anim_player.current_animation == "float") != is_slow:
+		play_anim("float" if is_slow else "float-move")
 	
 	if is_near_floor():
 		emit_signal("finished", "fall")
