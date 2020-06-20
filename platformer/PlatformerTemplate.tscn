@@ -30,7 +30,7 @@
 [ext_resource path="res://graphics/font.tres" type="DynamicFont" id=28]
 [ext_resource path="res://gui/PauseScreen.tscn" type="PackedScene" id=29]
 
-[sub_resource type="TileSet" id=621]
+[sub_resource type="TileSet" id=1]
 0/name = "Dark"
 0/texture = ExtResource( 3 )
 0/tex_offset = Vector2( 0, 0 )
@@ -3993,26 +3993,26 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 7/shapes = [  ]
 7/z_index = 0
 
-[sub_resource type="Curve2D" id=630]
+[sub_resource type="Curve2D" id=621]
 resource_local_to_scene = true
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="Curve2D" id=629]
+[sub_resource type="Curve2D" id=622]
 resource_local_to_scene = true
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120, 0 )
 }
 
-[sub_resource type="Gradient" id=622]
+[sub_resource type="Gradient" id=623]
 offsets = PoolRealArray( 0, 0.305011, 0.640523, 1 )
 colors = PoolColorArray( 0.27451, 0.27451, 0.27451, 0, 0.470588, 0.470588, 0.470588, 1, 0.470588, 0.470588, 0.470588, 1, 0.27451, 0.27451, 0.27451, 0 )
 
-[sub_resource type="GradientTexture" id=623]
-gradient = SubResource( 622 )
+[sub_resource type="GradientTexture" id=624]
+gradient = SubResource( 623 )
 
-[sub_resource type="ParticlesMaterial" id=624]
+[sub_resource type="ParticlesMaterial" id=625]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -4022,16 +4022,16 @@ initial_velocity = 8.0
 angular_velocity = 4.57384e-41
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-color_ramp = SubResource( 623 )
+color_ramp = SubResource( 624 )
 
-[sub_resource type="Gradient" id=625]
+[sub_resource type="Gradient" id=626]
 offsets = PoolRealArray( 0, 0.30719, 0.359477, 0.381264, 0.405229, 0.43573, 1 )
 colors = PoolColorArray( 0.388235, 0.388235, 0.388235, 0, 1, 1, 1, 0.109804, 0.996078, 0.996078, 0.996078, 0.137255, 0.992157, 0.992157, 0.992157, 0.0980392, 0.988235, 0.988235, 0.988235, 0.12549, 0.984314, 0.984314, 0.984314, 0.0941176, 0.937255, 0.937255, 0.937255, 0 )
 
-[sub_resource type="GradientTexture" id=626]
-gradient = SubResource( 625 )
+[sub_resource type="GradientTexture" id=627]
+gradient = SubResource( 626 )
 
-[sub_resource type="ParticlesMaterial" id=627]
+[sub_resource type="ParticlesMaterial" id=628]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -4043,9 +4043,9 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 0.05
 scale_random = 0.05
-color_ramp = SubResource( 626 )
+color_ramp = SubResource( 627 )
 
-[sub_resource type="Animation" id=628]
+[sub_resource type="Animation" id=629]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("MarginContainer/ScoreLabel:visible")
@@ -4088,7 +4088,7 @@ centered = false
 [node name="TileMapBackground" type="TileMap" parent="."]
 scale = Vector2( 1.5, 1.5 )
 z_index = -2
-tile_set = SubResource( 621 )
+tile_set = SubResource( 1 )
 cell_size = Vector2( 8, 8 )
 cell_quadrant_size = 2
 collision_layer = 0
@@ -4189,7 +4189,6 @@ __meta__ = {
 position = Vector2( 144, 28.0543 )
 
 [node name="Player" parent="." instance=ExtResource( 17 )]
-editor/display_folded = true
 light_mask = 1
 position = Vector2( 80, 64 )
 
@@ -4236,7 +4235,7 @@ editor/display_folded = true
 position = Vector2( 48, 112 )
 
 [node name="Path2D" parent="MovingPlatforms/MovingPlatform" index="0"]
-curve = SubResource( 630 )
+curve = SubResource( 621 )
 
 [node name="PathFollow2D" parent="MovingPlatforms/MovingPlatform/Path2D" index="0"]
 position = Vector2( 0, 0 )
@@ -4248,7 +4247,7 @@ position = Vector2( 144, 136 )
 LOOP_TIME = 8.0
 
 [node name="Path2D" parent="MovingPlatforms/MovingPlatform2" index="0"]
-curve = SubResource( 629 )
+curve = SubResource( 622 )
 
 [node name="PathFollow2D" parent="MovingPlatforms/MovingPlatform2/Path2D" index="0"]
 position = Vector2( 0, 0 )
@@ -4261,7 +4260,7 @@ autoplay = "follow-ping-pong"
 position = Vector2( 160, 90 )
 z_index = 1
 local_coords = false
-process_material = SubResource( 624 )
+process_material = SubResource( 625 )
 script = ExtResource( 24 )
 
 [node name="LightParticles" type="Particles2D" parent="."]
@@ -4270,7 +4269,7 @@ z_index = 1
 amount = 2
 lifetime = 7.0
 local_coords = false
-process_material = SubResource( 627 )
+process_material = SubResource( 628 )
 texture = ExtResource( 25 )
 script = ExtResource( 24 )
 
@@ -4305,7 +4304,7 @@ text = "Joy: 0"
 align = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="HUD"]
-anims/joy-label-blink = SubResource( 628 )
+anims/joy-label-blink = SubResource( 629 )
 
 [node name="PauseScreen" parent="." instance=ExtResource( 29 )]
 editor/display_folded = true

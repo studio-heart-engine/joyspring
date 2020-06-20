@@ -37,8 +37,6 @@ func play_anim(anim_name):
 func set_looking_right(value):
 	is_looking_right = value
 	player_sprite.get_node("Sprite").flip_h = not value
-	if cape != null:
-		cape.get_node("CapeFrontOffset/Front/Sprite").flip_h = not value
 
 
 func start_blink():

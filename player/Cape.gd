@@ -1,7 +1,10 @@
 extends Node2D
 
-onready var cape_front_anim_player = $CapeFrontOffset/Front/AnimationPlayer
-onready var cape_front = $CapeFrontOffset/Front
+onready var cape_front_anim_player = $CapeFront/AnimatedSprite/AnimationPlayer
+onready var cape_front = $CapeFront
+onready var player_anim_player = $"../AnimatedSprite/AnimationPlayer"
+onready var player_anim_sprite = $"../AnimatedSprite"
 
-func _on_AnimationPlayer_animation_started(anim_name):
-	cape_front_anim_player.play(anim_name)
+func _process(delta):
+	cape_front_anim_player.play(player_anim_player.current_animation)
+	cape_front.scale = player_anim_sprite.scale

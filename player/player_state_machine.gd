@@ -9,7 +9,6 @@ var previous_state = null
 
 onready var sprite = $AnimatedSprite/Sprite
 
-onready var parent_state = $States
 onready var states = {
 	"idle": $States/Idle,
 	"dash": $States/Dash,
@@ -39,10 +38,6 @@ func _input(event):
 
 func _physics_process(delta):
 	states[current_state].update(delta)
-
-
-func _process(delta):
-	print(velocity)
 
 
 func change_state(next_state):
