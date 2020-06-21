@@ -10,7 +10,9 @@ func enter():
 		squish_stretch_player.play("squish")
 
 func update(delta):
-	owner.velocity = owner.move_and_slide_with_snap(owner.velocity, Vector2.DOWN * 4, Vector2.UP)
+	owner.velocity = owner.move_and_slide_with_snap(owner.velocity, Vector2.DOWN * 4, Vector2.UP,
+			false, 4, 0.785398, false)
+	push_bodies()
 	
 	if owner.velocity.x != 0:
 		owner.is_looking_right = owner.velocity.x > 0

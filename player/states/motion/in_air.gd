@@ -20,7 +20,9 @@ func reenter():
 
 
 func update(delta):
-	owner.velocity = owner.move_and_slide(owner.velocity, Vector2.UP)
+	owner.velocity = owner.move_and_slide(owner.velocity, Vector2.UP, 
+			false, 4, 0.785398, false)
+	push_bodies()
 	
 	if owner.velocity.x != 0:
 		owner.is_looking_right = owner.velocity.x > 0

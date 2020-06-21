@@ -35,6 +35,13 @@ func move_smoothly(cur_velocity, input_direction, max_speed, acceleration):
 	return cur_velocity
 
 
+func push_bodies(inertia = 20):
+	for i in owner.get_slide_count():
+		var collision = owner.get_slide_collision(i)
+		if collision.collider.has_method("apply_central_impulse"):
+			collision.collider.apply_central_impulse(-collision.normal * inertia)
+
+
 func is_near_wall():
 	var original_position = owner.position
 	if owner.move_and_collide(Vector2.LEFT):

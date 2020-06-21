@@ -32,7 +32,10 @@ func exit():
 
 func update(delta):
 	owner.velocity = owner.move_and_slide_with_snap(
-			owner.velocity, wall_direction * Vector2.RIGHT, wall_direction * Vector2.LEFT)
+			owner.velocity, wall_direction * Vector2.RIGHT, wall_direction * Vector2.LEFT,
+			false, 4, 0.785398, false)
+	push_bodies()
+	
 	if on_wall_timer.time_left < 1 and not on_wall_timer.is_stopped() and not blink_anim_player.is_playing():
 		start_blink()
 
