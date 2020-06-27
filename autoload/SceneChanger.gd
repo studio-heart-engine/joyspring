@@ -26,4 +26,3 @@ func change_scene_to(scene: PackedScene, color = Color.black):
 	$AnimationPlayer.play_backwards("fade")
 	yield($AnimationPlayer, "animation_finished")
 	color_rect.set_visible(false)
-	print("hi")

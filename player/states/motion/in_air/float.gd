@@ -35,7 +35,6 @@ func exit():
 
 
 func update(delta):
-	print(owner.current_state)
 	owner.velocity.y = move_smoothly(
 		owner.velocity.y, 1, MAX_GLIDE_FALL_SPEED, GLIDE_FALL_ACCELERATION)
 	owner.velocity.x = move_smoothly(
