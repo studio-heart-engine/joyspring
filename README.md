@@ -3,7 +3,7 @@
 # Joyspring
 A quick platformer about spreading positivity. Our game is still in development, so if you want to help out with designing levels, please check the section below!
 ### Instructions to Download and Play
-1. Head over to the releases page (linked in the right column under About)
+1. Head over to the releases page (linked in the right column under About) and expand the Assets dropdown
 
 2. Download the file corresponding to your system
 
