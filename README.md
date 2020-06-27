@@ -1,3 +1,5 @@
+![](graphics/marketing/banner.png?raw=true)
+
 # Joyspring
 A quick platformer about spreading positivity. Our game is still in development, so if you want to help out with designing levels, please check the section below!
 ### Instructions to Download and Play
