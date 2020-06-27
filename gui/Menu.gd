@@ -17,7 +17,7 @@ func _on_BeginButton_pressed():
 	
 
 func begin():
-	$AnimationPlayer.play_backwards("startup")
+	$AnimationPlayer.play_backwards("fade-in")
 	$AnimationPlayer.stop(false)
 	$AnimationPlayer.play("start-fall")
 	yield($AnimationPlayer, "animation_finished")

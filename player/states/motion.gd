@@ -69,30 +69,30 @@ func get_wall_state():
 
 func spawn_jump_particles():
 	var jump_particles = JumpParticles.instance()
-	jump_particles.position = owner.position
 	owner.get_parent().add_child(jump_particles)
+	jump_particles.position = owner.position
 
 func spawn_fall_particles():
 	var fall_particles = FallParticles.instance()
-	fall_particles.position = owner.position
 	owner.get_parent().add_child(fall_particles)
+	fall_particles.position = owner.position
 
 func spawn_skid_particles():
 	var skid_particles = SkidParticles.instance()
+	owner.get_parent().add_child(skid_particles)
 	skid_particles.position = owner.position
 	skid_particles.scale.x = -input_direction.x
-	owner.get_parent().add_child(skid_particles)
 
 func spawn_dash_start_particles():
 	var dash_start_particles = DashStartParticles.instance()
+	owner.get_parent().add_child(dash_start_particles)
 	dash_start_particles.init(input_direction)
 	dash_start_particles.position = owner.position
-	owner.get_parent().add_child(dash_start_particles)
 
 func spawn_dash_ring_particles():
 	var dash_ring_particles = DashRingParticles.instance()
+	owner.get_parent().add_child(dash_ring_particles)
 	dash_ring_particles.init(input_direction)
 	dash_ring_particles.position = owner.position
-	owner.get_parent().add_child(dash_ring_particles)
 
 

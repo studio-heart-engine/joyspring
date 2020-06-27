@@ -2,7 +2,6 @@ extends StaticBody2D
 
 onready var anim_player = $AnimationPlayer
 onready var anim_player2 = $AnimationPlayer2
-export (BitMap) var BITMASK
 
 func _on_Area2D_area_entered(area):
 	$TopArea/CollisionShape2D.set_deferred("disabled", true)

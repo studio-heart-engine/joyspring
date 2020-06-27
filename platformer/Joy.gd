@@ -1,14 +1,10 @@
 extends Node2D
 
 var POINTS_PER_COIN = 10
-var SLOW_MO_DURATION_SEC = 0.2
-var SLOW_MO_TIME_SCALE = 0.2
 var is_following_player = false setget set_following_player
 var is_on_cape = false setget set_on_cape
 
 onready var anim_player = $AnimationPlayer
-onready var player = $"../../Player"
-onready var cape_joys = $"../../Player/Cape/Joys"
 
 
 func _ready():
@@ -37,7 +33,7 @@ func _on_Hitbox_area_entered(area):
 	$Hitbox.set_deferred("monitoring", false)
 	Events.emit_signal("joy_collected")
 	get_parent().call_deferred("remove_child", self)
-	cape_joys.call_deferred("add_child", self)
+	$"../../Player/Cape/Joys".call_deferred("add_child", self)
 	set_following_player(true)
 
 
