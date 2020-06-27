@@ -3,11 +3,11 @@
 # Joyspring
 A quick platformer about spreading positivity. Our game is still in development, so if you want to help out with designing levels, please check the section below!
 ### Instructions to Download and Play
-1. Download this entire repository into a folder
+1. Head over to the releases page (linked in the right column under About)
 
-2. Open the project.godot file with the Godot Engine https://godotengine.org/ to load it into Godot
+2. Download the file corresponding to your system
 
-3. Click the play button on the top right
+3. Unpack the folder or file and open the executable corresponding to your system (.app, .exe, or .x86_64)
 
 ### How to Make Levels
 We're hoping for levels that are mostly contained within the screen. Thus, please restrict your level design to somewhere around 40 tiles wide and 23 tiles tall (a bit bigger is fine).
