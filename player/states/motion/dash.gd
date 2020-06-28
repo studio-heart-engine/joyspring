@@ -7,10 +7,8 @@ export var MAX_UP_DASH_TIME = 0.01
 var direction
 var timer
 
-signal player_dashed
-
 func enter():
-	emit_signal("player_dashed")
+	Events.emit_signal("player_dashed")
 	
 	spawn_dash_start_particles()
 	owner.can_dash = false
