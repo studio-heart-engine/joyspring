@@ -1,7 +1,11 @@
 ![](graphics/marketing/banner.png?raw=true)
+<p align="center">
+  <img src="graphics/marketing/dash.gif" height="180"><img src="graphics/marketing/blebs.gif" height="180"><img src="graphics/marketing/glide.gif" height="180">
+</p>
 
-# Joyspring
+# JOYSPRING
 A quick platformer about spreading positivity. Our game is still in development, so if you want to help out with designing levels, please check the section below!
+
 ### Instructions to Download and Play
 1. Head over to the releases page (linked in the right column under About) and expand the Assets dropdown
 
