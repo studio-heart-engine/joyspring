@@ -9,6 +9,7 @@ onready var timer = $CameraShakeTimer
 
 func _ready():
 	timer.set_wait_time(CAMERA_SHAKE_DURATION)
+	Events.connect("player_dashed", self, "shake_camera")
 
 
 func _process(delta):

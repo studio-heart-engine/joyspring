@@ -2,7 +2,7 @@ extends Light2D
 
 func _ready():
 	Events.connect("joy_attached_to_cape", self, "glow")
-	Events.connect("player_dashed", self, "_on_player_dashsed")
+	Events.connect("player_dashed", self, "_on_player_dashed")
 
 
 func glow():
