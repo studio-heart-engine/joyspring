@@ -5,6 +5,8 @@ export (float, 0, 2) var wait_time = 0.4
 
 var done = false
 
+signal resumed
+
 func _ready():
 	Events.connect(action, self, "resume")
 	set_process(false)
@@ -18,3 +20,4 @@ func _process(delta):
 func resume():
 	done = true
 	Engine.time_scale = 1
+	emit_signal("resumed")
