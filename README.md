@@ -1,6 +1,6 @@
 ![](graphics/marketing/banner.png?raw=true)
 <p align="center">
-  <img src="graphics/marketing/dash.gif" height="240"><img src="graphics/marketing/blebs.gif" height="240"><!--<img src="graphics/marketing/moving-platform.gif" height="240">--><img src="graphics/marketing/glide.gif" height="240">
+  <img src="graphics/marketing/dash.gif" height="180"><img src="graphics/marketing/blebs.gif" height="180"><img src="graphics/marketing/glide.gif" height="180">
 </p>
 
 # JOYSPRING
