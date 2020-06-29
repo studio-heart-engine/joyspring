@@ -18,9 +18,8 @@
 [ext_resource path="res://graphics/riley.json" type="PackedScene" id=16]
 [ext_resource path="res://graphics/glider.json" type="PackedScene" id=17]
 [ext_resource path="res://player/PlayerRespawnTransition.gd" type="Script" id=18]
-[ext_resource path="res://graphics/circle-transition.shader" type="Shader" id=19]
-[ext_resource path="res://graphics/circle-transition.png" type="Texture" id=20]
-[ext_resource path="res://graphics/cave-light.png" type="Texture" id=21]
+[ext_resource path="res://graphics/circle-transition.png" type="Texture" id=19]
+[ext_resource path="res://graphics/cave-darkness.png" type="Texture" id=20]
 
 [sub_resource type="Animation" id=1]
 resource_name = "dash-glow"
@@ -131,11 +130,25 @@ tracks/0/keys = {
 "values": [ true, false ]
 }
 
+[sub_resource type="Shader" id=630]
+code = "shader_type canvas_item;
+
+uniform sampler2D mask;
+uniform float cutoff: hint_range(0f, 1f);
+uniform float smooth_size: hint_range(0f, 1f);
+
+void fragment() {
+	float value = texture(mask, UV).r;
+	float alpha = smoothstep(cutoff + smooth_size, cutoff, value * (1f - smooth_size) + smooth_size);
+	COLOR = vec4(COLOR.rgb, alpha);
+}"
+
 [sub_resource type="ShaderMaterial" id=7]
-shader = ExtResource( 19 )
+resource_local_to_scene = true
+shader = SubResource( 630 )
 shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.1
-shader_param/mask = ExtResource( 20 )
+shader_param/mask = ExtResource( 19 )
 
 [sub_resource type="Animation" id=8]
 length = 0.8
@@ -269,7 +282,6 @@ position = Vector2( 0, -7.5 )
 shape = SubResource( 3 )
 
 [node name="RespawnTransition" type="CanvasLayer" parent="."]
-editor/display_folded = true
 layer = 2
 script = ExtResource( 18 )
 
@@ -290,8 +302,10 @@ __meta__ = {
 anims/shrink-circle = SubResource( 8 )
 
 [node name="cave-darkness" type="Sprite" parent="."]
+modulate = Color( 0, 0.00392157, 0.0392157, 1 )
+scale = Vector2( 1.1, 1.1 )
 z_index = 4
-texture = ExtResource( 21 )
+texture = ExtResource( 20 )
 [connection signal="ready" from="." to="RespawnTransition" method="_on_Player_ready"]
 
 [editable path="AnimatedSprite"]
