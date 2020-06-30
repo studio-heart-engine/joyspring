@@ -17,8 +17,6 @@ func _on_BeginButton_pressed():
 	
 
 func begin():
-	$AnimationPlayer.play_backwards("fade-in")
-	$AnimationPlayer.stop(false)
 	$AnimationPlayer.play("start-fall")
 	yield($AnimationPlayer, "animation_finished")
 	SceneChanger.change_scene("res://platformer/levels/Level_01.tscn")
