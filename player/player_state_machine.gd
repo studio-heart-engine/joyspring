@@ -62,18 +62,11 @@ func change_state(next_state):
 		if not previous_state in [null, "dead"] and current_state != "dead":
 			states[current_state].input_direction = states[previous_state].input_direction
 		states[current_state].enter()
+	
+	print(current_state)
 
 
 func set_looking_right(value):
 	is_looking_right = value
 	sprite.scale.x = 1 if value else -1
-
-#func respawn():
-#	position = $"../PlayerStartPosition".position
-#	$Camera.align()
-#	$Camera.reset_smoothing()
-#	change_state("idle")
-#	states[current_state].input_direction = Vector2.ZERO
-#	previous_state = null
-#	velocity = Vector2.ZERO
 	
