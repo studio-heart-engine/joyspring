@@ -39,7 +39,11 @@ func push_bodies(inertia = 20):
 	for i in owner.get_slide_count():
 		var collision = owner.get_slide_collision(i)
 		if collision.collider.has_method("apply_central_impulse"):
-			collision.collider.apply_central_impulse(-collision.normal * inertia)
+			var dir = -collision.normal.round()
+			if dir == Vector2.DOWN:
+				continue
+			var impulse_vec = dir * inertia
+			collision.collider.apply_central_impulse(impulse_vec)
 
 
 func is_near_wall():

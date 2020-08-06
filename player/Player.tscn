@@ -78,7 +78,7 @@ tracks/1/keys = {
 }
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 4.2, 7.5 )
+extents = Vector2( 3, 7.5 )
 
 [sub_resource type="Animation" id=4]
 length = 0.2
@@ -130,7 +130,7 @@ tracks/0/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="Shader" id=630]
+[sub_resource type="Shader" id=7]
 code = "shader_type canvas_item;
 
 uniform sampler2D mask;
@@ -143,14 +143,14 @@ void fragment() {
 	COLOR = vec4(COLOR.rgb, alpha);
 }"
 
-[sub_resource type="ShaderMaterial" id=7]
+[sub_resource type="ShaderMaterial" id=8]
 resource_local_to_scene = true
-shader = SubResource( 630 )
+shader = SubResource( 7 )
 shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.1
 shader_param/mask = ExtResource( 19 )
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=9]
 length = 0.8
 step = 0.05
 tracks/0/type = "value"
@@ -230,7 +230,6 @@ anims/dash-glow = SubResource( 1 )
 anims/glow = SubResource( 2 )
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2( 0, -7.5 )
 shape = SubResource( 3 )
 
@@ -274,7 +273,6 @@ position = Vector2( -12, -20 )
 centered = false
 
 [node name="Hitbox" type="Area2D" parent="."]
-editor/display_folded = true
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Hitbox"]
 visible = false
@@ -287,7 +285,7 @@ script = ExtResource( 18 )
 
 [node name="ColorRect" type="ColorRect" parent="RespawnTransition"]
 light_mask = 2
-material = SubResource( 7 )
+material = SubResource( 8 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -320.0
@@ -299,10 +297,11 @@ __meta__ = {
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="RespawnTransition"]
-anims/shrink-circle = SubResource( 8 )
+anims/shrink-circle = SubResource( 9 )
 
 [node name="cave-darkness" type="Sprite" parent="."]
 modulate = Color( 0, 0.00392157, 0.0392157, 1 )
+position = Vector2( 1, -2 )
 scale = Vector2( 1.1, 1.1 )
 z_index = 4
 texture = ExtResource( 20 )
