@@ -1,7 +1,11 @@
 extends Control
 
+export (bool) var has_level_select_button = false
 
 func _ready():
+	if not has_level_select_button:
+		$VBoxContainer/LevelSelectButton.queue_free()
+	
 	if not globals.has_played_startup_animation:
 		globals.has_played_startup_animation = true
 		$AnimationPlayer.play("fade-in")
@@ -21,3 +25,6 @@ func begin():
 	yield($AnimationPlayer, "animation_finished")
 	SceneChanger.change_scene("res://platformer/levels/Level_01.tscn")
 	
+
+func _on_LevelSelectButton_pressed():
+	SceneChanger.change_scene("res://gui/LevelSelect.tscn")

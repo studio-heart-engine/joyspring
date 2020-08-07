@@ -185,21 +185,38 @@ alignment = 1
 
 [node name="BeginButton" type="Button" parent="VBoxContainer"]
 margin_left = 108.0
-margin_top = 17.0
+margin_top = 10.0
 margin_right = 211.0
-margin_bottom = 31.0
+margin_bottom = 24.0
 rect_pivot_offset = Vector2( -1032, 475 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_styles/focus = SubResource( 1 )
 custom_fonts/font = ExtResource( 4 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_color_hover = Color( 0.286275, 0.286275, 0.286275, 1 )
-custom_colors/font_color_pressed = Color( 0.168627, 0.168627, 0.168627, 1 )
+custom_colors/font_color_hover = Color( 0.764706, 0.764706, 0.764706, 1 )
+custom_colors/font_color_pressed = Color( 0.5, 0.5, 0.5, 1 )
 text = "Press space to begin"
+flat = true
+
+[node name="LevelSelectButton" type="Button" parent="VBoxContainer"]
+margin_left = 129.0
+margin_top = 24.0
+margin_right = 191.0
+margin_bottom = 38.0
+rect_pivot_offset = Vector2( -1032, 475 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_styles/focus = SubResource( 1 )
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.764706, 0.764706, 0.764706, 1 )
+custom_colors/font_color_pressed = Color( 0.5, 0.5, 0.5, 1 )
+text = "Level select"
 flat = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/fade-in = SubResource( 2 )
 anims/start-fall = SubResource( 3 )
 [connection signal="pressed" from="VBoxContainer/BeginButton" to="." method="_on_BeginButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/LevelSelectButton" to="." method="_on_LevelSelectButton_pressed"]
