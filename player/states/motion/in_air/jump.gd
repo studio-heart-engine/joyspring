@@ -1,6 +1,6 @@
 extends "../in_air.gd"
 
-export var INITIAL_JUMP_SPEED = 200
+export var INITIAL_JUMP_SPEED = 230
 
 func enter():
 	.enter()
