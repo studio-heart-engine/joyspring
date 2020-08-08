@@ -60,8 +60,6 @@ func change_state(next_state):
 		if not previous_state in [null, "dead"] and current_state != "dead":
 			states[current_state].input_direction = states[previous_state].input_direction
 		states[current_state].enter()
-	
-	print(current_state)
 
 
 func set_looking_right(value):

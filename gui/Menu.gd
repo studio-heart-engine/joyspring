@@ -4,7 +4,7 @@ export (bool) var has_level_select_button = false
 
 func _ready():
 	
-	if len(globals.levels_completed) > 0:
+	if len(globals.levels_completed) > 1:
 		has_level_select_button = true
 	
 	if not has_level_select_button:
