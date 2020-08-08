@@ -28,8 +28,6 @@ func _ready():
 	for state_node in states.values():
 		state_node.connect("finished", self, "change_state")
 	
-	$AnimatedSprite/Glider.hide()
-	
 	change_state("idle")
 
 
