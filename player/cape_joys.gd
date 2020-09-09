@@ -3,6 +3,8 @@ extends Node2D
 enum MovementType {FLOATING, NOT_FLOATING}
 
 export (int) var initial_cape_size = 10
+export (int) var cape_size = initial_cape_size
+
 export (Vector2) var cape_start_offset = Vector2(0, -7)
 
 onready var Joy = preload("res://platformer/Joy.tscn")
@@ -39,9 +41,11 @@ func _on_float_ended():
 
 
 func _process(delta):
-	position = -player.position
 	
-	var n = get_child_count()
+	print("cape size" + str(cape_size))
+	print(get_child_count())
+	
+	position = -player.position
 	
 	match movement_type:
 		MovementType.FLOATING:
@@ -49,23 +53,24 @@ func _process(delta):
 			var vertical_noise_offset =  noise.get_noise_2d(0, 100 * time_elapsed)
 			
 			# offset all joys on cape
-			for i in range(n):
-				if get_child(i).is_on_cape:
-					get_child(i).position += 1.8 * Vector2(horizontal_noise_offset, vertical_noise_offset)
+			for child in get_children():
+				if child.is_on_cape:
+					child.position += 1.8 * Vector2(horizontal_noise_offset, vertical_noise_offset)
 		
 		MovementType.NOT_FLOATING:
 			var horizontal_noise_offset =  noise.get_noise_2d(100 * time_elapsed, 0)
 			var vertical_noise_offset =  noise.get_noise_2d(0, 100 * time_elapsed)
 			
 			# offset all joys on cape
-			for i in range(n):
-				if get_child(i).is_on_cape:
-					get_child(i).position += Vector2(
+			for child in get_children():
+				if child.is_on_cape:
+					child.position += Vector2(
 						0.7 * horizontal_noise_offset, vertical_noise_offset + 0.5)
 	
 	# follow first joy
-	get_child(0).follow(player.position + cape_start_offset, 0, 2, 1)
-	for i in range(1, n):
+	if get_child_count() > 0:
+		get_child(0).follow(player.position + cape_start_offset, 0, 2, 1)
+	for i in range(1, get_child_count()):
 		get_child(i).follow(get_child(i-1).position, 0.5, 3, 0.7)
 	
 	time_elapsed += delta
