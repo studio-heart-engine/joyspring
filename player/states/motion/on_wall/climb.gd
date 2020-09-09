@@ -6,7 +6,7 @@ export var INITIAL_WALL_JUMP_SPEED = 50
 func enter():
 	.enter()
 	owner.velocity.y = self.input_direction.y * WALL_CLIMB_SPEED
-	play_anim("climb")
+	play_anim("climb-side")
 
 
 func update(delta):
