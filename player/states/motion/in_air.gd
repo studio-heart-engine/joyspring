@@ -6,6 +6,7 @@ export var IN_AIR_ACCELERATION = 6
 
 
 func enter():
+	
 	# from coming off wall
 	blink_anim_player.stop()
 	player_sprite.visible = true

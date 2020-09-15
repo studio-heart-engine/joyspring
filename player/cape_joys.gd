@@ -42,9 +42,6 @@ func _on_float_ended():
 
 func _process(delta):
 	
-	print("cape size" + str(cape_size))
-	print(get_child_count())
-	
 	position = -player.position
 	
 	match movement_type:

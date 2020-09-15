@@ -4,7 +4,7 @@ export var MAX_GLIDE_FALL_SPEED = 20
 export var GLIDE_FALL_ACCELERATION = 3
 export var MAX_GLIDE_HORIZONTAL_SPEED = 90
 export var GLIDE_HORIZONTAL_ACCELERATION = 3
-export var CAPE_SHRINK_TIME_PER_JOY = 0.2
+export var CAPE_SHRINK_TIME_PER_JOY = 0.4
 export var CAPE_REGROW_TIME_PER_JOY = 0.1
 
 onready var cape_shrink_timer = Timer.new()
@@ -34,12 +34,16 @@ func on_begin_cape_regrow():
 func shrink_cape():
 	if cape_joys.get_child_count() == 1:
 		cape_shrink_timer.stop()
-		emit_signal("finished", "previous")
+		emit_signal("finished", "fall")
 	else:
 		cape_joys.get_child(0).queue_free()
 
 
 func regrow_cape():
+	if not (owner.current_state in ["idle", "run"]):
+		cape_regrow_timer.stop()
+		return
+	
 	var n = cape_joys.get_child_count()
 	if n == cape_joys.cape_size:
 		cape_regrow_timer.stop()
