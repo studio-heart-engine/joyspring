@@ -8,3 +8,4 @@ signal float_started
 signal float_ended
 signal player_dashed
 signal level_completed(level_index)
+signal begin_cape_regrow

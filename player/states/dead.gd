@@ -1,5 +1,7 @@
 extends "../state.gd"
 
+var input_direction = Vector2.ZERO
+
 func enter():
 	anim_player.stop(false)
 	owner.find_node("GlowAnimationPlayer").stop()

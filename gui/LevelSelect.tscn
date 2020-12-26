@@ -1,4 +1,4 @@
-[gd_scene load_steps=637 format=2]
+[gd_scene load_steps=638 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
 [ext_resource path="res://graphics/background/background4.png" type="Texture" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://graphics/tilesets/rocksPurple.png" type="Texture" id=11]
 [ext_resource path="res://graphics/tilesets/rocksYellow.png" type="Texture" id=12]
 [ext_resource path="res://graphics/tilesets/grassGreen.png" type="Texture" id=13]
+[ext_resource path="res://gui/PauseScreen.tscn" type="PackedScene" id=14]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Dark"
@@ -4103,6 +4104,14 @@ collision_layer = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitArea"]
 position = Vector2( 0, 7 )
 shape = SubResource( 623 )
+
+[node name="PauseScreen" parent="." instance=ExtResource( 14 )]
+layer = 3
+
+[node name="MarginContainer" parent="PauseScreen" index="0"]
+visible = false
 [connection signal="area_entered" from="ExitArea" to="." method="_on_ExitArea_area_entered"]
 
 [editable path="Player"]
+
+[editable path="PauseScreen"]

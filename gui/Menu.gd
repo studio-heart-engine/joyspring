@@ -2,6 +2,8 @@ extends Control
 
 export (bool) var has_level_select_button = false
 
+onready var begun = false
+
 func _ready():
 	
 	if len(globals.levels_completed) > 1:
@@ -25,6 +27,9 @@ func _on_BeginButton_pressed():
 	
 
 func begin():
+	if begun:
+		return
+	begun = true
 	$AnimationPlayer.play("start-fall")
 	yield($AnimationPlayer, "animation_finished")
 	SceneChanger.change_scene("res://platformer/levels/Level_01.tscn")

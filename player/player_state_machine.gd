@@ -28,7 +28,7 @@ func _ready():
 	for state_node in states.values():
 		state_node.connect("finished", self, "change_state")
 	
-	change_state("idle")
+	change_state("fall")
 
 
 func _input(event):
