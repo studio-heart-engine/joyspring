@@ -9,6 +9,7 @@ signal resumed
 
 func _ready():
 	Events.connect(action, self, "resume")
+	owner.connect('level_exited', self, 'resume')
 	set_process(false)
 	yield(get_tree().create_timer(wait_time), "timeout")
 	set_process(true)

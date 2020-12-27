@@ -28,9 +28,7 @@ func _ready():
 	for state_node in states.values():
 		state_node.connect("finished", self, "change_state")
 	
-	$AnimatedSprite/Glider.hide()
-	
-	change_state("idle")
+	change_state("fall")
 
 
 func _input(event):
@@ -67,13 +65,4 @@ func change_state(next_state):
 func set_looking_right(value):
 	is_looking_right = value
 	sprite.scale.x = 1 if value else -1
-
-#func respawn():
-#	position = $"../PlayerStartPosition".position
-#	$Camera.align()
-#	$Camera.reset_smoothing()
-#	change_state("idle")
-#	states[current_state].input_direction = Vector2.ZERO
-#	previous_state = null
-#	velocity = Vector2.ZERO
 	

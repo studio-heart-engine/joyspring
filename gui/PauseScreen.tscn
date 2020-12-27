@@ -27,17 +27,18 @@ custom_constants/separation = 20
 alignment = 1
 
 [node name="Buttons" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
-margin_left = 138.0
-margin_top = 74.0
-margin_right = 181.0
-margin_bottom = 105.0
+margin_left = 129.0
+margin_top = 66.0
+margin_right = 191.0
+margin_bottom = 114.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
 custom_constants/separation = 3
 alignment = 1
 
 [node name="ResumeButton" type="Button" parent="MarginContainer/VBoxContainer/Buttons"]
-margin_right = 43.0
+margin_left = 9.0
+margin_right = 52.0
 margin_bottom = 14.0
 size_flags_horizontal = 4
 size_flags_vertical = 3
@@ -49,11 +50,25 @@ custom_colors/font_color_pressed = Color( 0.168627, 0.168627, 0.168627, 1 )
 text = "Resume"
 flat = true
 
-[node name="MenuButton" type="Button" parent="MarginContainer/VBoxContainer/Buttons"]
-margin_left = 5.0
+[node name="Level Select" type="Button" parent="MarginContainer/VBoxContainer/Buttons"]
 margin_top = 17.0
-margin_right = 38.0
+margin_right = 62.0
 margin_bottom = 31.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.286275, 0.286275, 0.286275, 1 )
+custom_colors/font_color_pressed = Color( 0.168627, 0.168627, 0.168627, 1 )
+text = "Level Select"
+flat = true
+
+[node name="MenuButton" type="Button" parent="MarginContainer/VBoxContainer/Buttons"]
+margin_left = 14.0
+margin_top = 34.0
+margin_right = 47.0
+margin_bottom = 48.0
 size_flags_horizontal = 4
 size_flags_vertical = 3
 custom_styles/focus = SubResource( 1 )
@@ -64,4 +79,5 @@ custom_colors/font_color_pressed = Color( 0.168627, 0.168627, 0.168627, 1 )
 text = "Menu"
 flat = true
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/ResumeButton" to="." method="_on_ResumeButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/Level Select" to="." method="_on_Level_Select_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/MenuButton" to="." method="_on_MenuButton_pressed"]

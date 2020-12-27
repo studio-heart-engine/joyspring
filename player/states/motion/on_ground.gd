@@ -8,6 +8,11 @@ func enter():
 	on_wall_timer.stop()
 	if owner.previous_state == "fall":
 		squish_stretch_player.play("squish")
+	
+	if owner.has_node("Cape"):
+		var cape_joys = owner.get_node("Cape/Joys")
+		if cape_joys.get_child_count() < cape_joys.cape_size:
+			Events.emit_signal("begin_cape_regrow")
 
 func update(delta):
 	owner.velocity = owner.move_and_slide_with_snap(owner.velocity, Vector2.DOWN * 4, Vector2.UP,

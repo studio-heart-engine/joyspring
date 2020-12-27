@@ -14,6 +14,7 @@ func _on_ResumeButton_pressed():
 
 
 func _on_MenuButton_pressed():
+	get_parent().emit_signal('level_exited')
 	PlayerData.score = 0
 	SceneChanger.change_scene("res://gui/Menu.tscn")
 	yield($"/root/SceneChanger/AnimationPlayer", "animation_finished")
@@ -27,3 +28,10 @@ func pause():
 func resume():
 	$MarginContainer.hide()
 	get_tree().paused = false
+
+func _on_Level_Select_pressed():
+	get_parent().emit_signal('level_exited')
+	PlayerData.score = 0
+	SceneChanger.change_scene("res://gui/LevelSelect.tscn")
+	yield($"/root/SceneChanger/AnimationPlayer", "animation_finished")
+	resume()

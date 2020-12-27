@@ -2,14 +2,14 @@
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
 [ext_resource path="res://platformer/levels/Level_05.tscn" type="PackedScene" id=2]
-[ext_resource path="res://platformer/levels/ResumeDash.gd" type="Script" id=3]
+[ext_resource path="res://platformer/ResumeDash.gd" type="Script" id=3]
 [ext_resource path="res://graphics/background/background1.png" type="Texture" id=4]
 [ext_resource path="res://graphics/tilesets/dark.png" type="Texture" id=5]
 [ext_resource path="res://graphics/tilesets/dirt.png" type="Texture" id=6]
 [ext_resource path="res://graphics/tilesets/grassBlueBack.png" type="Texture" id=7]
 [ext_resource path="res://platformer/Joy.tscn" type="PackedScene" id=8]
-[ext_resource path="res://graphics/sign2.png" type="Texture" id=9]
-[ext_resource path="res://graphics/sign3.png" type="Texture" id=10]
+[ext_resource path="res://graphics/tutorialSigns3.png" type="Texture" id=9]
+[ext_resource path="res://graphics/tutorialSigns4.png" type="Texture" id=10]
 [ext_resource path="res://player/Player.tscn" type="PackedScene" id=11]
 [ext_resource path="res://graphics/circle-transition.png" type="Texture" id=12]
 [ext_resource path="res://player/Cape.tscn" type="PackedScene" id=13]
@@ -4082,6 +4082,7 @@ __meta__ = {
 }
 next_level = ExtResource( 2 )
 dash_enabled = false
+level_index = 4
 
 [node name="ResumeDash" type="Node" parent="."]
 script = ExtResource( 3 )
@@ -4114,7 +4115,7 @@ __meta__ = {
 }
 
 [node name="Joy_10" parent="Joys" instance=ExtResource( 8 )]
-position = Vector2( 86.6349, 133.004 )
+position = Vector2( 88, 162 )
 
 [node name="Joy_08" parent="Joys" instance=ExtResource( 8 )]
 position = Vector2( 160.499, 146.57 )
@@ -4128,7 +4129,7 @@ position = Vector2( 37.8746, 47.3665 )
 [node name="Signs" type="Node2D" parent="."]
 
 [node name="sign2" type="Sprite" parent="Signs"]
-position = Vector2( 210, 170 )
+position = Vector2( 192, 178 )
 texture = ExtResource( 9 )
 
 [node name="sign3" type="Sprite" parent="Signs"]
@@ -4222,7 +4223,6 @@ align = 2
 anims/joy-label-blink = SubResource( 629 )
 
 [node name="PauseScreen" parent="." instance=ExtResource( 24 )]
-editor/display_folded = true
 layer = 3
 
 [node name="MarginContainer" parent="PauseScreen" index="0"]
@@ -4232,5 +4232,7 @@ visible = false
 [editable path="Player"]
 
 [editable path="Player/AnimatedSprite"]
+
+[editable path="Player/Cape"]
 
 [editable path="PauseScreen"]
