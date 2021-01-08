@@ -28,6 +28,7 @@ We're hoping for levels that are mostly contained within the screen. Thus, pleas
 **Purple**: dangerous blobs (the stationary kind)   
 **Red**: dangerous blobs (the moving kind); use the red pixels to outline their path   
 **Gray**: moving platforms; use the gray pixels to outline their path   
-**Brown**: breakable rocks (note that each of these takes up a 2 x 2 tile area)   
+**Brown**: gravel (note that each of these takes up a 2 x 2 tile area)   
+**Green**: prickle blobs (that spring up after player steps on them)   
 
 4. Send the image to studioheartengine@gmail.com
