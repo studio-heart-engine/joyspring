@@ -52,10 +52,15 @@ func regrow_cape():
 
 
 func enter():
-	# only glide if you have a cape
-	if not owner.has_node("Cape"):
+	# only glide if you have a cape, you just dashed, and you're midair
+	if not(
+		owner.can_dash and
+		owner.current_state in ["jump", "fall", "dash"] and
+		owner.has_node("Cape")
+	):
 		emit_signal("finished", "previous")
 		return
+	
 	.enter()
 	
 	Events.emit_signal("float_started")
