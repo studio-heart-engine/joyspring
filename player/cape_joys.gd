@@ -37,7 +37,8 @@ func _on_float_started():
 
 func _on_float_ended():
 	movement_type = MovementType.NOT_FLOATING
-	anim_player.play_backwards()
+	if anim_player.is_playing():
+		anim_player.play_backwards()
 
 
 func _process(delta):
