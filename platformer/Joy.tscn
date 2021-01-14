@@ -22,7 +22,7 @@ shader_param/outline_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="Animation" id=3]
 resource_name = "fade_out"
-length = 0.7
+length = 2.0
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
@@ -30,7 +30,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3, 0.7 ),
+"times": PoolRealArray( 0, 0.3, 1.5 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 10, 10, 10, 1 ), Color( 10, 10, 10, 0 ) ]
@@ -40,7 +40,7 @@ tracks/0/keys = {
 radius = 3.67797
 
 [node name="Joy" index="0" instance=ExtResource( 1 )]
-modulate = Color( 10, 10, 10, 1 )
+modulate = Color( 10, 10, 10, 0.666667 )
 script = ExtResource( 2 )
 
 [node name="Particles" type="Particles2D" parent="." index="0"]
@@ -57,6 +57,9 @@ z_index = -1
 texture = ExtResource( 4 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 8 )
+
+[node name="Sprite" parent="." index="2"]
+region_rect = Rect2( 48, 0, 8, 8 )
 
 [node name="AnimationPlayer" parent="." index="3"]
 autoplay = "float"

@@ -15,6 +15,11 @@ var time_elapsed = 0
 var noise = OpenSimplexNoise.new()
 var movement_type = MovementType.NOT_FLOATING
 
+
+func fade_out():
+	
+
+
 func _ready():
 	noise.octaves = 1
 	
