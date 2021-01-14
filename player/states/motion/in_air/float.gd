@@ -36,7 +36,7 @@ func shrink_cape():
 		cape_shrink_timer.stop()
 		emit_signal("finished", "fall")
 	else:
-		cape_joys.get_child(0).queue_free()
+		cape_joys.get_child(0).fade_out()
 
 
 func regrow_cape():
@@ -52,10 +52,8 @@ func regrow_cape():
 
 
 func enter():
-	# only glide if you have a cape, you just dashed, and you're midair
+	# only glide if you have a cape
 	if not(
-		owner.can_dash and
-		owner.current_state in ["jump", "fall", "dash"] and
 		owner.has_node("Cape")
 	):
 		emit_signal("finished", "previous")
