@@ -24,7 +24,11 @@ onready var states = {
 }
 
 
+func enbale_dash():
+	can_dash = true
+
 func _ready():
+	Events.connect("joy_collected", self, "enable_dash")
 	for state_node in states.values():
 		state_node.connect("finished", self, "change_state")
 	

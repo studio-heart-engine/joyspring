@@ -16,10 +16,6 @@ var noise = OpenSimplexNoise.new()
 var movement_type = MovementType.NOT_FLOATING
 
 
-func fade_out():
-	
-
-
 func _ready():
 	noise.octaves = 1
 	
@@ -38,7 +34,6 @@ func _ready():
 
 func _on_float_started():
 	movement_type = MovementType.FLOATING
-	anim_player.play("fade-white")
 
 func _on_float_ended():
 	movement_type = MovementType.NOT_FLOATING

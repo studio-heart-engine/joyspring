@@ -18,6 +18,7 @@ func enter():
 	if self.input_direction.x != 0:
 		owner.is_looking_right = self.input_direction.x == 1
 	
+	anim_player.stop()
 	anim_player.play("dash")
 	anim_player.stop(false)
 	if self.input_direction.x == 0:

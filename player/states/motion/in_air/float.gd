@@ -36,7 +36,7 @@ func shrink_cape():
 		cape_shrink_timer.stop()
 		emit_signal("finished", "fall")
 	else:
-		cape_joys.get_child(0).fade_out()
+		cape_joys.get_child(cape_joys.get_child_count()-1).fade_out()
 
 
 func regrow_cape():

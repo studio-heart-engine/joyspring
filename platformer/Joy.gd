@@ -6,6 +6,11 @@ var is_on_cape = false setget set_on_cape
 
 onready var anim_player = $AnimationPlayer
 
+func fade_out():
+	anim_player.play("fade_out")
+	yield(anim_player, "animation_finished")
+	queue_free()
+
 
 func _ready():
 	rotation_degrees = randi() % 4 * 90
