@@ -11,5 +11,10 @@ func _ready():
 	view_box.rect_scale = scaling
 
 func _process(delta):
-	var coord = $"ViewportContainer/Viewport/Level/Text1".get_global_transform_with_canvas().origin
-	$Text/Control/Label1.rect_position = coord * scaling
+	if $ViewportContainer/Viewport/Level:
+		var children = $ViewportContainer/Viewport/Level.get_children()
+		for child in children:
+			if child.name.substr(0, 4) == "Text":
+				var coord = child.get_global_transform_with_canvas().origin
+				var path = "Text/Control/Label" + child.name.right(4)
+				get_node(path).rect_position = coord * scaling
