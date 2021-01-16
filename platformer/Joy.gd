@@ -24,6 +24,7 @@ func set_following_player(value):
 		anim_player.stop(false)
 		$Hitbox/CollisionShape2D.set_deferred("disabled", true)
 		$Particles.emitting = true
+		$AnimationPlayer2.stop()
 
 
 func set_on_cape(value):
