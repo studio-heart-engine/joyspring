@@ -14,17 +14,16 @@ onready var states = {
 	"idle": $States/Idle,
 	"dash": $States/Dash,
 	"run": $States/Run,
-	"cling": $States/Cling,
-	"climb": $States/Climb,
 	"slide": $States/Slide,
 	"jump": $States/Jump,
 	"fall": $States/Fall,
 	"float": $States/Float,
 	"dead": $States/Dead,
+	"cling": $States/Cling
 }
 
 
-func enbale_dash():
+func enable_dash():
 	can_dash = true
 
 func _ready():
@@ -46,7 +45,7 @@ func _physics_process(delta):
 func change_state(next_state):
 	if next_state == "dash" and not get_parent().dash_enabled \
 			or next_state == "float" and not get_parent().float_enabled \
-			or next_state in ["cling", "climb", "slide"] and not get_parent().climb_enabled:
+			or next_state in ["cling", "slide"] and not get_parent().climb_enabled:
 		return
 	
 	if current_state != null:

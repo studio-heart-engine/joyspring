@@ -16,18 +16,10 @@ func enter():
 	wall_direction = get_wall_direction()
 	owner.is_looking_right = wall_direction == 1
 	owner.velocity = Vector2.ZERO
-	if owner.current_state in ["climb", "cling"]:
-		if on_wall_timer.is_stopped():
-			on_wall_timer.start()
-			on_wall_timer.set_paused(false)
-		else:
-			on_wall_timer.set_paused(false)
-	elif on_wall_timer.time_left < 1:
+	if on_wall_timer.time_left < 1:
 		start_blink()
 
 func exit():
-	if owner.current_state in ["climb", "cling"]:
-		on_wall_timer.set_paused(true)
 	stop_blink()
 
 func update(delta):

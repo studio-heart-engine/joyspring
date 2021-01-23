@@ -1,24 +1,23 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://player/player_state_machine.gd" type="Script" id=1]
 [ext_resource path="res://player/state.gd" type="Script" id=2]
 [ext_resource path="res://player/states/motion/on_ground/idle.gd" type="Script" id=3]
 [ext_resource path="res://player/states/motion/dash.gd" type="Script" id=4]
 [ext_resource path="res://player/states/motion/on_ground/run.gd" type="Script" id=5]
-[ext_resource path="res://player/states/motion/on_wall/cling.gd" type="Script" id=6]
-[ext_resource path="res://player/states/motion/on_wall/climb.gd" type="Script" id=7]
-[ext_resource path="res://player/states/motion/on_wall/slide.gd" type="Script" id=8]
-[ext_resource path="res://player/states/motion/in_air/jump.gd" type="Script" id=9]
-[ext_resource path="res://player/states/motion/in_air/fall.gd" type="Script" id=10]
-[ext_resource path="res://player/states/motion/in_air/float.gd" type="Script" id=11]
-[ext_resource path="res://player/states/dead.gd" type="Script" id=12]
-[ext_resource path="res://graphics/effects/white-radial-gradient.png" type="Texture" id=13]
-[ext_resource path="res://player/glow.gd" type="Script" id=14]
-[ext_resource path="res://platformer/camera.gd" type="Script" id=15]
-[ext_resource path="res://graphics/sprites/riley/rileyDawn.json" type="PackedScene" id=16]
-[ext_resource path="res://player/PlayerRespawnTransition.gd" type="Script" id=17]
-[ext_resource path="res://graphics/effects/circle-transition.png" type="Texture" id=18]
-[ext_resource path="res://graphics/effects/cave-darkness.png" type="Texture" id=19]
+[ext_resource path="res://player/states/motion/on_wall/slide.gd" type="Script" id=6]
+[ext_resource path="res://player/states/motion/in_air/jump.gd" type="Script" id=7]
+[ext_resource path="res://player/states/motion/in_air/fall.gd" type="Script" id=8]
+[ext_resource path="res://player/states/motion/in_air/float.gd" type="Script" id=9]
+[ext_resource path="res://player/states/dead.gd" type="Script" id=10]
+[ext_resource path="res://player/states/motion/on_wall/cling.gd" type="Script" id=11]
+[ext_resource path="res://graphics/effects/white-radial-gradient.png" type="Texture" id=12]
+[ext_resource path="res://player/glow.gd" type="Script" id=13]
+[ext_resource path="res://platformer/camera.gd" type="Script" id=14]
+[ext_resource path="res://graphics/sprites/riley/rileyDawn.json" type="PackedScene" id=15]
+[ext_resource path="res://player/PlayerRespawnTransition.gd" type="Script" id=16]
+[ext_resource path="res://graphics/effects/circle-transition.png" type="Texture" id=17]
+[ext_resource path="res://graphics/effects/cave-darkness.png" type="Texture" id=18]
 
 [sub_resource type="Animation" id=1]
 resource_name = "dash-glow"
@@ -147,7 +146,7 @@ resource_local_to_scene = true
 shader = SubResource( 7 )
 shader_param/cutoff = 1.0
 shader_param/smooth_size = 0.1
-shader_param/mask = ExtResource( 18 )
+shader_param/mask = ExtResource( 17 )
 
 [sub_resource type="Animation" id=9]
 length = 0.8
@@ -171,7 +170,12 @@ z_index = 2
 collision_mask = 30
 script = ExtResource( 1 )
 
+[node name="OnWallTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
 [node name="States" type="Node" parent="."]
+editor/display_folded = true
 script = ExtResource( 2 )
 
 [node name="Idle" type="Node" parent="States"]
@@ -183,34 +187,27 @@ script = ExtResource( 4 )
 [node name="Run" type="Node" parent="States"]
 script = ExtResource( 5 )
 
-[node name="Cling" type="Node" parent="States"]
+[node name="Slide" type="Node" parent="States"]
 script = ExtResource( 6 )
 
-[node name="Climb" type="Node" parent="States"]
+[node name="Jump" type="Node" parent="States"]
 script = ExtResource( 7 )
 
-[node name="Slide" type="Node" parent="States"]
+[node name="Fall" type="Node" parent="States"]
 script = ExtResource( 8 )
 
-[node name="Jump" type="Node" parent="States"]
+[node name="Float" type="Node" parent="States"]
 script = ExtResource( 9 )
 
-[node name="Fall" type="Node" parent="States"]
+[node name="Dead" type="Node" parent="States"]
 script = ExtResource( 10 )
 
-[node name="Float" type="Node" parent="States"]
+[node name="Cling" type="Node" parent="States"]
 script = ExtResource( 11 )
-
-[node name="Dead" type="Node" parent="States"]
-script = ExtResource( 12 )
-
-[node name="OnWallTimer" type="Timer" parent="."]
-wait_time = 4.0
-one_shot = true
 
 [node name="Light2D" type="Light2D" parent="."]
 position = Vector2( 0, -7.92011 )
-texture = ExtResource( 13 )
+texture = ExtResource( 12 )
 texture_scale = 0.7
 color = Color( 0, 0.27451, 1, 1 )
 energy = 0.4
@@ -219,7 +216,7 @@ shadow_enabled = true
 shadow_gradient_length = 2.0
 shadow_filter = 5
 shadow_filter_smooth = 10.0
-script = ExtResource( 14 )
+script = ExtResource( 13 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -243,12 +240,12 @@ drag_margin_top = 0.5
 drag_margin_bottom = 0.0
 editor_draw_limits = true
 editor_draw_drag_margin = true
-script = ExtResource( 15 )
+script = ExtResource( 14 )
 
 [node name="CameraShakeTimer" type="Timer" parent="Camera"]
 one_shot = true
 
-[node name="AnimatedSprite" parent="." instance=ExtResource( 16 )]
+[node name="AnimatedSprite" parent="." instance=ExtResource( 15 )]
 
 [node name="Sprite" parent="AnimatedSprite" index="0"]
 light_mask = 0
@@ -270,7 +267,7 @@ shape = SubResource( 3 )
 
 [node name="RespawnTransition" type="CanvasLayer" parent="."]
 layer = 2
-script = ExtResource( 17 )
+script = ExtResource( 16 )
 
 [node name="ColorRect" type="ColorRect" parent="RespawnTransition"]
 light_mask = 2
@@ -293,7 +290,7 @@ modulate = Color( 0, 0.00392157, 0.0392157, 1 )
 position = Vector2( 1, -2 )
 scale = Vector2( 1.1, 1.1 )
 z_index = 4
-texture = ExtResource( 19 )
+texture = ExtResource( 18 )
 [connection signal="ready" from="." to="RespawnTransition" method="_on_Player_ready"]
 
 [editable path="AnimatedSprite"]

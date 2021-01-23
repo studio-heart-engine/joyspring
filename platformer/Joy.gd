@@ -4,16 +4,16 @@ var POINTS_PER_COIN = 10
 var is_following_player = false setget set_following_player
 var is_on_cape = false setget set_on_cape
 
-onready var anim_player = $AnimationPlayer
+onready var anim_player = $Offset/AnimatedSprite/AnimationPlayer
 
 func fade_out():
 	anim_player.play("fade_out")
 	yield(anim_player, "animation_finished")
-	queue_free()
+	call_deferred("free")
 
 
 func _ready():
-	rotation_degrees = randi() % 4 * 90
+	rotation_degrees = randi() % 2 * 180
 	anim_player.get_animation("collect1").set_loop(false)
 	anim_player.advance(rand_range(0, anim_player.get_animation(anim_player.current_animation).length))
 
@@ -22,21 +22,22 @@ func set_following_player(value):
 	is_following_player = value
 	if value:
 		anim_player.stop(false)
-		$Hitbox/CollisionShape2D.set_deferred("disabled", true)
-		$Particles.emitting = true
-		$AnimationPlayer2.stop()
+		$Offset/AnimationPlayer2.stop()
+		$Offset.position = Vector2.ZERO
+		$Offset/Hitbox/CollisionShape2D.set_deferred("disabled", true)
+		$Offset/Particles.emitting = true
 
 
 func set_on_cape(value):
 	is_on_cape = value
 	if value:
-		$Particles.emitting = false
+		$Offset/Particles.emitting = false
 
 
 func _on_Hitbox_area_entered(area):
 	
 	PlayerData.score += POINTS_PER_COIN
-	$Hitbox.set_deferred("monitoring", false)
+	$Offset/Hitbox.set_deferred("monitoring", false)
 	Events.emit_signal("joy_collected")
 	get_parent().call_deferred("remove_child", self)
 	$"../../Player/Cape/Joys".call_deferred("add_child", self)

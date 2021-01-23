@@ -65,12 +65,6 @@ func is_near_floor():
 	return false
 
 
-func get_wall_state():
-	if not owner.can_wall_climb:
-		return "slide"
-	return "cling" if input_direction.y == 0 else "climb"
-
-
 func spawn_jump_particles():
 	var jump_particles = JumpParticles.instance()
 	owner.get_parent().add_child(jump_particles)

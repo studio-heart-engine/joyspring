@@ -1,11 +1,17 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://platformer/levels/Level_01.tscn" type="PackedScene" id=1]
-[ext_resource path="res://HD.gd" type="Script" id=2]
-[ext_resource path="res://graphics/smoothFont.tres" type="DynamicFont" id=3]
+[ext_resource path="res://HD.gd" type="Script" id=1]
+[ext_resource path="res://platformer/levels/Level_01.tscn" type="PackedScene" id=2]
 
-[node name="HD" type="Node"]
-script = ExtResource( 2 )
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://graphics/HappyFox-Condensed.otf"
+
+[sub_resource type="DynamicFont" id=2]
+size = 100
+font_data = SubResource( 1 )
+
+[node name="SceneHD" type="Node"]
+script = ExtResource( 1 )
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
 margin_right = 320.0
@@ -19,7 +25,7 @@ size = Vector2( 320, 180 )
 handle_input_locally = false
 render_target_update_mode = 3
 
-[node name="Level" parent="ViewportContainer/Viewport" instance=ExtResource( 1 )]
+[node name="Level" parent="ViewportContainer/Viewport" instance=ExtResource( 2 )]
 
 [node name="Text" type="Node" parent="."]
 
@@ -35,19 +41,8 @@ margin_left = 473.627
 margin_top = 561.408
 margin_right = 962.627
 margin_bottom = 681.408
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "omg it's smooth text"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label2" type="Label" parent="Text/Control"]
-margin_left = 481.419
-margin_top = 701.665
-margin_right = 970.419
-margin_bottom = 821.665
-custom_fonts/font = ExtResource( 3 )
-text = "omg it's smooth text 2"
 __meta__ = {
 "_edit_use_anchors_": false
 }

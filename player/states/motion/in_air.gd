@@ -31,13 +31,15 @@ func update(delta):
 	if owner.is_on_floor():
 		spawn_fall_particles()
 		var next_state = ""
-		if owner.velocity.x == 0:
+		if Input.is_action_pressed("up"):
+			next_state = "jump"
+		elif owner.velocity.x == 0:
 			next_state = "idle"
 		else:
 			next_state = "run"
 		emit_signal("finished", next_state)
 	elif Input.is_action_pressed("wall") and is_near_wall():
-		emit_signal("finished", get_wall_state())
+		emit_signal("finished", "cling")
 	
 	.update(delta)
 

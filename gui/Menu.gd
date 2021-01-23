@@ -10,6 +10,7 @@ func _ready():
 		has_level_select_button = true
 	
 	if not has_level_select_button:
+		
 		$VBoxContainer/LevelSelectButton.queue_free()
 	
 	if not globals.has_played_startup_animation:

@@ -40,6 +40,7 @@ func exit():
 	return
 
 func update(delta):
+	print(on_wall_timer.time_left)
 	return
 
 func handle_input(event):
