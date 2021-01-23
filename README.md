@@ -1,7 +1,4 @@
-![](graphics/marketing/banner.png?raw=true)
-<p align="center">
-  <img src="graphics/marketing/dash.gif" height="180"><img src="graphics/marketing/blebs.gif" height="180"><img src="graphics/marketing/glide.gif" height="180">
-</p>
+![](graphics/marketing/cover.png?raw=true)
 
 # JOYSPRING
 A quick platformer about spreading positivity. Our game is still in development, so if you want to help out with designing levels, please check the section below!
