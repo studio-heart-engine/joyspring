@@ -8,7 +8,6 @@ signal scene_changed
 func _ready():
 	color_rect.set_visible(false)
 
-
 func change_scene(path: String, color = Color.black):
 	color_rect.color = color
 	color_rect.set_visible(true)
