@@ -17,7 +17,7 @@ func _ready():
 	current_scene = opening.instance()
 	sub_viewport.add_child(current_scene)
 
-
+	
 func _process(delta):
 	if sub_viewport.get_child(0):
 		var children = current_scene.get_children()
@@ -25,7 +25,6 @@ func _process(delta):
 			if child.name.substr(0, 4) == "Text":
 				var coord = child.get_global_transform_with_canvas().origin
 				var path = "Text/Control/Label" + child.name.right(4)
-				print(path)
 				get_node(path).rect_position = coord * scaling
 
 
