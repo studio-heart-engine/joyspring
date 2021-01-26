@@ -1,4 +1,4 @@
-extends "../state.gd"
+ extends "../state.gd"
 
 var input_direction = Vector2.ZERO setget ,get_input_direction
 
