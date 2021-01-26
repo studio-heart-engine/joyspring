@@ -31,6 +31,7 @@ func _on_Hitbox_area_entered(area):
 
 
 func _ready():
+	update_image()
 	anim_player.play("crawl")
 	$Sprite.material.set_shader_param("outline_color", Color(possible_colors[randi() % len(possible_colors)]))
 
@@ -90,3 +91,20 @@ func turn_obtuse():
 	var dir = deg2rad(rotation_degrees)
 	position += Vector2(coef * 8, 8).rotated(dir)
 	rotation_degrees += coef * 90
+
+
+
+enum TIME_OF_DAY {dawn, evening, midnight}
+
+export (TIME_OF_DAY) var time_of_day = TIME_OF_DAY.evening setget set_time_of_day
+
+func update_image():
+	var image_path = "res://graphics/sprites/blobs/" + get_time_of_day() + "/bleb.png"
+	$Sprite.set_texture(load(image_path))
+
+func get_time_of_day():
+	return TIME_OF_DAY.keys()[time_of_day]
+
+func set_time_of_day(value):
+	time_of_day = value
+	update_image()

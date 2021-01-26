@@ -7,7 +7,7 @@ enum TILE_MATERIAL {dirt, grass, pebbles, rocks, stones, vines}
 export (TIME_OF_DAY) var time_of_day = TIME_OF_DAY.evening setget set_time_of_day
 export (TILE_MATERIAL) var tile_material = TILE_MATERIAL.grass setget set_tile_material
 
-var dynamic_tileset = load("res://graphics/tilesets/foreground_tileset.tres")
+var dynamic_tileset = load("res://graphics/tilesets/foreground_tileset_image.tres")
 
 func _ready():
 	update_tileset()

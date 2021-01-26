@@ -22,11 +22,11 @@ onready var states = {
 	"cling": $States/Cling
 }
 
-
 func enable_dash():
 	can_dash = true
 
 func _ready():
+	update_image()
 	Events.connect("joy_collected", self, "enable_dash")
 	for state_node in states.values():
 		state_node.connect("finished", self, "change_state")
@@ -69,3 +69,19 @@ func set_looking_right(value):
 	is_looking_right = value
 	sprite.scale.x = 1 if value else -1
 	
+
+
+enum TIME_OF_DAY {dawn, evening, midnight}
+
+export (TIME_OF_DAY) var time_of_day = TIME_OF_DAY.evening setget set_time_of_day
+
+func update_image():
+	var image_path = "res://graphics/sprites/riley/riley" + get_time_of_day() + ".png"
+	$AnimatedSprite/Sprite.set_texture(load(image_path))
+
+func get_time_of_day():
+	return TIME_OF_DAY.keys()[time_of_day]
+
+func set_time_of_day(value):
+	time_of_day = value
+	update_image()

@@ -12,6 +12,5 @@ signal level_exited
 func get_level_index():
 	return level_index
 
-
 func _on_ExitArea_area_entered(area):
 	SceneChanger.change_scene('res://gui/Menu.tscn')

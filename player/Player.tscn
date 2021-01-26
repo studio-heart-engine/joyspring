@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://player/player_state_machine.gd" type="Script" id=1]
 [ext_resource path="res://player/state.gd" type="Script" id=2]
@@ -18,6 +18,7 @@
 [ext_resource path="res://player/PlayerRespawnTransition.gd" type="Script" id=16]
 [ext_resource path="res://graphics/effects/circle-transition.png" type="Texture" id=17]
 [ext_resource path="res://graphics/effects/cave-darkness.png" type="Texture" id=18]
+[ext_resource path="res://graphics/sprites/riley/rileyEvening.png" type="Texture" id=19]
 
 [sub_resource type="Animation" id=1]
 resource_name = "dash-glow"
@@ -175,7 +176,6 @@ wait_time = 3.0
 one_shot = true
 
 [node name="States" type="Node" parent="."]
-editor/display_folded = true
 script = ExtResource( 2 )
 
 [node name="Idle" type="Node" parent="States"]
@@ -249,6 +249,7 @@ one_shot = true
 
 [node name="Sprite" parent="AnimatedSprite" index="0"]
 light_mask = 0
+texture = ExtResource( 19 )
 offset = Vector2( 0, -8 )
 
 [node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
