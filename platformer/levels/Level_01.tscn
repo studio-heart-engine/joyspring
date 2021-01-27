@@ -1,7 +1,6 @@
 [gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
-[ext_resource path="res://graphics/environment/background1.png" type="Texture" id=2]
 [ext_resource path="res://platformer/levels/Level_02.tscn" type="PackedScene" id=3]
 [ext_resource path="res://player/Player.tscn" type="PackedScene" id=14]
 [ext_resource path="res://graphics/effects/circle-transition.png" type="Texture" id=15]
@@ -15,7 +14,10 @@
 [ext_resource path="res://platformer/BlobTileMap.gd" type="Script" id=24]
 [ext_resource path="res://graphics/tilesets/blobs_tileset.tres" type="TileSet" id=25]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="StreamTexture" id=1]
+load_path = "res://.import/background1.png-badbe7d6cfda288f5bcb698ce2e9a0a2.stex"
+
+[sub_resource type="Shader" id=2]
 code = "shader_type canvas_item;
 
 uniform sampler2D mask;
@@ -28,23 +30,23 @@ void fragment() {
 	COLOR = vec4(COLOR.rgb, alpha);
 }"
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id=3]
 resource_local_to_scene = true
-shader = SubResource( 1 )
+shader = SubResource( 2 )
 shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.1
 shader_param/mask = ExtResource( 15 )
 
-[sub_resource type="TileSet" id=3]
+[sub_resource type="TileSet" id=4]
 
-[sub_resource type="Gradient" id=4]
+[sub_resource type="Gradient" id=5]
 offsets = PoolRealArray( 0, 0.305011, 0.640523, 1 )
 colors = PoolColorArray( 0.27451, 0.27451, 0.27451, 0, 0.470588, 0.470588, 0.470588, 1, 0.470588, 0.470588, 0.470588, 1, 0.27451, 0.27451, 0.27451, 0 )
 
-[sub_resource type="GradientTexture" id=5]
-gradient = SubResource( 4 )
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
 
-[sub_resource type="ParticlesMaterial" id=6]
+[sub_resource type="ParticlesMaterial" id=7]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -54,16 +56,16 @@ initial_velocity = 8.0
 angular_velocity = 4.57384e-41
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-color_ramp = SubResource( 5 )
+color_ramp = SubResource( 6 )
 
-[sub_resource type="Gradient" id=7]
+[sub_resource type="Gradient" id=8]
 offsets = PoolRealArray( 0, 0.30719, 0.359477, 0.381264, 0.405229, 0.43573, 1 )
 colors = PoolColorArray( 0.388235, 0.388235, 0.388235, 0, 1, 1, 1, 0.109804, 0.996078, 0.996078, 0.996078, 0.137255, 0.992157, 0.992157, 0.992157, 0.0980392, 0.988235, 0.988235, 0.988235, 0.12549, 0.984314, 0.984314, 0.984314, 0.0941176, 0.937255, 0.937255, 0.937255, 0 )
 
-[sub_resource type="GradientTexture" id=8]
-gradient = SubResource( 7 )
+[sub_resource type="GradientTexture" id=9]
+gradient = SubResource( 8 )
 
-[sub_resource type="ParticlesMaterial" id=9]
+[sub_resource type="ParticlesMaterial" id=10]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -75,7 +77,7 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 0.05
 scale_random = 0.05
-color_ramp = SubResource( 8 )
+color_ramp = SubResource( 9 )
 
 [node name="Level_01" type="Node2D"]
 script = ExtResource( 1 )
@@ -88,7 +90,7 @@ next_level = ExtResource( 3 )
 layer = -1
 
 [node name="background" type="Sprite" parent="Background"]
-texture = ExtResource( 2 )
+texture = SubResource( 1 )
 centered = false
 
 [node name="Blebs" type="Node2D" parent="."]
@@ -137,7 +139,7 @@ limit_right = 320
 limit_bottom = 248
 
 [node name="ColorRect" parent="Player/RespawnTransition" index="0"]
-material = SubResource( 2 )
+material = SubResource( 3 )
 
 [node name="Cape" parent="Player" instance=ExtResource( 16 )]
 
@@ -160,7 +162,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.784314 )
 scale = Vector2( 0.75, 0.75 )
 z_index = -2
-tile_set = SubResource( 3 )
+tile_set = SubResource( 4 )
 cell_size = Vector2( 8, 8 )
 cell_quadrant_size = 2
 collision_layer = 0
@@ -186,7 +188,7 @@ script = ExtResource( 24 )
 position = Vector2( 160, 90 )
 z_index = 1
 local_coords = false
-process_material = SubResource( 6 )
+process_material = SubResource( 7 )
 script = ExtResource( 20 )
 
 [node name="LightParticles" type="Particles2D" parent="."]
@@ -195,12 +197,32 @@ z_index = 1
 amount = 2
 lifetime = 7.0
 local_coords = false
-process_material = SubResource( 9 )
+process_material = SubResource( 10 )
 texture = ExtResource( 21 )
 script = ExtResource( 20 )
 
-[node name="EndPosition" type="Position2D" parent="."]
-position = Vector2( 320, 64 )
+[node name="EndPosition1" type="Position2D" parent="."]
+position = Vector2( 336, 64 )
+script = ExtResource( 22 )
+
+[node name="EndPosition2" type="Position2D" parent="."]
+position = Vector2( 336, 32 )
+script = ExtResource( 22 )
+
+[node name="EndPosition3" type="Position2D" parent="."]
+position = Vector2( 336, 0 )
+script = ExtResource( 22 )
+
+[node name="EndPosition4" type="Position2D" parent="."]
+position = Vector2( 320, -16 )
+script = ExtResource( 22 )
+
+[node name="EndPosition5" type="Position2D" parent="."]
+position = Vector2( 288, -16 )
+script = ExtResource( 22 )
+
+[node name="EndPosition6" type="Position2D" parent="."]
+position = Vector2( 256, -32 )
 script = ExtResource( 22 )
 
 [node name="PauseScreen" parent="." instance=ExtResource( 23 )]
@@ -240,7 +262,7 @@ margin_right = 213.0
 margin_bottom = 384.0
 
 [node name="Text1" type="Node2D" parent="."]
-position = Vector2( 92, 72 )
+position = Vector2( 72, 60 )
 
 [editable path="Player"]
 
