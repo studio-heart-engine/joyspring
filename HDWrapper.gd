@@ -25,7 +25,6 @@ func _process(delta):
 			if child.name.substr(0, 4) == "Text":
 				var coord = child.get_global_transform_with_canvas().origin
 				var path = "Text/Control/Label" + child.name.right(4)
-				print(path)
 				get_node(path).rect_position = coord * scaling
 
 
