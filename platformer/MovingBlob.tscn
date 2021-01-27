@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://platformer/MovingBlob.gd" type="Script" id=1]
 [ext_resource path="res://graphics/sprites/blobs/Blob.tscn" type="PackedScene" id=2]
-[ext_resource path="res://graphics/sprites/blobs/dawn/blobs1.png" type="Texture" id=3]
 
 [sub_resource type="Curve2D" id=1]
 resource_local_to_scene = true
@@ -56,17 +55,12 @@ lookahead = 6.0
 
 [node name="Blob" parent="Path2D/PathFollow2D" instance=ExtResource( 2 )]
 scale = Vector2( 1.3, 1 )
-texture = ExtResource( 3 )
 
 [node name="NoiseOffset" parent="Path2D/PathFollow2D/Blob" index="0"]
 AMPLITUDE = 0.0
 
 [node name="Outline" parent="Path2D/PathFollow2D/Blob/NoiseOffset" index="0"]
-modulate = Color( 0.972549, 0.184314, 0.407843, 1 )
-texture = ExtResource( 3 )
-
-[node name="Sprite" parent="Path2D/PathFollow2D/Blob/NoiseOffset" index="1"]
-texture = ExtResource( 3 )
+modulate = Color( 0.972549, 0.184314, 0.635294, 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "follow-loop"

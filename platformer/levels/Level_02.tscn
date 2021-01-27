@@ -1,13 +1,9 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
-[ext_resource path="res://graphics/environment/background1.png" type="Texture" id=2]
+[ext_resource path="res://graphics/environment/background1.tres" type="Texture" id=2]
+[ext_resource path="res://platformer/levels/Level_03.tscn" type="PackedScene" id=3]
 [ext_resource path="res://graphics/sprites/blobs/Blob.tscn" type="PackedScene" id=4]
-[ext_resource path="res://graphics/sprites/blobs/dawn/blobs1.png" type="Texture" id=5]
-[ext_resource path="res://graphics/sprites/blobs/dawn/blobs2.png" type="Texture" id=6]
-[ext_resource path="res://graphics/sprites/blobs/dawn/blobs3.png" type="Texture" id=7]
-[ext_resource path="res://graphics/sprites/blobs/dawn/blobs4.png" type="Texture" id=8]
-[ext_resource path="res://graphics/sprites/blobs/dawn/blobs5.png" type="Texture" id=9]
 [ext_resource path="res://player/Player.tscn" type="PackedScene" id=14]
 [ext_resource path="res://graphics/effects/circle-transition.png" type="Texture" id=15]
 [ext_resource path="res://player/Cape.tscn" type="PackedScene" id=16]
@@ -17,10 +13,10 @@
 [ext_resource path="res://graphics/effects/white-radial-gradient.png" type="Texture" id=21]
 [ext_resource path="res://platformer/EndPosition.gd" type="Script" id=22]
 [ext_resource path="res://gui/PauseScreen.tscn" type="PackedScene" id=23]
+[ext_resource path="res://platformer/BlobTileMap.gd" type="Script" id=24]
+[ext_resource path="res://graphics/tilesets/blobs_tileset.tres" type="TileSet" id=25]
 
-[sub_resource type="TileSet" id=1]
-
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
 uniform sampler2D mask;
@@ -33,12 +29,14 @@ void fragment() {
 	COLOR = vec4(COLOR.rgb, alpha);
 }"
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
-shader = SubResource( 2 )
+shader = SubResource( 1 )
 shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.1
 shader_param/mask = ExtResource( 15 )
+
+[sub_resource type="TileSet" id=3]
 
 [sub_resource type="Gradient" id=4]
 offsets = PoolRealArray( 0, 0.305011, 0.640523, 1 )
@@ -85,6 +83,7 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_lock_": true
 }
+next_level = ExtResource( 3 )
 
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -1
@@ -92,20 +91,6 @@ layer = -1
 [node name="background" type="Sprite" parent="Background"]
 texture = ExtResource( 2 )
 centered = false
-
-[node name="TileMapBackground" type="TileMap" parent="."]
-modulate = Color( 1, 1, 1, 0.784314 )
-scale = Vector2( 0.75, 0.75 )
-z_index = -2
-tile_set = SubResource( 1 )
-cell_size = Vector2( 8, 8 )
-cell_quadrant_size = 2
-collision_layer = 0
-collision_mask = 0
-format = 1
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="Blebs" type="Node2D" parent="."]
 __meta__ = {
@@ -118,118 +103,93 @@ __meta__ = {
 }
 
 [node name="Blob1_01" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 67, 100 )
-texture = ExtResource( 5 )
-
-[node name="Blob1_05" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 85, 220 )
-texture = ExtResource( 5 )
-
-[node name="Blob1_06" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 103, 228 )
-texture = ExtResource( 5 )
-
-[node name="Blob1_07" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 115, 228 )
-texture = ExtResource( 5 )
-
-[node name="Blob1_08" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 123, 214 )
-texture = ExtResource( 5 )
-
-[node name="Blob1_09" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 114, 220 )
-texture = ExtResource( 5 )
-
-[node name="Blob1_10" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 75, 213 )
-texture = ExtResource( 5 )
+position = Vector2( 74, 195 )
+shape = "1"
 
 [node name="Blob1_02" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 84, 96 )
-texture = ExtResource( 5 )
+position = Vector2( 104, 210 )
+shape = "1"
 
 [node name="Blob1_03" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 66, 80 )
-texture = ExtResource( 5 )
-
-[node name="Blob1_11" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 286, 153 )
-texture = ExtResource( 5 )
+position = Vector2( 94, 101 )
+shape = "1"
 
 [node name="Blob1_04" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 92, 104 )
-texture = ExtResource( 5 )
+position = Vector2( 87, 93 )
+shape = "1"
+
+[node name="Blob1_05" parent="Blobs" instance=ExtResource( 4 )]
+position = Vector2( 66, 80 )
+shape = "1"
+
+[node name="Blob1_06" parent="Blobs" instance=ExtResource( 4 )]
+position = Vector2( 286, 159 )
+shape = "1"
 
 [node name="Blob2_01" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 67, 90 )
-texture = ExtResource( 6 )
+position = Vector2( 75, 83 )
+shape = "2"
 
 [node name="Blob2_02" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 76, 100 )
-texture = ExtResource( 6 )
+position = Vector2( 80, 199 )
+shape = "2"
 
 [node name="Blob2_03" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 106, 221 )
-texture = ExtResource( 6 )
+position = Vector2( 125, 209 )
+shape = "2"
 
 [node name="Blob2_04" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 92, 228 )
-texture = ExtResource( 6 )
+position = Vector2( 115, 206 )
+shape = "2"
+
+[node name="Blob2_05" parent="Blobs" instance=ExtResource( 4 )]
+position = Vector2( 281, 154 )
+shape = "2"
 
 [node name="Blob3_01" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 76, 92 )
-rotation = 0.535484
-texture = ExtResource( 7 )
+position = Vector2( 81, 87 )
+shape = "3"
+
+[node name="Blob3_02" parent="Blobs" instance=ExtResource( 4 )]
+position = Vector2( 98, 202 )
+shape = "3"
+
+[node name="Blob3_03" parent="Blobs" instance=ExtResource( 4 )]
+position = Vector2( 283, 146 )
+shape = "3"
 
 [node name="Blob4_01" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 84, 100 )
-texture = ExtResource( 8 )
-
-[node name="Blob4_02" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 89, 213 )
-rotation = 0.814138
-texture = ExtResource( 8 )
+position = Vector2( 93, 200 )
+shape = "4"
 
 [node name="Blob5_01" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 88, 92 )
-texture = ExtResource( 9 )
-
-[node name="Blob5_02" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 97, 226 )
-texture = ExtResource( 9 )
-
-[node name="Blob5_03" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 109, 215 )
-texture = ExtResource( 9 )
-
-[node name="Blob5_04" parent="Blobs" instance=ExtResource( 4 )]
-position = Vector2( 286, 147 )
-texture = ExtResource( 9 )
-
-[node name="MovingBlobs" type="Node2D" parent="."]
-__meta__ = {
-"_edit_lock_": true
-}
+position = Vector2( 86, 200 )
+shape = "5"
 
 [node name="Joys" type="Node2D" parent="."]
 __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="WeakRocks" type="Node2D" parent="."]
+[node name="Gravel" type="Node2D" parent="."]
 __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="MovableTiles" type="Node2D" parent="."]
+[node name="MovingBlobs" type="Node2D" parent="."]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="MovingPlatforms" type="Node2D" parent="."]
+z_index = 1
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="Player" parent="." instance=ExtResource( 14 )]
 light_mask = 1
-position = Vector2( 4, 72 )
+position = Vector2( 5, 72 )
 
 [node name="Light2D" parent="Player" index="2"]
 texture_scale = 0.05
@@ -238,14 +198,11 @@ energy = 0.5
 [node name="Camera" parent="Player" index="4"]
 visible = true
 limit_top = 0
-limit_right = 320
-limit_bottom = 250
+limit_right = 392
+limit_bottom = 248
 
 [node name="ColorRect" parent="Player/RespawnTransition" index="0"]
-material = SubResource( 3 )
-
-[node name="cave-darkness" parent="Player" index="8"]
-position = Vector2( -12, -8 )
+material = SubResource( 2 )
 
 [node name="Cape" parent="Player" instance=ExtResource( 16 )]
 
@@ -263,18 +220,32 @@ __meta__ = {
 "_edit_bone_": true,
 "_edit_lock_": true
 }
-time_of_day = 1
-tile_material = 1
+
+[node name="TileMapBackground" type="TileMap" parent="."]
+modulate = Color( 1, 1, 1, 0.784314 )
+scale = Vector2( 0.75, 0.75 )
+z_index = -2
+tile_set = SubResource( 3 )
+cell_size = Vector2( 8, 8 )
+cell_quadrant_size = 2
+collision_layer = 0
+collision_mask = 0
+format = 1
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="VineTileMap" type="TileMap" parent="."]
 z_index = 1
 format = 1
 
-[node name="MovingPlatforms" type="Node2D" parent="."]
-z_index = 1
-__meta__ = {
-"_edit_lock_": true
-}
+[node name="BlobTileMap" type="TileMap" parent="."]
+tile_set = ExtResource( 25 )
+cell_size = Vector2( 8, 8 )
+cell_quadrant_size = 2
+format = 1
+tile_data = PoolIntArray( 655368, 0, 0, 655369, 0, 0, 720904, 0, 0, 720905, 0, 0, 720906, 0, 0, 786440, 0, 0, 786441, 0, 0, 786442, 0, 0, 786443, 0, 0, 851976, 0, 0, 851977, 0, 0, 1179683, 0, 0, 1245219, 0, 0, 1638409, 0, 0, 1638410, 0, 0, 1638411, 0, 0, 1638412, 0, 0, 1703939, 1, 0, 1703940, 1, 0, 1703945, 0, 0, 1703946, 0, 0, 1703947, 0, 0, 1703948, 0, 0, 1703949, 0, 0, 1703950, 0, 0, 1703951, 0, 0, 1769482, 0, 0, 1769483, 0, 0, 1769484, 0, 0, 1769485, 0, 0, 1769486, 0, 0, 1835019, 0, 0, 1835020, 0, 0, 1835021, 0, 0, 1835022, 0, 0 )
+script = ExtResource( 24 )
 
 [node name="DustParticles" type="Particles2D" parent="."]
 position = Vector2( 160, 90 )
@@ -293,8 +264,32 @@ process_material = SubResource( 9 )
 texture = ExtResource( 21 )
 script = ExtResource( 20 )
 
-[node name="EndPosition" type="Position2D" parent="."]
-position = Vector2( 288, 240 )
+[node name="EndPosition1" type="Position2D" parent="."]
+position = Vector2( 400, 80 )
+script = ExtResource( 22 )
+
+[node name="EndPosition2" type="Position2D" parent="."]
+position = Vector2( 400, 56 )
+script = ExtResource( 22 )
+
+[node name="EndPosition3" type="Position2D" parent="."]
+position = Vector2( 400, 32 )
+script = ExtResource( 22 )
+
+[node name="EndPosition4" type="Position2D" parent="."]
+position = Vector2( 400, 16 )
+script = ExtResource( 22 )
+
+[node name="EndPosition5" type="Position2D" parent="."]
+position = Vector2( 400, -8 )
+script = ExtResource( 22 )
+
+[node name="EndPosition6" type="Position2D" parent="."]
+position = Vector2( 376, -24 )
+script = ExtResource( 22 )
+
+[node name="EndPosition7" type="Position2D" parent="."]
+position = Vector2( 351, -32 )
 script = ExtResource( 22 )
 
 [node name="PauseScreen" parent="." instance=ExtResource( 23 )]
@@ -333,8 +328,8 @@ margin_top = 258.0
 margin_right = 213.0
 margin_bottom = 384.0
 
-[node name="Text1" type="Node2D" parent="."]
-position = Vector2( 79.8375, 25.8628 )
+[node name="Text2" type="Node2D" parent="."]
+position = Vector2( 129, 112 )
 
 [editable path="Player"]
 

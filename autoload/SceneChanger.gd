@@ -13,7 +13,7 @@ func change_scene(path: String, color = Color.black):
 	color_rect.set_visible(true)
 	$AnimationPlayer.play("fade")
 	yield($AnimationPlayer, "animation_finished")
-	HDWrapper.change_scene(path)
+	HDSceneChanger.change_scene(path)
 	call_deferred("emit_signal", "scene_changed")
 	$AnimationPlayer.play_backwards("fade")
 	yield($AnimationPlayer, "animation_finished")
@@ -24,7 +24,18 @@ func change_scene_to(scene: PackedScene, color = Color.black):
 	color_rect.set_visible(true)
 	$AnimationPlayer.play("fade")
 	yield($AnimationPlayer, "animation_finished")
-	HDWrapper.change_scene_to(scene)
+	HDSceneChanger.change_scene_to(scene)
+	call_deferred("emit_signal", "scene_changed")
+	$AnimationPlayer.play_backwards("fade")
+	yield($AnimationPlayer, "animation_finished")
+	color_rect.set_visible(false)
+
+func reload_scene(color = Color.black):
+	color_rect.color = color
+	color_rect.set_visible(true)
+	$AnimationPlayer.play("fade")
+	yield($AnimationPlayer, "animation_finished")
+	HDSceneChanger.reload_scene()
 	call_deferred("emit_signal", "scene_changed")
 	$AnimationPlayer.play_backwards("fade")
 	yield($AnimationPlayer, "animation_finished")
