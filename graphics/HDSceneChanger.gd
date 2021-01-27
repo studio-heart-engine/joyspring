@@ -7,9 +7,6 @@ var current_scene
 
 
 func _ready():
-	for child in get_tree().get_root().get_children():
-		print(child.get_name())
-	
 	current_scene = opening.instance()
 	packed_current_scene = opening
 	get_node('/root/HDWrapper/ViewportContainer/Viewport').add_child(current_scene)
