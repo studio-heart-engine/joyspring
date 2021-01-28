@@ -8,9 +8,13 @@ export (int) var level_index setget ,get_level_index
 
 signal level_exited
 
+func all_joys_collected():
+	return $Joys.get_child_count() == 0
+
 
 func get_level_index():
 	return level_index
+
 
 func _on_ExitArea_area_entered(area):
 	SceneChanger.change_scene('res://gui/Menu.tscn')
