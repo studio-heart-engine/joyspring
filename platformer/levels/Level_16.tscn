@@ -32,7 +32,7 @@ _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120, 0, 0, 0, 0, 0, 6.86406, 0.100353, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="Shader" id=14]
+[sub_resource type="Shader" id=3]
 code = "shader_type canvas_item;
 
 uniform sampler2D mask;
@@ -45,9 +45,9 @@ void fragment() {
 	COLOR = vec4(COLOR.rgb, alpha);
 }"
 
-[sub_resource type="ShaderMaterial" id=15]
+[sub_resource type="ShaderMaterial" id=4]
 resource_local_to_scene = true
-shader = SubResource( 14 )
+shader = SubResource( 3 )
 shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.1
 shader_param/mask = ExtResource( 15 )
@@ -61,7 +61,7 @@ colors = PoolColorArray( 0.27451, 0.27451, 0.27451, 0, 0.470588, 0.470588, 0.470
 [sub_resource type="GradientTexture" id=7]
 gradient = SubResource( 6 )
 
-[sub_resource type="ParticlesMaterial" id=16]
+[sub_resource type="ParticlesMaterial" id=8]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -73,14 +73,14 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 color_ramp = SubResource( 7 )
 
-[sub_resource type="Gradient" id=11]
+[sub_resource type="Gradient" id=9]
 offsets = PoolRealArray( 0, 0.30719, 0.359477, 0.381264, 0.405229, 0.43573, 1 )
 colors = PoolColorArray( 0.388235, 0.388235, 0.388235, 0, 1, 1, 1, 0.109804, 0.996078, 0.996078, 0.996078, 0.137255, 0.992157, 0.992157, 0.992157, 0.0980392, 0.988235, 0.988235, 0.988235, 0.12549, 0.984314, 0.984314, 0.984314, 0.0941176, 0.937255, 0.937255, 0.937255, 0 )
 
-[sub_resource type="GradientTexture" id=12]
-gradient = SubResource( 11 )
+[sub_resource type="GradientTexture" id=10]
+gradient = SubResource( 9 )
 
-[sub_resource type="ParticlesMaterial" id=13]
+[sub_resource type="ParticlesMaterial" id=11]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -92,7 +92,7 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 0.05
 scale_random = 0.05
-color_ramp = SubResource( 12 )
+color_ramp = SubResource( 10 )
 
 [node name="PlatformerTemplate" type="Node2D"]
 script = ExtResource( 1 )
@@ -556,7 +556,7 @@ limit_right = 368
 limit_bottom = 288
 
 [node name="ColorRect" parent="Player/RespawnTransition" index="0"]
-material = SubResource( 15 )
+material = SubResource( 4 )
 
 [node name="Cape" parent="Player" instance=ExtResource( 16 )]
 
@@ -607,7 +607,7 @@ time_of_day = 2
 position = Vector2( 160, 90 )
 z_index = 1
 local_coords = false
-process_material = SubResource( 16 )
+process_material = SubResource( 8 )
 script = ExtResource( 20 )
 
 [node name="LightParticles" type="Particles2D" parent="."]
@@ -616,7 +616,7 @@ z_index = 1
 amount = 2
 lifetime = 7.0
 local_coords = false
-process_material = SubResource( 13 )
+process_material = SubResource( 11 )
 texture = ExtResource( 21 )
 script = ExtResource( 20 )
 
@@ -660,11 +660,17 @@ margin_top = 258.0
 margin_right = 213.0
 margin_bottom = 384.0
 
-[node name="Text14" type="Node2D" parent="."]
-position = Vector2( 72, 104 )
+[node name="Text15" type="Node2D" parent="."]
+position = Vector2( 88, 105 )
 
-[node name="Pos" type="Node2D" parent="Text14"]
-position = Vector2( 82, -12 )
+[node name="Pos" type="Node2D" parent="Text15"]
+position = Vector2( 30, 46 )
+
+[node name="Text16" type="Node2D" parent="."]
+position = Vector2( 147, 68 )
+
+[node name="Pos" type="Node2D" parent="Text16"]
+position = Vector2( 7, 22.7486 )
 
 [editable path="MovingBlobs/MovingBlob_01"]
 

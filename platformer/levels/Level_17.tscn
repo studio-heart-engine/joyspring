@@ -41,7 +41,7 @@ tracks/0/keys = {
 "values": [ 0.0, 1.0 ]
 }
 
-[sub_resource type="Animation" id=16]
+[sub_resource type="Animation" id=3]
 resource_name = "follow-ping-pong"
 loop = true
 tracks/0/type = "value"
@@ -57,12 +57,12 @@ tracks/0/keys = {
 "values": [ 0.0, 0.99 ]
 }
 
-[sub_resource type="Curve2D" id=17]
+[sub_resource type="Curve2D" id=4]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 127, 0, 0, 0, 0, 0, -10, 0, 0, 0, 0, 0, -10, 0, 0, 0, 0, 0, 127 )
 }
 
-[sub_resource type="Animation" id=18]
+[sub_resource type="Animation" id=5]
 resource_name = "follow-loop"
 loop = true
 tracks/0/type = "value"
@@ -78,7 +78,7 @@ tracks/0/keys = {
 "values": [ 0.0, 1.0 ]
 }
 
-[sub_resource type="Animation" id=19]
+[sub_resource type="Animation" id=6]
 resource_name = "follow-ping-pong"
 loop = true
 tracks/0/type = "value"
@@ -94,7 +94,7 @@ tracks/0/keys = {
 "values": [ 0.0, 0.99 ]
 }
 
-[sub_resource type="Shader" id=20]
+[sub_resource type="Shader" id=7]
 code = "shader_type canvas_item;
 
 uniform sampler2D mask;
@@ -107,14 +107,14 @@ void fragment() {
 	COLOR = vec4(COLOR.rgb, alpha);
 }"
 
-[sub_resource type="ShaderMaterial" id=21]
+[sub_resource type="ShaderMaterial" id=8]
 resource_local_to_scene = true
-shader = SubResource( 20 )
+shader = SubResource( 7 )
 shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.1
 shader_param/mask = ExtResource( 15 )
 
-[sub_resource type="TileSet" id=22]
+[sub_resource type="TileSet" id=9]
 
 [sub_resource type="Gradient" id=10]
 offsets = PoolRealArray( 0, 0.305011, 0.640523, 1 )
@@ -433,13 +433,13 @@ time_of_day = 2
 
 [node name="AnimationPlayer" parent="MovingBlobs/MovingBlob_02" index="1"]
 anims/follow-loop = SubResource( 2 )
-anims/follow-ping-pong = SubResource( 16 )
+anims/follow-ping-pong = SubResource( 3 )
 
 [node name="MovingBlob_03" parent="MovingBlobs" instance=ExtResource( 10 )]
 position = Vector2( 147, 98 )
 
 [node name="Path2D" parent="MovingBlobs/MovingBlob_03" index="0"]
-curve = SubResource( 17 )
+curve = SubResource( 4 )
 
 [node name="PathFollow2D" parent="MovingBlobs/MovingBlob_03/Path2D" index="0"]
 position = Vector2( 0, 127 )
@@ -450,8 +450,8 @@ shape = "1"
 time_of_day = 2
 
 [node name="AnimationPlayer" parent="MovingBlobs/MovingBlob_03" index="1"]
-anims/follow-loop = SubResource( 18 )
-anims/follow-ping-pong = SubResource( 19 )
+anims/follow-loop = SubResource( 5 )
+anims/follow-ping-pong = SubResource( 6 )
 
 [node name="MovingPlatforms" type="Node2D" parent="."]
 z_index = 1
@@ -475,7 +475,7 @@ limit_right = 320
 limit_bottom = 248
 
 [node name="ColorRect" parent="Player/RespawnTransition" index="0"]
-material = SubResource( 21 )
+material = SubResource( 8 )
 
 [node name="Cape" parent="Player" instance=ExtResource( 16 )]
 
@@ -499,7 +499,7 @@ time_of_day = 2
 modulate = Color( 1, 1, 1, 0.784314 )
 scale = Vector2( 0.75, 0.75 )
 z_index = -2
-tile_set = SubResource( 22 )
+tile_set = SubResource( 9 )
 cell_size = Vector2( 8, 8 )
 cell_quadrant_size = 2
 collision_layer = 0
@@ -579,11 +579,17 @@ margin_top = 258.0
 margin_right = 213.0
 margin_bottom = 384.0
 
-[node name="Text15" type="Node2D" parent="."]
-position = Vector2( 205, 47 )
+[node name="Text17" type="Node2D" parent="."]
+position = Vector2( 207, 51 )
 
-[node name="Pos" type="Node2D" parent="Text15"]
-position = Vector2( 17, 28 )
+[node name="Pos" type="Node2D" parent="Text17"]
+position = Vector2( 13, 29 )
+
+[node name="Text18" type="Node2D" parent="."]
+position = Vector2( 273, 33 )
+
+[node name="Pos" type="Node2D" parent="Text18"]
+position = Vector2( -13, 11.7486 )
 
 [editable path="MovingBlobs/MovingBlob_01"]
 
