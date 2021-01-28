@@ -21,8 +21,7 @@ func _ready():
 	
 func _process(delta):
 	set_dialogue()
-	print(show)
-	$Text/Dialogue.check_dialogue(sub_viewport.get_child(0).get_name(), show)
+	$Text.check_dialogue(sub_viewport.get_child(0).get_name(), show)
 	
 func set_dialogue():
 	show = []
@@ -31,13 +30,20 @@ func set_dialogue():
 		for child in children:
 			if child.name.substr(0, 4) == "Text":
 				var coord = child.get_global_transform_with_canvas().origin
-				var path = "Text/Dialogue/Dialogue" + child.name.right(4)
+				var path = "Text/Dialogue" + child.name.right(4)
 				get_node(path).rect_position = coord * scaling
-				show.append(child.get_name().right(4))
-		for child in $Text/Dialogue.get_children():
-			if child.get_name().substr(0, 8) != 'Dialogue':
+				show.append('D' + child.get_name().right(4))
+			if child.name.substr(0, 3) == "Tut":
+#				var coord = child.get_global_transform_with_canvas().origin
+				var path = "Text/Tutorial" + child.name.right(3)
+				get_node(path).rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y - 100)
+				get_node(path).rect_position.x -= get_node(path).rect_size.x / 2
+#				get_node(path).rect_position = coord * scaling
+				show.append('T' + child.get_name().right(3))
+		for child in $Text.get_children():
+			if child.get_name().substr(0, 8) != 'Dialogue' and child.get_name().substr(0, 8) != 'Tutorial':
 				continue
-			if child.get_name().right(8) in show:
+			if (child.get_name().substr(0, 1) + child.get_name().right(8)) in show:
 				child.show()
 			else:
 				child.hide()

@@ -1,12 +1,17 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://graphics/DialogueManager.gd" type="Script" id=2]
+[ext_resource path="res://graphics/TextManager.gd" type="Script" id=1]
+[ext_resource path="res://graphics/HappyFox-Condensed.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://graphics/Dialogue.tscn" type="PackedScene" id=3]
 
-[node name="DialogueManager" type="Control"]
+[sub_resource type="DynamicFont" id=1]
+size = 60
+font_data = ExtResource( 2 )
+
+[node name="TextManager" type="Control"]
 margin_right = 40.0
 margin_bottom = 40.0
-script = ExtResource( 2 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -17,7 +22,9 @@ text = "Legends say it's up here... Just a while longer."
 
 [node name="Dialogue2" parent="." instance=ExtResource( 3 )]
 margin_right = 894.0
-text = "Some say it doesn't exist, but I don't believe them."
+text = "Some say it doesn't
+exist, but I don't
+believe them."
 
 [node name="Dialogue3" parent="." instance=ExtResource( 3 )]
 margin_right = 77.0
@@ -30,7 +37,8 @@ text = "The light's getting darker."
 [node name="Dialogue5" parent="." instance=ExtResource( 3 )]
 margin_right = 270.0
 text = "When I find this spring,
-the world will be so much better."
+the world will be
+so much better."
 
 [node name="Dialogue6" parent="." instance=ExtResource( 3 )]
 margin_right = 77.0
@@ -54,11 +62,13 @@ text = "It's... not here."
 
 [node name="Dialogue11" parent="." instance=ExtResource( 3 )]
 margin_right = 77.0
-text = "And there's no other way to go."
+text = "And there's no other
+way to go."
 
 [node name="Dialogue12" parent="." instance=ExtResource( 3 )]
 margin_right = 77.0
-text = "Why is it not here? It had to be here."
+text = "Why is it not here?
+It had to be here."
 
 [node name="Dialogue13" parent="." instance=ExtResource( 3 )]
 margin_right = 77.0
@@ -71,3 +81,28 @@ text = "For everyone."
 [node name="Dialogue15" parent="." instance=ExtResource( 3 )]
 margin_right = 77.0
 text = "asdf"
+
+[node name="Dialogue16" parent="." instance=ExtResource( 3 )]
+margin_right = 77.0
+text = "asdf"
+
+[node name="Tutorial1" parent="." instance=ExtResource( 3 )]
+margin_right = 376.0
+margin_bottom = 140.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 1, 1, 1, 0.607843 )
+text = "Hold shift to grab walls."
+
+[node name="Tutorial2" parent="." instance=ExtResource( 3 )]
+margin_right = 300.0
+margin_bottom = 140.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 1, 1, 1, 0.607843 )
+text = "Press space to dash. Dash resets when you touch the ground."
+
+[node name="Tutorial3" parent="." instance=ExtResource( 3 )]
+margin_right = 300.0
+margin_bottom = 140.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 1, 1, 1, 0.607843 )
+text = "Collecting droplets resets your dash."
