@@ -36,7 +36,8 @@ func set_dialogue():
 			if child.name.substr(0, 3) == "Tut":
 #				var coord = child.get_global_transform_with_canvas().origin
 				var path = "Text/Tutorial" + child.name.right(3)
-				get_node(path).rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y - 100)
+				get_node(path).rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y)
+				get_node(path).rect_position.y -= 100 + (get_node(path).rect_size.y - 72)
 				get_node(path).rect_position.x -= get_node(path).rect_size.x / 2
 #				get_node(path).rect_position = coord * scaling
 				show.append('T' + child.get_name().right(3))
@@ -48,6 +49,16 @@ func set_dialogue():
 			else:
 				child.hide()
 			
+#func set_pause_text():
+#	if sub_viewport.get_child(0):
+#		var children = sub_viewport.get_child(0).get_children()
+#		for child in children:
+#			if child.name != 'PauseScreen':
+#				continue
+#			$Text/Pause1.rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y / 2 - 100)
+#			$Text/Pause2.rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y / 2)
+#			$Text/Pause3.rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y / 2 + 100)
+#
 
 #func change_scene(path: String):
 #	current_scene.queue_free()
