@@ -71,9 +71,9 @@ func set_looking_right(value):
 	
 
 
-enum TIME_OF_DAY {dawn, evening, midnight}
+enum TIME_OF_DAY {Dawn, Evening, Midnight}
 
-export (TIME_OF_DAY) var time_of_day = TIME_OF_DAY.evening setget set_time_of_day
+export (TIME_OF_DAY) var time_of_day = TIME_OF_DAY.Evening setget set_time_of_day
 
 func update_image():
 	var image_path = "res://graphics/sprites/riley/riley" + get_time_of_day() + ".png"

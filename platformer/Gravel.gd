@@ -21,9 +21,9 @@ func _on_Area2D_area_entered(area):
 
 
 
-enum TIME_OF_DAY {dawn, evening, midnight}
+enum TIME_OF_DAY {Dawn, Evening, Midnight}
 
-export (TIME_OF_DAY) var time_of_day = TIME_OF_DAY.evening setget set_time_of_day
+export (TIME_OF_DAY) var time_of_day = TIME_OF_DAY.Evening setget set_time_of_day
 
 func update_image():
 	var image_path = "res://graphics/sprites/gravel" + get_time_of_day() + ".png"
