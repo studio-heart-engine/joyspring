@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
 [ext_resource path="res://platformer/levels/Level_02.tscn" type="PackedScene" id=3]
@@ -10,7 +10,6 @@
 [ext_resource path="res://platformer/Particles2D.gd" type="Script" id=20]
 [ext_resource path="res://graphics/effects/white-radial-gradient.png" type="Texture" id=21]
 [ext_resource path="res://platformer/EndPosition.gd" type="Script" id=22]
-[ext_resource path="res://gui/PauseScreen.tscn" type="PackedScene" id=23]
 [ext_resource path="res://platformer/BlobTileMap.gd" type="Script" id=24]
 [ext_resource path="res://graphics/tilesets/blobs_tileset.tres" type="TileSet" id=25]
 
@@ -227,42 +226,6 @@ script = ExtResource( 22 )
 position = Vector2( 256, -32 )
 script = ExtResource( 22 )
 
-[node name="PauseScreen" parent="." instance=ExtResource( 23 )]
-layer = 3
-
-[node name="MarginContainer" parent="PauseScreen" index="0"]
-visible = false
-
-[node name="ColorRect" parent="PauseScreen/MarginContainer" index="0"]
-margin_right = 1600.0
-margin_bottom = 900.0
-
-[node name="VBoxContainer" parent="PauseScreen/MarginContainer" index="1"]
-margin_right = 1600.0
-margin_bottom = 900.0
-
-[node name="Buttons" parent="PauseScreen/MarginContainer/VBoxContainer" index="0"]
-margin_left = 647.0
-margin_top = 258.0
-margin_right = 953.0
-margin_bottom = 642.0
-
-[node name="ResumeButton" parent="PauseScreen/MarginContainer/VBoxContainer/Buttons" index="0"]
-margin_left = 67.0
-margin_right = 238.0
-margin_bottom = 126.0
-
-[node name="Level Select" parent="PauseScreen/MarginContainer/VBoxContainer/Buttons" index="1"]
-margin_top = 129.0
-margin_right = 306.0
-margin_bottom = 255.0
-
-[node name="MenuButton" parent="PauseScreen/MarginContainer/VBoxContainer/Buttons" index="2"]
-margin_left = 93.0
-margin_top = 258.0
-margin_right = 213.0
-margin_bottom = 384.0
-
 [node name="Text1" type="Node2D" parent="."]
 position = Vector2( 72, 60 )
 
@@ -272,5 +235,3 @@ position = Vector2( 4, 48 )
 [editable path="Player"]
 
 [editable path="Player/AnimatedSprite"]
-
-[editable path="PauseScreen"]
