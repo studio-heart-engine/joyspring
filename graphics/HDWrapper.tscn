@@ -1,10 +1,12 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://graphics/HDWrapper.gd" type="Script" id=1]
-[ext_resource path="res://graphics/TextManager.tscn" type="PackedScene" id=2]
+[ext_resource path="res://HDWrapper.gd" type="Script" id=1]
+[ext_resource path="res://platformer/levels/Level_01.tscn" type="PackedScene" id=2]
+[ext_resource path="res://graphics/font.tres" type="DynamicFont" id=3]
 
 [node name="HDWrapper" type="Node"]
 script = ExtResource( 1 )
+opening = ExtResource( 2 )
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
 margin_right = 320.0
@@ -18,4 +20,47 @@ size = Vector2( 320, 180 )
 handle_input_locally = false
 render_target_update_mode = 3
 
-[node name="Text" parent="." instance=ExtResource( 2 )]
+[node name="Text" type="Node" parent="."]
+
+[node name="Control" type="Control" parent="Text"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label1" type="Label" parent="Text/Control"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 406.339
+margin_top = 863.148
+margin_right = 1554.34
+margin_bottom = 983.148
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 4
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "Once upon a time
+Deep in the tallest peak
+There was a spring with droplets of gold
+Spreading joy and prosperity to all
+
+Decades later, on one tragic day
+The wells went dry, and golden rivers died
+The spring went empty
+And the land was cast into darkness
+
+Years later, a child
+Clad in gold and purple, equipped with optimism
+Would dare to end this drought
+Descend into the depths
+
+And revive the Joyspring"
+align = 1
+valign = 1
+percent_visible = 0.0518293
+max_lines_visible = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
