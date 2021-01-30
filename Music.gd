@@ -14,21 +14,23 @@ func _ready():
 
 func _on_scene_changed():
 	var current_scene = get_tree().get_current_scene()
-	if not current_scene.has_method("get_level_index"):
+	var previous_song = current_song
+	current_song = $Silence
+	if globals.curr_state.substr(0, 5) == 'Level':
+		var level_index = int(globals.curr_state.right(5))
+	
+		if level_index < 14:
+			current_song = $ArcTan
+		elif level_index == 15:
+			current_song = $Silence
+		else:
+			current_song = $Silence
+	elif globals.curr_state == 'Opening' or globals.curr_state == 'Menu':
+		pass
+	else:
 		if current_song != null:
 			current_song.stop()
 		return
-	
-	var level_index = current_scene.level_index
-	
-	var previous_song = current_song
-	
-	if level_index < 3:
-		current_song = $ArcTan
-	elif level_index < 6:
-		current_song = $Something
-	else:
-		current_song = $Sogn
 	
 	if current_song != previous_song and previous_song != null:
 		# fade out
@@ -46,7 +48,7 @@ func _on_scene_changed():
 		tween.start()
 		yield(get_tree().create_timer(0.2), "timeout")
 		current_song.play()
-	
+
 	elif not current_song.playing:
 		# fade in
 		tween.interpolate_property(

@@ -9,9 +9,9 @@ func _ready():
 	if len(globals.levels_completed) > 1:
 		has_level_select_button = true
 	
-	if not has_level_select_button:
-		
-		$VBoxContainer/LevelSelectButton.queue_free()
+#	if not has_level_select_button:
+#	if has_level_select_button:
+#		$VBoxContainer/LevelSelectButton.queue_free()
 	
 	if not globals.has_played_startup_animation:
 		globals.has_played_startup_animation = true
@@ -22,18 +22,20 @@ func _input(event):
 	if event.is_action_pressed("ui_select"):
 		begin()
 
-
-func _on_BeginButton_pressed():
-	begin()
+#func _on_BeginButton_pressed():
+#	begin()
 	
-
 func begin():
 	if begun:
 		return
 	begun = true
 	$AnimationPlayer.play("start-fall")
+	globals.curr_state = 'MenuTransition'
 	yield($AnimationPlayer, "animation_finished")
-	SceneChanger.change_scene("res://platformer/levels/Level_01.tscn")
+	
+	var curr_level = str(globals.levels_completed[-1] + 1).pad_zeros(2)
+	SceneChanger.change_scene_to(load('res://platformer/levels/Level_' + curr_level + '.tscn'))
+#	SceneChanger.change_scene_to(load("res://platformer/levels/Level_01.tscn"))
 	
 
 func _on_LevelSelectButton_pressed():

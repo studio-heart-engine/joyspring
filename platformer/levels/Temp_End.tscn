@@ -17,13 +17,13 @@
 [ext_resource path="res://platformer/BlobTileMap.gd" type="Script" id=18]
 [ext_resource path="res://graphics/tilesets/tileset.tres" type="TileSet" id=19]
 
-[sub_resource type="Curve2D" id=2]
+[sub_resource type="Curve2D" id=1]
 resource_local_to_scene = true
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 0, 0, 0, 0, 0, 6.86406, 0.100353, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="Shader" id=3]
+[sub_resource type="Shader" id=2]
 code = "shader_type canvas_item;
 
 uniform sampler2D mask;
@@ -36,23 +36,23 @@ void fragment() {
 	COLOR = vec4(COLOR.rgb, alpha);
 }"
 
-[sub_resource type="ShaderMaterial" id=4]
+[sub_resource type="ShaderMaterial" id=3]
 resource_local_to_scene = true
-shader = SubResource( 3 )
+shader = SubResource( 2 )
 shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.1
 shader_param/mask = ExtResource( 14 )
 
-[sub_resource type="TileSet" id=5]
+[sub_resource type="TileSet" id=4]
 
-[sub_resource type="Gradient" id=6]
+[sub_resource type="Gradient" id=5]
 offsets = PoolRealArray( 0, 0.305011, 0.640523, 1 )
 colors = PoolColorArray( 0.27451, 0.27451, 0.27451, 0, 0.470588, 0.470588, 0.470588, 1, 0.470588, 0.470588, 0.470588, 1, 0.27451, 0.27451, 0.27451, 0 )
 
-[sub_resource type="GradientTexture" id=7]
-gradient = SubResource( 6 )
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
 
-[sub_resource type="ParticlesMaterial" id=8]
+[sub_resource type="ParticlesMaterial" id=7]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -62,16 +62,16 @@ initial_velocity = 8.0
 angular_velocity = 4.57384e-41
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-color_ramp = SubResource( 7 )
+color_ramp = SubResource( 6 )
 
-[sub_resource type="Gradient" id=9]
+[sub_resource type="Gradient" id=8]
 offsets = PoolRealArray( 0, 0.30719, 0.359477, 0.381264, 0.405229, 0.43573, 1 )
 colors = PoolColorArray( 0.388235, 0.388235, 0.388235, 0, 1, 1, 1, 0.109804, 0.996078, 0.996078, 0.996078, 0.137255, 0.992157, 0.992157, 0.992157, 0.0980392, 0.988235, 0.988235, 0.988235, 0.12549, 0.984314, 0.984314, 0.984314, 0.0941176, 0.937255, 0.937255, 0.937255, 0 )
 
-[sub_resource type="GradientTexture" id=10]
-gradient = SubResource( 9 )
+[sub_resource type="GradientTexture" id=9]
+gradient = SubResource( 8 )
 
-[sub_resource type="ParticlesMaterial" id=11]
+[sub_resource type="ParticlesMaterial" id=10]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -83,9 +83,9 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 0.05
 scale_random = 0.05
-color_ramp = SubResource( 10 )
+color_ramp = SubResource( 9 )
 
-[node name="PlatformerTemplate" type="Node2D"]
+[node name="Level_End" type="Node2D"]
 script = ExtResource( 8 )
 __meta__ = {
 "_edit_lock_": true
@@ -227,7 +227,7 @@ __meta__ = {
 position = Vector2( 161, 153 )
 
 [node name="Path2D" parent="MovingPlatforms/MovingPlatform" index="0"]
-curve = SubResource( 2 )
+curve = SubResource( 1 )
 
 [node name="PathFollow2D" parent="MovingPlatforms/MovingPlatform/Path2D" index="0"]
 position = Vector2( 0, 0 )
@@ -253,7 +253,7 @@ limit_right = 320
 limit_bottom = 248
 
 [node name="ColorRect" parent="Player/RespawnTransition" index="0"]
-material = SubResource( 4 )
+material = SubResource( 3 )
 
 [node name="Cape" parent="Player" instance=ExtResource( 9 )]
 
@@ -277,7 +277,7 @@ time_of_day = 2
 modulate = Color( 1, 1, 1, 0.784314 )
 scale = Vector2( 0.75, 0.75 )
 z_index = -2
-tile_set = SubResource( 5 )
+tile_set = SubResource( 4 )
 cell_size = Vector2( 8, 8 )
 cell_quadrant_size = 2
 collision_layer = 0
@@ -304,7 +304,7 @@ time_of_day = 2
 position = Vector2( 160, 90 )
 z_index = 1
 local_coords = false
-process_material = SubResource( 8 )
+process_material = SubResource( 7 )
 script = ExtResource( 15 )
 
 [node name="LightParticles" type="Particles2D" parent="."]
@@ -313,7 +313,7 @@ z_index = 1
 amount = 2
 lifetime = 7.0
 local_coords = false
-process_material = SubResource( 11 )
+process_material = SubResource( 10 )
 texture = ExtResource( 13 )
 script = ExtResource( 15 )
 
