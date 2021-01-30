@@ -13,11 +13,6 @@ func _ready():
 	get_node('/root/HDWrapper/ViewportContainer/Viewport').add_child(current_scene)
 	globals.curr_state = current_scene.get_name()
 
-#func change_scene(path: String):
-#	current_scene.queue_free()
-#	current_scene = get_node(path).instance()
-#	get_node('/root/HDWrapper/ViewportContainer/Viewport').add_child(current_scene)
-
 func change_scene_to(scene: PackedScene):
 	if current_scene:
 		get_node('/root/HDWrapper/ViewportContainer/Viewport').remove_child(current_scene)
