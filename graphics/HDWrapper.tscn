@@ -1,8 +1,40 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://graphics/HDWrapper.gd" type="Script" id=1]
 [ext_resource path="res://graphics/TextManager.tscn" type="PackedScene" id=2]
 [ext_resource path="res://gui/PauseScreen.tscn" type="PackedScene" id=3]
+[ext_resource path="res://graphics/Text.gd" type="Script" id=4]
+
+[sub_resource type="StreamTexture" id=1]
+flags = 4
+load_path = "res://.import/title.png-fa5124c30997b9e0f1be809e48d53d67.stex"
+
+[sub_resource type="Animation" id=2]
+resource_name = "fade_in"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 2.37841 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, -40 ), Vector2( -1.52588e-05, -1.52588e-05 ) ]
+}
 
 [node name="HDWrapper" type="Node"]
 script = ExtResource( 1 )
@@ -20,6 +52,24 @@ handle_input_locally = false
 render_target_update_mode = 3
 
 [node name="Text" parent="." instance=ExtResource( 2 )]
+
+[node name="Title" type="Control" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="Title"]
+modulate = Color( 1, 1, 1, 0 )
+position = Vector2( -1.52588e-05, -1.52588e-05 )
+scale = Vector2( 0.624709, 0.624709 )
+texture = SubResource( 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Title/Sprite"]
+anims/fade_in = SubResource( 2 )
 
 [node name="PauseScreen" parent="." instance=ExtResource( 3 )]
 

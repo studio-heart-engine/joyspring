@@ -22,18 +22,3 @@ func check_dialogue(level, ids):
 		
 		if (trigger_pos.position + text_pos.position).distance_to(player.position) <= RADIUS:
 			child.play()
-			
-#		var x1 = child.rect_position.x
-#		var y1 = child.rect_position.y
-#		var x2 = child.rect_position.x + child.rect_size.x
-#		var y2 = child.rect_position.y + child.rect_size.y
-#
-#		var bound = 48
-#		x1 -= bound
-#		x2 += bound
-#		y1 -= bound
-#		y2 += bound
-		
-#		var player_pos = player.get_global_transform_with_canvas().origin * $'../..'.scaling
-#		if (player_pos.x > x1 and player_pos.x < x2) and (player_pos.y > y1 and player_pos.y < y2):
-#			child.play()
