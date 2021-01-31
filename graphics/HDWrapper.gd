@@ -1,6 +1,5 @@
 extends Node
 
-#export (PackedScene) var opening
 
 onready var view_box = $ViewportContainer
 onready var sub_viewport = $ViewportContainer/Viewport
@@ -8,7 +7,6 @@ onready var screen_res = get_viewport().size
 
 var scaling = Vector2()
 var show = []
-#var current_scene
 
 
 func _ready():
@@ -16,7 +14,7 @@ func _ready():
 	view_box.rect_scale = scaling
 	
 func _process(delta):
-	if globals.curr_state.substr(0, 5) == 'Level':
+	if globals.curr_state.substr(0, 5) == 'Level' or globals.curr_state == 'Temp_End':
 		set_level_text()
 	else:
 		hide_level_text()
@@ -32,13 +30,10 @@ func _process(delta):
 		set_menu_text()
 	else:
 		hide_menu_text()
-#		clear_all()
 
 func set_level_text():
 	show = []
 	if sub_viewport.get_child(0):
-#		if sub_viewport.get_child(0).get_name().substr(0, 5) != 'Level':
-#			return
 		var children = sub_viewport.get_child(0).get_children()
 		for child in children:
 			if child.name.substr(0, 4) == "Text":
@@ -106,17 +101,8 @@ func hide_opening_text():
 
 func set_menu_text():  # Including title image
 	if sub_viewport.get_child(0):
-#		if sub_viewport.get_child(0).get_name() != 'Menu':
-#			return
 		var path1 = "Text/Menu1"
 		var path2 = "Title"
-#		if sub_viewport.get_child(0).get_name() == 'Menu':
-#			get_node(path1).show()
-#			get_node(path2).show()
-#		else:
-#			get_node(path1).hide()
-#			get_node(path2).hide()
-#			return
 		get_node(path1).show()
 		get_node(path2).show()
 		get_node(path1).rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y)

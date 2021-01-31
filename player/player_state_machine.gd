@@ -47,10 +47,10 @@ func change_state(next_state):
 			or next_state == "float" and not get_parent().float_enabled \
 			or next_state in ["cling", "slide"] and not get_parent().climb_enabled:
 		return
-	
+
 	if current_state != null:
 		states[current_state].exit()
-	
+
 	if next_state == "previous":
 		var temp = current_state
 		current_state = previous_state
@@ -68,20 +68,14 @@ func change_state(next_state):
 func set_looking_right(value):
 	is_looking_right = value
 	sprite.scale.x = 1 if value else -1
-	
 
 
-enum TIME_OF_DAY {Dawn, Evening, Midnight}
 
-export (TIME_OF_DAY) var time_of_day = TIME_OF_DAY.Evening setget set_time_of_day
+var TIME_OF_DAY = ['Evening', 'Midnight', 'Dawn']
 
 func update_image():
 	var image_path = "res://graphics/sprites/riley/riley" + get_time_of_day() + ".png"
 	$AnimatedSprite/Sprite.set_texture(load(image_path))
 
 func get_time_of_day():
-	return TIME_OF_DAY.keys()[time_of_day]
-
-func set_time_of_day(value):
-	time_of_day = value
-	update_image()
+	return TIME_OF_DAY[globals.time_of_day]

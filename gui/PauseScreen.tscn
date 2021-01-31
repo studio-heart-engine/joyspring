@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://gui/PauseScreen.gd" type="Script" id=1]
 [ext_resource path="res://graphics/font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://music/effects/click.wav" type="AudioStream" id=3]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -78,6 +79,10 @@ custom_colors/font_color_hover = Color( 0.286275, 0.286275, 0.286275, 1 )
 custom_colors/font_color_pressed = Color( 0.168627, 0.168627, 0.168627, 1 )
 text = "Menu"
 flat = true
+
+[node name="Click" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+volume_db = -20.0
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/ResumeButton" to="." method="_on_ResumeButton_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/Level Select" to="." method="_on_Level_Select_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/MenuButton" to="." method="_on_MenuButton_pressed"]

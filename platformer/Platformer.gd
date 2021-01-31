@@ -10,6 +10,7 @@ signal level_exited
 
 func _ready():
 	level_index = int(name.right(6))
+	set_bg()
 
 func all_joys_collected():
 	return $Joys.get_child_count() == 0
@@ -21,3 +22,11 @@ func get_level_index():
 
 func _on_ExitArea_area_entered(area):
 	SceneChanger.change_scene_to(load('res://gui/Menu.tscn'))
+
+
+
+func set_bg():
+	var image_path = "res://graphics/environment/background" + str(globals.bg_num) + ".tres"
+	$ParallaxBackground/ParallaxLayer/background.set_texture(load(image_path))
+	$ParallaxBackground/ParallaxLayer.motion_offset.y = globals.bg_offset
+#	$Background/background.set_texture(load(image_path))
