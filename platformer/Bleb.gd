@@ -8,11 +8,14 @@ export var facing_right = true setget set_facing_right
 var velocity = Vector2(SPEED if facing_right else -SPEED, 0)
 var state = states.CRAWL
 
-var possible_colors = [
-	"#f82f68",
-	"#f82fa2",
-	"#e841cf"
-]
+#var possible_colors = [
+#	"#f82f68",
+#	"#f82fa2",
+#	"#e841cf"
+#]
+var possible_colors = [['#e96254', '#da4863', '#cb3660', '#b92e6f'],
+					   ['#e5be48', '#e5b841', '#e5ae34', '#e1a83c'],
+					   ['#9583dd', '#967ac9', '#8070be', '#6c6cba']]
 
 onready var down1 = $RayCasts/Down1
 onready var down2 = $RayCasts/Down2
@@ -33,7 +36,7 @@ func _on_Hitbox_area_entered(area):
 func _ready():
 	update_image()
 	anim_player.play("crawl")
-	$Sprite.material.set_shader_param("outline_color", Color(possible_colors[randi() % len(possible_colors)]))
+#	$Sprite.material.set_shader_param("outline_color", Color(possible_colors[randi() % len(possible_colors)]))
 
 
 func _physics_process(delta):
@@ -96,6 +99,7 @@ func turn_obtuse():
 var TIME_OF_DAY = ['evening', 'midnight', 'dawn']
 
 func update_image():
+	$Sprite.material.set_shader_param("outline_color", Color(possible_colors[globals.time_of_day][randi() % len(possible_colors)]))
 	var image_path = "res://graphics/sprites/blobs/" + get_time_of_day() + "/bleb.png"
 	$Sprite.set_texture(load(image_path))
 
