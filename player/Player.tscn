@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://player/player_state_machine.gd" type="Script" id=1]
 [ext_resource path="res://player/state.gd" type="Script" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://platformer/camera.gd" type="Script" id=14]
 [ext_resource path="res://graphics/sprites/riley/rileyDawn.json" type="PackedScene" id=15]
 [ext_resource path="res://player/PlayerRespawnTransition.gd" type="Script" id=16]
+[ext_resource path="res://player/states/motion/on_wall/climb.gd" type="Script" id=17]
 [ext_resource path="res://graphics/effects/cave-darkness.png" type="Texture" id=18]
 [ext_resource path="res://graphics/sprites/riley/rileyEvening.png" type="Texture" id=19]
 
@@ -78,6 +79,23 @@ tracks/1/keys = {
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 3, 7.5 )
 
+[sub_resource type="Animation" id=6]
+resource_name = "squish"
+length = 0.4
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.18, 0.36 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 0.9, 1.1 ), Vector2( 1, 1 ) ]
+}
+
 [sub_resource type="Animation" id=4]
 length = 0.2
 step = 0.01
@@ -102,12 +120,24 @@ tracks/0/path = NodePath(".:scale")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/imported = false
-tracks/0/enabled = true
+tracks/0/enabled = false
 tracks/0/keys = {
 "times": PoolRealArray( 0, 0.1, 0.2 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 1, 1 ), Vector2( 0.7, 1.4 ), Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.23 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true ]
 }
 
 [node name="Player" type="KinematicBody2D"]
@@ -149,6 +179,9 @@ script = ExtResource( 10 )
 
 [node name="Cling" type="Node" parent="States"]
 script = ExtResource( 11 )
+
+[node name="Climb" type="Node" parent="States"]
+script = ExtResource( 17 )
 
 [node name="Light2D" type="Light2D" parent="."]
 position = Vector2( 0, -7.92011 )
@@ -196,8 +229,10 @@ one_shot = true
 light_mask = 0
 texture = ExtResource( 19 )
 offset = Vector2( 0, -8 )
+region_rect = Rect2( 320, 0, 16, 16 )
 
 [node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
+anims/squish = SubResource( 6 )
 anims/stretch = SubResource( 4 )
 
 [node name="BlinkAnimationPlayer" type="AnimationPlayer" parent="AnimatedSprite"]

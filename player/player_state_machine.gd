@@ -19,7 +19,8 @@ onready var states = {
 	"fall": $States/Fall,
 	"float": $States/Float,
 	"dead": $States/Dead,
-	"cling": $States/Cling
+	"cling": $States/Cling,
+	"climb": $States/Climb
 }
 
 func enable_dash():

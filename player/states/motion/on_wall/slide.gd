@@ -7,7 +7,8 @@ var particles_instance
 func enter():
 	.enter()
 	blink_anim_player.stop()
-	on_wall_timer.stop()
+#	on_wall_timer.stop()
+	on_wall_timer.paused = true
 	player_sprite.visible = true
 	if cape != null:
 		cape.visible = true
@@ -35,3 +36,5 @@ func handle_input(event):
 	
 	if self.input_direction.x == -wall_direction:
 		emit_signal("finished", "jump" if self.input_direction.y == -1 else "fall")
+	if self.input_direction.y == -1 and owner.can_wall_climb:
+		emit_signal("finished", "climb")

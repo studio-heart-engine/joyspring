@@ -54,7 +54,7 @@ func set_level_text():
 				child.show()
 			else:
 				child.hide()
-	$Text.check_dialogue(sub_viewport.get_child(0).get_name(), show)
+		$Text.check_dialogue(sub_viewport.get_child(0).get_name(), show)
 
 func hide_level_text():
 	for child in $Text.get_children():

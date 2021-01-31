@@ -7,12 +7,15 @@ func enter():
 	.enter()
 	owner.velocity.y = self.input_direction.y * WALL_CLIMB_SPEED
 	play_anim("climb-side")
+	on_wall_timer.paused = false
 
 
 func update(delta):
 	.update(delta)
 	if not is_near_wall():
 		emit_signal("finished", "jump" if input_direction.y == -1 else "fall")
+	if on_wall_timer.time_left < 1 and not on_wall_timer.is_stopped() and not blink_anim_player.is_playing():
+		start_blink()
 
 
 func handle_input(event):

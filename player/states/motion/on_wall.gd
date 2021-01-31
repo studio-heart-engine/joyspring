@@ -8,6 +8,7 @@ func _ready():
 
 
 func on_wall_timer_timeout():
+	print('timeout')
 	owner.can_wall_climb = false
 	emit_signal("finished", "slide")
 
@@ -16,8 +17,9 @@ func enter():
 	wall_direction = get_wall_direction()
 	owner.is_looking_right = wall_direction == 1
 	owner.velocity = Vector2.ZERO
-	if on_wall_timer.time_left < 1:
-		start_blink()
+	
+#	if on_wall_timer.time_left < 1:
+#		start_blink()
 
 func exit():
 	stop_blink()
@@ -27,9 +29,6 @@ func update(delta):
 			owner.velocity, wall_direction * Vector2.RIGHT, wall_direction * Vector2.LEFT,
 			false, 4, 0.785398, false)
 	push_bodies()
-	
-	if on_wall_timer.time_left < 1 and not on_wall_timer.is_stopped() and not blink_anim_player.is_playing():
-		start_blink()
 
 
 func handle_input(event):

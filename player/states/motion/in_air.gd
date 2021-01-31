@@ -8,6 +8,7 @@ export var IN_AIR_ACCELERATION = 6
 func enter():
 	
 	# from coming off wall
+	on_wall_timer.stop()
 	blink_anim_player.stop()
 	player_sprite.visible = true
 	if cape != null:
@@ -39,6 +40,7 @@ func update(delta):
 			next_state = "run"
 		emit_signal("finished", next_state)
 	elif Input.is_action_pressed("wall") and is_near_wall():
+		on_wall_timer.start()
 		emit_signal("finished", "cling")
 	
 	.update(delta)
