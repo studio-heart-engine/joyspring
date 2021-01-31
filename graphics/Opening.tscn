@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://graphics/Opening.gd" type="Script" id=1]
 [ext_resource path="res://graphics/legend/legend1.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://graphics/legend/legend3.png" type="Texture" id=4]
 [ext_resource path="res://graphics/effects/circle-transition.shader" type="Shader" id=5]
 [ext_resource path="res://graphics/effects/circle-transition.png" type="Texture" id=6]
+[ext_resource path="res://graphics/04B_03__.TTF" type="DynamicFontData" id=7]
 
 [sub_resource type="Animation" id=1]
 resource_name = "opening"
@@ -36,11 +37,11 @@ tracks/1/keys = {
 "values": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath(".:lines_skipped")
+tracks/2/path = NodePath("Text:lines_skipped")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
-tracks/2/enabled = false
+tracks/2/enabled = true
 tracks/2/keys = {
 "times": PoolRealArray( 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
@@ -48,11 +49,11 @@ tracks/2/keys = {
 "values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath(".:visible_characters")
+tracks/3/path = NodePath("Text:visible_characters")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
-tracks/3/enabled = false
+tracks/3/enabled = true
 tracks/3/keys = {
 "times": PoolRealArray( 0, 1, 3.8, 4, 6.8, 7, 9.8, 10, 12.8, 13, 15.8, 16, 18.8, 19, 21.8, 22, 24.8, 25, 27.8, 28, 30.8, 31, 33.8, 34, 36.8, 37, 39.8, 40, 42.8, 43, 45.8, 46, 48.6, 50 ),
 "transitions": PoolRealArray( 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1 ),
@@ -62,17 +63,18 @@ tracks/3/keys = {
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 5 )
-shader_param/cutoff = 1.0
+shader_param/cutoff = -0.0192
 shader_param/smooth_size = 0.1
 shader_param/mask = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 8
+font_data = ExtResource( 7 )
 
 [node name="Opening" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "opening"
@@ -82,9 +84,6 @@ anims/opening = SubResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchor_top = 1.0
@@ -93,9 +92,6 @@ anchor_bottom = 1.0
 margin_top = -20.0
 rect_min_size = Vector2( 0, 20 )
 color = Color( 0.133333, 0.12549, 0.223529, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ShaderRect" type="ColorRect" parent="."]
 material = SubResource( 2 )
@@ -107,4 +103,34 @@ color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="Text" type="Label" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -20.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 4
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "Once upon a time
+Deep in the tallest peak
+There was a spring with droplets of gold
+Spreading joy and prosperity to all
+
+Decades later, on one tragic day
+The wells went dry, and golden rivers died
+The spring went empty
+And the land was cast into darkness
+
+Years later, a child
+Clad in gold and purple, equipped with optimism
+Would dare to end this drought
+Descend into the depths
+
+And revive the Joyspring"
+align = 1
+valign = 1
+percent_visible = 0.0518293
+max_lines_visible = 1
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

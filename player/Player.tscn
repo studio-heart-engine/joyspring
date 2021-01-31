@@ -15,9 +15,9 @@
 [ext_resource path="res://player/glow.gd" type="Script" id=13]
 [ext_resource path="res://platformer/camera.gd" type="Script" id=14]
 [ext_resource path="res://graphics/sprites/riley/rileyDawn.json" type="PackedScene" id=15]
-[ext_resource path="res://player/PlayerRespawnTransition.gd" type="Script" id=16]
+[ext_resource path="res://graphics/sprites/riley/rileyEvening.png" type="Texture" id=16]
+[ext_resource path="res://player/PlayerRespawnTransition.gd" type="Script" id=17]
 [ext_resource path="res://graphics/effects/cave-darkness.png" type="Texture" id=18]
-[ext_resource path="res://graphics/sprites/riley/rileyEvening.png" type="Texture" id=19]
 
 [sub_resource type="Animation" id=1]
 resource_name = "dash-glow"
@@ -194,7 +194,7 @@ one_shot = true
 
 [node name="Sprite" parent="AnimatedSprite" index="0"]
 light_mask = 0
-texture = ExtResource( 19 )
+texture = ExtResource( 16 )
 offset = Vector2( 0, -8 )
 
 [node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
@@ -212,7 +212,7 @@ shape = SubResource( 3 )
 
 [node name="RespawnTransition" type="CanvasLayer" parent="."]
 layer = 2
-script = ExtResource( 16 )
+script = ExtResource( 17 )
 
 [node name="ColorRect" type="ColorRect" parent="RespawnTransition"]
 light_mask = 2

@@ -1,40 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://graphics/HDWrapper.gd" type="Script" id=1]
-[ext_resource path="res://graphics/TextManager.tscn" type="PackedScene" id=2]
-[ext_resource path="res://gui/PauseScreen.tscn" type="PackedScene" id=3]
-[ext_resource path="res://graphics/Text.gd" type="Script" id=4]
-
-[sub_resource type="StreamTexture" id=1]
-flags = 4
-load_path = "res://.import/title.png-fa5124c30997b9e0f1be809e48d53d67.stex"
-
-[sub_resource type="Animation" id=2]
-resource_name = "fade_in"
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.7 ),
-"transitions": PoolRealArray( 1, 2.37841 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.7 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector2( 0, -40 ), Vector2( -1.52588e-05, -1.52588e-05 ) ]
-}
+[ext_resource path="res://HDWrapper.gd" type="Script" id=1]
+[ext_resource path="res://graphics/font.tres" type="DynamicFont" id=2]
 
 [node name="HDWrapper" type="Node"]
 script = ExtResource( 1 )
@@ -51,29 +18,47 @@ size = Vector2( 320, 180 )
 handle_input_locally = false
 render_target_update_mode = 3
 
-[node name="Text" parent="." instance=ExtResource( 2 )]
+[node name="Text" type="Node" parent="."]
 
-[node name="Title" type="Control" parent="."]
-visible = false
+[node name="Control" type="Control" parent="Text"]
 margin_right = 40.0
 margin_bottom = 40.0
-script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Sprite" type="Sprite" parent="Title"]
-modulate = Color( 1, 1, 1, 0 )
-position = Vector2( -1.52588e-05, -1.52588e-05 )
-scale = Vector2( 0.624709, 0.624709 )
-texture = SubResource( 1 )
+[node name="Label1" type="Label" parent="Text/Control"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 406.339
+margin_top = 863.148
+margin_right = 1554.34
+margin_bottom = 983.148
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 4
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "Once upon a time
+Deep in the tallest peak
+There was a spring with droplets of gold
+Spreading joy and prosperity to all
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Title/Sprite"]
-anims/fade_in = SubResource( 2 )
+Decades later, on one tragic day
+The wells went dry, and golden rivers died
+The spring went empty
+And the land was cast into darkness
 
-[node name="PauseScreen" parent="." instance=ExtResource( 3 )]
+Years later, a child
+Clad in gold and purple, equipped with optimism
+Would dare to end this drought
+Descend into the depths
 
-[node name="MarginContainer" parent="PauseScreen" index="0"]
-visible = false
-
-[editable path="PauseScreen"]
+And revive the Joyspring"
+align = 1
+valign = 1
+percent_visible = 0.0518293
+max_lines_visible = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
