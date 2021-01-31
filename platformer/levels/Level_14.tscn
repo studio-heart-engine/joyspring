@@ -1,8 +1,7 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://graphics/tilesets/blobs_tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=6]
-[ext_resource path="res://graphics/environment/background4.tres" type="Texture" id=7]
 [ext_resource path="res://player/Cape.tscn" type="PackedScene" id=8]
 [ext_resource path="res://platformer/levels/Level_15.tscn" type="PackedScene" id=9]
 [ext_resource path="res://player/Player.tscn" type="PackedScene" id=10]
@@ -84,13 +83,6 @@ __meta__ = {
 next_level = ExtResource( 9 )
 float_enabled = false
 
-[node name="Background" type="CanvasLayer" parent="."]
-layer = -1
-
-[node name="background" type="Sprite" parent="Background"]
-texture = ExtResource( 7 )
-centered = false
-
 [node name="Blebs" type="Node2D" parent="."]
 __meta__ = {
 "_edit_lock_": true
@@ -125,7 +117,6 @@ __meta__ = {
 [node name="Player" parent="." instance=ExtResource( 10 )]
 light_mask = 1
 position = Vector2( 5, 336 )
-time_of_day = 2
 
 [node name="Light2D" parent="Player" index="2"]
 texture_scale = 0.05
@@ -156,7 +147,6 @@ __meta__ = {
 "_edit_bone_": true,
 "_edit_lock_": true
 }
-time_of_day = 2
 
 [node name="TileMapBackground" type="TileMap" parent="."]
 modulate = Color( 1, 1, 1, 0.784314 )
@@ -183,7 +173,6 @@ cell_quadrant_size = 2
 format = 1
 tile_data = PoolIntArray( 1572865, 1, 0, 1572866, 1, 0, 1572867, 1, 0, 1572868, 1, 0, 1572869, 1, 0, 1638401, 1, 0, 1638402, 1, 0, 1638403, 1, 0, 1638404, 1, 0, 1703939, 1, 0, 1703940, 1, 0, 3669697, 0, 0 )
 script = ExtResource( 17 )
-time_of_day = 2
 
 [node name="DustParticles" type="Particles2D" parent="."]
 position = Vector2( 160, 90 )
@@ -225,6 +214,16 @@ position = Vector2( 217, 121 )
 
 [node name="Pos" type="Node2D" parent="Text11"]
 position = Vector2( 0, 15 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.1, 0.1 )
+motion_offset = Vector2( 320, 180 )
+motion_mirroring = Vector2( 640, 360 )
+
+[node name="background" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+centered = false
 
 [editable path="Player"]
 

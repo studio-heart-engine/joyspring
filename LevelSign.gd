@@ -38,5 +38,6 @@ func _input(event):
 	if is_player_in_box and event.is_action_pressed('ui_select'):
 		set_locked(-1)
 		if not locked:
+			$Click.play()
 			var level_path = 'platformer/levels/Level_' + '%02d' % level_index + '.tscn'
 			SceneChanger.change_scene_to(load(level_path))

@@ -1,7 +1,6 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
-[ext_resource path="res://graphics/environment/background2.tres" type="Texture" id=2]
 [ext_resource path="res://platformer/levels/Level_10.tscn" type="PackedScene" id=3]
 [ext_resource path="res://graphics/sprites/blobs/Blob.tscn" type="PackedScene" id=4]
 [ext_resource path="res://platformer/MovingBlob.tscn" type="PackedScene" id=10]
@@ -92,13 +91,6 @@ __meta__ = {
 }
 next_level = ExtResource( 3 )
 float_enabled = false
-
-[node name="Background" type="CanvasLayer" parent="."]
-layer = -1
-
-[node name="background" type="Sprite" parent="Background"]
-texture = ExtResource( 2 )
-centered = false
 
 [node name="Blebs" type="Node2D" parent="."]
 __meta__ = {
@@ -369,6 +361,16 @@ position = Vector2( 497, 56 )
 
 [node name="Pos" type="Node2D" parent="Text5"]
 position = Vector2( -30, -21 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.1, 0.1 )
+motion_offset = Vector2( 320, 180 )
+motion_mirroring = Vector2( 640, 360 )
+
+[node name="background" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+centered = false
 
 [editable path="MovingBlobs/MovingBlob_01"]
 

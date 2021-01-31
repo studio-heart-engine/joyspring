@@ -1,7 +1,6 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
-[ext_resource path="res://graphics/environment/background1.tres" type="Texture" id=2]
 [ext_resource path="res://platformer/levels/Level_04.tscn" type="PackedScene" id=5]
 [ext_resource path="res://player/Player.tscn" type="PackedScene" id=14]
 [ext_resource path="res://graphics/effects/circle-transition.png" type="Texture" id=15]
@@ -84,13 +83,6 @@ __meta__ = {
 next_level = ExtResource( 5 )
 dash_enabled = false
 float_enabled = false
-
-[node name="Background" type="CanvasLayer" parent="."]
-layer = -1
-
-[node name="background" type="Sprite" parent="Background"]
-texture = ExtResource( 2 )
-centered = false
 
 [node name="Blebs" type="Node2D" parent="."]
 __meta__ = {
@@ -214,6 +206,16 @@ script = ExtResource( 22 )
 [node name="EndPosition4" type="Position2D" parent="."]
 position = Vector2( 376, 0 )
 script = ExtResource( 22 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.1, 0.1 )
+motion_offset = Vector2( 320, 180 )
+motion_mirroring = Vector2( 640, 360 )
+
+[node name="background" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+centered = false
 
 [editable path="Player"]
 

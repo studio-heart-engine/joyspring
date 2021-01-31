@@ -93,18 +93,22 @@ func turn_obtuse():
 	rotation_degrees += coef * 90
 
 
-
-enum TIME_OF_DAY {dawn, evening, midnight}
-
-export (TIME_OF_DAY) var time_of_day = TIME_OF_DAY.evening setget set_time_of_day
+var TIME_OF_DAY = ['evening', 'midnight', 'dawn']
 
 func update_image():
 	var image_path = "res://graphics/sprites/blobs/" + get_time_of_day() + "/bleb.png"
 	$Sprite.set_texture(load(image_path))
 
 func get_time_of_day():
-	return TIME_OF_DAY.keys()[time_of_day]
+	return TIME_OF_DAY[globals.time_of_day]
 
-func set_time_of_day(value):
-	time_of_day = value
-	update_image()
+#enum TIME_OF_DAY {dawn, evening, midnight}
+#
+#export (TIME_OF_DAY) var time_of_day = TIME_OF_DAY.evening setget set_time_of_day
+#
+#func get_time_of_day():
+#	return TIME_OF_DAY.keys()[time_of_day]
+#
+#func set_time_of_day(value):
+#	time_of_day = value
+#	update_image()

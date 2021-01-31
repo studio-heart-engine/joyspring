@@ -19,19 +19,23 @@ func _on_Area2D_area_entered(area):
 	yield(anim_player2, "animation_finished")
 	$CollisionShape2D.set_deferred("disabled", true)
 
-
-
-enum TIME_OF_DAY {Dawn, Evening, Midnight}
-
-export (TIME_OF_DAY) var time_of_day = TIME_OF_DAY.Evening setget set_time_of_day
+var TIME_OF_DAY = ['Evening', 'Midnight', 'Dawn']
 
 func update_image():
 	var image_path = "res://graphics/sprites/gravel" + get_time_of_day() + ".png"
 	$Sprite.set_texture(load(image_path))
 
 func get_time_of_day():
-	return TIME_OF_DAY.keys()[time_of_day]
+	return TIME_OF_DAY[globals.time_of_day]
 
-func set_time_of_day(value):
-	time_of_day = value
-	update_image()
+#enum TIME_OF_DAY {Dawn, Evening, Midnight}
+#
+#export (TIME_OF_DAY) var time_of_day = TIME_OF_DAY.Evening setget set_time_of_day
+#
+#
+#func get_time_of_day():
+#	return TIME_OF_DAY.keys()[time_of_day]
+#
+#func set_time_of_day(value):
+#	time_of_day = value
+#	update_image()

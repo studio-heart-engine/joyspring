@@ -20,6 +20,7 @@ func _ready():
 
 func _input(event):
 	if event.is_action_pressed("ui_select"):
+		$Click.play()
 		begin()
 
 #func _on_BeginButton_pressed():
@@ -33,8 +34,14 @@ func begin():
 	globals.curr_state = 'MenuTransition'
 	yield($AnimationPlayer, "animation_finished")
 	
-	var curr_level = str(globals.levels_completed[-1] + 1).pad_zeros(2)
-	SceneChanger.change_scene_to(load('res://platformer/levels/Level_' + curr_level + '.tscn'))
+	var curr_level = globals.levels_completed[-1] + 1
+	curr_level = str(curr_level).pad_zeros(2)
+	if not File.new().file_exists('res://platformer/levels/Level_' + curr_level + '.tscn'):
+		SceneChanger.change_scene_to(load('res://gui/LevelSelect.tscn'))
+	else:
+		print('res://platformer/levels/Level_' + curr_level + '.tscn')
+		print(load('res://platformer/levels/Level_' + curr_level + '.tscn'))
+		SceneChanger.change_scene_to(load('res://platformer/levels/Level_' + curr_level + '.tscn'))
 #	SceneChanger.change_scene_to(load("res://platformer/levels/Level_01.tscn"))
 	
 

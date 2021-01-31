@@ -16,7 +16,7 @@ func _ready():
 	view_box.rect_scale = scaling
 	
 func _process(delta):
-	if globals.curr_state.substr(0, 5) == 'Level':
+	if globals.curr_state.substr(0, 5) == 'Level' or globals.curr_state == 'Temp_End':
 		set_level_text()
 	else:
 		hide_level_text()

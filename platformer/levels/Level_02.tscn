@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
 [ext_resource path="res://platformer/levels/Level_03.tscn" type="PackedScene" id=3]
@@ -13,10 +13,7 @@
 [ext_resource path="res://platformer/BlobTileMap.gd" type="Script" id=24]
 [ext_resource path="res://graphics/tilesets/blobs_tileset.tres" type="TileSet" id=25]
 
-[sub_resource type="StreamTexture" id=1]
-load_path = "res://.import/background1.png-badbe7d6cfda288f5bcb698ce2e9a0a2.stex"
-
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
 uniform sampler2D mask;
@@ -29,23 +26,23 @@ void fragment() {
 	COLOR = vec4(COLOR.rgb, alpha);
 }"
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
-shader = SubResource( 2 )
+shader = SubResource( 1 )
 shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.1
 shader_param/mask = ExtResource( 15 )
 
-[sub_resource type="TileSet" id=4]
+[sub_resource type="TileSet" id=3]
 
-[sub_resource type="Gradient" id=5]
+[sub_resource type="Gradient" id=4]
 offsets = PoolRealArray( 0, 0.305011, 0.640523, 1 )
 colors = PoolColorArray( 0.27451, 0.27451, 0.27451, 0, 0.470588, 0.470588, 0.470588, 1, 0.470588, 0.470588, 0.470588, 1, 0.27451, 0.27451, 0.27451, 0 )
 
-[sub_resource type="GradientTexture" id=6]
-gradient = SubResource( 5 )
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
 
-[sub_resource type="ParticlesMaterial" id=7]
+[sub_resource type="ParticlesMaterial" id=6]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -55,16 +52,16 @@ initial_velocity = 8.0
 angular_velocity = 4.57384e-41
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-color_ramp = SubResource( 6 )
+color_ramp = SubResource( 5 )
 
-[sub_resource type="Gradient" id=8]
+[sub_resource type="Gradient" id=7]
 offsets = PoolRealArray( 0, 0.30719, 0.359477, 0.381264, 0.405229, 0.43573, 1 )
 colors = PoolColorArray( 0.388235, 0.388235, 0.388235, 0, 1, 1, 1, 0.109804, 0.996078, 0.996078, 0.996078, 0.137255, 0.992157, 0.992157, 0.992157, 0.0980392, 0.988235, 0.988235, 0.988235, 0.12549, 0.984314, 0.984314, 0.984314, 0.0941176, 0.937255, 0.937255, 0.937255, 0 )
 
-[sub_resource type="GradientTexture" id=9]
-gradient = SubResource( 8 )
+[sub_resource type="GradientTexture" id=8]
+gradient = SubResource( 7 )
 
-[sub_resource type="ParticlesMaterial" id=10]
+[sub_resource type="ParticlesMaterial" id=9]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -76,7 +73,7 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 0.05
 scale_random = 0.05
-color_ramp = SubResource( 9 )
+color_ramp = SubResource( 8 )
 
 [node name="Level_02" type="Node2D"]
 script = ExtResource( 1 )
@@ -86,13 +83,6 @@ __meta__ = {
 next_level = ExtResource( 3 )
 dash_enabled = false
 float_enabled = false
-
-[node name="Background" type="CanvasLayer" parent="."]
-layer = -1
-
-[node name="background" type="Sprite" parent="Background"]
-texture = SubResource( 1 )
-centered = false
 
 [node name="Blebs" type="Node2D" parent="."]
 __meta__ = {
@@ -140,7 +130,7 @@ limit_right = 320
 limit_bottom = 248
 
 [node name="ColorRect" parent="Player/RespawnTransition" index="0"]
-material = SubResource( 3 )
+material = SubResource( 2 )
 
 [node name="Cape" parent="Player" instance=ExtResource( 16 )]
 
@@ -163,7 +153,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.784314 )
 scale = Vector2( 0.75, 0.75 )
 z_index = -2
-tile_set = SubResource( 4 )
+tile_set = SubResource( 3 )
 cell_size = Vector2( 8, 8 )
 cell_quadrant_size = 2
 collision_layer = 0
@@ -189,7 +179,7 @@ script = ExtResource( 24 )
 position = Vector2( 160, 90 )
 z_index = 1
 local_coords = false
-process_material = SubResource( 7 )
+process_material = SubResource( 6 )
 script = ExtResource( 20 )
 
 [node name="LightParticles" type="Particles2D" parent="."]
@@ -198,7 +188,7 @@ z_index = 1
 amount = 2
 lifetime = 7.0
 local_coords = false
-process_material = SubResource( 10 )
+process_material = SubResource( 9 )
 texture = ExtResource( 21 )
 script = ExtResource( 20 )
 
@@ -230,6 +220,16 @@ script = ExtResource( 22 )
 position = Vector2( 77.8515, 126.48 )
 
 [node name="Pos" type="Node2D" parent="Tut1"]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.1, 0.1 )
+motion_offset = Vector2( 320, 180 )
+motion_mirroring = Vector2( 640, 360 )
+
+[node name="background" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+centered = false
 
 [editable path="Player"]
 

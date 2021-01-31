@@ -36,7 +36,7 @@ tracks/1/keys = {
 "values": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath(".:lines_skipped")
+tracks/2/path = NodePath("Text:lines_skipped")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -48,7 +48,7 @@ tracks/2/keys = {
 "values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath(".:visible_characters")
+tracks/3/path = NodePath("Text:visible_characters")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -62,7 +62,7 @@ tracks/3/keys = {
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 5 )
-shader_param/cutoff = 1.0
+shader_param/cutoff = -0.0837281
 shader_param/smooth_size = 0.1
 shader_param/mask = ExtResource( 6 )
 
@@ -81,7 +81,7 @@ anims/opening = SubResource( 1 )
 [node name="Background" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -106,5 +106,32 @@ margin_bottom = 70.0
 color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_lock_": true
+}
+
+[node name="Text" type="Label" parent="."]
+visible = false
+margin_top = 268.0
+margin_right = 254.0
+margin_bottom = 486.0
+text = "Once upon a time
+Legends told of a magical golden spring
+Hidden among bushes of thyme
+Full of joyous voices that laugh and sing
+
+But with the course of war and strife
+The world went hollow
+The spring dried and died
+And the people had no soul to follow
+
+Except for one, a child
+Clad in optimism, faith without doubt
+Would descend into the wild
+Seeking to put an end to this drought
+
+And revive the Joyspring"
+percent_visible = 0.100917
+lines_skipped = 5
+__meta__ = {
+"_edit_use_anchors_": false
 }
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

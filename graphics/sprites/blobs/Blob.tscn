@@ -2,11 +2,12 @@
 
 [ext_resource path="res://graphics/sprites/blobs/Blob.gd" type="Script" id=1]
 [ext_resource path="res://graphics/sprites/blobs/blob_noise_offset.gd" type="Script" id=2]
-[ext_resource path="res://graphics/outline-shader.shader" type="Shader" id=3]
+[ext_resource path="res://graphics/effects/outline-shader.shader" type="Shader" id=3]
 [ext_resource path="res://graphics/sprites/blobs/Hitbox.gd" type="Script" id=4]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 3 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 6.0
@@ -18,7 +19,7 @@ script = ExtResource( 1 )
 script = ExtResource( 2 )
 
 [node name="Outline" type="Sprite" parent="NoiseOffset"]
-modulate = Color( 0.972549, 0.184314, 0.635294, 1 )
+modulate = Color( 0.972549, 0.184314, 0.407843, 1 )
 material = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="NoiseOffset"]
