@@ -4,7 +4,7 @@ export var MAX_GLIDE_FALL_SPEED = 20
 export var GLIDE_FALL_ACCELERATION = 3
 export var MAX_GLIDE_HORIZONTAL_SPEED = 90
 export var GLIDE_HORIZONTAL_ACCELERATION = 3
-export var CAPE_SHRINK_TIME_PER_JOY = 0.4
+export var CAPE_SHRINK_TIME_PER_JOY = 0.1
 export var CAPE_REGROW_TIME_PER_JOY = 0.1
 
 onready var cape_shrink_timer = Timer.new()
@@ -48,7 +48,12 @@ func regrow_cape():
 	if n == cape_joys.cape_size:
 		cape_regrow_timer.stop()
 	else:
-		cape_joys.add_child(cape_joys.get_child(n - 1).duplicate())
+		var joy = load('res://platformer/Joy.tscn').instance()
+		cape_joys.add_child(joy)
+		joy.position = owner.position
+		joy.set_following_player(true)
+
+#		cape_joys.add_child(cape_joys.get_child(n - 1).duplicate())
 
 
 func enter():
@@ -97,5 +102,9 @@ func update(delta):
 
 func handle_input(event):
 	.handle_input(event)
-	if event.is_action_pressed("float"):
-		emit_signal("finished", "fall")
+	if event.is_action_pressed('float') and owner.current_state != 'dash':
+		emit_signal('finished', 'float')
+	elif event.is_action_released('float'):
+		emit_signal('finished', 'fall')
+#	if event.is_action_pressed("float") and owner.current_state != 'dash':
+#		emit_signal("finished", "fall")

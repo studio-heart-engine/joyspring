@@ -7,8 +7,10 @@ var is_on_cape = false setget set_on_cape
 onready var anim_player = $Offset/AnimatedSprite/AnimationPlayer
 
 func fade_out():
+	$Offset/Particles.emitting = true
 	anim_player.play("fade_out")
 	yield(anim_player, "animation_finished")
+	$Offset/Particles.emitting = false
 	call_deferred("free")
 
 

@@ -51,3 +51,4 @@ func update(delta):
 
 func finish():
 	emit_signal("finished", "previous")
+#	emit_signal("finished", "fall")

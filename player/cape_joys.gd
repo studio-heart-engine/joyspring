@@ -25,7 +25,8 @@ func _ready():
 		add_child(joy)
 		joy.set_following_player(true)
 		joy.position = player.position
-		joy.is_on_cape = true
+		joy.set_on_cape(true)
+#		joy.is_on_cape = true
 	set_process(true)
 	
 	Events.connect("float_started", self, "_on_float_started")
