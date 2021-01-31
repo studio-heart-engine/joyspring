@@ -26,6 +26,7 @@ func update(delta):
 		emit_signal("finished", "fall")
 	elif Input.is_action_pressed("wall") and is_near_wall():
 		on_wall_timer.start()
+		owner.can_wall_climb = true
 		emit_signal("finished", "cling")
 
 
