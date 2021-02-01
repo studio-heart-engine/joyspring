@@ -21,6 +21,7 @@ func enter():
 	anim_player.stop()
 	anim_player.play("dash")
 	anim_player.stop(false)
+	$SoundEffect.play()
 	if self.input_direction.x == 0:
 		anim_player.advance(0)
 	elif self.input_direction.y == -1:

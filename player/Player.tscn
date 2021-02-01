@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://player/player_state_machine.gd" type="Script" id=1]
 [ext_resource path="res://player/state.gd" type="Script" id=2]
@@ -19,6 +19,8 @@
 [ext_resource path="res://player/states/motion/on_wall/climb.gd" type="Script" id=17]
 [ext_resource path="res://graphics/effects/cave-darkness.png" type="Texture" id=18]
 [ext_resource path="res://graphics/sprites/riley/rileyEvening.png" type="Texture" id=19]
+[ext_resource path="res://music/effects/float.wav" type="AudioStream" id=20]
+[ext_resource path="res://music/effects/dash.wav" type="AudioStream" id=21]
 
 [sub_resource type="Animation" id=1]
 resource_name = "dash-glow"
@@ -159,8 +161,13 @@ script = ExtResource( 3 )
 [node name="Dash" type="Node" parent="States"]
 script = ExtResource( 4 )
 
+[node name="SoundEffect" type="AudioStreamPlayer" parent="States/Dash"]
+stream = ExtResource( 21 )
+
 [node name="Run" type="Node" parent="States"]
 script = ExtResource( 5 )
+
+[node name="SoundEffect" type="AudioStreamPlayer" parent="States/Run"]
 
 [node name="Slide" type="Node" parent="States"]
 script = ExtResource( 6 )
@@ -173,6 +180,9 @@ script = ExtResource( 8 )
 
 [node name="Float" type="Node" parent="States"]
 script = ExtResource( 9 )
+
+[node name="SoundEffect" type="AudioStreamPlayer" parent="States/Float"]
+stream = ExtResource( 20 )
 
 [node name="Dead" type="Node" parent="States"]
 script = ExtResource( 10 )

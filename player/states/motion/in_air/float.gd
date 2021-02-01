@@ -68,6 +68,7 @@ func enter():
 	
 	Events.emit_signal("float_started")
 	play_anim("float")
+	$SoundEffect.play()
 	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
 	
 	cape_shrink_timer.start()
@@ -80,6 +81,7 @@ func reenter():
 
 func exit():
 	Events.emit_signal("float_ended")
+	$SoundEffect.stop()
 
 
 func update(delta):
