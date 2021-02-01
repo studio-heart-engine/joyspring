@@ -47,7 +47,7 @@ func play():
 			previous_song, "volume_db", -20, -80, 2,
 			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
 		tween.start()
-		yield(tween, "tween_completed")
+#		yield(tween, "tween_completed")
 		previous_song.stop()
 		
 		# fade in
@@ -55,7 +55,7 @@ func play():
 			current_song, "volume_db", -30, -20, 2,
 			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
 		tween.start()
-		yield(get_tree().create_timer(0.2), "timeout")
+#		yield(get_tree().create_timer(0.2), "timeout")
 		current_song.play()
 
 	elif not current_song.playing:
@@ -64,5 +64,5 @@ func play():
 			current_song, "volume_db", -30, -20, 2,
 			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
 		tween.start()
-		yield(get_tree().create_timer(0.2), "timeout")
+#		yield(get_tree().create_timer(0.2), "timeout")
 		current_song.play()
