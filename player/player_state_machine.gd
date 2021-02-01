@@ -8,8 +8,6 @@ var current_state = null
 var previous_state = null
 var is_looking_right = true setget set_looking_right
 
-onready var sound_fx = $SoundEffects
-
 onready var sprite = $AnimatedSprite/Sprite
 
 onready var states = {
