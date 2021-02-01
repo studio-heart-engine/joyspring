@@ -11,7 +11,6 @@ var bg_offset = 180  # Motion offset for parallax
 func _ready():
 	Events.connect('level_completed', self, 'on_level_completed')
 	load_game()
-	print(levels_completed)
 
 
 func on_level_completed(level_index):
