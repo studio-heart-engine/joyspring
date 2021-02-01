@@ -8,8 +8,12 @@ var level_index setget , get_level_index
 
 signal level_exited
 
+
 func _ready():
 	level_index = int(name.right(6))
+	if globals.curr_state == 'LevelSelect':
+		if globals.prev_state.substr(0, 5) == 'Level' and globals.prev_state != 'LevelSelect':
+			$Player.position = get_node('LevelSign' + str(int(globals.prev_state.right(5)))).position
 	set_bg()
 
 func all_joys_collected():

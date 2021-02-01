@@ -25,6 +25,7 @@ func change_scene_to(scene: PackedScene, color = Color.black):
 	$AnimationPlayer.play("fade")
 	yield($AnimationPlayer, "animation_finished")
 	
+	globals.prev_state = globals.curr_state
 	globals.curr_state = scene.instance().get_name()
 	globals.save_game()
 	globals.set_time_of_day()
