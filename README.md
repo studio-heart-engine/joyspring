@@ -1,4 +1,4 @@
-# Pre-release out on [Itch.io](https://studio-heart-engine.itch.io/joyspring) and [Steam](https://store.steampowered.com/app/1532360/Joyspring/)
+## Get the pre-release on [Itch.io](https://studio-heart-engine.itch.io/joyspring) and wishlist on [Steam](https://store.steampowered.com/app/1532360/Joyspring/)!
 
 ![](graphics/marketing/banner2.png?raw=true)
 
