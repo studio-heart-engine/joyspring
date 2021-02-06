@@ -44,7 +44,7 @@ func enter():
 	spawn_dash_ring_particles()
 
 func exit():
-		timer.stop()
+	timer.stop()
 
 func update(delta):
 	owner.velocity = direction * DASH_SPEED
