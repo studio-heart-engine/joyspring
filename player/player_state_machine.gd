@@ -41,13 +41,10 @@ func _input(event):
 
 func _physics_process(delta):
 	states[current_state].update(delta)
+	print(current_state)
 
 
 func change_state(next_state):
-	if next_state == "dash" and not get_parent().dash_enabled \
-			or next_state == "float" and not get_parent().float_enabled \
-			or next_state in ["cling", "slide"] and not get_parent().climb_enabled:
-		return
 
 	if current_state != null:
 		states[current_state].exit()
