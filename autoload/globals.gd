@@ -3,6 +3,7 @@ extends Node
 var has_played_startup_animation = false
 var levels_completed = [0]
 var curr_state = "Opening"
+var prev_state = ""
 
 var time_of_day = 0
 var bg_num = 1
@@ -34,12 +35,15 @@ func load_game():
 func set_time_of_day():
 	if curr_state.substr(0, 5) != 'Level':
 		return
-	if curr_state == 'LevelSelect':
+	if curr_state == 'LevelSelect':  # Done in level select script
 		return
 	var level_num = int(curr_state.right(5))
-	if level_num < 10:
+	set_time_of_day_from_num(level_num)
+
+func set_time_of_day_from_num(num):
+	if num < 10:
 		time_of_day = 0
-	elif level_num < 50:  # TODO
+	elif num < 50:  # TODO
 		time_of_day = 1
 	else:
 		time_of_day = 2

@@ -34,3 +34,6 @@ func handle_input(event):
 	.handle_input(event)
 	if event.is_action_pressed("up"):
 		emit_signal("finished", "jump")
+	if event.is_action_pressed('dash') and owner.can_dash and self.input_direction != Vector2.ZERO:
+		emit_signal('finished', 'fall')  # So dash goes to fall after it's complete
+		emit_signal('finished', 'dash')

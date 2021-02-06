@@ -1,9 +1,15 @@
-![](graphics/marketing/cover.png?raw=true)
+## Get the pre-release on [Itch.io](https://studio-heart-engine.itch.io/joyspring) and wishlist on [Steam](https://store.steampowered.com/app/1532360/Joyspring/)!
 
-# JOYSPRING
-A quick platformer about spreading positivity. Our game is still in development, so if you want to help out with designing levels, please check the section below!
+![](graphics/marketing/banner2.png?raw=true)
+
+# Joyspring
+**ASCEND the peak in search of the Joyspring.** Explore every cavern and cave, crevasse and chasm. Hear the wind sing. Keep dashing and find the spring. And when you return, return smiling.   
+   
+*Our game is still in development, so if you want to help out with designing levels, please check the section below!*
 
 ### Instructions to Download and Play
+We highly suggest you download from the [itch.io page](https://studio-heart-engine.itch.io/joyspring), but downloads are avaliable on Github as well.
+
 1. Head over to the releases page (linked in the right column under About) and expand the Assets dropdown
 
 2. Download the file corresponding to your system
