@@ -22,7 +22,7 @@ func handle_input(event):
 	.handle_input(event)
 	
 	if self.input_direction.y == 0:
-		emit_signal("finished", "cling")
+		emit_signal("finished", get_wall_state())
 	
 	if self.input_direction.x == -wall_direction:
 		if self.input_direction.y == -1:

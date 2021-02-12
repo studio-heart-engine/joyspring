@@ -36,5 +36,5 @@ func handle_input(event):
 	
 	if self.input_direction.x == -wall_direction:
 		emit_signal("finished", "jump" if self.input_direction.y == -1 else "fall")
-	if self.input_direction.y == -1 and owner.can_wall_climb:
+	elif self.input_direction.y == -1 and owner.can_wall_climb:
 		emit_signal("finished", "climb")

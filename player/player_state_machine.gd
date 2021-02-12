@@ -41,7 +41,7 @@ func _input(event):
 
 func _physics_process(delta):
 	states[current_state].update(delta)
-	#print(current_state)
+	print(current_state)
 
 
 func change_state(next_state):

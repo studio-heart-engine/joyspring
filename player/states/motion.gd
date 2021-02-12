@@ -57,6 +57,14 @@ func is_near_wall():
 	return false
 
 
+func get_wall_state():
+	match int(self.input_direction.y):
+		1: return "slide"
+		0: return "cling"
+		-1: return "climb"
+	return null
+
+
 func is_near_floor():
 	var original_position = owner.position
 	if owner.move_and_collide(Vector2.DOWN):

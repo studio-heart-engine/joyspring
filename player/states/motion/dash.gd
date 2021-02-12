@@ -1,8 +1,8 @@
 extends "../motion.gd"
 
-export var DASH_SPEED = 300
-export var MAX_DASH_TIME = 0.2
-export var MAX_UP_DASH_TIME = 0.05
+export var DASH_SPEED = 250
+export var MAX_DASH_TIME = 0.24
+var MAX_UP_DASH_TIME = MAX_DASH_TIME
 
 var direction
 var timer
@@ -51,6 +51,14 @@ func update(delta):
 	if owner.move_and_collide(owner.velocity * delta):
 		finish()
 
+
+func handle_input(event):
+	.handle_input(event)
+	if event.is_action_pressed("float") and not owner.can_dash and $"../../..".float_enabled:
+		emit_signal("finished", "float")
+
+
 func finish():
+	owner.velocity.y *= 0.7
 	emit_signal("finished", "previous")
 #	emit_signal("finished", "fall")
