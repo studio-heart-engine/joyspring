@@ -1,8 +1,8 @@
-## Pre-release out on [Itch.io](https://studio-heart-engine.itch.io/joyspring)
+## Get the pre-release on [Itch.io](https://studio-heart-engine.itch.io/joyspring) and wishlist on [Steam](https://store.steampowered.com/app/1532360/Joyspring/)!
 
 ![](graphics/marketing/banner2.png?raw=true)
 
-# JOYSPRING
+# Joyspring
 **ASCEND the peak in search of the Joyspring.** Explore every cavern and cave, crevasse and chasm. Hear the wind sing. Keep dashing and find the spring. And when you return, return smiling.   
    
 *Our game is still in development, so if you want to help out with designing levels, please check the section below!*

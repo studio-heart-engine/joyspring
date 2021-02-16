@@ -2,12 +2,13 @@ extends "../motion.gd"
 
 export var DASH_SPEED = 300
 export var MAX_DASH_TIME = 0.2
-export var MAX_UP_DASH_TIME = 0.01
+export var MAX_UP_DASH_TIME = 0.05
 
 var direction
 var timer
 
 func enter():
+	
 	Events.emit_signal("player_dashed")
 	
 	spawn_dash_start_particles()
@@ -33,7 +34,7 @@ func enter():
 	
 	
 	timer = Timer.new()
-	timer.set_wait_time(MAX_UP_DASH_TIME if direction == Vector2.UP else MAX_DASH_TIME)
+	timer.set_wait_time(MAX_UP_DASH_TIME if direction.y < 0 else MAX_DASH_TIME)
 	timer.set_one_shot(true)
 	timer.connect("timeout", self, "finish")
 	add_child(timer)

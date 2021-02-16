@@ -58,9 +58,7 @@ func regrow_cape():
 
 func enter():
 	# only glide if you have a cape
-	if not(
-		owner.has_node("Cape")
-	):
+	if not owner.has_node("Cape") or not $"../../..".float_enabled:
 		emit_signal("finished", "previous")
 		return
 	
