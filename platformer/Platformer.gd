@@ -29,6 +29,8 @@ func _ready():
 	for i in range(6, 10):
 		collision_mask_vals[1] += pow(2, i)
 	update_collision()
+	layers[layer_num].modulate = Color(1, 1, 1)
+	layers[(layer_num + 1) % 2].modulate = Color(0, 0, 0)
 
 
 func _input(event):
@@ -38,11 +40,13 @@ func _input(event):
 		# Check if player is inside tile
 		var dummy = get_node('Layer' + str(layer_num) + '/Dummy')
 		dummy.position = $Player.position
-		if dummy.move_and_collide(Vector2(0, 0)):
+		if dummy.move_and_collide(Vector2(0, 0)):  # TODO: allow swap when 1 pixel off
 			layer_num = (layer_num + 1) % 2
 			return
 		else:
 			update_collision()
+			$Swapper.play("swap_to_" + str(layer_num))
+			Events.emit_signal("layer_swapped")
 
 
 func update_collision():
@@ -50,8 +54,6 @@ func update_collision():
 	$Player.collision_mask = collision_mask_vals[layer_num]
 	$Player/Hitbox.collision_layer = $Player.collision_layer
 	$Player/Hitbox.collision_mask = $Player.collision_mask
-	layers[layer_num].z_index = 10
-	layers[(layer_num + 1) % 2].z_index = 0
 
 
 func all_joys_collected():
