@@ -30,7 +30,9 @@ func _ready():
 		collision_mask_vals[1] += pow(2, i)
 	update_collision()
 	layers[layer_num].modulate = Color(1, 1, 1)
+	layers[layer_num].z_index = 10
 	layers[(layer_num + 1) % 2].modulate = Color(0, 0, 0)
+	layers[(layer_num + 1) % 2].z_index = 0
 
 
 func _input(event):
