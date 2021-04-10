@@ -43,8 +43,8 @@ func _on_Hitbox_area_entered(area):
 	Events.emit_signal("joy_collected")
 	$SoundEffect.play()
 	get_parent().call_deferred("remove_child", self)
-	$"../../Player/Cape/Joys".call_deferred("add_child", self)
-	$"../../Player/Cape/Joys".cape_size += 1
+	$"../../../Player/Cape/Joys".call_deferred("add_child", self)
+	$"../../../Player/Cape/Joys".cape_size += 1
 	set_following_player(true)
 
 

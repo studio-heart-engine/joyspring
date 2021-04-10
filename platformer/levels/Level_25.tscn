@@ -17,19 +17,19 @@
 [ext_resource path="res://graphics/effects/white-radial-gradient.png" type="Texture" id=16]
 [ext_resource path="res://platformer/EndPosition.gd" type="Script" id=17]
 
-[sub_resource type="Curve2D" id=17]
+[sub_resource type="Curve2D" id=1]
 resource_local_to_scene = true
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3.05176e-05, 48, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="Curve2D" id=18]
+[sub_resource type="Curve2D" id=2]
 resource_local_to_scene = true
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -48, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="Animation" id=19]
+[sub_resource type="Animation" id=3]
 resource_name = "follow-loop"
 loop = true
 tracks/0/type = "value"
@@ -45,7 +45,7 @@ tracks/0/keys = {
 "values": [ 0.0, 1.0 ]
 }
 
-[sub_resource type="Animation" id=20]
+[sub_resource type="Animation" id=4]
 resource_name = "follow-ping-pong"
 loop = true
 tracks/0/type = "value"
@@ -61,13 +61,13 @@ tracks/0/keys = {
 "values": [ 0.0, 0.99 ]
 }
 
-[sub_resource type="Curve2D" id=21]
+[sub_resource type="Curve2D" id=5]
 resource_local_to_scene = true
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 0.220993, 0, 0, 0, 0, 61, 61.221, 0, 0, 0, 0, 0, 61.221, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="Animation" id=22]
+[sub_resource type="Animation" id=6]
 resource_name = "follow-loop"
 loop = true
 tracks/0/type = "value"
@@ -83,7 +83,7 @@ tracks/0/keys = {
 "values": [ 0.0, 1.0 ]
 }
 
-[sub_resource type="Animation" id=23]
+[sub_resource type="Animation" id=7]
 resource_name = "follow-ping-pong"
 loop = true
 tracks/0/type = "value"
@@ -99,25 +99,25 @@ tracks/0/keys = {
 "values": [ 0.0, 0.99 ]
 }
 
-[sub_resource type="Curve2D" id=26]
+[sub_resource type="Curve2D" id=8]
 resource_local_to_scene = true
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="Curve2D" id=27]
+[sub_resource type="Curve2D" id=9]
 resource_local_to_scene = true
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="Curve2D" id=28]
+[sub_resource type="Curve2D" id=10]
 resource_local_to_scene = true
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="Shader" id=24]
+[sub_resource type="Shader" id=11]
 code = "shader_type canvas_item;
 
 uniform sampler2D mask;
@@ -130,23 +130,23 @@ void fragment() {
 	COLOR = vec4(COLOR.rgb, alpha);
 }"
 
-[sub_resource type="ShaderMaterial" id=25]
+[sub_resource type="ShaderMaterial" id=12]
 resource_local_to_scene = true
-shader = SubResource( 24 )
+shader = SubResource( 11 )
 shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.1
 shader_param/mask = ExtResource( 9 )
 
-[sub_resource type="TileSet" id=10]
+[sub_resource type="TileSet" id=13]
 
-[sub_resource type="Gradient" id=11]
+[sub_resource type="Gradient" id=14]
 offsets = PoolRealArray( 0, 0.305011, 0.640523, 1 )
 colors = PoolColorArray( 0.27451, 0.27451, 0.27451, 0, 0.470588, 0.470588, 0.470588, 1, 0.470588, 0.470588, 0.470588, 1, 0.27451, 0.27451, 0.27451, 0 )
 
-[sub_resource type="GradientTexture" id=12]
-gradient = SubResource( 11 )
+[sub_resource type="GradientTexture" id=15]
+gradient = SubResource( 14 )
 
-[sub_resource type="ParticlesMaterial" id=13]
+[sub_resource type="ParticlesMaterial" id=16]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -156,16 +156,16 @@ initial_velocity = 8.0
 angular_velocity = 4.57384e-41
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-color_ramp = SubResource( 12 )
+color_ramp = SubResource( 15 )
 
-[sub_resource type="Gradient" id=14]
+[sub_resource type="Gradient" id=17]
 offsets = PoolRealArray( 0, 0.30719, 0.359477, 0.381264, 0.405229, 0.43573, 1 )
 colors = PoolColorArray( 0.388235, 0.388235, 0.388235, 0, 1, 1, 1, 0.109804, 0.996078, 0.996078, 0.996078, 0.137255, 0.992157, 0.992157, 0.992157, 0.0980392, 0.988235, 0.988235, 0.988235, 0.12549, 0.984314, 0.984314, 0.984314, 0.0941176, 0.937255, 0.937255, 0.937255, 0 )
 
-[sub_resource type="GradientTexture" id=15]
-gradient = SubResource( 14 )
+[sub_resource type="GradientTexture" id=18]
+gradient = SubResource( 17 )
 
-[sub_resource type="ParticlesMaterial" id=16]
+[sub_resource type="ParticlesMaterial" id=19]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -177,7 +177,7 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 0.05
 scale_random = 0.05
-color_ramp = SubResource( 15 )
+color_ramp = SubResource( 18 )
 
 [node name="Level_25" type="Node2D"]
 script = ExtResource( 1 )
@@ -1046,7 +1046,7 @@ __meta__ = {
 position = Vector2( 250, 8 )
 
 [node name="Path2D" parent="MovingBlobs/MovingBlob" index="0"]
-curve = SubResource( 17 )
+curve = SubResource( 1 )
 
 [node name="Blob" parent="MovingBlobs/MovingBlob/Path2D/PathFollow2D" index="0"]
 shape = "1"
@@ -1056,7 +1056,7 @@ position = Vector2( 250, 8 )
 
 [node name="Path2D" parent="MovingBlobs/MovingBlob2" index="0"]
 position = Vector2( 49, 48 )
-curve = SubResource( 18 )
+curve = SubResource( 2 )
 
 [node name="PathFollow2D" parent="MovingBlobs/MovingBlob2/Path2D" index="0"]
 rotation = -1.5708
@@ -1065,15 +1065,15 @@ rotation = -1.5708
 shape = "2"
 
 [node name="AnimationPlayer" parent="MovingBlobs/MovingBlob2" index="1"]
-anims/follow-loop = SubResource( 19 )
-anims/follow-ping-pong = SubResource( 20 )
+anims/follow-loop = SubResource( 3 )
+anims/follow-ping-pong = SubResource( 4 )
 
 [node name="MovingBlob3" parent="MovingBlobs" instance=ExtResource( 7 )]
 position = Vector2( 252, 9 )
 
 [node name="Path2D" parent="MovingBlobs/MovingBlob3" index="0"]
 position = Vector2( 124, 30 )
-curve = SubResource( 21 )
+curve = SubResource( 5 )
 
 [node name="PathFollow2D" parent="MovingBlobs/MovingBlob3/Path2D" index="0"]
 rotation = 0.00362282
@@ -1082,14 +1082,14 @@ rotation = 0.00362282
 shape = "1"
 
 [node name="AnimationPlayer" parent="MovingBlobs/MovingBlob3" index="1"]
-anims/follow-loop = SubResource( 22 )
-anims/follow-ping-pong = SubResource( 23 )
+anims/follow-loop = SubResource( 6 )
+anims/follow-ping-pong = SubResource( 7 )
 
 [node name="MovingBlob4" parent="MovingBlobs" instance=ExtResource( 7 )]
 position = Vector2( 285, 53 )
 
 [node name="Path2D" parent="MovingBlobs/MovingBlob4" index="0"]
-curve = SubResource( 26 )
+curve = SubResource( 8 )
 
 [node name="Blob" parent="MovingBlobs/MovingBlob4/Path2D/PathFollow2D" index="0"]
 shape = "2"
@@ -1098,7 +1098,7 @@ shape = "2"
 position = Vector2( 220.744, 53 )
 
 [node name="Path2D" parent="MovingBlobs/MovingBlob5" index="0"]
-curve = SubResource( 27 )
+curve = SubResource( 9 )
 
 [node name="Blob" parent="MovingBlobs/MovingBlob5/Path2D/PathFollow2D" index="0"]
 shape = "1"
@@ -1107,7 +1107,7 @@ shape = "1"
 position = Vector2( 251, 90 )
 
 [node name="Path2D" parent="MovingBlobs/MovingBlob6" index="0"]
-curve = SubResource( 28 )
+curve = SubResource( 10 )
 
 [node name="Blob" parent="MovingBlobs/MovingBlob6/Path2D/PathFollow2D" index="0"]
 shape = "1"
@@ -1133,7 +1133,7 @@ limit_right = 640
 limit_bottom = 360
 
 [node name="ColorRect" parent="Player/RespawnTransition" index="0"]
-material = SubResource( 25 )
+material = SubResource( 12 )
 
 [node name="Cape" parent="Player" instance=ExtResource( 10 )]
 
@@ -1151,12 +1151,13 @@ __meta__ = {
 "_edit_bone_": true,
 "_edit_lock_": true
 }
+tile_material = 1
 
 [node name="TileMapBackground" type="TileMap" parent="."]
 modulate = Color( 1, 1, 1, 0.784314 )
 scale = Vector2( 0.75, 0.75 )
 z_index = -2
-tile_set = SubResource( 10 )
+tile_set = SubResource( 13 )
 cell_size = Vector2( 8, 8 )
 cell_quadrant_size = 2
 collision_layer = 0
@@ -1182,7 +1183,7 @@ script = ExtResource( 14 )
 position = Vector2( 160, 90 )
 z_index = 1
 local_coords = false
-process_material = SubResource( 13 )
+process_material = SubResource( 16 )
 script = ExtResource( 15 )
 
 [node name="LightParticles" type="Particles2D" parent="."]
@@ -1191,7 +1192,7 @@ z_index = 1
 amount = 2
 lifetime = 7.0
 local_coords = false
-process_material = SubResource( 16 )
+process_material = SubResource( 19 )
 texture = ExtResource( 16 )
 script = ExtResource( 15 )
 
