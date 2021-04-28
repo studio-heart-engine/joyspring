@@ -10,6 +10,7 @@ var layers
 var layer_num = 0
 var collision_layer_vals
 var collision_mask_vals
+onready var solid_shader = preload('res://graphics/effects/solid_color.shader')
 
 signal level_exited
 
@@ -29,10 +30,12 @@ func _ready():
 	for i in range(6, 10):
 		collision_mask_vals[1] += pow(2, i)
 	update_collision()
-	layers[layer_num].modulate = Color(1, 1, 1)
+#	layers[layer_num].modulate = Color(1, 1, 1)
 	layers[layer_num].z_index = 10
-	layers[(layer_num + 1) % 2].modulate = Color(0, 0, 0)
+#	layers[(layer_num + 1) % 2].modulate = Color(0, 0, 0)
 	layers[(layer_num + 1) % 2].z_index = 0
+	
+	layers[layer_num].material.shader = null
 
 
 func _input(event):
@@ -48,6 +51,9 @@ func _input(event):
 		else:
 			update_collision()
 			$Swapper.play("swap_to_" + str(layer_num))
+			print(layer_num)
+			layers[layer_num].material.shader = null
+			layers[(layer_num + 1) % 2].material.shader = solid_shader
 			Events.emit_signal("layer_swapped")
 
 
