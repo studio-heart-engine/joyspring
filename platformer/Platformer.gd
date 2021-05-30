@@ -7,10 +7,14 @@ export (bool) var climb_enabled = true
 var level_index setget , get_level_index
 
 var layers
+var layer_names = ['Layer0', 'Layer1']
 var layer_num = 0
 var collision_layer_vals
 var collision_mask_vals
+
+onready var outline_mat = preload('res://graphics/effects/outline_material.tres')
 onready var solid_shader = preload('res://graphics/effects/solid_color.shader')
+onready var outline_shader = preload('res://graphics/effects/outline-shader.shader')
 
 signal level_exited
 
@@ -23,6 +27,7 @@ func _ready():
 	set_bg()
 	
 	layers = [$Layer0, $Layer1]
+	
 	collision_layer_vals = [1, pow(2, 5)]
 	collision_mask_vals = [0, 0]
 	for i in range(1, 5):
@@ -30,12 +35,15 @@ func _ready():
 	for i in range(6, 10):
 		collision_mask_vals[1] += pow(2, i)
 	update_collision()
+	
 #	layers[layer_num].modulate = Color(1, 1, 1)
 	layers[layer_num].z_index = 10
 #	layers[(layer_num + 1) % 2].modulate = Color(0, 0, 0)
 	layers[(layer_num + 1) % 2].z_index = 0
 	
-	layers[layer_num].material.shader = null
+	layers[layer_num]._ready()
+	layers[(layer_num + 1) % 2]._ready()
+	update_shader()
 
 
 func _input(event):
@@ -52,8 +60,11 @@ func _input(event):
 			update_collision()
 			$Swapper.play("swap_to_" + str(layer_num))
 			print(layer_num)
-			layers[layer_num].material.shader = null
-			layers[(layer_num + 1) % 2].material.shader = solid_shader
+			
+			update_shader()
+#			layers[layer_num].material.shader = null
+#			layers[(layer_num + 1) % 2].material.shader = solid_shader
+			
 			Events.emit_signal("layer_swapped")
 
 
@@ -62,6 +73,11 @@ func update_collision():
 	$Player.collision_mask = collision_mask_vals[layer_num]
 	$Player/Hitbox.collision_layer = $Player.collision_layer
 	$Player/Hitbox.collision_mask = $Player.collision_mask
+
+
+func update_shader():
+	layers[layer_num].update_shader('normal')
+	layers[(layer_num + 1) % 2].update_shader('solid')
 
 
 func all_joys_collected():

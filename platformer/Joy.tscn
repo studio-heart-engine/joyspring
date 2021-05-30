@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://platformer/Joy.gd" type="Script" id=1]
 [ext_resource path="res://graphics/effects/outline-shader.shader" type="Shader" id=2]
@@ -6,7 +6,9 @@
 [ext_resource path="res://graphics/sprites/JoyAnimatedSprite.tscn" type="PackedScene" id=4]
 [ext_resource path="res://music/effects/joy.wav" type="AudioStream" id=5]
 
-[sub_resource type="ParticlesMaterial" id=1]
+[sub_resource type="ShaderMaterial" id=1]
+
+[sub_resource type="ParticlesMaterial" id=2]
 flag_disable_z = true
 spread = 180.0
 gravity = Vector3( 0, 0, 0 )
@@ -16,12 +18,11 @@ angular_velocity = 4.57384e-41
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 2 )
 shader_param/outline_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="Animation" id=3]
-resource_name = "fade_out"
+[sub_resource type="Animation" id=4]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("..:modulate")
@@ -48,10 +49,10 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="CircleShape2D" id=4]
+[sub_resource type="CircleShape2D" id=5]
 radius = 6.35152
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=6]
 length = 2.0
 loop = true
 step = 0.5
@@ -79,15 +80,16 @@ volume_db = -8.0
 position = Vector2( 0, -2.25145 )
 
 [node name="Particles" type="Particles2D" parent="Offset"]
+material = SubResource( 1 )
 z_index = -1
 amount = 10
 preprocess = 0.01
 visibility_rect = Rect2( -20, -20, 40, 40 )
 local_coords = false
-process_material = SubResource( 1 )
+process_material = SubResource( 2 )
 
 [node name="Outline" type="Sprite" parent="Offset"]
-material = SubResource( 2 )
+material = SubResource( 3 )
 position = Vector2( -0.102417, 0.102417 )
 z_index = -1
 texture = ExtResource( 3 )
@@ -100,17 +102,17 @@ region_rect = Rect2( 0, 0, 8, 8 )
 region_rect = Rect2( 24, 0, 8, 8 )
 
 [node name="AnimationPlayer" parent="Offset/AnimatedSprite" index="1"]
-anims/fade_out = SubResource( 3 )
+anims/fade_out = SubResource( 4 )
 
 [node name="Hitbox" type="Area2D" parent="Offset"]
 collision_layer = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Offset/Hitbox"]
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="AnimationPlayer2" type="AnimationPlayer" parent="Offset"]
 autoplay = "float"
-anims/float = SubResource( 5 )
+anims/float = SubResource( 6 )
 [connection signal="area_entered" from="Offset/Hitbox" to="." method="_on_Hitbox_area_entered"]
 
 [editable path="Offset/AnimatedSprite"]
