@@ -35,34 +35,36 @@ func _ready():
 		collision_mask_vals[1] += pow(2, i)
 	update_collision()
 	
-#	layers[layer_num].modulate = Color(1, 1, 1)
 	layers[layer_num].z_index = 10
-#	layers[(layer_num + 1) % 2].modulate = Color(0, 0, 0)
 	layers[(layer_num + 1) % 2].z_index = 0
-	
 	layers[layer_num]._ready()
 	layers[(layer_num + 1) % 2]._ready()
 	update_shader()
+	
+	Events.connect('swap_layers', self, 'swap_layers')
 
 
 func _input(event):
 	if event.is_action_pressed("swap"):
-		layer_num = (layer_num + 1) % 2
-		var layer_name = 'Layer' + str(layer_num)
-		
-		# Check if player is inside tile
-		var index = get_node(layer_name + '/TileMap').world_to_map($Player.position)
-		var inside_tile = get_node(layer_name + '/TileMap').get_cellv(index) != -1
-		if inside_tile:  # TODO: check gravel collision
-			layer_num = (layer_num + 1) % 2
-			return
-		else:
-			update_collision()
-			$Swapper.play("swap_to_" + str(layer_num))
-			update_shader()
-			
-			Events.emit_signal("layer_swapped")
+		swap_layers()
 
+
+func swap_layers():
+	print('swap')
+	layer_num = (layer_num + 1) % 2
+	var layer_name = 'Layer' + str(layer_num)
+	
+	# Check if player is inside tile
+	var index = get_node(layer_name + '/TileMap').world_to_map($Player.position)
+	var inside_tile = get_node(layer_name + '/TileMap').get_cellv(index) != -1
+	if inside_tile:  # TODO: check gravel collision
+		layer_num = (layer_num + 1) % 2
+		return
+	else:
+		update_collision()
+		$Swapper.play("swap_to_" + str(layer_num))
+		update_shader()
+		Events.emit_signal("layer_swapped")
 
 func update_collision():
 	$Player.collision_layer = collision_layer_vals[layer_num]

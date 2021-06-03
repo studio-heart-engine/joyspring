@@ -15,7 +15,12 @@ func update_shader(mode):
 			get_node('Blobs/' + child.get_name() + '/NoiseOffset/Outline').material.shader = outline_shader
 			get_node('Blobs/' + child.get_name() + '/NoiseOffset/Sprite').material.shader = null
 		for child in $Joys.get_children():
+			if child.is_following_player or child.is_on_cape:
+				continue
 			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.shader = outline_shader
+			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.set_shader_param(
+				'outline_color', Color(1, 1, 1, 1)
+			)
 			get_node('Joys/' + child.get_name() + '/Offset/Particles').material.shader = null
 			get_node('Joys/' + child.get_name() + '/Offset/AnimatedSprite/Sprite').material.shader = null
 		for child in $Gravel.get_children():
@@ -45,7 +50,12 @@ func update_shader(mode):
 				'color', Color(possible_colors[globals.bg_num - 1])
 			)
 		for child in $Joys.get_children():
-			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.shader = null
+			if child.is_following_player or child.is_on_cape:
+				continue
+			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.shader = solid_shader
+			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.set_shader_param(
+				'color', Color(possible_colors[globals.bg_num - 1])
+			)
 			get_node('Joys/' + child.get_name() + '/Offset/Particles').material.shader = solid_shader
 			get_node('Joys/' + child.get_name() + '/Offset/Particles').material.set_shader_param(
 				'color', Color(possible_colors[globals.bg_num - 1])

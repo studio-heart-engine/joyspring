@@ -22,7 +22,7 @@ func _on_Area2D_area_entered(area):
 var TIME_OF_DAY = ['Evening', 'Midnight', 'Dawn']
 
 func update_image():
-	var image_path = "res://graphics/sprites/gravel" + get_time_of_day() + ".png"
+	var image_path = "res://graphics/sprites/gravel/gravel" + get_time_of_day() + ".png"
 	$Sprite.set_texture(load(image_path))
 
 func get_time_of_day():
