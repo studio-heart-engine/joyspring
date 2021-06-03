@@ -7,7 +7,6 @@ export (bool) var climb_enabled = true
 var level_index setget , get_level_index
 
 var layers
-var layer_names = ['Layer0', 'Layer1']
 var layer_num = 0
 var collision_layer_vals
 var collision_mask_vals
@@ -49,10 +48,12 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed("swap"):
 		layer_num = (layer_num + 1) % 2
+		var layer_name = 'Layer' + str(layer_num)
 		
 		# Check if player is inside tile
-		var index = get_node('Layer' + str(layer_num) + '/TileMap').world_to_map($Player.position)
-		if get_node('Layer' + str(layer_num) + '/TileMap').get_cellv(index) != -1:
+		var index = get_node(layer_name + '/TileMap').world_to_map($Player.position)
+		var inside_tile = get_node(layer_name + '/TileMap').get_cellv(index) != -1
+		if inside_tile:  # TODO: check gravel collision
 			layer_num = (layer_num + 1) % 2
 			return
 		else:

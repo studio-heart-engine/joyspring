@@ -29,6 +29,9 @@ func update_shader(mode):
 		$TileMap.material.shader = null
 		$VineTileMap.material.shader = null
 		$BlobTileMap.material.shader = null
+		for child in $Environment.get_children():
+			child.material.shader = null
+		$Environment.modulate = Color(1, 1, 1, 1)
 	if mode == 'solid':
 		for child in $Blebs.get_children():
 			get_node('Blebs/' + child.get_name() + '/Sprite').material.shader = solid_shader
@@ -77,3 +80,9 @@ func update_shader(mode):
 		$VineTileMap.material.set_shader_param('color', Color(possible_colors[globals.bg_num - 1]))
 		$BlobTileMap.material.shader = solid_shader
 		$BlobTileMap.material.set_shader_param('color', Color(possible_colors[globals.bg_num - 1]))
+		for child in $Environment.get_children():
+			child.material.shader = solid_shader
+			child.material.set_shader_param(
+				'color', Color(possible_colors[globals.bg_num - 1])
+			)
+		$Environment.modulate = Color(1, 1, 1, 0.5)

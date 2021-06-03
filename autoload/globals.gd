@@ -5,8 +5,8 @@ var levels_completed = [0]
 var curr_state = "Opening"
 var prev_state = ""
 
-var time_of_day = 1
-var bg_num = 5
+var time_of_day = 0  # 0-indexed
+var bg_num = 1  # 1-indexed
 var bg_offset = 180  # Motion offset for parallax
 
 func _ready():
