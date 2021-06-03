@@ -51,9 +51,8 @@ func _input(event):
 		layer_num = (layer_num + 1) % 2
 		
 		# Check if player is inside tile
-		var dummy = get_node('Layer' + str(layer_num) + '/Dummy')
-		dummy.position = $Player.position
-		if dummy.move_and_collide(Vector2(0, 0)):
+		var index = get_node('Layer' + str(layer_num) + '/TileMap').world_to_map($Player.position)
+		if get_node('Layer' + str(layer_num) + '/TileMap').get_cellv(index) != -1:
 			layer_num = (layer_num + 1) % 2
 			return
 		else:
