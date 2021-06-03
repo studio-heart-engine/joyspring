@@ -8,13 +8,8 @@ export var facing_right = true setget set_facing_right
 var velocity = Vector2(SPEED if facing_right else -SPEED, 0)
 var state = states.CRAWL
 
-#var possible_colors = [
-#	"#f82f68",
-#	"#f82fa2",
-#	"#e841cf"
-#]
-var possible_colors = [['#e96254', '#da4863', '#cb3660', '#b92e6f'],
-					   ['#e5be48', '#e5b841', '#e5ae34', '#e1a83c'],
+var possible_colors = [['#c97d54', '#c96254', '#d24b61', '#c9377b'],
+					   ['#aee64d', '#83d464', '#57be7c', '#5aa98c'],
 					   ['#9583dd', '#967ac9', '#8070be', '#6c6cba']]
 
 onready var down1 = $RayCasts/Down1

@@ -53,17 +53,13 @@ func _input(event):
 		# Check if player is inside tile
 		var dummy = get_node('Layer' + str(layer_num) + '/Dummy')
 		dummy.position = $Player.position
-		if dummy.move_and_collide(Vector2(0, 0)):  # TODO: allow swap when 1 pixel off
+		if dummy.move_and_collide(Vector2(0, 0)):
 			layer_num = (layer_num + 1) % 2
 			return
 		else:
 			update_collision()
 			$Swapper.play("swap_to_" + str(layer_num))
-			print(layer_num)
-			
 			update_shader()
-#			layers[layer_num].material.shader = null
-#			layers[(layer_num + 1) % 2].material.shader = solid_shader
 			
 			Events.emit_signal("layer_swapped")
 
@@ -93,6 +89,6 @@ func _on_ExitArea_area_entered(area):
 
 
 func set_bg():
-	var image_path = "res://graphics/environment/background" + str(globals.bg_num) + ".tres"
+	var image_path = "res://graphics/environment/background" + str(globals.bg_num) + ".png"
 	$ParallaxBackground/ParallaxLayer/background.set_texture(load(image_path))
 	$ParallaxBackground/ParallaxLayer.motion_offset.y = globals.bg_offset
