@@ -34,18 +34,21 @@ func _ready():
 		font.size = 40
 		
 		label.set('custom_fonts/font', font)
-		label.align = Label.ALIGN_CENTER
+		label.align = Label.ALIGN_RIGHT
 		
 		button.flat = true
 		button.set('custom_colors/font_color', Color(1, 1, 1, 1))
 		button.set('custom_colors/font_color_hover', Color(0.28, 0.28, 0.28, 1))
 		button.set('custom_colors/font_color_pressed', Color('ffce43'))
 		button.set('custom_fonts/font', font)
+		button.align = Button.ALIGN_LEFT
 		
-		
-		hbox.add_child(label)
-		hbox.add_child(button)
-		$MarginContainer/VBoxContainer/ControlMenu/ControlButtons.add_child(hbox)
+
+#		hbox.add_child(label)
+#		hbox.add_child(button)
+#		$MarginContainer/VBoxContainer/ControlMenu/ControlButtons.add_child(hbox)
+		$MarginContainer/VBoxContainer/ControlMenu.add_child(label)
+		$MarginContainer/VBoxContainer/ControlMenu.add_child(button)
 		
 		buttons[key] = button
 	
