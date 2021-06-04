@@ -6,6 +6,8 @@ var is_on_cape = false setget set_on_cape
 
 onready var anim_player = $Offset/AnimatedSprite/AnimationPlayer
 
+onready var outline_shader = preload('res://graphics/effects/outline-shader.shader')
+
 var TIME_OF_DAY = ['evening', 'midnight', 'dawn']
 
 func get_time_of_day():
@@ -28,10 +30,9 @@ func _ready():
 		$Offset/Outline.texture = texture
 		$Offset/AnimatedSprite/Sprite.texture = texture
 
-	# I used this to prevent cape joys from becoming solid color after layer swap, but idk if this is safe
-	$Offset/Outline.material.set_local_to_scene(true)
-	$Offset/Particles.material.set_local_to_scene(true)
-	$Offset/AnimatedSprite/Sprite.material.set_local_to_scene(true)
+	$Offset/Outline.set_material($Offset/Outline.get_material().duplicate())
+	$Offset/Particles.set_material($Offset/Particles.get_material().duplicate())
+	$Offset/AnimatedSprite/Sprite.set_material($Offset/AnimatedSprite/Sprite.get_material().duplicate())
 
 
 func set_following_player(value):

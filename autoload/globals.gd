@@ -9,8 +9,14 @@ var time_of_day = 0  # 0-indexed
 var bg_num = 1  # 1-indexed
 var bg_offset = 180  # Motion offset for parallax
 
+var configurable_keys = ['up', 'down', 'left', 'right', 'dash', 'wall', 'float', 'swap']
+var config_file
+var keybinds = {}
+
 func _ready():
 	Events.connect('level_completed', self, 'on_level_completed')
+	load_controls()
+	set_controls()
 	load_game()
 
 
@@ -31,6 +37,44 @@ func load_game():
 	save.open('user://game.save', File.READ)
 	var data = parse_json(save.get_line())
 	levels_completed = data['levels_completed']
+
+func load_controls():
+	config_file = ConfigFile.new()
+	if config_file.load('user://keybinds.ini') == OK:
+		for key in config_file.get_section_keys('keybinds'):
+			var value = config_file.get_value('keybinds', key)
+			if str(value) != '':
+				keybinds[key] = value
+				print(value)
+			else:
+				keybinds[key] = null
+	else:
+		print('Warning: Missing keybinds config file, loading default controls')
+		load_default_controls()
+		save_controls()
+
+func load_default_controls():
+	for key in configurable_keys:
+		var actionlist = InputMap.get_action_list(key)
+		keybinds[key] = actionlist[0].scancode
+
+func set_controls():
+	for key in keybinds.keys():
+		var actionlist = InputMap.get_action_list(key)
+		if !actionlist.empty():
+			InputMap.action_erase_event(key, actionlist[0])
+		if keybinds[key] != null:
+			var new_value = InputEventKey.new()
+			new_value.set_scancode(keybinds[key])
+			InputMap.action_add_event(key, new_value)
+
+func save_controls():
+	for key in keybinds.keys():
+		if keybinds[key] != null:
+			config_file.set_value('keybinds', key, keybinds[key])
+		else:
+			config_file.set_value('keybinds', key, '')
+	config_file.save('user://keybinds.ini')
 
 func set_time_of_day():
 	if curr_state.substr(0, 5) != 'Level':

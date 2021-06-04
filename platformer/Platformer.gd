@@ -50,7 +50,6 @@ func _input(event):
 
 
 func swap_layers():
-	print('swap')
 	layer_num = (layer_num + 1) % 2
 	var layer_name = 'Layer' + str(layer_num)
 	
