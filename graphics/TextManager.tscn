@@ -1,9 +1,10 @@
-[gd_scene load_steps=106 format=2]
+[gd_scene load_steps=107 format=2]
 
 [ext_resource path="res://graphics/TextManager.gd" type="Script" id=1]
 [ext_resource path="res://graphics/HappyFox-Condensed.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://Select.gd" type="Script" id=3]
 [ext_resource path="res://graphics/font.tres" type="DynamicFont" id=4]
+[ext_resource path="res://graphics/TutorialText.gd" type="Script" id=5]
 [ext_resource path="res://graphics/Text.tscn" type="PackedScene" id=8]
 
 [sub_resource type="Animation" id=1]
@@ -2911,6 +2912,8 @@ anims/fade_in = SubResource( 34 )
 custom_fonts/font = SubResource( 35 )
 custom_colors/font_color = Color( 1, 1, 1, 0.607843 )
 text = "Hold shift to climb walls."
+script = ExtResource( 5 )
+action = "climb"
 
 [node name="Tutorial2" parent="." instance=ExtResource( 8 )]
 
@@ -2918,6 +2921,8 @@ text = "Hold shift to climb walls."
 custom_fonts/font = SubResource( 35 )
 custom_colors/font_color = Color( 1, 1, 1, 0.607843 )
 text = "Hold shift, up, and press a direction to wall jump."
+script = ExtResource( 5 )
+action = "wall jump"
 
 [node name="AnimationPlayer" parent="Tutorial2/Label" index="0"]
 anims/fade_in = SubResource( 36 )
@@ -2929,6 +2934,8 @@ custom_fonts/font = SubResource( 35 )
 custom_colors/font_color = Color( 1, 1, 1, 0.607843 )
 text = "Hold a direction and press space to dash.
 Dash resets when you touch the ground."
+script = ExtResource( 5 )
+action = "dash"
 
 [node name="AnimationPlayer" parent="Tutorial3/Label" index="0"]
 anims/fade_in = SubResource( 37 )
@@ -2940,6 +2947,7 @@ anims/fade_in_2 = SubResource( 38 )
 custom_fonts/font = SubResource( 35 )
 custom_colors/font_color = Color( 1, 1, 1, 0.607843 )
 text = "Collecting droplets resets your dash."
+script = ExtResource( 5 )
 
 [node name="AnimationPlayer" parent="Tutorial4/Label" index="0"]
 anims/fade_in = SubResource( 39 )
@@ -2950,7 +2958,9 @@ anims/fade_in_2 = SubResource( 40 )
 [node name="Label" parent="Tutorial5" index="0"]
 custom_fonts/font = SubResource( 35 )
 custom_colors/font_color = Color( 1, 1, 1, 0.607843 )
-text = "Hold space after dashing to glide."
+text = "Hold space after dashing to float."
+script = ExtResource( 5 )
+action = "float"
 
 [node name="AnimationPlayer" parent="Tutorial5/Label" index="0"]
 anims/fade_in = SubResource( 41 )
@@ -2966,6 +2976,7 @@ custom_colors/font_color = Color( 1, 1, 1, 0.607843 )
 text = "Thanks for playing our pre-release demo.
 Check out our Steam page for the full release!"
 align = 1
+script = ExtResource( 5 )
 
 [node name="AnimationPlayer" parent="Tutorial6/Label" index="0"]
 anims/fade_in = SubResource( 43 )
@@ -2980,6 +2991,7 @@ custom_fonts/font = SubResource( 35 )
 custom_colors/font_color = Color( 1, 1, 1, 0.607843 )
 text = "Press space next to the level you wish to revisit."
 align = 1
+script = ExtResource( 5 )
 
 [node name="AnimationPlayer" parent="Tutorial7/Label" index="0"]
 anims/fade_in = SubResource( 45 )
