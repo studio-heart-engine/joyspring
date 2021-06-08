@@ -4,11 +4,11 @@ export(String) var action
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if action == 'climb':
+	if action == 'wall':
 		var keybind_text = OS.get_scancode_string(globals.keybinds[action])
 		self.text = 'Hold ' + keybind_text + ' to climb walls.'
 	if action == 'wall jump':
-		var keybind_text_1 = OS.get_scancode_string(globals.keybinds['climb'])
+		var keybind_text_1 = OS.get_scancode_string(globals.keybinds['wall'])
 		var keybind_text_2 = OS.get_scancode_string(globals.keybinds['up'])
 		var keybind_text_3a = OS.get_scancode_string(globals.keybinds['left'])
 		var keybind_text_3b = OS.get_scancode_string(globals.keybinds['right'])

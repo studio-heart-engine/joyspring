@@ -16,6 +16,7 @@ func _ready():
 	if not globals.has_played_startup_animation:
 		globals.has_played_startup_animation = true
 		$AnimationPlayer.play("fade-in")
+		$Mountain/AnimationPlayer.play('Loop')
 
 
 func _input(event):
