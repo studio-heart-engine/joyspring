@@ -16,8 +16,6 @@ var possible_colors = [['#c97d54', '#c96254', '#d24b61', '#c9377b'],
 func _ready():
 	update_image()
 
-
-
 var TIME_OF_DAY = ['evening', 'midnight', 'dawn']
 
 func get_time_of_day():

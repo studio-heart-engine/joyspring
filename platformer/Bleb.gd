@@ -1,3 +1,5 @@
+
+tool
 extends KinematicBody2D
 
 export var SPEED = 10
@@ -30,12 +32,14 @@ func _on_Hitbox_area_entered(area):
 
 func _ready():
 	update_image()
-	anim_player.play("crawl")
+	if not Engine.editor_hint:
+		anim_player.play("crawl")
 #	$Sprite.material.set_shader_param("outline_color", Color(possible_colors[randi() % len(possible_colors)]))
 
 
 func _physics_process(delta):
-	
+	if Engine.editor_hint:
+		return
 	match state:
 		
 		states.CRAWL:
