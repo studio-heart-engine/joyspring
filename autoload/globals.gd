@@ -1,3 +1,4 @@
+tool
 extends Node
 
 var has_played_startup_animation = false
@@ -14,10 +15,11 @@ var config_file
 var keybinds = {}
 
 func _ready():
-	Events.connect('level_completed', self, 'on_level_completed')
-	load_controls()
-	set_controls()
-	load_game()
+	if not Engine.editor_hint:
+		Events.connect('level_completed', self, 'on_level_completed')
+		load_controls()
+		set_controls()
+		load_game()
 
 
 func on_level_completed(level_index):

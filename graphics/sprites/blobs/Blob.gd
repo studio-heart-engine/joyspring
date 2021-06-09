@@ -1,5 +1,4 @@
 tool
-
 extends Node2D
 
 #export (Texture) var texture

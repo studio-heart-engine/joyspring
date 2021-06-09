@@ -11,3 +11,4 @@ signal level_completed(level_index)
 signal begin_cape_regrow
 signal swap_layers
 signal layer_swapped
+signal keybind_changed

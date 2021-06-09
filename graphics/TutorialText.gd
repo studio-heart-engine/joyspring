@@ -4,6 +4,13 @@ export(String) var action
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Events.connect('keybind_changed', self, 'update_text')
+	update_text()
+
+func update_text():
+	if action == 'swap':
+		var keybind_text = OS.get_scancode_string(globals.keybinds[action])
+		self.text = 'Press ' + keybind_text + ' to swap between layers.'
 	if action == 'wall':
 		var keybind_text = OS.get_scancode_string(globals.keybinds[action])
 		self.text = 'Hold ' + keybind_text + ' to climb walls.'

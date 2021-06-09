@@ -1,9 +1,13 @@
+tool
 extends Node2D
 
 
 var TIME_OF_DAY = ['evening', 'midnight', 'dawn']
 
 func _ready():
+	update_image()
+
+func _process(delta):
 	update_image()
 
 func get_time_of_day():

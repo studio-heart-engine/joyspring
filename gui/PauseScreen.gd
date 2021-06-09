@@ -99,6 +99,7 @@ func change_bind(key, value):
 	globals.keybinds = keybinds.duplicate()
 	globals.set_controls()
 	globals.save_controls()
+	Events.emit_signal('keybind_changed')
 
 #func _on_MenuButton_pressed():
 #	$Click.play()
