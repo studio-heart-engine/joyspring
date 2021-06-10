@@ -71,7 +71,7 @@ func merge( sheet, texture, packed_scene, post_script_path, autoplay_name, aggre
 				break
 	else:
 		scene = Node2D.new()
-		scene.name = "Animation"
+		scene.name = "AnimatedSprite"
 		scene.set_meta("_ase_imported", true)
 	
 	if !sprite:

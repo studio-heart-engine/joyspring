@@ -6,7 +6,6 @@ onready var outline_shader = preload('res://graphics/effects/outline-shader.shad
 var possible_colors = ['#306d78', '225874', '3f3071', '3c4982', '3f3071', 'd2969b', 'e6a57f']
 
 func update_shader(mode):
-	print('--------------------------------')
 	if mode == 'normal':
 		for child in $Blebs.get_children():
 			get_node('Blebs/' + child.get_name() + '/Sprite').material.shader = outline_shader
@@ -17,7 +16,6 @@ func update_shader(mode):
 		for child in $Joys.get_children():
 			if child.is_following_player or child.is_on_cape:
 				continue
-			print('NORMAL: ' + child.name)
 			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.shader = outline_shader
 			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.set_shader_param(
 				'outline_color', Color(1, 1, 1, 1)
@@ -53,7 +51,6 @@ func update_shader(mode):
 		for child in $Joys.get_children():
 			if child.is_following_player or child.is_on_cape:
 				continue
-			print('SOLID: ' + child.name)
 			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.shader = solid_shader
 			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.set_shader_param(
 				'color', Color(possible_colors[globals.bg_num - 1])
@@ -97,4 +94,4 @@ func update_shader(mode):
 			child.material.set_shader_param(
 				'color', Color(possible_colors[globals.bg_num - 1])
 			)
-		$Environment.modulate = Color(1, 1, 1, 0.5)
+		$Environment.modulate = Color(1, 1, 1, 0.8)

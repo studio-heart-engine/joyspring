@@ -19,7 +19,7 @@ func update_text():
 		var keybind_text_2 = OS.get_scancode_string(globals.keybinds['up'])
 		var keybind_text_3a = OS.get_scancode_string(globals.keybinds['left'])
 		var keybind_text_3b = OS.get_scancode_string(globals.keybinds['right'])
-		self.text = 'Hold ' + keybind_text_1 + ', ' + keybind_text_2 + ', and ' + \
+		self.text = 'Hold ' + keybind_text_1 + ' and ' + keybind_text_2 + ', then press ' + \
 					keybind_text_3a + ' or ' + keybind_text_3b + ' to wall jump.'
 	if action == 'dash':
 		var keybind_text = OS.get_scancode_string(globals.keybinds[action])
