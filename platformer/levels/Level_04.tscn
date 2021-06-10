@@ -1,0 +1,4148 @@
+[gd_scene load_steps=88 format=2]
+
+[ext_resource path="res://graphics/effects/outline-shader.shader" type="Shader" id=1]
+[ext_resource path="res://platformer/Layer.gd" type="Script" id=2]
+[ext_resource path="res://platformer/EndPosition.gd" type="Script" id=3]
+[ext_resource path="res://platformer/Environment.gd" type="Script" id=4]
+[ext_resource path="res://platformer/Platformer.gd" type="Script" id=5]
+[ext_resource path="res://player/Cape.tscn" type="PackedScene" id=7]
+[ext_resource path="res://player/Player.tscn" type="PackedScene" id=8]
+[ext_resource path="res://platformer/Particles2D.gd" type="Script" id=9]
+[ext_resource path="res://graphics/tilesets/blobs_tileset.tres" type="TileSet" id=10]
+[ext_resource path="res://graphics/tilesets/tileset.tres" type="TileSet" id=12]
+[ext_resource path="res://platformer/Joy.tscn" type="PackedScene" id=13]
+[ext_resource path="res://platformer/levelsOld/Level_01.tscn" type="PackedScene" id=14]
+[ext_resource path="res://graphics/effects/white-radial-gradient.png" type="Texture" id=15]
+[ext_resource path="res://graphics/sprites/blobs/Blob.tscn" type="PackedScene" id=16]
+[ext_resource path="res://platformer/BlobTileMap.gd" type="Script" id=19]
+[ext_resource path="res://platformer/TileMap.gd" type="Script" id=20]
+[ext_resource path="res://graphics/effects/circle-transition.png" type="Texture" id=21]
+[ext_resource path="res://graphics/sprites/blobs/evening/blobs5.png" type="Texture" id=22]
+[ext_resource path="res://graphics/environment/evening/stalactites1.png" type="Texture" id=23]
+[ext_resource path="res://graphics/environment/evening/rocks1.png" type="Texture" id=24]
+[ext_resource path="res://graphics/environment/evening/trees1.png" type="Texture" id=25]
+[ext_resource path="res://graphics/sprites/blobs/evening/blobs1.png" type="Texture" id=26]
+[ext_resource path="res://graphics/environment/evening/bushes1.png" type="Texture" id=27]
+[ext_resource path="res://graphics/sprites/blobs/evening/blobs3.png" type="Texture" id=28]
+[ext_resource path="res://graphics/sprites/blobs/evening/blobs2.png" type="Texture" id=29]
+[ext_resource path="res://graphics/sprites/blobs/evening/blobs4.png" type="Texture" id=30]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform sampler2D mask;
+uniform float cutoff: hint_range(0f, 1f);
+uniform float smooth_size: hint_range(0f, 1f);
+
+void fragment() {
+	float value = texture(mask, UV).r;
+	float alpha = smoothstep(cutoff + smooth_size, cutoff, value * (1f - smooth_size) + smooth_size);
+	COLOR = vec4(COLOR.rgb, alpha);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/cutoff = 0.0
+shader_param/smooth_size = 0.1
+shader_param/mask = ExtResource( 21 )
+
+[sub_resource type="Shader" id=6]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform vec4 outline_color : hint_color;
+
+void fragment() {
+	vec2 pixel_size = vec2(1f, 1f) / vec2(textureSize(TEXTURE, 0));
+	if(texture(TEXTURE, UV).a > 0f) {
+		COLOR = texture(TEXTURE, UV);
+	} else {
+		float alpha = 0f;
+		alpha += texture(TEXTURE, UV + vec2(pixel_size.x, 0)).a;
+		alpha += texture(TEXTURE, UV + vec2(-pixel_size.x, 0)).a;
+		alpha += texture(TEXTURE, UV + vec2(0, pixel_size.y)).a;
+		alpha += texture(TEXTURE, UV + vec2(0, -pixel_size.y)).a;
+		COLOR = vec4(outline_color.rgb, clamp(alpha, 0f, 1f));
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=8]
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = SubResource( 6 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=10]
+
+[sub_resource type="ShaderMaterial" id=11]
+shader = SubResource( 6 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=12]
+
+[sub_resource type="ShaderMaterial" id=13]
+shader = SubResource( 6 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=14]
+
+[sub_resource type="ShaderMaterial" id=15]
+shader = SubResource( 6 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=16]
+
+[sub_resource type="ShaderMaterial" id=17]
+
+[sub_resource type="ShaderMaterial" id=18]
+shader = ExtResource( 1 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="Animation" id=20]
+length = 2.0
+loop = true
+step = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.8, 0.8 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -7 ) ]
+}
+
+[sub_resource type="Animation" id=84]
+length = 2.0
+loop = true
+step = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.8, 0.8 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -7 ) ]
+}
+
+[sub_resource type="ShaderMaterial" id=29]
+
+[sub_resource type="ShaderMaterial" id=30]
+
+[sub_resource type="ShaderMaterial" id=31]
+
+[sub_resource type="ShaderMaterial" id=32]
+
+[sub_resource type="ShaderMaterial" id=33]
+
+[sub_resource type="ShaderMaterial" id=34]
+
+[sub_resource type="ShaderMaterial" id=35]
+
+[sub_resource type="ShaderMaterial" id=41]
+shader = SubResource( 6 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=42]
+
+[sub_resource type="ShaderMaterial" id=43]
+shader = SubResource( 6 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=44]
+
+[sub_resource type="ShaderMaterial" id=45]
+shader = SubResource( 6 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=46]
+
+[sub_resource type="ShaderMaterial" id=47]
+shader = SubResource( 6 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=48]
+
+[sub_resource type="ShaderMaterial" id=49]
+shader = SubResource( 6 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=50]
+
+[sub_resource type="ShaderMaterial" id=85]
+
+[sub_resource type="ParticlesMaterial" id=86]
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 2.0
+initial_velocity_random = 0.3
+angular_velocity = 4.57384e-41
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+
+[sub_resource type="ShaderMaterial" id=87]
+shader = ExtResource( 1 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=88]
+
+[sub_resource type="Animation" id=89]
+length = 0.9
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.45, 0.6, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 24, 0, 8, 8 ), Rect2( 32, 0, 8, 8 ), Rect2( 40, 0, 8, 8 ), Rect2( 48, 0, 8, 8 ), Rect2( 56, 0, 8, 8 ) ]
+}
+
+[sub_resource type="Animation" id=90]
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=91]
+length = 0.9
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 0, 0, 8, 8 ), Rect2( 8, 0, 8, 8 ), Rect2( 16, 0, 8, 8 ) ]
+}
+
+[sub_resource type="CircleShape2D" id=92]
+radius = 6.35152
+
+[sub_resource type="Animation" id=93]
+length = 2.0
+loop = true
+step = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.8, 0.8 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -7 ) ]
+}
+
+[sub_resource type="ShaderMaterial" id=51]
+
+[sub_resource type="ShaderMaterial" id=52]
+shader = ExtResource( 1 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="Animation" id=55]
+length = 2.0
+loop = true
+step = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.8, 0.8 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -7 ) ]
+}
+
+[sub_resource type="ShaderMaterial" id=69]
+
+[sub_resource type="ShaderMaterial" id=70]
+
+[sub_resource type="ShaderMaterial" id=71]
+
+[sub_resource type="ShaderMaterial" id=72]
+
+[sub_resource type="ShaderMaterial" id=73]
+
+[sub_resource type="ShaderMaterial" id=74]
+
+[sub_resource type="ShaderMaterial" id=75]
+
+[sub_resource type="Animation" id=76]
+tracks/0/type = "value"
+tracks/0/path = NodePath("Layer0:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, -2, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -1 ), Vector2( 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Layer0:z_index")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 10 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Layer1:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, -2, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, 4 ), Vector2( 0, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Layer1:z_index")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Layer1:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = false
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 0, 0, 0, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Layer0:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = false
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=77]
+tracks/0/type = "value"
+tracks/0/path = NodePath("Layer0:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, 4 ), Vector2( 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Layer0:z_index")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Layer1:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -1 ), Vector2( 0, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Layer1:z_index")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 10 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Layer1:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = false
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Layer0:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = false
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 0, 0, 0, 1 ) ]
+}
+
+[sub_resource type="Gradient" id=78]
+offsets = PoolRealArray( 0, 0.305011, 0.640523, 1 )
+colors = PoolColorArray( 0.27451, 0.27451, 0.27451, 0, 0.470588, 0.470588, 0.470588, 1, 0.470588, 0.470588, 0.470588, 1, 0.27451, 0.27451, 0.27451, 0 )
+
+[sub_resource type="GradientTexture" id=79]
+gradient = SubResource( 78 )
+
+[sub_resource type="ParticlesMaterial" id=80]
+emission_shape = 2
+emission_box_extents = Vector3( 160, 90, 1 )
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 10, 0 )
+initial_velocity = 8.0
+angular_velocity = 4.57384e-41
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color_ramp = SubResource( 79 )
+
+[sub_resource type="Gradient" id=81]
+offsets = PoolRealArray( 0, 0.30719, 0.359477, 0.381264, 0.405229, 0.43573, 1 )
+colors = PoolColorArray( 0.388235, 0.388235, 0.388235, 0, 1, 1, 1, 0.109804, 0.996078, 0.996078, 0.996078, 0.137255, 0.992157, 0.992157, 0.992157, 0.0980392, 0.988235, 0.988235, 0.988235, 0.12549, 0.984314, 0.984314, 0.984314, 0.0941176, 0.937255, 0.937255, 0.937255, 0 )
+
+[sub_resource type="GradientTexture" id=82]
+gradient = SubResource( 81 )
+
+[sub_resource type="ParticlesMaterial" id=83]
+emission_shape = 2
+emission_box_extents = Vector3( 160, 90, 1 )
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 10.0
+angular_velocity = -1.0842e-19
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 0.05
+scale_random = 0.05
+color_ramp = SubResource( 82 )
+
+[node name="Level_04" type="Node2D"]
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_lock_": true
+}
+next_level = ExtResource( 14 )
+float_enabled = false
+
+[node name="Player" parent="." instance=ExtResource( 8 )]
+light_mask = 1
+position = Vector2( 12, 144 )
+z_index = 100
+
+[node name="Light2D" parent="Player" index="2"]
+texture_scale = 0.05
+energy = 0.5
+
+[node name="Camera" parent="Player" index="3"]
+visible = true
+limit_top = 0
+limit_right = 632
+limit_bottom = 240
+
+[node name="Hitbox" parent="Player" index="6"]
+collision_layer = 2147483649
+collision_mask = 30
+
+[node name="ColorRect" parent="Player/RespawnTransition" index="0"]
+material = SubResource( 2 )
+
+[node name="Cape" parent="Player" instance=ExtResource( 7 )]
+
+[node name="Layer0" type="Node2D" parent="."]
+z_index = 10
+script = ExtResource( 2 )
+
+[node name="Blebs" type="Node2D" parent="Layer0"]
+
+[node name="Blobs" type="Node2D" parent="Layer0"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Blob1_01" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 245.708, 4.99908 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_01/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_01/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_02" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 237.632, 37.3781 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_02/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_02/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_03" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 234.082, 48.7082 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_03/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_03/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_04" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 239.159, 58.807 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_04/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_04/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_05" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 236.684, 87.8182 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_05/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_05/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_06" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 244.735, 94.942 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_06/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_06/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_07" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 249.578, 103.872 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_07/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_07/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_08" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 250.708, 111.834 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_08/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_08/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_09" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 243.663, 156.305 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_09/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_09/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_10" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 239.139, 164.272 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_10/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_10/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_11" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 254.475, 200.022 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_11/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_11/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_12" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 253.289, 209.929 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_12/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_12/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_13" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 247.739, 216.809 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_13/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_13/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_14" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 253.108, 225.174 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_14/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_14/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_15" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 426.136, 123.778 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_15/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_15/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_16" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 247.111, -5.90505 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_16/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_16/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_17" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 425.645, 58.7478 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_17/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_17/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_18" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 419.27, 50.6834 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_18/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_18/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_19" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 413.448, 43.222 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_19/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_19/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_20" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 418.53, 10.0987 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_20/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_20/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_21" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 417.994, -5.71024 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_21/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_21/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_22" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 420.803, 1.75518 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_22/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_22/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_23" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 249.163, 235.876 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_23/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_23/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_24" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 429.482, 133.914 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_24/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_24/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_25" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 441.63, 191.283 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_25/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_25/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_26" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 442.679, 239.84 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_26/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_26/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_27" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 88, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_27/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_27/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_28" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 104, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_28/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_28/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_29" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 120, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_29/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_29/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_30" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 136, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_30/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_30/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_31" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 152, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_31/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_31/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_32" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 168, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_32/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_32/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_34" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 184, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_34/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_34/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_35" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 200, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_35/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_35/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_36" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 216, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_36/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_36/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_37" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 232, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_37/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_37/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_38" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 248, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_38/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_38/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_39" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 264, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_39/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_39/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_40" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 280, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_40/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_40/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_41" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 296, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_41/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_41/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_42" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 312, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_42/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_42/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_43" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 328, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_43/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_43/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_44" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 344, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_44/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_44/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_45" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 360, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_45/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_45/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_46" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 376, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_46/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_46/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_47" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 392, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_47/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_47/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_48" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 408, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_48/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_48/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_49" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 424, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_49/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_49/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_50" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 440, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_50/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_50/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_51" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 456, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_51/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_51/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_52" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 472, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_52/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_52/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_53" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 488, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_53/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_53/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_54" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 504, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_54/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_54/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_55" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 520, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_55/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_55/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_56" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 536, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_56/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_56/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_57" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 552, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_57/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_57/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_58" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 568, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_58/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_58/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_59" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 584, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_59/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_59/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_60" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 600, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_60/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_60/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_61" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 616, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_61/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_61/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_62" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 632, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_62/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_62/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_63" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 248, 248 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_63/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_63/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob1_64" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 448, 248 )
+shape = "1"
+
+[node name="Outline" parent="Layer0/Blobs/Blob1_64/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 7 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob1_64/NoiseOffset" index="1"]
+material = SubResource( 8 )
+texture = ExtResource( 26 )
+
+[node name="Blob2_01" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 241.629, 14.4557 )
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_01/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_01/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_02" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 241.492, 69.6135 )
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_02/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_02/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_03" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 239.193, 79.5694 )
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_03/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_03/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_04" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 243.608, 129.694 )
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_04/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_04/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_05" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 241.248, 138.062 )
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_05/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_05/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_06" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 244.895, 147.288 )
+rotation = 1.5708
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_06/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_06/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_07" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 246.397, 190.628 )
+rotation = 1.5708
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_07/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_07/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_08" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 420.984, 115.377 )
+rotation = 1.5708
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_08/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_08/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_09" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 417.519, 105.908 )
+rotation = 1.5708
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_09/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_09/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_10" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 413.328, 98.8363 )
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_10/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_10/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_11" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 418.032, 36.0634 )
+rotation = -1.5708
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_11/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_11/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_12" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 418.481, 26.8474 )
+rotation = -1.5708
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_12/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_12/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_13" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 414.772, 18.5695 )
+rotation = -4.71239
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_13/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_13/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_14" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 424.019, 150.219 )
+rotation = -4.71239
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_14/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_14/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_15" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 425.159, 158.563 )
+rotation = -6.28319
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_15/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_15/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_16" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 438.395, 182.654 )
+rotation = -6.28319
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_16/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_16/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_17" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 438.19, 225.483 )
+rotation = -6.28319
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_17/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_17/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob2_18" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 442.327, 230.837 )
+rotation = -7.85398
+shape = "2"
+
+[node name="Outline" parent="Layer0/Blobs/Blob2_18/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 9 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob2_18/NoiseOffset" index="1"]
+material = SubResource( 10 )
+texture = ExtResource( 29 )
+
+[node name="Blob3_01" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 239.822, 22.7515 )
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_01/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_01/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_02" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 243.47, 115.01 )
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_02/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_02/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_03" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 241.11, 122.949 )
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_03/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_03/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_04" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 245.061, 173.285 )
+rotation = -1.5708
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_04/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_04/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_05" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 248.619, 181.737 )
+rotation = -3.14159
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_05/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_05/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_06" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 418.898, 91.2184 )
+rotation = -3.14159
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_06/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_06/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_07" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 421.275, 84.6665 )
+rotation = -3.14159
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_07/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_07/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_08" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 425.126, 74.6837 )
+rotation = -6.28319
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_08/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_08/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_09" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 422.883, 67.6296 )
+rotation = -4.71239
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_09/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_09/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_10" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 426.533, 142.823 )
+rotation = -6.28319
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_10/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_10/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_11" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 430.349, 165.525 )
+rotation = -7.85398
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_11/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_11/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_12" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 432.391, 174.772 )
+rotation = -7.85398
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_12/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_12/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_13" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 437.708, 200.679 )
+rotation = -9.42478
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_13/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_13/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_14" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 434.134, 208.84 )
+rotation = -9.42478
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_14/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_14/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob3_15" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 435.837, 217.6 )
+rotation = -10.9956
+shape = "3"
+
+[node name="Outline" parent="Layer0/Blobs/Blob3_15/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 11 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob3_15/NoiseOffset" index="1"]
+material = SubResource( 12 )
+texture = ExtResource( 28 )
+
+[node name="Blob4_01" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 239.734, 29.3293 )
+shape = "4"
+
+[node name="Outline" parent="Layer0/Blobs/Blob4_01/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 13 )
+texture = ExtResource( 30 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob4_01/NoiseOffset" index="1"]
+material = SubResource( 14 )
+texture = ExtResource( 30 )
+
+[node name="Blob5_01" parent="Layer0/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 242.578, 34.8403 )
+shape = "5"
+
+[node name="Outline" parent="Layer0/Blobs/Blob5_01/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
+texture = ExtResource( 22 )
+
+[node name="Sprite" parent="Layer0/Blobs/Blob5_01/NoiseOffset" index="1"]
+material = SubResource( 16 )
+texture = ExtResource( 22 )
+
+[node name="Joys" type="Node2D" parent="Layer0"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="SwapJoy_01" parent="Layer0/Joys" instance=ExtResource( 13 )]
+position = Vector2( 204, 136 )
+
+[node name="Offset" parent="Layer0/Joys/SwapJoy_01" index="1"]
+position = Vector2( 0, -4.19255 )
+
+[node name="Particles" parent="Layer0/Joys/SwapJoy_01/Offset" index="0"]
+material = SubResource( 17 )
+
+[node name="Outline" parent="Layer0/Joys/SwapJoy_01/Offset" index="1"]
+material = SubResource( 18 )
+
+[node name="AnimationPlayer2" parent="Layer0/Joys/SwapJoy_01/Offset" index="4"]
+anims/float = SubResource( 20 )
+
+[node name="SwapJoy_02" parent="Layer0/Joys" instance=ExtResource( 13 )]
+position = Vector2( 380, 136 )
+
+[node name="Offset" parent="Layer0/Joys/SwapJoy_02" index="1"]
+position = Vector2( 0, -4.19255 )
+
+[node name="Particles" parent="Layer0/Joys/SwapJoy_02/Offset" index="0"]
+material = SubResource( 17 )
+
+[node name="Outline" parent="Layer0/Joys/SwapJoy_02/Offset" index="1"]
+material = SubResource( 18 )
+
+[node name="AnimationPlayer2" parent="Layer0/Joys/SwapJoy_02/Offset" index="4"]
+anims/float = SubResource( 84 )
+
+[node name="Gravel" type="Node2D" parent="Layer0"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="MovingBlobs" type="Node2D" parent="Layer0"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="MovingPlatforms" type="Node2D" parent="Layer0"]
+z_index = 1
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="TileMap" type="TileMap" parent="Layer0"]
+material = SubResource( 29 )
+z_index = 1
+tile_set = ExtResource( 12 )
+cell_size = Vector2( 8, 8 )
+cell_quadrant_size = 2
+collision_layer = 8
+collision_mask = 19
+format = 1
+tile_data = PoolIntArray( -65538, 0, 0, -65537, 0, 0, -131072, 0, 0, -131071, 0, 0, -131070, 0, 0, -131069, 0, 0, -131068, 0, 0, -131067, 0, 0, -131066, 0, 0, -131065, 0, 0, -131064, 0, 0, -131063, 0, 0, -131062, 0, 0, -131061, 0, 0, -131060, 0, 0, -131059, 0, 0, -131058, 0, 0, -131057, 0, 0, -131056, 0, 0, -131055, 0, 0, -131054, 0, 0, -131053, 0, 0, -131052, 0, 0, -131051, 0, 0, -131050, 0, 0, -131049, 0, 0, -131048, 0, 0, -131047, 0, 0, -131046, 0, 0, -131045, 0, 0, -131044, 0, 0, -131043, 0, 0, -131042, 0, 0, -131041, 0, 0, -131040, 0, 0, -131039, 0, 0, -131038, 0, 0, -131037, 0, 0, -131036, 0, 0, -131035, 0, 0, -131034, 0, 0, -131033, 0, 0, -131032, 0, 0, -131031, 0, 0, -131030, 0, 0, -131029, 0, 0, -131028, 0, 0, -131027, 0, 0, -131026, 0, 0, -131025, 0, 0, -131024, 0, 0, -131023, 0, 0, -131022, 0, 0, -131021, 0, 0, -131020, 0, 0, -131019, 0, 0, -131018, 0, 0, -131017, 0, 0, -131016, 0, 0, -131015, 0, 0, -131014, 0, 0, -131013, 0, 0, -131012, 0, 0, -131011, 0, 0, -131010, 0, 0, -131009, 0, 0, -131008, 0, 0, -131007, 0, 0, -131006, 0, 0, -131005, 0, 0, -131004, 0, 0, -131003, 0, 0, -131002, 0, 0, -131001, 0, 0, -131000, 0, 0, -130999, 0, 0, -130998, 0, 0, -130997, 0, 0, -130996, 0, 0, -130995, 0, 0, -130994, 0, 0, -130993, 0, 0, -130992, 0, 0, -2, 0, 0, -65456, 0, 0, 65534, 0, 0, 80, 0, 0, 131070, 0, 0, 65616, 0, 0, 196606, 0, 0, 131152, 0, 0, 262142, 0, 0, 196688, 0, 0, 327678, 0, 0, 262224, 0, 0, 393214, 0, 0, 327760, 0, 0, 458750, 0, 0, 393296, 0, 0, 524286, 0, 0, 458832, 0, 0, 589822, 0, 0, 524368, 0, 0, 655358, 0, 0, 589904, 0, 0, 720894, 0, 0, 655440, 0, 0, 786430, 0, 0, 720976, 0, 0, 851966, 0, 0, 786512, 0, 0, 917502, 0, 0, 852048, 0, 0, 983038, 0, 0, 917584, 0, 0, 1048574, 0, 0, 983120, 0, 0, 1114110, 0, 0, 1048656, 0, 0, 1179646, 0, 0, 1114192, 0, 0, 1245182, 0, 327681, 1245183, 0, 131073, 1179648, 0, 196608, 1179649, 0, 196608, 1179650, 0, 327683, 1179728, 0, 0, 1310718, 0, 131076, 1310719, 0, 8, 1245184, 0, 8, 1245185, 0, 8, 1245186, 0, 7, 1245192, 0, 262145, 1245193, 0, 65536, 1245194, 0, 65537, 1245195, 0, 65537, 1245196, 0, 327682, 1245264, 0, 0, 1376254, 0, 196613, 1376255, 0, 393225, 1310720, 0, 8, 1310721, 0, 8, 1310722, 0, 393221, 1310723, 0, 196608, 1310724, 0, 196608, 1310725, 0, 196609, 1310726, 0, 65537, 1310727, 0, 131073, 1310728, 0, 393223, 1310729, 0, 131080, 1310730, 0, 196616, 1310731, 0, 262153, 1310732, 0, 7, 1310800, 0, 0, 1441790, 0, 131077, 1441791, 0, 8, 1376256, 0, 8, 1376257, 0, 8, 1376258, 0, 8, 1376259, 0, 8, 1376260, 0, 8, 1376261, 0, 8, 1376262, 0, 8, 1376263, 0, 196617, 1376264, 0, 327689, 1376265, 0, 8, 1376266, 0, 8, 1376267, 0, 8, 1376268, 0, 65540, 1376336, 0, 0, 1507326, 0, 131078, 1507327, 0, 8, 1441792, 0, 327688, 1441793, 0, 8, 1441794, 0, 8, 1441795, 0, 8, 1441796, 0, 8, 1441797, 0, 8, 1441798, 0, 8, 1441799, 0, 196617, 1441800, 0, 8, 1441801, 0, 8, 1441802, 0, 8, 1441803, 0, 262149, 1441804, 0, 393219, 1441872, 0, 0, 1572862, 0, 131079, 1572863, 0, 8, 1507328, 0, 8, 1507329, 0, 8, 1507330, 0, 8, 1507331, 0, 8, 1507332, 0, 8, 1507333, 0, 8, 1507334, 0, 8, 1507335, 0, 8, 1507336, 0, 8, 1507337, 0, 8, 1507338, 0, 262148, 1507339, 0, 458755, 1507408, 0, 0, 1638398, 0, 196615, 1638399, 0, 8, 1572864, 0, 8, 1572865, 0, 8, 1572866, 0, 8, 1572867, 0, 8, 1572868, 0, 8, 1572869, 0, 8, 1572870, 0, 131081, 1572871, 0, 8, 1572872, 0, 8, 1572873, 0, 8, 1572874, 0, 4, 1572944, 0, 0, 1703934, 0, 131077, 1703935, 0, 8, 1638400, 0, 8, 1638401, 0, 8, 1638402, 0, 8, 1638403, 0, 8, 1638404, 0, 8, 1638405, 0, 8, 1638406, 0, 8, 1638407, 0, 8, 1638408, 0, 8, 1638409, 0, 8, 1638410, 0, 7, 1638480, 0, 0, 1769470, 0, 196613, 1769471, 0, 8, 1703936, 0, 8, 1703937, 0, 8, 1703938, 0, 8, 1703939, 0, 262153, 1703940, 0, 8, 1703941, 0, 8, 1703942, 0, 8, 1703943, 0, 8, 1703944, 0, 8, 1703945, 0, 8, 1703946, 0, 4, 1704016, 0, 0, 1835006, 0, 196614, 1835007, 0, 8, 1769472, 0, 8, 1769473, 0, 8, 1769474, 0, 8, 1769475, 0, 8, 1769476, 0, 8, 1769477, 0, 8, 1769478, 0, 8, 1769479, 0, 8, 1769480, 0, 8, 1769481, 0, 8, 1769482, 0, 4, 1769552, 0, 0, 1900542, 0, 131079, 1900543, 0, 327689, 1835008, 0, 8, 1835009, 0, 8, 1835010, 0, 8, 1835011, 0, 8, 1835012, 0, 8, 1835013, 0, 8, 1835014, 0, 8, 1835015, 0, 196616, 1835016, 0, 8, 1835017, 0, 8, 1835018, 0, 65542, 1835088, 0, 0, 1966078, 0, 131077, 1966079, 0, 8, 1900544, 0, 8, 1900545, 0, 262152, 1900546, 0, 8, 1900547, 0, 196616, 1900548, 0, 8, 1900549, 0, 8, 1900550, 0, 458760, 1900551, 0, 8, 1900552, 0, 8, 1900553, 0, 8, 1900554, 0, 65542, 1900624, 0, 0, 2031614, 0, 131076, 2031615, 0, 8, 1966080, 0, 8, 1966081, 0, 8, 1966082, 0, 8, 1966083, 0, 8, 1966084, 0, 8, 1966085, 0, 8, 1966086, 0, 8, 1966087, 0, 8, 1966088, 0, 8, 1966089, 0, 8, 1966090, 0, 5, 1966160, 0, 0, 2097150, 0, 131076, 2097151, 0, 8, 2031616, 0, 8, 2031617, 0, 8, 2031618, 0, 8, 2031619, 0, 458761, 2031620, 0, 8, 2031621, 0, 8, 2031622, 0, 8, 2031623, 0, 8, 2031624, 0, 8, 2031625, 0, 8, 2031626, 0, 65542, 2031696, 0, 0, 2162686, 0, 458753, 2162687, 0, 65538, 2097152, 0, 196611, 2097153, 0, 65539, 2097154, 0, 131075, 2097155, 0, 196610, 2097156, 0, 2, 2097157, 0, 196610, 2097158, 0, 65538, 2097159, 0, 196611, 2097160, 0, 131074, 2097161, 0, 65539, 2097162, 0, 393218, 2097163, 0, 0, 2097164, 0, 0, 2097165, 0, 0, 2097166, 0, 0, 2097167, 0, 0, 2097168, 0, 0, 2097169, 0, 0, 2097170, 0, 0, 2097171, 0, 0, 2097172, 0, 0, 2097173, 0, 0, 2097174, 0, 0, 2097175, 0, 0, 2097176, 0, 0, 2097177, 0, 0, 2097178, 0, 0, 2097179, 0, 0, 2097180, 0, 0, 2097181, 0, 0, 2097182, 0, 0, 2097183, 0, 0, 2097184, 0, 0, 2097185, 0, 0, 2097186, 0, 0, 2097187, 0, 0, 2097188, 0, 0, 2097189, 0, 0, 2097190, 0, 0, 2097191, 0, 0, 2097192, 0, 0, 2097193, 0, 0, 2097194, 0, 0, 2097195, 0, 0, 2097196, 0, 0, 2097197, 0, 0, 2097198, 0, 0, 2097199, 0, 0, 2097200, 0, 0, 2097201, 0, 0, 2097202, 0, 0, 2097203, 0, 0, 2097204, 0, 0, 2097205, 0, 0, 2097206, 0, 0, 2097207, 0, 0, 2097208, 0, 0, 2097209, 0, 0, 2097210, 0, 0, 2097211, 0, 0, 2097212, 0, 0, 2097213, 0, 0, 2097214, 0, 0, 2097215, 0, 0, 2097216, 0, 0, 2097217, 0, 0, 2097218, 0, 0, 2097219, 0, 0, 2097220, 0, 0, 2097221, 0, 0, 2097222, 0, 0, 2097223, 0, 0, 2097224, 0, 0, 2097225, 0, 0, 2097226, 0, 0, 2097227, 0, 0, 2097228, 0, 0, 2097229, 0, 0, 2097230, 0, 0, 2097231, 0, 0, 2097232, 0, 0 )
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_bone_": true,
+"_edit_lock_": true
+}
+
+[node name="VineTileMap" type="TileMap" parent="Layer0"]
+material = SubResource( 30 )
+z_index = 1
+format = 1
+
+[node name="BlobTileMap" type="TileMap" parent="Layer0"]
+material = SubResource( 31 )
+tile_set = ExtResource( 10 )
+cell_size = Vector2( 4, 4 )
+cell_quadrant_size = 2
+format = 1
+tile_data = PoolIntArray( 1572865, 1, 0, 1572866, 1, 0, 1572867, 1, 0, 1572868, 1, 0, 1572869, 1, 0, 1638401, 1, 0, 1638402, 1, 0, 1638403, 1, 0, 1638404, 1, 0, 1703939, 1, 0, 1703940, 1, 0, 3669697, 0, 0 )
+script = ExtResource( 19 )
+
+[node name="Environment" type="Node2D" parent="Layer0"]
+visible = false
+z_index = -10
+script = ExtResource( 4 )
+
+[node name="Bushes1" type="TextureRect" parent="Layer0/Environment"]
+material = SubResource( 32 )
+margin_left = 12.0
+margin_top = 156.0
+margin_right = 126.0
+margin_bottom = 196.0
+texture = ExtResource( 27 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Rocks1" type="TextureRect" parent="Layer0/Environment"]
+material = SubResource( 33 )
+margin_left = 152.0
+margin_top = 156.0
+margin_right = 224.0
+margin_bottom = 196.0
+texture = ExtResource( 24 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Stalactites1" type="TextureRect" parent="Layer0/Environment"]
+material = SubResource( 34 )
+margin_left = 84.0
+margin_top = 88.0
+margin_right = 92.0
+margin_bottom = 104.0
+texture = ExtResource( 23 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Trees1" type="TextureRect" parent="Layer0/Environment"]
+material = SubResource( 35 )
+margin_left = 228.0
+margin_top = -24.0
+margin_right = 324.0
+margin_bottom = 72.0
+texture = ExtResource( 25 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Layer1" type="Node2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="Blebs" type="Node2D" parent="Layer1"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Blobs" type="Node2D" parent="Layer1"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Blob1_01" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 330.505, -7.59498 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_01/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_01/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_01" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_02" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 334.271, 19.2405 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_02/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_02/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_02" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_03" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 337.567, 27.244 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_03/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_03/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_03" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_04" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 334.044, 60.7085 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_04/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_04/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_04" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_05" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 343.027, 97.0131 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_05/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_05/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_05" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_06" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 344.005, 106.602 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_06/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_06/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_06" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_07" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 339.7, 111.69 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_07/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_07/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_07" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_08" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 337.938, 142.087 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_08/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_08/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_08" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_09" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 338.819, 149.355 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_09/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_09/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_09" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_10" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 328.429, 176.834 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_10/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_10/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_10" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_11" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 330.629, 186.088 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_11/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_11/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_11" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_12" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 345.395, 206.792 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_12/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_12/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_12" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_13" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 341.651, 233.664 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_13/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_13/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_13" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_14" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 338.567, 239.611 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_14/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_14/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_14" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_15" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 177.062, 238.428 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_15/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_15/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_15" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_16" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 181.499, 231.033 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_16/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_16/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_16" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_17" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 175.583, 220.976 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_17/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_17/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_17" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_18" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 159.314, 127.208 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_18/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_18/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_18" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_19" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 163.751, 118.038 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_19/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_19/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_19" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_20" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 170.555, 97.6281 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_20/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_20/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_20" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_21" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 168.188, 14.2132 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_21/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_21/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_21" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_22" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 169.963, 5.63508 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_22/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_22/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_22" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_23" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 167.597, -5.01363 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_23/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_23/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_23" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_24" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 0, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_24/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_24/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_24" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_25" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 16, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_25/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_25/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_25" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_26" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 32, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_26/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_26/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_26" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_27" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 48, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_27/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_27/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_27" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_28" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 64, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_28/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_28/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_28" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_29" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 80, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_29/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_29/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_29" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_30" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 96, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_30/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_30/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_30" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_31" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 152, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_31/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_31/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_31" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_32" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 168, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_32/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_32/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_32" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_33" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 184, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_33/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_33/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_33" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_34" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 200, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_34/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_34/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_34" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_35" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 216, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_35/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_35/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_35" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_36" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 232, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_36/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_36/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_36" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_37" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 248, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_37/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_37/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_37" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_38" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 264, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_38/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_38/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_38" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_39" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 280, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_39/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_39/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_39" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_40" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 296, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_40/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_40/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_40" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_41" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 312, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_41/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_41/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_41" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_42" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 328, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_42/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_42/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_42" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_43" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 344, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_43/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_43/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_43" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_44" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 360, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_44/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_44/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_44" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_45" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 376, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_45/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_45/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_45" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_46" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 392, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_46/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_46/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_46" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_47" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 408, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_47/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_47/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_47" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_48" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 424, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_48/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_48/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_48" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_49" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 440, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_49/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_49/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_49" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_50" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 456, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_50/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_50/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_50" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_51" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 472, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_51/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_51/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_51" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_52" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 488, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_52/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_52/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_52" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_53" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 504, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_53/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_53/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_53" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_54" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 520, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_54/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_54/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_54" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_55" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 536, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_55/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_55/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_55" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_56" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 552, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_56/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_56/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_56" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_57" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 568, 256 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_57/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_57/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_57" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_58" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 176, 248 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_58/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_58/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_58" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob1_59" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 336, 248 )
+shape = "1"
+
+[node name="Outline" parent="Layer1/Blobs/Blob1_59/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 41 )
+texture = ExtResource( 26 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob1_59/NoiseOffset" index="1"]
+material = SubResource( 42 )
+texture = ExtResource( 26 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob1_59" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_01" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 331.631, 3.45466 )
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_01/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_01/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_01" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_02" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 340.859, 36.4264 )
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_02/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_02/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_02" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_03" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 334.738, 43.4883 )
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_03/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_03/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_03" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_04" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 335.306, 81.7499 )
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_04/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_04/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_04" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_05" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 338.633, 90.3606 )
+rotation = -3.14159
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_05/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_05/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_05" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_06" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 341.496, 158.862 )
+rotation = -3.14159
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_06/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_06/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_06" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_07" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 337.311, 166.351 )
+rotation = -4.71239
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_07/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_07/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_07" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_08" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 336.619, 174.009 )
+rotation = -3.14159
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_08/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_08/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_08" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_09" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 347.192, 216.078 )
+rotation = -3.14159
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_09/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_09/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_09" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_10" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 170.305, 212.529 )
+rotation = -3.14159
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_10/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_10/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_10" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_11" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 175.038, 206.613 )
+rotation = -3.14159
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_11/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_11/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_11" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_12" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 175.334, 196.852 )
+rotation = -4.71239
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_12/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_12/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_12" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_13" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 171.193, 186.795 )
+rotation = -4.71239
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_13/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_13/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_13" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_14" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 166.46, 178.216 )
+rotation = -4.71239
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_14/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_14/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_14" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_15" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 172.376, 172.3 )
+rotation = -4.71239
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_15/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_15/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_15" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_16" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 173.855, 162.539 )
+rotation = -4.71239
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_16/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_16/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_16" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_17" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 172.376, 87.1108 )
+rotation = -4.71239
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_17/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_17/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_17" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_18" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 168.235, 77.6452 )
+rotation = -4.71239
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_18/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_18/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_18" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_19" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 168.53, 68.4755 )
+rotation = -7.85398
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_19/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_19/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_19" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_20" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 170.897, 59.01 )
+rotation = -6.28319
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_20/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_20/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_20" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob2_21" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 168.53, 49.2487 )
+rotation = -6.28319
+shape = "2"
+
+[node name="Outline" parent="Layer1/Blobs/Blob2_21/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 43 )
+texture = ExtResource( 29 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob2_21/NoiseOffset" index="1"]
+material = SubResource( 44 )
+texture = ExtResource( 29 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob2_21" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_01" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 330.027, 11.7077 )
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_01/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_01/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_01" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_02" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 340.399, 54.5657 )
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_02/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_02/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_02" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_03" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 329.44, 67.0905 )
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_03/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_03/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_03" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_04" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 334.528, 72.9614 )
+rotation = -1.5708
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_04/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_04/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_04" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_05" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 344.03, 118.166 )
+rotation = -1.5708
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_05/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_05/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_05" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_06" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 345.132, 126.756 )
+rotation = -3.14159
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_06/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_06/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_06" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_07" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 343.59, 134.245 )
+rotation = -3.14159
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_07/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_07/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_07" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_08" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 336.29, 193.444 )
+rotation = -4.71239
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_08/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_08/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_08" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_09" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 341.576, 199.612 )
+rotation = -4.71239
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_09/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_09/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_09" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_10" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 343.779, 225.382 )
+rotation = -3.14159
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_10/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_10/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_10" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_11" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 173.4, 156.461 )
+rotation = -3.14159
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_11/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_11/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_11" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_12" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 171.921, 148.475 )
+rotation = -4.71239
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_12/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_12/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_12" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_13" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 167.188, 142.263 )
+rotation = -4.71239
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_13/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_13/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_13" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_14" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 163.047, 134.276 )
+rotation = -4.71239
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_14/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_14/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_14" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_15" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 167.484, 106.767 )
+rotation = -6.28319
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_15/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_15/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_15" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_16" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 168.075, 40.2129 )
+rotation = -6.28319
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_16/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_16/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_16" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_17" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 171.921, 31.6347 )
+rotation = -6.28319
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_17/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_17/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_17" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob3_18" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 172.808, 22.1692 )
+rotation = -7.85398
+shape = "3"
+
+[node name="Outline" parent="Layer1/Blobs/Blob3_18/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 45 )
+texture = ExtResource( 28 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob3_18/NoiseOffset" index="1"]
+material = SubResource( 46 )
+texture = ExtResource( 28 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob3_18" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob4_01" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 334.967, 10.0581 )
+shape = "4"
+
+[node name="Outline" parent="Layer1/Blobs/Blob4_01/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 47 )
+texture = ExtResource( 30 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob4_01/NoiseOffset" index="1"]
+material = SubResource( 48 )
+texture = ExtResource( 30 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob4_01" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob4_02" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 337.707, 49.5893 )
+shape = "4"
+
+[node name="Outline" parent="Layer1/Blobs/Blob4_02/NoiseOffset" index="0"]
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 47 )
+texture = ExtResource( 30 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob4_02/NoiseOffset" index="1"]
+material = SubResource( 48 )
+texture = ExtResource( 30 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob4_02" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Blob5_01" parent="Layer1/Blobs" instance=ExtResource( 16 )]
+position = Vector2( 334.728, 36.8936 )
+shape = "5"
+
+[node name="Outline" parent="Layer1/Blobs/Blob5_01/NoiseOffset" index="0"]
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 49 )
+texture = ExtResource( 22 )
+
+[node name="Sprite" parent="Layer1/Blobs/Blob5_01/NoiseOffset" index="1"]
+material = SubResource( 50 )
+texture = ExtResource( 22 )
+
+[node name="Hitbox" parent="Layer1/Blobs/Blob5_01" index="1"]
+collision_layer = 64
+collision_mask = 32
+
+[node name="Joys" type="Node2D" parent="Layer1"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Joy_01" parent="Layer1/Joys" instance=ExtResource( 13 )]
+position = Vector2( 468, 132 )
+
+[node name="Particles" parent="Layer1/Joys/Joy_01/Offset" index="0"]
+material = SubResource( 85 )
+process_material = SubResource( 86 )
+
+[node name="Outline" parent="Layer1/Joys/Joy_01/Offset" index="1"]
+material = SubResource( 87 )
+
+[node name="Sprite" parent="Layer1/Joys/Joy_01/Offset/AnimatedSprite" index="0"]
+material = SubResource( 88 )
+
+[node name="AnimationPlayer" parent="Layer1/Joys/Joy_01/Offset/AnimatedSprite" index="1"]
+anims/collect1 = SubResource( 89 )
+anims/fade_out = SubResource( 90 )
+anims/float = SubResource( 91 )
+
+[node name="Hitbox" parent="Layer1/Joys/Joy_01/Offset" index="3"]
+collision_layer = 128
+collision_mask = 32
+
+[node name="CollisionShape2D" parent="Layer1/Joys/Joy_01/Offset/Hitbox" index="0"]
+shape = SubResource( 92 )
+
+[node name="AnimationPlayer2" parent="Layer1/Joys/Joy_01/Offset" index="4"]
+anims/float = SubResource( 93 )
+
+[node name="SwapJoy_01" parent="Layer1/Joys" instance=ExtResource( 13 )]
+position = Vector2( 292, 132 )
+
+[node name="Particles" parent="Layer1/Joys/SwapJoy_01/Offset" index="0"]
+material = SubResource( 51 )
+
+[node name="Outline" parent="Layer1/Joys/SwapJoy_01/Offset" index="1"]
+material = SubResource( 52 )
+
+[node name="Hitbox" parent="Layer1/Joys/SwapJoy_01/Offset" index="3"]
+collision_layer = 128
+collision_mask = 32
+
+[node name="AnimationPlayer2" parent="Layer1/Joys/SwapJoy_01/Offset" index="4"]
+anims/float = SubResource( 55 )
+
+[node name="Gravel" type="Node2D" parent="Layer1"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="MovingBlobs" type="Node2D" parent="Layer1"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="MovingPlatforms" type="Node2D" parent="Layer1"]
+z_index = 1
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="TileMap" type="TileMap" parent="Layer1"]
+material = SubResource( 69 )
+z_index = 1
+tile_set = ExtResource( 12 )
+cell_size = Vector2( 8, 8 )
+cell_quadrant_size = 2
+collision_layer = 256
+collision_mask = 608
+format = 1
+tile_data = PoolIntArray( -65538, 0, 0, -65537, 0, 0, -131072, 0, 0, -131071, 0, 0, -131070, 0, 0, -131069, 0, 0, -131068, 0, 0, -131067, 0, 0, -131066, 0, 0, -131065, 0, 0, -131064, 0, 0, -131063, 0, 0, -131062, 0, 0, -131061, 0, 0, -131060, 0, 0, -131059, 0, 0, -131058, 0, 0, -131057, 0, 0, -131056, 0, 0, -131055, 0, 0, -131054, 0, 0, -131053, 0, 0, -131052, 0, 0, -131051, 0, 0, -131050, 0, 0, -131049, 0, 0, -131048, 0, 0, -131047, 0, 0, -131046, 0, 0, -131045, 0, 0, -131044, 0, 0, -131043, 0, 0, -131042, 0, 0, -131041, 0, 0, -131040, 0, 0, -131039, 0, 0, -131038, 0, 0, -131037, 0, 0, -131036, 0, 0, -131035, 0, 0, -131034, 0, 0, -131033, 0, 0, -131032, 0, 0, -131031, 0, 0, -131030, 0, 0, -131029, 0, 0, -131028, 0, 0, -131027, 0, 0, -131026, 0, 0, -131025, 0, 0, -131024, 0, 0, -131023, 0, 0, -131022, 0, 0, -131021, 0, 0, -131020, 0, 0, -131019, 0, 0, -131018, 0, 0, -131017, 0, 0, -131016, 0, 0, -131015, 0, 0, -131014, 0, 0, -131013, 0, 0, -131012, 0, 0, -131011, 0, 0, -131010, 0, 0, -131009, 0, 0, -131008, 0, 0, -131007, 0, 0, -131006, 0, 0, -131005, 0, 0, -131004, 0, 0, -131003, 0, 0, -131002, 0, 0, -131001, 0, 0, -131000, 0, 0, -130999, 0, 0, -130998, 0, 0, -130997, 0, 0, -130996, 0, 0, -130995, 0, 0, -130994, 0, 0, -130993, 0, 0, -130992, 0, 0, -2, 0, 0, -65456, 0, 0, 65534, 0, 0, 80, 0, 0, 131070, 0, 0, 65616, 0, 0, 196606, 0, 0, 131152, 0, 0, 262142, 0, 0, 196688, 0, 0, 327678, 0, 0, 262224, 0, 0, 393214, 0, 0, 327760, 0, 0, 458750, 0, 0, 393296, 0, 0, 524286, 0, 0, 458832, 0, 0, 589822, 0, 0, 524361, 0, 327681, 524362, 0, 1, 524363, 0, 196608, 524364, 0, 131073, 524365, 0, 196609, 524366, 0, 196608, 524367, 0, 131072, 524368, 0, 327683, 655358, 0, 0, 589893, 0, 262145, 589894, 0, 1, 589895, 0, 131072, 589896, 0, 131072, 589897, 0, 458758, 589898, 0, 8, 589899, 0, 8, 589900, 0, 8, 589901, 0, 8, 589902, 0, 8, 589903, 0, 8, 589904, 0, 5, 720894, 0, 0, 655428, 0, 262144, 655429, 0, 393222, 655430, 0, 8, 655431, 0, 8, 655432, 0, 8, 655433, 0, 8, 655434, 0, 8, 655435, 0, 8, 655436, 0, 8, 655437, 0, 8, 655438, 0, 8, 655439, 0, 8, 655440, 0, 65541, 786430, 0, 0, 720964, 0, 196615, 720965, 0, 8, 720966, 0, 8, 720967, 0, 8, 720968, 0, 8, 720969, 0, 8, 720970, 0, 8, 720971, 0, 8, 720972, 0, 131081, 720973, 0, 8, 720974, 0, 196617, 720975, 0, 8, 720976, 0, 6, 851966, 0, 0, 786500, 0, 196615, 786501, 0, 8, 786502, 0, 8, 786503, 0, 8, 786504, 0, 393224, 786505, 0, 8, 786506, 0, 8, 786507, 0, 8, 786508, 0, 8, 786509, 0, 196616, 786510, 0, 8, 786511, 0, 8, 786512, 0, 65542, 917502, 0, 0, 852036, 0, 458753, 852037, 0, 262150, 852038, 0, 8, 852039, 0, 8, 852040, 0, 8, 852041, 0, 8, 852042, 0, 8, 852043, 0, 8, 852044, 0, 8, 852045, 0, 8, 852046, 0, 8, 852047, 0, 8, 852048, 0, 5, 983038, 0, 0, 917573, 0, 196612, 917574, 0, 458761, 917575, 0, 8, 917576, 0, 8, 917577, 0, 131080, 917578, 0, 8, 917579, 0, 8, 917580, 0, 8, 917581, 0, 8, 917582, 0, 8, 917583, 0, 131080, 917584, 0, 65541, 1048574, 0, 0, 983109, 0, 393217, 983110, 0, 65538, 983111, 0, 262151, 983112, 0, 8, 983113, 0, 8, 983114, 0, 8, 983115, 0, 8, 983116, 0, 8, 983117, 0, 8, 983118, 0, 8, 983119, 0, 8, 983120, 0, 4, 1114110, 0, 0, 1048647, 0, 131076, 1048648, 0, 8, 1048649, 0, 8, 1048650, 0, 327689, 1048651, 0, 8, 1048652, 0, 8, 1048653, 0, 8, 1048654, 0, 8, 1048655, 0, 8, 1048656, 0, 65541, 1179646, 0, 0, 1114183, 0, 131078, 1114184, 0, 8, 1114185, 0, 8, 1114186, 0, 8, 1114187, 0, 327688, 1114188, 0, 8, 1114189, 0, 8, 1114190, 0, 8, 1114191, 0, 8, 1114192, 0, 65540, 1245182, 0, 0, 1179719, 0, 131076, 1179720, 0, 8, 1179721, 0, 8, 1179722, 0, 8, 1179723, 0, 8, 1179724, 0, 196616, 1179725, 0, 8, 1179726, 0, 8, 1179727, 0, 8, 1179728, 0, 65543, 1310718, 0, 0, 1245255, 0, 131078, 1245256, 0, 8, 1245257, 0, 327689, 1245258, 0, 8, 1245259, 0, 8, 1245260, 0, 8, 1245261, 0, 8, 1245262, 0, 8, 1245263, 0, 8, 1245264, 0, 65540, 1376254, 0, 0, 1310791, 0, 131079, 1310792, 0, 8, 1310793, 0, 8, 1310794, 0, 8, 1310795, 0, 8, 1310796, 0, 458761, 1310797, 0, 8, 1310798, 0, 8, 1310799, 0, 8, 1310800, 0, 5, 1441790, 0, 0, 1376327, 0, 393217, 1376328, 0, 262151, 1376329, 0, 196617, 1376330, 0, 8, 1376331, 0, 8, 1376332, 0, 8, 1376333, 0, 8, 1376334, 0, 8, 1376335, 0, 8, 1376336, 0, 7, 1507326, 0, 0, 1441864, 0, 131077, 1441865, 0, 8, 1441866, 0, 393224, 1441867, 0, 327689, 1441868, 0, 8, 1441869, 0, 8, 1441870, 0, 8, 1441871, 0, 8, 1441872, 0, 65543, 1572862, 0, 0, 1507400, 0, 131076, 1507401, 0, 8, 1507402, 0, 8, 1507403, 0, 8, 1507404, 0, 8, 1507405, 0, 8, 1507406, 0, 8, 1507407, 0, 8, 1507408, 0, 65543, 1638398, 0, 0, 1572936, 0, 196614, 1572937, 0, 8, 1572938, 0, 8, 1572939, 0, 393225, 1572940, 0, 8, 1572941, 0, 8, 1572942, 0, 8, 1572943, 0, 8, 1572944, 0, 4, 1703934, 0, 0, 1638413, 0, 262145, 1638414, 0, 0, 1638415, 0, 65537, 1638416, 0, 131073, 1638417, 0, 262146, 1638472, 0, 196614, 1638473, 0, 8, 1638474, 0, 262152, 1638475, 0, 8, 1638476, 0, 8, 1638477, 0, 8, 1638478, 0, 8, 1638479, 0, 8, 1638480, 0, 5, 1769470, 0, 0, 1703949, 0, 196614, 1703950, 0, 8, 1703951, 0, 8, 1703952, 0, 8, 1703953, 0, 4, 1704008, 0, 131079, 1704009, 0, 8, 1704010, 0, 327688, 1704011, 0, 8, 1704012, 0, 8, 1704013, 0, 8, 1704014, 0, 8, 1704015, 0, 8, 1704016, 0, 65543, 1835006, 0, 0, 1769485, 0, 131078, 1769486, 0, 262152, 1769487, 0, 8, 1769488, 0, 8, 1769489, 0, 65541, 1769544, 0, 131077, 1769545, 0, 196616, 1769546, 0, 8, 1769547, 0, 8, 1769548, 0, 8, 1769549, 0, 8, 1769550, 0, 8, 1769551, 0, 327688, 1769552, 0, 65541, 1900542, 0, 0, 1835021, 0, 131077, 1835022, 0, 8, 1835023, 0, 8, 1835024, 0, 8, 1835025, 0, 7, 1835080, 0, 196613, 1835081, 0, 8, 1835082, 0, 131081, 1835083, 0, 196616, 1835084, 0, 8, 1835085, 0, 8, 1835086, 0, 8, 1835087, 0, 8, 1835088, 0, 7, 1966078, 0, 0, 1900557, 0, 131077, 1900558, 0, 327688, 1900559, 0, 8, 1900560, 0, 8, 1900561, 0, 4, 1900616, 0, 196614, 1900617, 0, 8, 1900618, 0, 8, 1900619, 0, 8, 1900620, 0, 8, 1900621, 0, 8, 1900622, 0, 458760, 1900623, 0, 393225, 1900624, 0, 65543, 2031614, 0, 0, 1966093, 0, 196615, 1966094, 0, 8, 1966095, 0, 8, 1966096, 0, 8, 1966097, 0, 6, 1966152, 0, 196612, 1966153, 0, 393224, 1966154, 0, 8, 1966155, 0, 8, 1966156, 0, 8, 1966157, 0, 8, 1966158, 0, 8, 1966159, 0, 8, 1966160, 0, 65542, 2097150, 0, 0, 2031629, 0, 131079, 2031630, 0, 8, 2031631, 0, 8, 2031632, 0, 8, 2031633, 0, 65543, 2031688, 0, 131076, 2031689, 0, 8, 2031690, 0, 8, 2031691, 0, 8, 2031692, 0, 8, 2031693, 0, 8, 2031694, 0, 8, 2031695, 0, 8, 2031696, 0, 6, 2162686, 0, 0, 2162687, 0, 0, 2097152, 0, 0, 2097153, 0, 0, 2097154, 0, 0, 2097155, 0, 0, 2097156, 0, 0, 2097157, 0, 0, 2097158, 0, 0, 2097159, 0, 0, 2097160, 0, 0, 2097161, 0, 0, 2097162, 0, 0, 2097163, 0, 0, 2097164, 0, 0, 2097165, 0, 458753, 2097166, 0, 2, 2097167, 0, 196610, 2097168, 0, 2, 2097169, 0, 393218, 2097170, 0, 0, 2097171, 0, 0, 2097172, 0, 0, 2097173, 0, 0, 2097174, 0, 0, 2097175, 0, 0, 2097176, 0, 0, 2097177, 0, 0, 2097178, 0, 0, 2097179, 0, 0, 2097180, 0, 0, 2097181, 0, 0, 2097182, 0, 0, 2097183, 0, 0, 2097184, 0, 0, 2097185, 0, 0, 2097186, 0, 0, 2097187, 0, 0, 2097188, 0, 0, 2097189, 0, 0, 2097190, 0, 0, 2097191, 0, 0, 2097192, 0, 0, 2097193, 0, 0, 2097194, 0, 0, 2097195, 0, 0, 2097196, 0, 0, 2097197, 0, 0, 2097198, 0, 0, 2097199, 0, 0, 2097200, 0, 0, 2097201, 0, 0, 2097202, 0, 0, 2097203, 0, 0, 2097204, 0, 0, 2097205, 0, 0, 2097206, 0, 0, 2097207, 0, 0, 2097208, 0, 0, 2097209, 0, 0, 2097210, 0, 0, 2097211, 0, 0, 2097212, 0, 0, 2097213, 0, 0, 2097214, 0, 0, 2097215, 0, 0, 2097216, 0, 0, 2097217, 0, 0, 2097218, 0, 0, 2097219, 0, 0, 2097220, 0, 0, 2097221, 0, 0, 2097222, 0, 0, 2097223, 0, 0, 2097224, 0, 458752, 2097225, 0, 196611, 2097226, 0, 196610, 2097227, 0, 196611, 2097228, 0, 131075, 2097229, 0, 196610, 2097230, 0, 196610, 2097231, 0, 3, 2097232, 0, 458754 )
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_bone_": true,
+"_edit_lock_": true
+}
+
+[node name="VineTileMap" type="TileMap" parent="Layer1"]
+material = SubResource( 70 )
+z_index = 1
+format = 1
+
+[node name="BlobTileMap" type="TileMap" parent="Layer1"]
+material = SubResource( 71 )
+tile_set = ExtResource( 10 )
+cell_size = Vector2( 4, 4 )
+cell_quadrant_size = 2
+format = 1
+tile_data = PoolIntArray( 1572865, 1, 0, 1572866, 1, 0, 1572867, 1, 0, 1572868, 1, 0, 1572869, 1, 0, 1638401, 1, 0, 1638402, 1, 0, 1638403, 1, 0, 1638404, 1, 0, 1703939, 1, 0, 1703940, 1, 0, 3669697, 0, 0 )
+script = ExtResource( 19 )
+
+[node name="Environment" type="Node2D" parent="Layer1"]
+visible = false
+z_index = -10
+script = ExtResource( 4 )
+
+[node name="Bushes1" type="TextureRect" parent="Layer1/Environment"]
+material = SubResource( 72 )
+margin_left = 212.0
+margin_top = 108.0
+margin_right = 326.0
+margin_bottom = 148.0
+texture = ExtResource( 27 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Rocks1" type="TextureRect" parent="Layer1/Environment"]
+material = SubResource( 73 )
+margin_left = 36.0
+margin_top = 116.0
+margin_right = 108.0
+margin_bottom = 156.0
+texture = ExtResource( 24 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Stalactites1" type="TextureRect" parent="Layer1/Environment"]
+material = SubResource( 74 )
+margin_left = 12.0
+margin_top = 128.0
+margin_right = 20.0
+margin_bottom = 144.0
+texture = ExtResource( 23 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Trees1" type="TextureRect" parent="Layer1/Environment"]
+material = SubResource( 75 )
+margin_left = 92.0
+margin_top = 56.0
+margin_right = 188.0
+margin_bottom = 152.0
+texture = ExtResource( 25 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Swapper" type="AnimationPlayer" parent="."]
+anims/swap_to_0 = SubResource( 76 )
+anims/swap_to_1 = SubResource( 77 )
+
+[node name="DustParticles" type="Particles2D" parent="."]
+position = Vector2( 160, 90 )
+z_index = 1
+local_coords = false
+process_material = SubResource( 80 )
+script = ExtResource( 9 )
+
+[node name="LightParticles" type="Particles2D" parent="."]
+position = Vector2( 160, 90 )
+z_index = 1
+amount = 2
+lifetime = 7.0
+local_coords = false
+process_material = SubResource( 83 )
+texture = ExtResource( 15 )
+script = ExtResource( 9 )
+
+[node name="EndPosition1" type="Position2D" parent="."]
+position = Vector2( 640, 56 )
+script = ExtResource( 3 )
+
+[node name="EndPosition2" type="Position2D" parent="."]
+position = Vector2( 640, 40 )
+script = ExtResource( 3 )
+
+[node name="EndPosition3" type="Position2D" parent="."]
+position = Vector2( 640, 24 )
+script = ExtResource( 3 )
+
+[node name="EndPosition4" type="Position2D" parent="."]
+position = Vector2( 640, 8 )
+script = ExtResource( 3 )
+
+[node name="EndPosition5" type="Position2D" parent="."]
+position = Vector2( 640, -8 )
+script = ExtResource( 3 )
+
+[node name="Text1" type="Node2D" parent="."]
+position = Vector2( 66.9929, 115.483 )
+
+[node name="Pos" type="Node2D" parent="Text1"]
+position = Vector2( 6.20565, 22.1437 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.1, 0.1 )
+motion_offset = Vector2( 320, 180 )
+motion_mirroring = Vector2( 640, 360 )
+
+[node name="background" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+centered = false
+
+[editable path="Player"]
+[editable path="Player/AnimatedSprite"]
+[editable path="Layer0/Blobs/Blob1_01"]
+[editable path="Layer0/Blobs/Blob1_02"]
+[editable path="Layer0/Blobs/Blob1_03"]
+[editable path="Layer0/Blobs/Blob1_04"]
+[editable path="Layer0/Blobs/Blob1_05"]
+[editable path="Layer0/Blobs/Blob1_06"]
+[editable path="Layer0/Blobs/Blob1_07"]
+[editable path="Layer0/Blobs/Blob1_08"]
+[editable path="Layer0/Blobs/Blob1_09"]
+[editable path="Layer0/Blobs/Blob1_10"]
+[editable path="Layer0/Blobs/Blob1_11"]
+[editable path="Layer0/Blobs/Blob1_12"]
+[editable path="Layer0/Blobs/Blob1_13"]
+[editable path="Layer0/Blobs/Blob1_14"]
+[editable path="Layer0/Blobs/Blob1_15"]
+[editable path="Layer0/Blobs/Blob1_16"]
+[editable path="Layer0/Blobs/Blob1_17"]
+[editable path="Layer0/Blobs/Blob1_18"]
+[editable path="Layer0/Blobs/Blob1_19"]
+[editable path="Layer0/Blobs/Blob1_20"]
+[editable path="Layer0/Blobs/Blob1_21"]
+[editable path="Layer0/Blobs/Blob1_22"]
+[editable path="Layer0/Blobs/Blob1_23"]
+[editable path="Layer0/Blobs/Blob1_24"]
+[editable path="Layer0/Blobs/Blob1_25"]
+[editable path="Layer0/Blobs/Blob1_26"]
+[editable path="Layer0/Blobs/Blob1_27"]
+[editable path="Layer0/Blobs/Blob1_28"]
+[editable path="Layer0/Blobs/Blob1_29"]
+[editable path="Layer0/Blobs/Blob1_30"]
+[editable path="Layer0/Blobs/Blob1_31"]
+[editable path="Layer0/Blobs/Blob1_32"]
+[editable path="Layer0/Blobs/Blob1_34"]
+[editable path="Layer0/Blobs/Blob1_35"]
+[editable path="Layer0/Blobs/Blob1_36"]
+[editable path="Layer0/Blobs/Blob1_37"]
+[editable path="Layer0/Blobs/Blob1_38"]
+[editable path="Layer0/Blobs/Blob1_39"]
+[editable path="Layer0/Blobs/Blob1_40"]
+[editable path="Layer0/Blobs/Blob1_41"]
+[editable path="Layer0/Blobs/Blob1_42"]
+[editable path="Layer0/Blobs/Blob1_43"]
+[editable path="Layer0/Blobs/Blob1_44"]
+[editable path="Layer0/Blobs/Blob1_45"]
+[editable path="Layer0/Blobs/Blob1_46"]
+[editable path="Layer0/Blobs/Blob1_47"]
+[editable path="Layer0/Blobs/Blob1_48"]
+[editable path="Layer0/Blobs/Blob1_49"]
+[editable path="Layer0/Blobs/Blob1_50"]
+[editable path="Layer0/Blobs/Blob1_51"]
+[editable path="Layer0/Blobs/Blob1_52"]
+[editable path="Layer0/Blobs/Blob1_53"]
+[editable path="Layer0/Blobs/Blob1_54"]
+[editable path="Layer0/Blobs/Blob1_55"]
+[editable path="Layer0/Blobs/Blob1_56"]
+[editable path="Layer0/Blobs/Blob1_57"]
+[editable path="Layer0/Blobs/Blob1_58"]
+[editable path="Layer0/Blobs/Blob1_59"]
+[editable path="Layer0/Blobs/Blob1_60"]
+[editable path="Layer0/Blobs/Blob1_61"]
+[editable path="Layer0/Blobs/Blob1_62"]
+[editable path="Layer0/Blobs/Blob1_63"]
+[editable path="Layer0/Blobs/Blob1_64"]
+[editable path="Layer0/Blobs/Blob2_01"]
+[editable path="Layer0/Blobs/Blob2_02"]
+[editable path="Layer0/Blobs/Blob2_03"]
+[editable path="Layer0/Blobs/Blob2_04"]
+[editable path="Layer0/Blobs/Blob2_05"]
+[editable path="Layer0/Blobs/Blob2_06"]
+[editable path="Layer0/Blobs/Blob2_07"]
+[editable path="Layer0/Blobs/Blob2_08"]
+[editable path="Layer0/Blobs/Blob2_09"]
+[editable path="Layer0/Blobs/Blob2_10"]
+[editable path="Layer0/Blobs/Blob2_11"]
+[editable path="Layer0/Blobs/Blob2_12"]
+[editable path="Layer0/Blobs/Blob2_13"]
+[editable path="Layer0/Blobs/Blob2_14"]
+[editable path="Layer0/Blobs/Blob2_15"]
+[editable path="Layer0/Blobs/Blob2_16"]
+[editable path="Layer0/Blobs/Blob2_17"]
+[editable path="Layer0/Blobs/Blob2_18"]
+[editable path="Layer0/Blobs/Blob3_01"]
+[editable path="Layer0/Blobs/Blob3_02"]
+[editable path="Layer0/Blobs/Blob3_03"]
+[editable path="Layer0/Blobs/Blob3_04"]
+[editable path="Layer0/Blobs/Blob3_05"]
+[editable path="Layer0/Blobs/Blob3_06"]
+[editable path="Layer0/Blobs/Blob3_07"]
+[editable path="Layer0/Blobs/Blob3_08"]
+[editable path="Layer0/Blobs/Blob3_09"]
+[editable path="Layer0/Blobs/Blob3_10"]
+[editable path="Layer0/Blobs/Blob3_11"]
+[editable path="Layer0/Blobs/Blob3_12"]
+[editable path="Layer0/Blobs/Blob3_13"]
+[editable path="Layer0/Blobs/Blob3_14"]
+[editable path="Layer0/Blobs/Blob3_15"]
+[editable path="Layer0/Blobs/Blob4_01"]
+[editable path="Layer0/Blobs/Blob5_01"]
+[editable path="Layer0/Joys/SwapJoy_01"]
+[editable path="Layer0/Joys/SwapJoy_01/Offset/AnimatedSprite"]
+[editable path="Layer0/Joys/SwapJoy_02"]
+[editable path="Layer0/Joys/SwapJoy_02/Offset/AnimatedSprite"]
+[editable path="Layer1/Blobs/Blob1_01"]
+[editable path="Layer1/Blobs/Blob1_02"]
+[editable path="Layer1/Blobs/Blob1_03"]
+[editable path="Layer1/Blobs/Blob1_04"]
+[editable path="Layer1/Blobs/Blob1_05"]
+[editable path="Layer1/Blobs/Blob1_06"]
+[editable path="Layer1/Blobs/Blob1_07"]
+[editable path="Layer1/Blobs/Blob1_08"]
+[editable path="Layer1/Blobs/Blob1_09"]
+[editable path="Layer1/Blobs/Blob1_10"]
+[editable path="Layer1/Blobs/Blob1_11"]
+[editable path="Layer1/Blobs/Blob1_12"]
+[editable path="Layer1/Blobs/Blob1_13"]
+[editable path="Layer1/Blobs/Blob1_14"]
+[editable path="Layer1/Blobs/Blob1_15"]
+[editable path="Layer1/Blobs/Blob1_16"]
+[editable path="Layer1/Blobs/Blob1_17"]
+[editable path="Layer1/Blobs/Blob1_18"]
+[editable path="Layer1/Blobs/Blob1_19"]
+[editable path="Layer1/Blobs/Blob1_20"]
+[editable path="Layer1/Blobs/Blob1_21"]
+[editable path="Layer1/Blobs/Blob1_22"]
+[editable path="Layer1/Blobs/Blob1_23"]
+[editable path="Layer1/Blobs/Blob1_24"]
+[editable path="Layer1/Blobs/Blob1_25"]
+[editable path="Layer1/Blobs/Blob1_26"]
+[editable path="Layer1/Blobs/Blob1_27"]
+[editable path="Layer1/Blobs/Blob1_28"]
+[editable path="Layer1/Blobs/Blob1_29"]
+[editable path="Layer1/Blobs/Blob1_30"]
+[editable path="Layer1/Blobs/Blob1_31"]
+[editable path="Layer1/Blobs/Blob1_32"]
+[editable path="Layer1/Blobs/Blob1_33"]
+[editable path="Layer1/Blobs/Blob1_34"]
+[editable path="Layer1/Blobs/Blob1_35"]
+[editable path="Layer1/Blobs/Blob1_36"]
+[editable path="Layer1/Blobs/Blob1_37"]
+[editable path="Layer1/Blobs/Blob1_38"]
+[editable path="Layer1/Blobs/Blob1_39"]
+[editable path="Layer1/Blobs/Blob1_40"]
+[editable path="Layer1/Blobs/Blob1_41"]
+[editable path="Layer1/Blobs/Blob1_42"]
+[editable path="Layer1/Blobs/Blob1_43"]
+[editable path="Layer1/Blobs/Blob1_44"]
+[editable path="Layer1/Blobs/Blob1_45"]
+[editable path="Layer1/Blobs/Blob1_46"]
+[editable path="Layer1/Blobs/Blob1_47"]
+[editable path="Layer1/Blobs/Blob1_48"]
+[editable path="Layer1/Blobs/Blob1_49"]
+[editable path="Layer1/Blobs/Blob1_50"]
+[editable path="Layer1/Blobs/Blob1_51"]
+[editable path="Layer1/Blobs/Blob1_52"]
+[editable path="Layer1/Blobs/Blob1_53"]
+[editable path="Layer1/Blobs/Blob1_54"]
+[editable path="Layer1/Blobs/Blob1_55"]
+[editable path="Layer1/Blobs/Blob1_56"]
+[editable path="Layer1/Blobs/Blob1_57"]
+[editable path="Layer1/Blobs/Blob1_58"]
+[editable path="Layer1/Blobs/Blob1_59"]
+[editable path="Layer1/Blobs/Blob2_01"]
+[editable path="Layer1/Blobs/Blob2_02"]
+[editable path="Layer1/Blobs/Blob2_03"]
+[editable path="Layer1/Blobs/Blob2_04"]
+[editable path="Layer1/Blobs/Blob2_05"]
+[editable path="Layer1/Blobs/Blob2_06"]
+[editable path="Layer1/Blobs/Blob2_07"]
+[editable path="Layer1/Blobs/Blob2_08"]
+[editable path="Layer1/Blobs/Blob2_09"]
+[editable path="Layer1/Blobs/Blob2_10"]
+[editable path="Layer1/Blobs/Blob2_11"]
+[editable path="Layer1/Blobs/Blob2_12"]
+[editable path="Layer1/Blobs/Blob2_13"]
+[editable path="Layer1/Blobs/Blob2_14"]
+[editable path="Layer1/Blobs/Blob2_15"]
+[editable path="Layer1/Blobs/Blob2_16"]
+[editable path="Layer1/Blobs/Blob2_17"]
+[editable path="Layer1/Blobs/Blob2_18"]
+[editable path="Layer1/Blobs/Blob2_19"]
+[editable path="Layer1/Blobs/Blob2_20"]
+[editable path="Layer1/Blobs/Blob2_21"]
+[editable path="Layer1/Blobs/Blob3_01"]
+[editable path="Layer1/Blobs/Blob3_02"]
+[editable path="Layer1/Blobs/Blob3_03"]
+[editable path="Layer1/Blobs/Blob3_04"]
+[editable path="Layer1/Blobs/Blob3_05"]
+[editable path="Layer1/Blobs/Blob3_06"]
+[editable path="Layer1/Blobs/Blob3_07"]
+[editable path="Layer1/Blobs/Blob3_08"]
+[editable path="Layer1/Blobs/Blob3_09"]
+[editable path="Layer1/Blobs/Blob3_10"]
+[editable path="Layer1/Blobs/Blob3_11"]
+[editable path="Layer1/Blobs/Blob3_12"]
+[editable path="Layer1/Blobs/Blob3_13"]
+[editable path="Layer1/Blobs/Blob3_14"]
+[editable path="Layer1/Blobs/Blob3_15"]
+[editable path="Layer1/Blobs/Blob3_16"]
+[editable path="Layer1/Blobs/Blob3_17"]
+[editable path="Layer1/Blobs/Blob3_18"]
+[editable path="Layer1/Blobs/Blob4_01"]
+[editable path="Layer1/Blobs/Blob4_02"]
+[editable path="Layer1/Blobs/Blob5_01"]
+[editable path="Layer1/Joys/Joy_01"]
+[editable path="Layer1/Joys/Joy_01/Offset/AnimatedSprite"]
+[editable path="Layer1/Joys/SwapJoy_01"]
+[editable path="Layer1/Joys/SwapJoy_01/Offset/AnimatedSprite"]
