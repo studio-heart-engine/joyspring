@@ -4,7 +4,7 @@
 [ext_resource path="res://graphics/legend/mountain.json" type="PackedScene" id=2]
 [ext_resource path="res://music/effects/click.wav" type="AudioStream" id=3]
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=1]
 tracks/0/type = "value"
 tracks/0/path = NodePath("Mountain:position")
 tracks/0/interp = 1
@@ -30,7 +30,7 @@ tracks/1/keys = {
 "values": [ Color( 0, 0, 0, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=2]
 length = 5.0
 tracks/0/type = "value"
 tracks/0/path = NodePath("Ground:color")
@@ -80,14 +80,12 @@ __meta__ = {
 }
 
 [node name="Mountain" parent="." instance=ExtResource( 2 )]
-position = Vector2( 160, 81.5669 )
-
-[node name="Sprite" parent="Mountain" index="0"]
-region_rect = Rect2( 1600, 0, 320, 320 )
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 160, 160 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/fade-in = SubResource( 2 )
-anims/start-fall = SubResource( 3 )
+anims/fade-in = SubResource( 1 )
+anims/start-fall = SubResource( 2 )
 
 [node name="Click" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )

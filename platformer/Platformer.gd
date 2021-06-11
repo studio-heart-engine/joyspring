@@ -35,6 +35,7 @@ func _ready():
 		collision_mask_vals[1] += pow(2, i)
 	update_collision()
 	
+	print(self.name)
 	layers[layer_num].z_index = 10
 	layers[(layer_num + 1) % 2].z_index = 0
 	layers[layer_num]._ready()
