@@ -7,6 +7,7 @@ onready var anim_player2 = $AnimationPlayer2
 
 func _ready():
 	update_image()
+	$CollisionShape2D.shape = $CollisionShape2D.shape.duplicate()
 
 func _on_Area2D_area_entered(area):
 	$TopArea/CollisionShape2D.set_deferred("disabled", true)

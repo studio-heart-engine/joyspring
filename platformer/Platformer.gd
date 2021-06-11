@@ -59,7 +59,12 @@ func swap_layers():
 	var index2 = get_node(layer_name + '/TileMap').world_to_map($Player.position + Vector2(0, -8))  # Top half of player
 	var inside_tile = get_node(layer_name + '/TileMap').get_cellv(index1) != -1 or \
 					  get_node(layer_name + '/TileMap').get_cellv(index2) != -1
-	if inside_tile:  # TODO: check gravel collision
+#	var inside_gravel = false
+#	for child in get_node(layer_name + '/Gravel').get_children():
+#		var player_rect = Rect2($Player.position - Vector2(4, 16), Vector2(8, 16))
+#		var gravel_rect = Rect2(child.position, Vector2(16, 16))
+#		inside_gravel = player_rect.intersects(gravel_rect)
+	if inside_tile:
 		layer_num = (layer_num + 1) % 2
 		return
 	else:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=113 format=2]
+[gd_scene load_steps=112 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
 [ext_resource path="res://platformer/levelsOld/Level_01.tscn" type="PackedScene" id=2]
@@ -73,7 +73,7 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id=4]
 shader = SubResource( 3 )
-shader_param/outline_color = Color( 0.823529, 0.294118, 0.380392, 1 )
+shader_param/outline_color = Color( 0.788235, 0.384314, 0.329412, 1 )
 
 [sub_resource type="RectangleShape2D" id=5]
 resource_local_to_scene = true
@@ -158,10 +158,6 @@ tracks/0/keys = {
 
 [sub_resource type="ShaderMaterial" id=22]
 
-[sub_resource type="RectangleShape2D" id=23]
-resource_local_to_scene = true
-extents = Vector2( 8, 8 )
-
 [sub_resource type="Curve2D" id=24]
 resource_local_to_scene = true
 _data = {
@@ -192,7 +188,7 @@ _data = {
 
 [sub_resource type="ShaderMaterial" id=34]
 shader = SubResource( 3 )
-shader_param/outline_color = Color( 0.788235, 0.490196, 0.329412, 1 )
+shader_param/outline_color = Color( 0.788235, 0.384314, 0.329412, 1 )
 
 [sub_resource type="Animation" id=35]
 length = 2.4
@@ -838,7 +834,7 @@ position = Vector2( 232, 176 )
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_01/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
 material = SubResource( 11 )
 texture = ExtResource( 27 )
 
@@ -851,7 +847,7 @@ position = Vector2( 228, 184 )
 shape = "4"
 
 [node name="Outline" parent="Layer0/Blobs/Blob4_01/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
 material = SubResource( 13 )
 texture = ExtResource( 25 )
 
@@ -916,9 +912,6 @@ material = SubResource( 21 )
 [node name="Sprite" parent="Layer0/Gravel/Gravel_01" index="1"]
 material = SubResource( 22 )
 
-[node name="CollisionShape2D" parent="Layer0/Gravel/Gravel_01" index="5"]
-shape = SubResource( 23 )
-
 [node name="MovingBlobs" type="Node2D" parent="Layer0"]
 __meta__ = {
 "_edit_lock_": true
@@ -934,7 +927,7 @@ curve = SubResource( 24 )
 shape = "1"
 
 [node name="Outline" parent="Layer0/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D/Blob/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
 texture = ExtResource( 24 )
 
 [node name="Sprite" parent="Layer0/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D/Blob/NoiseOffset" index="1"]
@@ -1103,7 +1096,7 @@ position = Vector2( 228, 136 )
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_01/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
 material = SubResource( 41 )
 texture = ExtResource( 22 )
 
@@ -1120,7 +1113,7 @@ position = Vector2( 236, 140 )
 shape = "3"
 
 [node name="Outline" parent="Layer1/Blobs/Blob3_01/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
 material = SubResource( 43 )
 texture = ExtResource( 27 )
 
@@ -1154,7 +1147,7 @@ position = Vector2( 252, 144 )
 shape = "5"
 
 [node name="Outline" parent="Layer1/Blobs/Blob5_01/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
 material = SubResource( 47 )
 texture = ExtResource( 26 )
 
@@ -1173,9 +1166,6 @@ __meta__ = {
 
 [node name="Joy_01" parent="Layer1/Joys" instance=ExtResource( 6 )]
 position = Vector2( 226, 117 )
-
-[node name="Offset" parent="Layer1/Joys/Joy_01" index="1"]
-position = Vector2( 0, 0 )
 
 [node name="Particles" parent="Layer1/Joys/Joy_01/Offset" index="0"]
 material = SubResource( 49 )
@@ -1196,9 +1186,6 @@ anims/float = SubResource( 52 )
 
 [node name="SwapJoy_01" parent="Layer1/Joys" instance=ExtResource( 6 )]
 position = Vector2( 30, 73 )
-
-[node name="Offset" parent="Layer1/Joys/SwapJoy_01" index="1"]
-position = Vector2( 0, 0 )
 
 [node name="Particles" parent="Layer1/Joys/SwapJoy_01/Offset" index="0"]
 material = SubResource( 49 )
@@ -1241,9 +1228,6 @@ anims/shrink-hitbox = SubResource( 59 )
 collision_layer = 256
 collision_mask = 32
 
-[node name="CollisionShape2D" parent="Layer1/Gravel/Gravel_01" index="5"]
-shape = SubResource( 23 )
-
 [node name="MovingBlobs" type="Node2D" parent="Layer1"]
 __meta__ = {
 "_edit_lock_": true
@@ -1259,7 +1243,7 @@ curve = SubResource( 60 )
 shape = "1"
 
 [node name="Outline" parent="Layer1/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D/Blob/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
 material = SubResource( 61 )
 texture = ExtResource( 24 )
 
@@ -1397,7 +1381,9 @@ process_material = SubResource( 82 )
 texture = ExtResource( 18 )
 script = ExtResource( 17 )
 
-[node name="EndPosition1" type="Position2D" parent="."]
+[node name="EndPositions" type="Node2D" parent="."]
+
+[node name="EndPosition1" type="Position2D" parent="EndPositions"]
 position = Vector2( 319.813, 58.5714 )
 script = ExtResource( 19 )
 
