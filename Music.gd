@@ -22,9 +22,9 @@ func play():
 		current_song = $Title
 	elif globals.curr_state.substr(0, 5) == 'Level':
 		var level_index = int(globals.curr_state.right(5))
-		if level_index < 14:
+		if level_index < 12:
 			current_song = $Mirage
-		elif level_index == 14:
+		elif level_index == 12:
 			current_song = $Silence
 		elif level_index < 30:
 			current_song = $Denial
