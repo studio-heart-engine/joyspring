@@ -2,29 +2,66 @@ extends Control
 
 const text_scene = preload('res://graphics/Text.tscn')
 const text_script = preload('res://graphics/Text.gd')
+const tutorial_script = preload('res://graphics/TutorialText.gd')
 
 export var RADIUS = 36
 
+var text_set = false
+
 func _ready():
-	var story_dialogue_file = File.new()
-	story_dialogue_file.open('res://story_dialogue.txt', File.READ)
+	if text_set:
+		return
+	# Load legend
+	var legend_file = File.new()
+	legend_file.open('res://text/legend.txt', File.READ)
+	$Legend1.text = legend_file.get_as_text().replace('’', '\'')
+	legend_file.close()
+	
+	# Load dialogue
+	var dialogue_file = File.new()
+	dialogue_file.open('res://text/dialogue.txt', File.READ)
 	var i = 1
-	while not story_dialogue_file.eof_reached():
-		var line = story_dialogue_file.get_line()
+	while not dialogue_file.eof_reached():
+		var line = dialogue_file.get_line()
 		line = line.replace('\\n', '\n')
-		print(line)
+		line = line.replace('’', '\'')
 		var dialogue_text = text_scene.instance()
 		dialogue_text.name = 'Dialogue' + str(i)
 		dialogue_text.set_script(text_script)
 		self.add_child(dialogue_text)
 		get_node(dialogue_text.name + '/Label').text = line
 		i += 1
-	
-	for j in range(1, globals.total_levels + 1):
+	dialogue_file.close()
+
+	# Load tutorial
+	var tutorial_file = File.new()
+	tutorial_file.open('res://text/tutorial.txt', File.READ)
+	var j = 1
+	while not tutorial_file.eof_reached():
+		var type = tutorial_file.get_line()
+		var line = tutorial_file.get_line()
+		line = line.replace('\\n', '\n')
+		line = line.replace('’', '\'')
+		var tutorial_text = text_scene.instance()
+		tutorial_text.name = 'Tutorial' + str(j)
+		tutorial_text.set_script(text_script)
+		self.add_child(tutorial_text)
+		get_node(tutorial_text.name + '/Label').text = line
+		get_node(tutorial_text.name + '/Label').align = HALIGN_CENTER
+		get_node(tutorial_text.name + '/Label').set_script(tutorial_script)
+		get_node(tutorial_text.name + '/Label').action = type
+		get_node(tutorial_text.name + '/Label')._ready()
+		j += 1
+	tutorial_file.close()
+
+	# Load select
+	for k in range(1, globals.total_levels + 1):
 		var select_text = text_scene.instance()
-		select_text.name = 'Select' + str(j)
+		select_text.name = 'Select' + str(k)
 		select_text.set_script(text_script)
 		self.add_child(select_text)
+	
+	text_set = true
 
 func check_dialogue(level, ids):
 	var player = get_node("../ViewportContainer/Viewport/" + level + "/Player")
