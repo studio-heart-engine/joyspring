@@ -1,7 +1,30 @@
 extends Control
 
+const text_scene = preload('res://graphics/Text.tscn')
+const text_script = preload('res://graphics/Text.gd')
 
 export var RADIUS = 36
+
+func _ready():
+	var story_dialogue_file = File.new()
+	story_dialogue_file.open('res://story_dialogue.txt', File.READ)
+	var i = 1
+	while not story_dialogue_file.eof_reached():
+		var line = story_dialogue_file.get_line()
+		line = line.replace('\\n', '\n')
+		print(line)
+		var dialogue_text = text_scene.instance()
+		dialogue_text.name = 'Dialogue' + str(i)
+		dialogue_text.set_script(text_script)
+		self.add_child(dialogue_text)
+		get_node(dialogue_text.name + '/Label').text = line
+		i += 1
+	
+	for j in range(1, globals.total_levels + 1):
+		var select_text = text_scene.instance()
+		select_text.name = 'Select' + str(j)
+		select_text.set_script(text_script)
+		self.add_child(select_text)
 
 func check_dialogue(level, ids):
 	var player = get_node("../ViewportContainer/Viewport/" + level + "/Player")

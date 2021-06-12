@@ -1,12 +1,8 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://graphics/HappyFox-Condensed.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://graphics/font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://music/effects/text_2.wav" type="AudioStream" id=2]
 [ext_resource path="res://graphics/Text.gd" type="Script" id=3]
-
-[sub_resource type="DynamicFont" id=1]
-size = 48
-font_data = ExtResource( 1 )
 
 [sub_resource type="Animation" id=2]
 tracks/0/type = "value"
@@ -34,6 +30,33 @@ tracks/1/keys = {
 "values": [ Vector2( 0, 20 ), Vector2( 0, 0 ) ]
 }
 
+[sub_resource type="Animation" id=3]
+resource_name = "highlight"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, 20 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0.6 ), Color( 1, 1, 1, 1 ) ]
+}
+
 [node name="Text" type="Control"]
 margin_right = 40.0
 margin_bottom = 40.0
@@ -43,18 +66,17 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="."]
-modulate = Color( 1, 1, 1, 0 )
-margin_top = 20.0
+modulate = Color( 1, 1, 1, 0.6 )
 margin_right = 19.0
-margin_bottom = 107.0
-custom_fonts/font = SubResource( 1 )
-text = "0"
+margin_bottom = 87.0
+custom_fonts/font = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Label"]
 anims/fade_in = SubResource( 2 )
+anims/highlight = SubResource( 3 )
 
 [node name="SoundEffect" type="AudioStreamPlayer" parent="Label"]
 stream = ExtResource( 2 )

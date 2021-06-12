@@ -66,7 +66,7 @@ func set_select_text():
 	if sub_viewport.get_child(0):
 		if sub_viewport.get_child(0).get_name() != 'LevelSelect':
 			return
-		var children = sub_viewport.get_child(0).get_children()
+		var children = $ViewportContainer/Viewport/LevelSelect/LevelSigns.get_children()
 		for child in children:
 			if child.name.substr(0, 9) == "LevelSign":
 				var coord = child.get_node("Number").get_global_transform_with_canvas().origin

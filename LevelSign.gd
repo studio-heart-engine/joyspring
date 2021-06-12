@@ -22,6 +22,7 @@ func _ready():
 
 func _on_Hitbox_area_entered(area):
 	set_locked(-1)
+	print('enter')
 	if not locked:
 		get_node('/root/HDWrapper/Text/Select' + str(level_index)).highlight()
 	is_player_in_box = true

@@ -5,6 +5,7 @@ var has_played_startup_animation = false
 var levels_completed = [0]
 var curr_state = "Opening"
 var prev_state = ""
+var total_levels = 13
 
 var time_of_day = 0  # 0-indexed
 var bg_num = 1  # 1-indexed
