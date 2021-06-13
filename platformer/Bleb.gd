@@ -32,6 +32,7 @@ func _on_Hitbox_area_entered(area):
 
 func _ready():
 	update_image()
+	Events.connect('time_of_day_changed', self, 'update_image')
 	if not Engine.editor_hint:
 		anim_player.play("crawl")
 #	$Sprite.material.set_shader_param("outline_color", Color(possible_colors[randi() % len(possible_colors)]))

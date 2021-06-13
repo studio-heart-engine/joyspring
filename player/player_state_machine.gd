@@ -28,6 +28,7 @@ func enable_dash():
 
 func _ready():
 	update_image()
+	Events.connect('time_of_day_changed', self, 'update_image')
 	Events.connect("joy_collected", self, "enable_dash")
 	for state_node in states.values():
 		state_node.connect("finished", self, "change_state")

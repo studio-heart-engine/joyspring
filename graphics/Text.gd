@@ -33,9 +33,3 @@ func play(reverse=false):
 		get_child(0).get_child(0).play_backwards('fade_in')
 #		$Label/AnimationPlayer.play_backwards('fade_in')
 		showed = false
-
-func highlight():
-	$Label/AnimationPlayer.play('highlight')
-
-func unhighlight():
-	$Label/AnimationPlayer.play_backwards('highlight')

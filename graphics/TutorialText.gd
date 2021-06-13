@@ -9,7 +9,6 @@ func _ready():
 	update_text()
 
 func update_text():
-	print('update')
 	if action == 'swap':
 		var keybind_text = 'Unassigned'
 		if not globals.keybinds[action] == null:

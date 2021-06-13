@@ -8,7 +8,9 @@ var prev_state = ""
 var total_levels = 13
 
 var time_of_day = 0  # 0-indexed
+var time_of_day_start = [0, 10, 50]
 var bg_num = 1  # 1-indexed
+var bg_num_start = [0, 5, 10, 13, 40, 50, 55]
 var bg_offset = 180  # Motion offset for parallax
 
 var configurable_keys = ['up', 'down', 'left', 'right', 'dash', 'wall', 'float', 'swap']
@@ -48,7 +50,6 @@ func load_controls():
 			var value = config_file.get_value('keybinds', key)
 			if str(value) != '':
 				keybinds[key] = value
-				print(value)
 			else:
 				keybinds[key] = null
 	else:
@@ -88,9 +89,9 @@ func set_time_of_day():
 	set_time_of_day_from_num(level_num)
 
 func set_time_of_day_from_num(num):
-	if num < 10:
+	if num < time_of_day_start[1]:
 		time_of_day = 0
-	elif num < 50:  # TODO
+	elif num < time_of_day_start[2]:  # TODO
 		time_of_day = 1
 	else:
 		time_of_day = 2
@@ -101,17 +102,17 @@ func set_bg():
 	if curr_state == 'LevelSelect':
 		return
 	var level_num = int(curr_state.right(5))
-	if level_num < 5:
+	if level_num < bg_num_start[1]:
 		bg_num = 1
-	elif level_num < 10:
+	elif level_num < bg_num_start[2]:
 		bg_num = 2
-	elif level_num < 13:
+	elif level_num < bg_num_start[3]:
 		bg_num = 3
-	elif level_num < 40:
+	elif level_num < bg_num_start[4]:
 		bg_num = 4
-	elif level_num < 50:  # TODO
+	elif level_num < bg_num_start[5]:
 		bg_num = 5
-	elif level_num < 55:
+	elif level_num < bg_num_start[6]:
 		bg_num = 6
 	else:
 		bg_num = 7

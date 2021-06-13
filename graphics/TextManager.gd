@@ -3,6 +3,8 @@ extends Control
 const text_scene = preload('res://graphics/Text.tscn')
 const text_script = preload('res://graphics/Text.gd')
 const tutorial_script = preload('res://graphics/TutorialText.gd')
+const text_pin_scene = preload('res://graphics/TextPin.tscn')
+const text_pin_script = preload('res://graphics/TextPin.gd')
 
 export var RADIUS = 36
 
@@ -55,11 +57,20 @@ func _ready():
 	tutorial_file.close()
 
 	# Load select
+	var curr_time_of_day = 0
 	for k in range(1, globals.total_levels + 1):
-		var select_text = text_scene.instance()
+		var select_text = text_pin_scene.instance()
 		select_text.name = 'Select' + str(k)
-		select_text.set_script(text_script)
+		select_text.set_script(text_pin_script)
+		select_text.set_colors(curr_time_of_day)
 		self.add_child(select_text)
+		get_node(select_text.name + '/Label').text = str(k)
+		if k >= globals.time_of_day_start[0]:
+			curr_time_of_day = 0
+		if k >= globals.time_of_day_start[1]:
+			curr_time_of_day = 1
+		if k >= globals.time_of_day_start[2]:
+			curr_time_of_day = 2
 	
 	text_set = true
 

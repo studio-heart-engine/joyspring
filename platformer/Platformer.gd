@@ -21,6 +21,8 @@ signal level_exited
 func _ready():
 	level_index = int(name.right(6))
 	set_bg()
+	Events.connect('bg_num_changed', self, 'set_bg')
+	Events.connect('bg_num_changed', self, 'update_shader')
 	
 	layers = [$Layer0, $Layer1]
 	collision_layer_vals = [1, pow(2, 5)]

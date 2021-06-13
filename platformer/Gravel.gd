@@ -7,6 +7,7 @@ onready var anim_player2 = $AnimationPlayer2
 
 func _ready():
 	update_image()
+	Events.connect('time_of_day_changed', self, 'update_image')
 	$CollisionShape2D.shape = $CollisionShape2D.shape.duplicate()
 
 func _on_Area2D_area_entered(area):

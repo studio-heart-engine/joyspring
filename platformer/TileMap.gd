@@ -16,6 +16,7 @@ var dynamic_tileset = load("res://graphics/tilesets/foreground_tileset_image.tre
 
 func _ready():
 	update_tileset()
+	Events.connect('time_of_day_changed', self, 'update_tileset')
 
 
 func update_tileset():
