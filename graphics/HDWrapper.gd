@@ -72,6 +72,7 @@ func set_select_text():
 				var coord = child.get_node("Number").get_global_transform_with_canvas().origin
 				var path = "Text/Select" + child.name.right(9)
 				get_node(path).rect_position = coord * scaling
+				get_node(path).rect_position -= Vector2(get_node(path + '/TextureRect').rect_size.x / 2, 0)  # Center align
 				if not child.get_locked():
 					show.append('S' + child.get_name().right(9))
 		for child in $Text.get_children():
@@ -118,7 +119,10 @@ func hide_menu_text():
 		var path1 = "Text/Menu1"
 		var path2 = "Title/Sprite"
 		get_node(path1).hide()
-		$Title.play(true)
+		if globals.curr_state == 'MenuTransition':
+			$Title.play(true)
+		else:
+			$Title.hide()
 
 func clear_all():
 	for child in $Text.get_children():

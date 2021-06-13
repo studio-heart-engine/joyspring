@@ -20,8 +20,11 @@ func _process(delta):
 func update_time_and_bg():
 	var closest = ''
 	var closest_dist = pow(2, 63) - 1
-	var player_pos = get_node('../Player').position
+	var player_pos = get_node('../Player').position + Vector2(0, -8)
 	for child in get_node('../LevelSigns').get_children():
+		if child.is_player_in_box:
+			closest = child.name
+			break
 		if player_pos.distance_to(child.position + Vector2(0, -40)) < closest_dist:
 			closest = child.name
 			closest_dist = player_pos.distance_to(child.position + Vector2(0, -40))
@@ -48,3 +51,5 @@ func update_time_and_bg():
 		globals.bg_num = 6
 	if closest_num > globals.bg_num_start[6]:
 		globals.bg_num = 7
+	
+	return closest_num

@@ -23,6 +23,12 @@ func _ready():
 	set_bg()
 	Events.connect('bg_num_changed', self, 'set_bg')
 	Events.connect('bg_num_changed', self, 'update_shader')
+	Events.connect('swap_layers', self, 'swap_layers')
+	
+	if globals.curr_state == 'LevelSelect':
+		if globals.prev_state.substr(0, 5) == 'Level' and globals.prev_state != 'LevelSelect':
+			$Player.position = get_node('LevelSigns/LevelSign' + str(int(globals.prev_state.right(5)))).position
+			layer_num = get_node('LevelSigns/LevelSign' + str(int(globals.prev_state.right(5)))).out_layer
 	
 	layers = [$Layer0, $Layer1]
 	collision_layer_vals = [1, pow(2, 5)]
@@ -39,13 +45,9 @@ func _ready():
 	layers[(layer_num + 1) % 2]._ready()
 	update_shader()
 	
-	Events.connect('swap_layers', self, 'swap_layers')
-	
 	if globals.curr_state == 'LevelSelect':
-		if globals.prev_state.substr(0, 5) == 'Level' and globals.prev_state != 'LevelSelect':
-			$Player.position = get_node('LevelSigns/LevelSign' + str(int(globals.prev_state.right(5)))).position + Vector2(0, -2)
-			if check_collision('Layer0'):
-				swap_layers()
+		$Switch._ready()
+		$Tut0.position = $Player.position
 
 
 func _input(event):
@@ -66,7 +68,7 @@ func swap_layers():
 		update_shader()
 		Events.emit_signal("layer_swapped")
 
-func check_collision(layer_name):  # Check if player is inside tile
+func check_collision(layer_name):  # Check if player is inside tilemap
 	var index1 = get_node(layer_name + '/TileMap').world_to_map($Player.position)  # Bottom half of player
 	var index2 = get_node(layer_name + '/TileMap').world_to_map($Player.position + Vector2(0, -8))  # Top half of player
 	var inside_tile = get_node(layer_name + '/TileMap').get_cellv(index1) != -1 or \

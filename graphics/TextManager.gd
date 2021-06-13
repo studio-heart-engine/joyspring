@@ -47,6 +47,7 @@ func _ready():
 		var tutorial_text = text_scene.instance()
 		tutorial_text.name = 'Tutorial' + str(j)
 		tutorial_text.set_script(text_script)
+		tutorial_text.modulate = Color(1, 1, 1, 0.5)
 		self.add_child(tutorial_text)
 		get_node(tutorial_text.name + '/Label').text = line
 		get_node(tutorial_text.name + '/Label').align = HALIGN_CENTER

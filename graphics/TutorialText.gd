@@ -37,6 +37,7 @@ func update_text():
 		new_text = new_text.replace('[up]', keybind_text_2)
 		new_text = new_text.replace('[left]', keybind_text_3a)
 		new_text = new_text.replace('[right]', keybind_text_3b)
+		self.text = new_text
 	if action == 'dash':
 		var keybind_text = 'Unassigned'
 		if not globals.keybinds[action] == null:

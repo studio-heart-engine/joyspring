@@ -3,6 +3,7 @@ extends Node2D
 #export (Texture) var texture
 var level_index = -1
 export (bool) var locked setget set_locked, get_locked
+export (int) var out_layer
 
 var is_player_in_box = false
 
@@ -18,7 +19,6 @@ func get_locked():
 func _ready():
 	self.locked = true
 	level_index = int(name.right(9))
-
 
 func _on_Hitbox_area_entered(area):
 	set_locked(-1)
@@ -36,7 +36,7 @@ func _on_Hitbox_area_exited(area):
 
 
 func _input(event):
-	if is_player_in_box and event.is_action_pressed('ui_select'):
+	if is_player_in_box and event.is_action_pressed('level_select'):
 		set_locked(-1)
 		if not locked:
 			$Click.play()
