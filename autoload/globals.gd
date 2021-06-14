@@ -5,7 +5,8 @@ var has_played_startup_animation = false
 var levels_completed = [0]
 var curr_state = "Opening"
 var prev_state = ""
-var total_levels = 13
+var total_levels = 17
+var peak_level = 12
 
 var time_of_day = 0  # 0-indexed
 var time_of_day_start = [0, 10, 50]
@@ -23,6 +24,8 @@ func _ready():
 		load_controls()
 		set_controls()
 		load_game()
+		set_time_of_day()
+		set_bg()
 
 
 func on_level_completed(level_index):
@@ -86,12 +89,9 @@ func set_time_of_day():
 	if curr_state == 'LevelSelect':  # Done in level select script
 		return
 	var level_num = int(curr_state.right(5))
-	set_time_of_day_from_num(level_num)
-
-func set_time_of_day_from_num(num):
-	if num < time_of_day_start[1]:
+	if level_num < time_of_day_start[1]:
 		time_of_day = 0
-	elif num < time_of_day_start[2]:  # TODO
+	elif level_num < time_of_day_start[2]:
 		time_of_day = 1
 	else:
 		time_of_day = 2
@@ -116,7 +116,7 @@ func set_bg():
 		bg_num = 6
 	else:
 		bg_num = 7
-	if level_num <= 14:  # Before and at peak
-		bg_offset = 120 + 4 * (level_num - 1)  # Go from 180 to 240
+	if level_num <= 12:  # Before and at peak
+		bg_offset = int(180 + (60 / peak_level) * level_num)  # 180 to 240
 	else:
-		bg_offset = 240 - 4 * (level_num - 14)  # TODO: recalc using total level num, end at 120
+		bg_offset = int(240 - (120 / (total_levels - peak_level)) * (level_num - peak_level))  # 240 to 120

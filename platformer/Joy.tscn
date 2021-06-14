@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://platformer/Joy.gd" type="Script" id=1]
 [ext_resource path="res://graphics/effects/outline-shader.shader" type="Shader" id=2]
@@ -49,6 +49,69 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
+[sub_resource type="ShaderMaterial" id=10]
+shader = ExtResource( 2 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="Animation" id=7]
+length = 0.9
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.45, 0.6, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 24, 0, 8, 8 ), Rect2( 32, 0, 8, 8 ), Rect2( 40, 0, 8, 8 ), Rect2( 48, 0, 8, 8 ), Rect2( 56, 0, 8, 8 ) ]
+}
+
+[sub_resource type="Animation" id=8]
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=9]
+length = 0.9
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 0, 0, 8, 8 ), Rect2( 8, 0, 8, 8 ), Rect2( 16, 0, 8, 8 ) ]
+}
+
 [sub_resource type="CircleShape2D" id=5]
 radius = 6.35152
 
@@ -88,6 +151,7 @@ local_coords = false
 process_material = SubResource( 2 )
 
 [node name="Outline" type="Sprite" parent="Offset"]
+visible = false
 material = SubResource( 3 )
 position = Vector2( -0.102417, 0.102417 )
 z_index = -1
@@ -97,8 +161,23 @@ region_rect = Rect2( 0, 0, 8, 8 )
 
 [node name="AnimatedSprite" parent="Offset" instance=ExtResource( 4 )]
 
+[node name="Sprite" parent="Offset/AnimatedSprite" index="0"]
+region_rect = Rect2( 0, 0, 8, 8 )
+
 [node name="AnimationPlayer" parent="Offset/AnimatedSprite" index="1"]
 anims/fade_out = SubResource( 4 )
+
+[node name="AnimatedOutline" parent="Offset" instance=ExtResource( 4 )]
+z_index = -1
+
+[node name="Sprite" parent="Offset/AnimatedOutline" index="0"]
+material = SubResource( 10 )
+region_rect = Rect2( 0, 0, 8, 8 )
+
+[node name="AnimationPlayer" parent="Offset/AnimatedOutline" index="1"]
+anims/collect1 = SubResource( 7 )
+anims/fade_out = SubResource( 8 )
+anims/float = SubResource( 9 )
 
 [node name="Hitbox" type="Area2D" parent="Offset"]
 collision_layer = 4
@@ -112,3 +191,5 @@ anims/float = SubResource( 6 )
 [connection signal="area_entered" from="Offset/Hitbox" to="." method="_on_Hitbox_area_entered"]
 
 [editable path="Offset/AnimatedSprite"]
+
+[editable path="Offset/AnimatedOutline"]

@@ -32,6 +32,9 @@ func _ready():
 		dialogue_text.set_script(text_script)
 		self.add_child(dialogue_text)
 		get_node(dialogue_text.name + '/Label').text = line
+		if line.substr(0, 1) == '*':
+			get_node(dialogue_text.name + '/Label').text = line.right(1)
+			get_node(dialogue_text.name).modulate = Color('ffce43')
 		i += 1
 	dialogue_file.close()
 

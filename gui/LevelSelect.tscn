@@ -1,7 +1,6 @@
-[gd_scene load_steps=95 format=2]
+[gd_scene load_steps=94 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
-[ext_resource path="res://platformer/levelsOld/Level_01.tscn" type="PackedScene" id=2]
 [ext_resource path="res://platformer/Layer.gd" type="Script" id=3]
 [ext_resource path="res://graphics/environment/evening/trees2.png" type="Texture" id=4]
 [ext_resource path="res://graphics/environment/evening/trees3.png" type="Texture" id=5]
@@ -61,7 +60,7 @@ shader_param/mask = ExtResource( 12 )
 
 [sub_resource type="ShaderMaterial" id=4]
 
-[sub_resource type="RectangleShape2D" id=59]
+[sub_resource type="RectangleShape2D" id=5]
 resource_local_to_scene = true
 extents = Vector2( 8, 8 )
 
@@ -137,7 +136,7 @@ tracks/1/keys = {
 "values": [ Vector2( 8, 8 ), Vector2( 8, 16 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=60]
+[sub_resource type="RectangleShape2D" id=10]
 resource_local_to_scene = true
 extents = Vector2( 8, 8 )
 
@@ -213,7 +212,7 @@ tracks/1/keys = {
 "values": [ Vector2( 8, 8 ), Vector2( 8, 16 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=61]
+[sub_resource type="RectangleShape2D" id=15]
 resource_local_to_scene = true
 extents = Vector2( 8, 8 )
 
@@ -315,7 +314,7 @@ tracks/1/keys = {
 "values": [ Vector2( 8, 8 ), Vector2( 8, 16 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=62]
+[sub_resource type="RectangleShape2D" id=31]
 resource_local_to_scene = true
 extents = Vector2( 8, 8 )
 
@@ -391,7 +390,7 @@ tracks/1/keys = {
 "values": [ Vector2( 8, 8 ), Vector2( 8, 16 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=63]
+[sub_resource type="RectangleShape2D" id=36]
 resource_local_to_scene = true
 extents = Vector2( 8, 8 )
 
@@ -676,7 +675,9 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_lock_": true
 }
-next_level = ExtResource( 2 )
+dash_enabled = false
+float_enabled = false
+climb_enabled = false
 
 [node name="Player" parent="." instance=ExtResource( 11 )]
 light_mask = 1
@@ -733,7 +734,7 @@ material = SubResource( 3 )
 material = SubResource( 4 )
 
 [node name="CollisionShape2D" parent="Layer0/Gravel/Gravel_01" index="5"]
-shape = SubResource( 59 )
+shape = SubResource( 5 )
 
 [node name="Gravel_02" parent="Layer0/Gravel" instance=ExtResource( 7 )]
 position = Vector2( 72, 616 )
@@ -753,7 +754,7 @@ anims/wiggle = SubResource( 8 )
 anims/shrink-hitbox = SubResource( 9 )
 
 [node name="CollisionShape2D" parent="Layer0/Gravel/Gravel_02" index="5"]
-shape = SubResource( 60 )
+shape = SubResource( 10 )
 
 [node name="Gravel_03" parent="Layer0/Gravel" instance=ExtResource( 7 )]
 position = Vector2( 520, 377 )
@@ -773,7 +774,7 @@ anims/wiggle = SubResource( 13 )
 anims/shrink-hitbox = SubResource( 14 )
 
 [node name="CollisionShape2D" parent="Layer0/Gravel/Gravel_03" index="5"]
-shape = SubResource( 61 )
+shape = SubResource( 15 )
 
 [node name="MovingBlobs" type="Node2D" parent="Layer0"]
 __meta__ = {
@@ -1065,7 +1066,7 @@ collision_layer = 256
 collision_mask = 32
 
 [node name="CollisionShape2D" parent="Layer1/Gravel/Gravel_01" index="5"]
-shape = SubResource( 62 )
+shape = SubResource( 31 )
 
 [node name="Gravel_02" parent="Layer1/Gravel" instance=ExtResource( 7 )]
 position = Vector2( 672, 648 )
@@ -1091,7 +1092,7 @@ collision_layer = 256
 collision_mask = 32
 
 [node name="CollisionShape2D" parent="Layer1/Gravel/Gravel_02" index="5"]
-shape = SubResource( 63 )
+shape = SubResource( 36 )
 
 [node name="MovingBlobs" type="Node2D" parent="Layer1"]
 __meta__ = {
@@ -1426,6 +1427,26 @@ out_layer = 1
 
 [node name="LevelSign12" parent="LevelSigns" instance=ExtResource( 19 )]
 position = Vector2( 392, 136 )
+out_layer = 1
+
+[node name="LevelSign13" parent="LevelSigns" instance=ExtResource( 19 )]
+position = Vector2( 455, 199 )
+out_layer = 1
+
+[node name="LevelSign14" parent="LevelSigns" instance=ExtResource( 19 )]
+position = Vector2( 520, 208 )
+out_layer = 1
+
+[node name="LevelSign15" parent="LevelSigns" instance=ExtResource( 19 )]
+position = Vector2( 504, 360 )
+out_layer = 1
+
+[node name="LevelSign16" parent="LevelSigns" instance=ExtResource( 19 )]
+position = Vector2( 600, 376 )
+out_layer = 1
+
+[node name="LevelSign17" parent="LevelSigns" instance=ExtResource( 19 )]
+position = Vector2( 576, 448 )
 out_layer = 1
 
 [node name="Switch" type="Node2D" parent="."]

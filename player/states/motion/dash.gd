@@ -60,5 +60,8 @@ func handle_input(event):
 
 func finish():
 	owner.velocity.y *= 0.7
-	emit_signal("finished", "previous")
+	if Input.is_action_pressed('float') and not owner.can_dash and $"../../..".float_enabled:
+		emit_signal("finished", "float")
+	else:
+		emit_signal("finished", "previous")
 #	emit_signal("finished", "fall")

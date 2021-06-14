@@ -69,7 +69,6 @@ func set_looking_right(value):
 	sprite.scale.x = 1 if value else -1
 
 
-
 var TIME_OF_DAY = ['Evening', 'Midnight', 'Dawn']
 
 func update_image():

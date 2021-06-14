@@ -5,6 +5,7 @@ var is_following_player = false setget set_following_player
 var is_on_cape = false setget set_on_cape
 
 onready var anim_player = $Offset/AnimatedSprite/AnimationPlayer
+onready var outline_anim_player = $Offset/AnimatedOutline/AnimationPlayer
 
 onready var outline_shader = preload('res://graphics/effects/outline-shader.shader')
 
@@ -16,6 +17,7 @@ func get_time_of_day():
 func fade_out():
 	$Offset/Particles.emitting = true
 	anim_player.play("fade_out")
+	outline_anim_player.play('fade_out')
 	yield(anim_player, "animation_finished")
 	$Offset/Particles.emitting = false
 	call_deferred("free")
@@ -24,14 +26,19 @@ func fade_out():
 func _ready():
 	rotation_degrees = randi() % 2 * 180
 	anim_player.get_animation("collect1").set_loop(false)
-	anim_player.advance(rand_range(0, anim_player.get_animation(anim_player.current_animation).length))
+	var rand_advance = rand_range(0, anim_player.get_animation(anim_player.current_animation).length)
+	anim_player.advance(rand_advance)
+	outline_anim_player.advance(rand_advance)
 	if self.name.substr(0, 4) == 'Swap':
 		var texture = load('res://graphics/sprites/joy/joy' + get_time_of_day().capitalize() + '.png')
-		$Offset/Outline.texture = texture
+#		$Offset/Outline.texture = texture
+		$Offset/AnimatedOutline/Sprite.texture = texture
 		$Offset/AnimatedSprite/Sprite.texture = texture
 
-	$Offset/Outline.set_material($Offset/Outline.get_material().duplicate())
+#	$Offset/Outline.set_material($Offset/Outline.get_material().duplicate())
+	$Offset/AnimatedOutline/Sprite.set_material($Offset/AnimatedOutline/Sprite.get_material().duplicate())
 	$Offset/Particles.set_material($Offset/Particles.get_material().duplicate())
+	$Offset/AnimatedSprite/Sprite.set_material($Offset/AnimatedSprite/Sprite.get_material().duplicate())
 	$Offset/AnimatedSprite/Sprite.set_material($Offset/AnimatedSprite/Sprite.get_material().duplicate())
 
 
@@ -39,6 +46,7 @@ func set_following_player(value):
 	is_following_player = value
 	if value:
 		anim_player.stop(false)
+		outline_anim_player.stop(false)
 		$Offset/AnimationPlayer2.stop()
 		$Offset.position = Vector2.ZERO
 		$Offset/Hitbox/CollisionShape2D.set_deferred("disabled", true)

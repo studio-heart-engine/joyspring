@@ -16,8 +16,12 @@ func update_shader(mode):
 		for child in $Joys.get_children():
 			if child.is_following_player or child.is_on_cape:
 				continue
-			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.shader = outline_shader
-			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.set_shader_param(
+#			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.shader = outline_shader
+#			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.set_shader_param(
+#				'outline_color', Color(1, 1, 1, 1)
+#			)
+			get_node('Joys/' + child.get_name() + '/Offset/AnimatedOutline/Sprite').material.shader = outline_shader
+			get_node('Joys/' + child.get_name() + '/Offset/AnimatedOutline/Sprite').material.set_shader_param(
 				'outline_color', Color(1, 1, 1, 1)
 			)
 			get_node('Joys/' + child.get_name() + '/Offset/Particles').material.shader = null
@@ -51,8 +55,12 @@ func update_shader(mode):
 		for child in $Joys.get_children():
 			if child.is_following_player or child.is_on_cape:
 				continue
-			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.shader = solid_shader
-			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.set_shader_param(
+#			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.shader = solid_shader
+#			get_node('Joys/' + child.get_name() + '/Offset/Outline').material.set_shader_param(
+#				'color', Color(possible_colors[globals.bg_num - 1])
+#			)
+			get_node('Joys/' + child.get_name() + '/Offset/AnimatedOutline/Sprite').material.shader = solid_shader
+			get_node('Joys/' + child.get_name() + '/Offset/AnimatedOutline/Sprite').material.set_shader_param(
 				'color', Color(possible_colors[globals.bg_num - 1])
 			)
 			get_node('Joys/' + child.get_name() + '/Offset/Particles').material.shader = solid_shader
