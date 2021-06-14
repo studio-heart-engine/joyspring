@@ -11,8 +11,7 @@ func enter():
 	
 	if owner.has_node("Cape"):
 		var cape_joys = owner.get_node("Cape/Joys")
-#		if cape_joys.get_child_count() < cape_joys.cape_size:
-		if cape_joys.get_child_count() < len(globals.cape):
+		if cape_joys.get_child_count() < cape_joys.cape_size:
 			Events.emit_signal("begin_cape_regrow")
 
 func update(delta):

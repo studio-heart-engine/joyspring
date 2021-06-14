@@ -18,8 +18,6 @@ var configurable_keys = ['up', 'down', 'left', 'right', 'dash', 'wall', 'float',
 var config_file
 var keybinds = {}
 
-var cape = []
-
 func _ready():
 	if not Engine.editor_hint:
 		Events.connect('level_completed', self, 'on_level_completed')
@@ -36,8 +34,7 @@ func on_level_completed(level_index):
 
 func save_game():
 	var save = File.new()
-	var data = {'levels_completed': levels_completed,
-				'cape': cape}
+	var data = {'levels_completed': levels_completed}
 	save.open('user://game.save', File.WRITE)
 	save.store_line(to_json(data))
 
@@ -47,14 +44,7 @@ func load_game():
 		return
 	save.open('user://game.save', File.READ)
 	var data = parse_json(save.get_line())
-	if data.has('levels_completed'):
-		levels_completed = data['levels_completed']
-	if data.has('cape'):
-		cape = data['cape']
-	else:
-		cape = []
-		for i in range(10):
-			cape.append('normal')
+	levels_completed = data['levels_completed']
 
 func load_controls():
 	config_file = ConfigFile.new()

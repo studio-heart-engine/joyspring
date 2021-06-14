@@ -2,8 +2,8 @@ extends Node2D
 
 enum MovementType {FLOATING, NOT_FLOATING}
 
-#export (int) var initial_cape_size = 10
-#export (int) var cape_size = initial_cape_size
+export (int) var initial_cape_size = 10
+export (int) var cape_size = initial_cape_size
 
 export (Vector2) var cape_start_offset = Vector2(0, -7)
 
@@ -18,22 +18,20 @@ var movement_type = MovementType.NOT_FLOATING
 
 func _ready():
 	noise.octaves = 1
-	init_cape(globals.cape)
 	
-	Events.connect("float_started", self, "_on_float_started")
-	Events.connect("float_ended", self, "_on_float_ended")
-
-func init_cape(cape):
 	set_process(false)
-	for i in cape:
+	for i in range(initial_cape_size):
 		var joy = Joy.instance()
 		add_child(joy)
 		joy.set_following_player(true)
 		joy.position = player.position
 		joy.set_on_cape(true)
-#		if i != 'normal':
-#			joy.set_theme_texture(i)
+#		joy.is_on_cape = true
 	set_process(true)
+	
+	Events.connect("float_started", self, "_on_float_started")
+	Events.connect("float_ended", self, "_on_float_ended")
+
 
 func _on_float_started():
 	movement_type = MovementType.FLOATING
@@ -43,7 +41,9 @@ func _on_float_ended():
 	if anim_player.is_playing():
 		anim_player.play_backwards()
 
-func _process(delta):	
+
+func _process(delta):
+	
 	position = -player.position
 	
 	match movement_type:

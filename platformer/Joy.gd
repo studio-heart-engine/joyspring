@@ -10,7 +10,6 @@ onready var outline_anim_player = $Offset/AnimatedOutline/AnimationPlayer
 onready var outline_shader = preload('res://graphics/effects/outline-shader.shader')
 
 var TIME_OF_DAY = ['evening', 'midnight', 'dawn']
-var texture_theme = 'normal'
 
 func get_time_of_day():
 	return TIME_OF_DAY[globals.time_of_day]
@@ -31,7 +30,10 @@ func _ready():
 	anim_player.advance(rand_advance)
 	outline_anim_player.advance(rand_advance)
 	if self.name.substr(0, 4) == 'Swap':
-		set_theme_texture()
+		var texture = load('res://graphics/sprites/joy/joy' + get_time_of_day().capitalize() + '.png')
+#		$Offset/Outline.texture = texture
+		$Offset/AnimatedOutline/Sprite.texture = texture
+		$Offset/AnimatedSprite/Sprite.texture = texture
 
 #	$Offset/Outline.set_material($Offset/Outline.get_material().duplicate())
 	$Offset/AnimatedOutline/Sprite.set_material($Offset/AnimatedOutline/Sprite.get_material().duplicate())
@@ -39,18 +41,6 @@ func _ready():
 	$Offset/AnimatedSprite/Sprite.set_material($Offset/AnimatedSprite/Sprite.get_material().duplicate())
 	$Offset/AnimatedSprite/Sprite.set_material($Offset/AnimatedSprite/Sprite.get_material().duplicate())
 
-
-func set_theme_texture(time_of_day='default'):
-	var texture
-	if time_of_day == 'default':
-		texture = load('res://graphics/sprites/joy/joy' + get_time_of_day().capitalize() + '.png')
-		texture_theme = get_time_of_day()
-	else:
-		texture = load('res://graphics/sprites/joy/joy' + time_of_day.capitalize() + '.png')
-		texture_theme = time_of_day
-#	$Offset/Outline.texture = texture
-	$Offset/AnimatedOutline/Sprite.texture = texture
-	$Offset/AnimatedSprite/Sprite.texture = texture
 
 func set_following_player(value):
 	is_following_player = value
@@ -76,9 +66,7 @@ func _on_Hitbox_area_entered(area):
 	$SoundEffect.play()
 	get_parent().call_deferred("remove_child", self)
 	$"../../../Player/Cape/Joys".call_deferred("add_child", self)
-#	$"../../../Player/Cape/Joys".cape_size += 1
-	globals.cape.append(texture_theme)
-	print(globals.cape)
+	$"../../../Player/Cape/Joys".cape_size += 1
 	set_following_player(true)
 	if self.name.substr(0, 4) == 'Swap':
 		Events.emit_signal('swap_layers')
