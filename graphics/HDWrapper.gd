@@ -12,6 +12,7 @@ var show = []
 func _ready():
 	scaling = screen_res / sub_viewport.size
 	view_box.rect_scale = scaling
+	Events.connect('quit_game', self, 'quit_game')
 	
 func _process(delta):
 	if globals.curr_state.substr(0, 5) == 'Level' or globals.curr_state == 'Temp_End':
@@ -129,3 +130,6 @@ func clear_all():
 		child.hide()
 	$Title/Sprite.hide()
 	
+
+func quit_game():
+	get_tree().quit()

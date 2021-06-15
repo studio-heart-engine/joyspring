@@ -7,7 +7,6 @@ func enter():
 	.enter()
 	owner.velocity.y = self.input_direction.y * WALL_CLIMB_SPEED
 	play_anim("climb-side")
-	print('climb')
 	on_wall_timer.paused = false
 
 

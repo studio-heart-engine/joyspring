@@ -16,6 +16,8 @@ func _ready():
 	globals.curr_state = current_scene.get_name()
 	globals.set_time_of_day()
 	globals.set_bg()
+	
+	Events.connect('quit_game', self, 'free_scene')
 
 func change_scene_to(scene: PackedScene):
 	if current_scene:
@@ -23,7 +25,12 @@ func change_scene_to(scene: PackedScene):
 		current_scene.queue_free()
 	current_scene = scene.instance()
 	packed_current_scene = scene
+	globals.prev_state = globals.curr_state
+	globals.curr_state = current_scene.get_name()
 	get_node('/root/HDWrapper/ViewportContainer/Viewport').add_child(current_scene)
 	
 func reload_scene():
 	change_scene_to(packed_current_scene)
+
+func free_scene():
+	current_scene.queue_free()

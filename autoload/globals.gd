@@ -32,6 +32,8 @@ func _ready():
 		set_bg()
 		for i in range(total_levels + 1):
 			joy_collected.append([])
+		for i in range(10):
+			cape.append('normal')
 
 
 func on_level_completed(level_index):
@@ -49,21 +51,24 @@ func save_game():
 				'joy_collected': joy_collected}
 	save.open('user://game.save', File.WRITE)
 	save.store_line(to_json(data))
+	save.close()
 
 func load_game():
 	var save = File.new()
 	if not save.file_exists('user://game.save'):
 		return
 	save.open('user://game.save', File.READ)
-	var data = parse_json(save.get_line())
+	if save.eof_reached():
+		return
+	var line = save.get_line()
+	if line == '':
+		return
+	var data = parse_json(line)
+	save.close()
 	if data.has('levels_completed'):
 		levels_completed = data['levels_completed']
 	if data.has('cape'):
 		cape = data['cape']
-	else:
-		cape = []
-		for i in range(10):
-			cape.append('normal')
 	if data.has('joy_collected'):
 		joy_collected = data['joy_collected']
 

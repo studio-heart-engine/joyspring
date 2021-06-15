@@ -14,3 +14,5 @@ signal layer_swapped
 signal keybind_changed
 signal time_of_day_changed
 signal bg_num_changed
+
+signal quit_game

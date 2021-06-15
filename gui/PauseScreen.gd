@@ -9,13 +9,13 @@ func _ready():
 	var button_script = load('res://gui/KeybindButton.gd')
 	keybinds = globals.keybinds.duplicate()
 	for key in keybinds.keys():
-		var hbox = HBoxContainer.new()
+#		var hbox = HBoxContainer.new()
 		var label = Label.new()
 		var button = Button.new()
 		
-		hbox.set_h_size_flags(Control.SIZE_EXPAND_FILL)
-		label.set_h_size_flags(Control.SIZE_EXPAND_FILL)
-		button.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+#		hbox.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+#		label.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+#		button.set_h_size_flags(Control.SIZE_EXPAND_FILL)
 		
 		label.text = key
 		if keybinds[key] != null:
@@ -75,7 +75,8 @@ func _on_ResumeButton_pressed():
 
 func _on_LevelSelectButton_pressed():
 	$Click.play()
-	get_parent().emit_signal('level_exited')
+	if get_parent().name.substr(0, 5) == 'Level':
+		get_parent().emit_signal('level_exited')
 	PlayerData.score = 0
 	SceneChanger.change_scene_to(load("res://gui/LevelSelect.tscn"))
 	yield($"/root/SceneChanger/AnimationPlayer", "animation_finished")
@@ -119,6 +120,6 @@ func resume():
 	get_tree().paused = false
 
 func _on_QuitButton_pressed():
-	get_tree().quit()
+	Events.emit_signal('quit_game')
 
 # Reference: https://www.youtube.com/watch?v=I_Kzb-d-SvM

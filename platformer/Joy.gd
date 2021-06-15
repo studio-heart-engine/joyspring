@@ -98,6 +98,7 @@ func follow(target_pos, min_dist, max_dist, speed):
 	if mag <= max_dist and not is_on_cape:
 		if already_collected:
 			get_parent().call_deferred("remove_child", self)
+			self.queue_free()
 		else:
 			self.is_on_cape = true
 			Events.emit_signal("joy_attached_to_cape")
