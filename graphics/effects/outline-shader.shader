@@ -36,4 +36,5 @@ void fragment() {
 		alpha += texture(TEXTURE, UV + vec2(0, -pixel_size.y)).a;
 		COLOR = vec4(outline_color.rgb, clamp(alpha, 0f, 1f));
 	}
+	
 }

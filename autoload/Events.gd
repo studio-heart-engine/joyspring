@@ -1,6 +1,6 @@
 extends Node
 
-signal joy_collected
+signal joy_collected(joy_name)
 signal player_died(position)
 signal circle_shrink_finished
 signal joy_attached_to_cape

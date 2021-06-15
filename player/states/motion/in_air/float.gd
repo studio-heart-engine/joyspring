@@ -45,12 +45,15 @@ func regrow_cape():
 		return
 	
 	var n = cape_joys.get_child_count()
-	if n == cape_joys.cape_size:
+#	if n == cape_joys.cape_size:
+	if n == len(globals.cape):
 		cape_regrow_timer.stop()
 	else:
 		var joy = load('res://platformer/Joy.tscn').instance()
 		cape_joys.add_child(joy)
 		joy.position = owner.position
+#		if globals.cape[n] != 'normal':
+#			joy.set_theme_texture(globals.cape[n])
 		joy.set_following_player(true)
 
 #		cape_joys.add_child(cape_joys.get_child(n - 1).duplicate())

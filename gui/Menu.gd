@@ -45,7 +45,6 @@ func begin():
 	if not File.new().file_exists('res://platformer/levels/Level_' + curr_level + '.tscn'):
 		SceneChanger.change_scene_to(load('res://gui/LevelSelect.tscn'))
 	else:
-		print(curr_level)
 		SceneChanger.change_scene_to(load('res://platformer/levels/Level_' + curr_level + '.tscn'))
 	
 
