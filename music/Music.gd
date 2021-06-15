@@ -32,8 +32,8 @@ func play():
 			current_song = $Silence
 	elif globals.curr_state == 'Opening':
 		current_song = $Legend
-	elif globals.curr_state == 'Menu':
-		current_song = $Title
+#	elif globals.curr_state == 'Menu':
+#			current_song = $Title
 	elif globals.curr_state == 'Temp_End':
 		current_song = $Title
 	else:
