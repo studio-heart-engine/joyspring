@@ -69,6 +69,7 @@ func enter():
 	
 	Events.emit_signal("float_started")
 	play_anim("float")
+	print('float')
 	$SoundEffect.play()
 	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
 	
@@ -96,8 +97,10 @@ func update(delta):
 		owner.is_looking_right = input_direction.x == 1
 	
 	var is_slow = owner.velocity.x < MAX_GLIDE_HORIZONTAL_SPEED * 0.9
-	if (anim_player.current_animation == "float") != is_slow:
+#	if (anim_player.current_animation == "float") != is_slow:
+	if anim_player.current_animation == 'float':
 		play_anim("float" if is_slow else "float-move")
+		print('float2')
 	
 	if is_near_floor():
 		emit_signal("finished", "fall")
