@@ -113,6 +113,8 @@ func change_bind(key, value):
 func pause():
 	$MarginContainer.show()
 	get_tree().paused = true
+	$MarginContainer/VBoxContainer/Buttons/ResetButton.text = 'Reset Data'
+	$MarginContainer/VBoxContainer/Buttons/ResetButton.set('custom_colors/font_color', Color('ffffff'))
 	# Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func resume():
@@ -123,3 +125,28 @@ func _on_QuitButton_pressed():
 	Events.emit_signal('quit_game')
 
 # Reference: https://www.youtube.com/watch?v=I_Kzb-d-SvM
+
+
+func _on_ResetButton_pressed():
+	var button = $MarginContainer/VBoxContainer/Buttons/ResetButton
+	if button.text == 'Reset Data':
+		button.text = 'Click Again to Confirm'
+		button.set('custom_colors/font_color', Color('ffce43'))
+		return
+	if button.text == 'Click Again to Confirm':
+		$MarginContainer/VBoxContainer/Buttons/ResumeButton.hide()
+		$MarginContainer/VBoxContainer/Buttons/ControlsButton.hide()
+		$MarginContainer/VBoxContainer/Buttons/LevelSelectButton.hide()
+		$MarginContainer/VBoxContainer/Buttons/QuitButton.hide()
+		button.disabled = true
+		button.set('custom_colors/font_color', Color('ffffff'))
+		var t = Timer.new()
+		t.set_wait_time(1)
+		t.set_one_shot(true)
+		self.add_child(t)
+		for i in range(3):
+			button.text = 'Joyspring Will Quit Automatically in ' + str(3 - i) + ' second(s), \nPlease reopen'
+			t.start()
+			yield(t, 'timeout')
+		
+		globals.reset_game()

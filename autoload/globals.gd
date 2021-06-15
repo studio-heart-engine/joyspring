@@ -72,6 +72,12 @@ func load_game():
 	if data.has('joy_collected'):
 		joy_collected = data['joy_collected']
 
+func reset_game():
+	var dir = Directory.new()
+	if dir.file_exists('user://game.save'):
+		dir.remove('user://game.save')
+	Events.emit_signal('quit_game')
+	
 func load_controls():
 	config_file = ConfigFile.new()
 	if config_file.load('user://keybinds.ini') == OK:
