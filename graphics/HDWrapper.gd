@@ -52,6 +52,8 @@ func set_level_text():
 			if child.get_name().substr(0, 8) != 'Dialogue' and child.get_name().substr(0, 8) != 'Tutorial':
 				continue
 			if (child.get_name().substr(0, 1) + child.get_name().right(8)) in show:
+				if child.get_name().substr(0, 1) == 'T':  # TEMP
+					continue
 				child.show()
 			else:
 				child.hide()

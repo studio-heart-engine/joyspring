@@ -25,15 +25,16 @@ func play():
 	if globals.curr_state == 'LevelSelect':
 		current_song = $Title
 	elif globals.curr_state.substr(0, 5) == 'Level':
-		var level_index = int(globals.curr_state.right(5))
-		if level_index < 12:
-			current_song = $Mirage
-		elif level_index == 12:
-			current_song = $Silence
-		elif level_index < 30:
-			current_song = $Denial
-		else:
-			current_song = $Silence
+		pass
+#		var level_index = int(globals.curr_state.right(5))
+#		if level_index < 12:
+#			current_song = $Mirage
+#		elif level_index == 12:
+#			current_song = $Silence
+#		elif level_index < 30:
+#			current_song = $Denial
+#		else:
+#			current_song = $Silence
 	elif globals.curr_state == 'Opening':
 		current_song = $Legend
 	elif globals.curr_state == 'Menu':
