@@ -14,6 +14,10 @@ func _ready():
 
 
 func play():
+	if globals.curr_state == 'Menu' and \
+	   current_song.get_playback_position() > 50.0 and \
+	   current_song.is_playing():
+		return  # Don't cut off last chord in opening
 	var current_scene = get_tree().get_current_scene()
 	var previous_song = current_song
 	current_song = $Silence
@@ -32,8 +36,8 @@ func play():
 			current_song = $Silence
 	elif globals.curr_state == 'Opening':
 		current_song = $Legend
-#	elif globals.curr_state == 'Menu':
-#			current_song = $Title
+	elif globals.curr_state == 'Menu':
+		current_song = $Title
 	elif globals.curr_state == 'Temp_End':
 		current_song = $Title
 	else:
