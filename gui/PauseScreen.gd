@@ -9,13 +9,13 @@ func _ready():
 	var button_script = load('res://gui/KeybindButton.gd')
 	keybinds = globals.keybinds.duplicate()
 	for key in keybinds.keys():
-		var hbox = HBoxContainer.new()
+#		var hbox = HBoxContainer.new()
 		var label = Label.new()
 		var button = Button.new()
 		
-		hbox.set_h_size_flags(Control.SIZE_EXPAND_FILL)
-		label.set_h_size_flags(Control.SIZE_EXPAND_FILL)
-		button.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+#		hbox.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+#		label.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+#		button.set_h_size_flags(Control.SIZE_EXPAND_FILL)
 		
 		label.text = key
 		if keybinds[key] != null:
@@ -75,7 +75,8 @@ func _on_ResumeButton_pressed():
 
 func _on_LevelSelectButton_pressed():
 	$Click.play()
-	get_parent().emit_signal('level_exited')
+	if get_parent().name.substr(0, 5) == 'Level':
+		get_parent().emit_signal('level_exited')
 	PlayerData.score = 0
 	SceneChanger.change_scene_to(load("res://gui/LevelSelect.tscn"))
 	yield($"/root/SceneChanger/AnimationPlayer", "animation_finished")
@@ -112,6 +113,8 @@ func change_bind(key, value):
 func pause():
 	$MarginContainer.show()
 	get_tree().paused = true
+	$MarginContainer/VBoxContainer/Buttons/ResetButton.text = 'Reset Data'
+	$MarginContainer/VBoxContainer/Buttons/ResetButton.set('custom_colors/font_color', Color('ffffff'))
 	# Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func resume():
@@ -119,6 +122,31 @@ func resume():
 	get_tree().paused = false
 
 func _on_QuitButton_pressed():
-	get_tree().quit()
+	Events.emit_signal('quit_game')
 
 # Reference: https://www.youtube.com/watch?v=I_Kzb-d-SvM
+
+
+func _on_ResetButton_pressed():
+	var button = $MarginContainer/VBoxContainer/Buttons/ResetButton
+	if button.text == 'Reset Data':
+		button.text = 'Click Again to Confirm'
+		button.set('custom_colors/font_color', Color('ffce43'))
+		return
+	if button.text == 'Click Again to Confirm':
+		$MarginContainer/VBoxContainer/Buttons/ResumeButton.hide()
+		$MarginContainer/VBoxContainer/Buttons/ControlsButton.hide()
+		$MarginContainer/VBoxContainer/Buttons/LevelSelectButton.hide()
+		$MarginContainer/VBoxContainer/Buttons/QuitButton.hide()
+		button.disabled = true
+		button.set('custom_colors/font_color', Color('ffffff'))
+		var t = Timer.new()
+		t.set_wait_time(1)
+		t.set_one_shot(true)
+		self.add_child(t)
+		for i in range(3):
+			button.text = 'Joyspring Will Quit Automatically in ' + str(3 - i) + ' second(s), \nPlease reopen'
+			t.start()
+			yield(t, 'timeout')
+		
+		globals.reset_game()

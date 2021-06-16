@@ -20,7 +20,6 @@ func _ready():
 		dynamic_material_tilesets.append(
 			"res://graphics/tilesets/foreground_" + material + "_tileset_image.tres"
 		)
-	print(dynamic_material_tilesets)
 	update_tileset()
 	Events.connect('time_of_day_changed', self, 'update_tileset')
 

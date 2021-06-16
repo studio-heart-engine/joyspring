@@ -18,34 +18,66 @@ var configurable_keys = ['up', 'down', 'left', 'right', 'dash', 'wall', 'float',
 var config_file
 var keybinds = {}
 
+var cape = []
+var joy_collected = []
+
 func _ready():
 	if not Engine.editor_hint:
 		Events.connect('level_completed', self, 'on_level_completed')
+		Events.connect('joy_collected', self, 'on_joy_collected')
 		load_controls()
 		set_controls()
 		load_game()
 		set_time_of_day()
 		set_bg()
+		for i in range(total_levels + 1):
+			joy_collected.append([])
+		for i in range(10):
+			cape.append('normal')
 
 
 func on_level_completed(level_index):
 	if not level_index in levels_completed:
 		levels_completed.append(level_index)
 
+func on_joy_collected(joy_name):
+	if not joy_name in joy_collected[int(curr_state.right(6))]:
+		joy_collected[int(curr_state.right(6))].append(joy_name)
+
 func save_game():
 	var save = File.new()
-	var data = {'levels_completed': levels_completed}
+	var data = {'levels_completed': levels_completed,
+				'cape': cape,
+				'joy_collected': joy_collected}
 	save.open('user://game.save', File.WRITE)
 	save.store_line(to_json(data))
+	save.close()
 
 func load_game():
 	var save = File.new()
 	if not save.file_exists('user://game.save'):
 		return
 	save.open('user://game.save', File.READ)
-	var data = parse_json(save.get_line())
-	levels_completed = data['levels_completed']
+	if save.eof_reached():
+		return
+	var line = save.get_line()
+	if line == '':
+		return
+	var data = parse_json(line)
+	save.close()
+	if data.has('levels_completed'):
+		levels_completed = data['levels_completed']
+	if data.has('cape'):
+		cape = data['cape']
+	if data.has('joy_collected'):
+		joy_collected = data['joy_collected']
 
+func reset_game():
+	var dir = Directory.new()
+	if dir.file_exists('user://game.save'):
+		dir.remove('user://game.save')
+	Events.emit_signal('quit_game')
+	
 func load_controls():
 	config_file = ConfigFile.new()
 	if config_file.load('user://keybinds.ini') == OK:

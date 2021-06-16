@@ -49,11 +49,11 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="ShaderMaterial" id=10]
+[sub_resource type="ShaderMaterial" id=5]
 shader = ExtResource( 2 )
 shader_param/outline_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=6]
 length = 0.9
 loop = true
 tracks/0/type = "value"
@@ -69,7 +69,7 @@ tracks/0/keys = {
 "values": [ Rect2( 24, 0, 8, 8 ), Rect2( 32, 0, 8, 8 ), Rect2( 40, 0, 8, 8 ), Rect2( 48, 0, 8, 8 ), Rect2( 56, 0, 8, 8 ) ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=7]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("..:modulate")
@@ -96,7 +96,7 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=8]
 length = 0.9
 loop = true
 tracks/0/type = "value"
@@ -112,10 +112,10 @@ tracks/0/keys = {
 "values": [ Rect2( 0, 0, 8, 8 ), Rect2( 8, 0, 8, 8 ), Rect2( 16, 0, 8, 8 ) ]
 }
 
-[sub_resource type="CircleShape2D" id=5]
+[sub_resource type="CircleShape2D" id=9]
 radius = 6.35152
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=10]
 length = 2.0
 loop = true
 step = 0.5
@@ -171,23 +171,23 @@ anims/fade_out = SubResource( 4 )
 z_index = -1
 
 [node name="Sprite" parent="Offset/AnimatedOutline" index="0"]
-material = SubResource( 10 )
+material = SubResource( 5 )
 region_rect = Rect2( 0, 0, 8, 8 )
 
 [node name="AnimationPlayer" parent="Offset/AnimatedOutline" index="1"]
-anims/collect1 = SubResource( 7 )
-anims/fade_out = SubResource( 8 )
-anims/float = SubResource( 9 )
+anims/collect1 = SubResource( 6 )
+anims/fade_out = SubResource( 7 )
+anims/float = SubResource( 8 )
 
 [node name="Hitbox" type="Area2D" parent="Offset"]
 collision_layer = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Offset/Hitbox"]
-shape = SubResource( 5 )
+shape = SubResource( 9 )
 
 [node name="AnimationPlayer2" type="AnimationPlayer" parent="Offset"]
 autoplay = "float"
-anims/float = SubResource( 6 )
+anims/float = SubResource( 10 )
 [connection signal="area_entered" from="Offset/Hitbox" to="." method="_on_Hitbox_area_entered"]
 
 [editable path="Offset/AnimatedSprite"]

@@ -25,10 +25,10 @@ func _ready():
 	if not self.locked:
 		var rep_level_instance = rep_level.instance()
 		var level_select = get_node('../../../LevelSelect')
-		print(level_index)
 		level_select.dash_enabled = level_select.dash_enabled or rep_level_instance.dash_enabled
 		level_select.climb_enabled = level_select.climb_enabled or rep_level_instance.climb_enabled
-		level_select.float_enabled = level_select.float_enabled or rep_level_instance.float_enabled 
+		level_select.float_enabled = level_select.float_enabled or rep_level_instance.float_enabled
+		rep_level_instance.queue_free()
 
 func _on_Hitbox_area_entered(area):
 #	set_locked(-1)

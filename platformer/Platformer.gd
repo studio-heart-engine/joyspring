@@ -1,6 +1,6 @@
 extends Node2D
 
-export (PackedScene) var next_level
+#export (PackedScene) var next_level
 export (bool) var dash_enabled = true
 export (bool) var float_enabled = true
 export (bool) var climb_enabled = true
@@ -29,6 +29,11 @@ func _ready():
 		if globals.prev_state.substr(0, 5) == 'Level' and globals.prev_state != 'LevelSelect':
 			$Player.position = get_node('LevelSigns/LevelSign' + str(int(globals.prev_state.right(5)))).position
 			layer_num = get_node('LevelSigns/LevelSign' + str(int(globals.prev_state.right(5)))).out_layer
+	
+	for child in ($Layer0/Joys.get_children() + $Layer1/Joys.get_children()):
+		if child.name in globals.joy_collected[level_index]:
+			child.already_collected = true
+#			child.modulate = Color(0, 0, 0 ,1)
 	
 	layers = [$Layer0, $Layer1]
 	collision_layer_vals = [1, pow(2, 5)]

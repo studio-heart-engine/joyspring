@@ -45,12 +45,15 @@ func regrow_cape():
 		return
 	
 	var n = cape_joys.get_child_count()
-	if n == cape_joys.cape_size:
+#	if n == cape_joys.cape_size:
+	if n == len(globals.cape):
 		cape_regrow_timer.stop()
 	else:
 		var joy = load('res://platformer/Joy.tscn').instance()
 		cape_joys.add_child(joy)
 		joy.position = owner.position
+#		if globals.cape[n] != 'normal':
+#			joy.set_theme_texture(globals.cape[n])
 		joy.set_following_player(true)
 
 #		cape_joys.add_child(cape_joys.get_child(n - 1).duplicate())
@@ -93,7 +96,8 @@ func update(delta):
 		owner.is_looking_right = input_direction.x == 1
 	
 	var is_slow = owner.velocity.x < MAX_GLIDE_HORIZONTAL_SPEED * 0.9
-	if (anim_player.current_animation == "float") != is_slow:
+#	if (anim_player.current_animation == "float") != is_slow:
+	if anim_player.current_animation == 'float':
 		play_anim("float" if is_slow else "float-move")
 	
 	if is_near_floor():
