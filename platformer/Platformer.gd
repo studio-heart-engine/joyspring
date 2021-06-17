@@ -10,6 +10,7 @@ var layers
 var layer_num = 0
 var collision_layer_vals
 var collision_mask_vals
+var light_mask_vals
 
 onready var outline_mat = preload('res://graphics/effects/outline_material.tres')
 onready var solid_shader = preload('res://graphics/effects/solid_color.shader')
@@ -44,6 +45,9 @@ func _ready():
 		collision_mask_vals[1] += pow(2, i)
 	update_collision()
 	
+	light_mask_vals = [1, pow(2, 5)]
+	update_light()
+	
 	layers[layer_num].z_index = 10
 	layers[(layer_num + 1) % 2].z_index = 0
 	layers[layer_num]._ready()
@@ -69,6 +73,7 @@ func swap_layers():
 		return
 	else:
 		update_collision()
+		update_light()
 		$Swapper.play("swap_to_" + str(layer_num))
 		update_shader()
 		Events.emit_signal("layer_swapped")
@@ -86,6 +91,9 @@ func update_collision():
 	$Player/Hitbox.collision_layer = $Player.collision_layer
 	$Player/Hitbox.collision_mask = $Player.collision_mask
 
+func update_light():
+	$Player.light_mask = light_mask_vals[layer_num]
+	$Player/Light2D.range_item_cull_mask = $Player.light_mask
 
 func update_shader():
 	layers[layer_num].update_shader('normal')

@@ -1,7 +1,6 @@
-[gd_scene load_steps=114 format=2]
+[gd_scene load_steps=113 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
-[ext_resource path="res://platformer/levelsOld/Level_01.tscn" type="PackedScene" id=2]
 [ext_resource path="res://platformer/Layer.gd" type="Script" id=3]
 [ext_resource path="res://platformer/Bleb.tscn" type="PackedScene" id=4]
 [ext_resource path="res://graphics/sprites/blobs/Blob.tscn" type="PackedScene" id=5]
@@ -760,7 +759,6 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_lock_": true
 }
-next_level = ExtResource( 2 )
 
 [node name="Player" parent="." instance=ExtResource( 11 )]
 light_mask = 1
@@ -769,7 +767,7 @@ z_index = 100
 
 [node name="Light2D" parent="Player" index="2"]
 texture_scale = 0.05
-energy = 0.5
+color = Color( 1, 1, 1, 1 )
 
 [node name="Camera" parent="Player" index="3"]
 visible = true
@@ -1040,6 +1038,7 @@ __meta__ = {
 }
 
 [node name="Layer1" type="Node2D" parent="."]
+light_mask = 32
 script = ExtResource( 3 )
 
 [node name="Blebs" type="Node2D" parent="Layer1"]
