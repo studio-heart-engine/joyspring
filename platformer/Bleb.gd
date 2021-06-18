@@ -28,6 +28,7 @@ func set_facing_right(value):
 
 func _on_Hitbox_area_entered(area):
 	Events.emit_signal("player_died", area.position)
+	print('bleb')
 
 
 func _ready():
