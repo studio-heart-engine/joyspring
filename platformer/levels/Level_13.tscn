@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=2]
+[gd_scene load_steps=79 format=2]
 
 [ext_resource path="res://player/Cape.tscn" type="PackedScene" id=1]
 [ext_resource path="res://platformer/Joy.tscn" type="PackedScene" id=2]
@@ -28,109 +28,9 @@
 [ext_resource path="res://graphics/environment/evening/stalactites5.png" type="Texture" id=26]
 [ext_resource path="res://graphics/environment/evening/rocks2.png" type="Texture" id=27]
 [ext_resource path="res://graphics/environment/evening/stalactites4.png" type="Texture" id=28]
-[ext_resource path="res://platformer/levels/Level_14.tscn" type="PackedScene" id=29]
+[ext_resource path="res://platformer/Platformer.gd" type="Script" id=29]
 
-[sub_resource type="GDScript" id=1]
-script/source = "extends Node2D
-
-export (PackedScene) var next_level
-export (bool) var dash_enabled = true
-export (bool) var float_enabled = true
-export (bool) var climb_enabled = true
-var level_index setget , get_level_index
-
-var layers
-var layer_num = 0
-var collision_layer_vals
-var collision_mask_vals
-
-onready var outline_mat = preload('res://graphics/effects/outline_material.tres')
-onready var solid_shader = preload('res://graphics/effects/solid_color.shader')
-onready var outline_shader = preload('res://graphics/effects/outline-shader.shader')
-
-signal level_exited
-
-
-func _ready():
-	level_index = int(name.right(6))
-	if globals.curr_state == 'LevelSelect':
-		if globals.prev_state.substr(0, 5) == 'Level' and globals.prev_state != 'LevelSelect':
-			$Player.position = get_node('LevelSign' + str(int(globals.prev_state.right(5)))).position
-	set_bg()
-	
-	layers = [$Layer0, $Layer1]
-	
-	collision_layer_vals = [1, pow(2, 5)]
-	collision_mask_vals = [0, 0]
-	for i in range(1, 5):
-		collision_mask_vals[0] += pow(2, i)
-	for i in range(6, 10):
-		collision_mask_vals[1] += pow(2, i)
-	update_collision()
-	
-	layers[layer_num].z_index = 10
-	layers[(layer_num + 1) % 2].z_index = 0
-	layers[layer_num]._ready()
-	layers[(layer_num + 1) % 2]._ready()
-	update_shader()
-	
-	Events.connect('swap_layers', self, 'swap_layers')
-
-
-func _input(event):
-	if event.is_action_pressed(\"swap\"):
-		swap_layers()
-
-
-func swap_layers():
-	layer_num = (layer_num + 1) % 2
-	var layer_name = 'Layer' + str(layer_num)
-	
-	# Check if player is inside tile
-	var index1 = get_node(layer_name + '/TileMap').world_to_map($Player.position)  # Bottom half of player
-	var index2 = get_node(layer_name + '/TileMap').world_to_map($Player.position + Vector2(0, -8))  # Top half of player
-	var inside_tile = get_node(layer_name + '/TileMap').get_cellv(index1) != -1 or \\
-					  get_node(layer_name + '/TileMap').get_cellv(index2) != -1
-	if inside_tile:  # TODO: check gravel collision
-		layer_num = (layer_num + 1) % 2
-		return
-	else:
-		update_collision()
-		$Swapper.play(\"swap_to_\" + str(layer_num))
-		update_shader()
-		Events.emit_signal(\"layer_swapped\")
-
-func update_collision():
-	$Player.collision_layer = collision_layer_vals[layer_num]
-	$Player.collision_mask = collision_mask_vals[layer_num]
-	$Player/Hitbox.collision_layer = $Player.collision_layer
-	$Player/Hitbox.collision_mask = $Player.collision_mask
-
-
-func update_shader():
-	layers[layer_num].update_shader('normal')
-	layers[(layer_num + 1) % 2].update_shader('solid')
-
-
-func all_joys_collected():
-	return $Joys.get_child_count() == 0
-
-
-func get_level_index():
-	return level_index
-
-
-func _on_ExitArea_area_entered(area):
-	SceneChanger.change_scene_to(load('res://gui/Menu.tscn'))
-
-
-func set_bg():
-	var image_path = \"res://graphics/environment/background\" + str(globals.bg_num) + \".png\"
-	$ParallaxBackground/ParallaxLayer/background.set_texture(load(image_path))
-	$ParallaxBackground/ParallaxLayer.motion_offset.y = globals.bg_offset
-"
-
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
 uniform sampler2D mask;
@@ -143,14 +43,14 @@ void fragment() {
 	COLOR = vec4(COLOR.rgb, alpha);
 }"
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
-shader = SubResource( 2 )
+shader = SubResource( 1 )
 shader_param/cutoff = 0.0
 shader_param/smooth_size = 0.1
 shader_param/mask = ExtResource( 9 )
 
-[sub_resource type="Shader" id=4]
+[sub_resource type="Shader" id=3]
 code = "shader_type canvas_item;
 render_mode unshaded;
 
@@ -170,15 +70,15 @@ void fragment() {
 	}
 }"
 
-[sub_resource type="ShaderMaterial" id=5]
-shader = SubResource( 4 )
-shader_param/outline_color = Color( 0.788235, 0.384314, 0.329412, 1 )
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 3 )
+shader_param/outline_color = Color( 0.788235, 0.490196, 0.329412, 1 )
 
-[sub_resource type="RectangleShape2D" id=6]
+[sub_resource type="RectangleShape2D" id=5]
 resource_local_to_scene = true
 extents = Vector2( 6, 3 )
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=6]
 length = 2.4
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:region_rect")
@@ -215,24 +115,24 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 0, -3 ), Vector2( 4, -4 ), Vector2( 5, -8 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+length = 1.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Rect2( 99, 0, 31, 32 ), Rect2( 132, 0, 31, 32 ), Rect2( 165, 0, 31, 32 ), Rect2( 198, 0, 31, 32 ) ]
 }
 
 [sub_resource type="Animation" id=8]
-length = 1.2
-tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:region_rect")
-tracks/0/interp = 0
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 0,
-"values": [ Rect2( 99, 0, 31, 32 ), Rect2( 132, 0, 31, 32 ), Rect2( 165, 0, 31, 32 ), Rect2( 198, 0, 31, 32 ) ]
-}
-
-[sub_resource type="Animation" id=9]
 length = 0.9
 loop = true
 tracks/0/type = "value"
@@ -272,7 +172,7 @@ tracks/2/keys = {
 "values": [ Vector2( 0, -3 ) ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=9]
 length = 2.1
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:region_rect")
@@ -311,7 +211,7 @@ tracks/2/keys = {
 "values": [ Vector2( 0, -3 ), Vector2( 5, -3 ), Vector2( 10, 1 ), Vector2( 11, 8 ) ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=10]
 length = 2.4
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:region_rect")
@@ -350,7 +250,7 @@ tracks/2/keys = {
 "values": [ Vector2( 0, -3 ), Vector2( 4, -4 ), Vector2( 5, -8 ) ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=11]
 length = 1.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:region_rect")
@@ -365,7 +265,7 @@ tracks/0/keys = {
 "values": [ Rect2( 99, 0, 31, 32 ), Rect2( 132, 0, 31, 32 ), Rect2( 165, 0, 31, 32 ), Rect2( 198, 0, 31, 32 ) ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=12]
 length = 0.9
 loop = true
 tracks/0/type = "value"
@@ -405,7 +305,7 @@ tracks/2/keys = {
 "values": [ Vector2( 0, -3 ) ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=13]
 length = 2.1
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:region_rect")
@@ -444,7 +344,7 @@ tracks/2/keys = {
 "values": [ Vector2( 0, -3 ), Vector2( 5, -3 ), Vector2( 10, 1 ), Vector2( 11, 8 ) ]
 }
 
-[sub_resource type="Shader" id=15]
+[sub_resource type="Shader" id=14]
 code = "shader_type canvas_item;
 render_mode unshaded;
 
@@ -464,29 +364,31 @@ void fragment() {
 	}
 }"
 
-[sub_resource type="ShaderMaterial" id=16]
-shader = SubResource( 15 )
+[sub_resource type="ShaderMaterial" id=15]
+shader = SubResource( 14 )
 shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=16]
 
 [sub_resource type="ShaderMaterial" id=17]
+shader = SubResource( 14 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="ShaderMaterial" id=18]
-shader = SubResource( 15 )
-shader_param/outline_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="ShaderMaterial" id=19]
+shader = SubResource( 14 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="ShaderMaterial" id=20]
-shader = SubResource( 15 )
-shader_param/outline_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="ShaderMaterial" id=21]
 
 [sub_resource type="ShaderMaterial" id=22]
-
-[sub_resource type="ShaderMaterial" id=23]
 shader = ExtResource( 5 )
 shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=23]
 
 [sub_resource type="ShaderMaterial" id=24]
 
@@ -503,16 +405,16 @@ shader_param/outline_color = Color( 1, 1, 1, 1 )
 [sub_resource type="ShaderMaterial" id=30]
 
 [sub_resource type="ShaderMaterial" id=31]
+shader = SubResource( 14 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="ShaderMaterial" id=32]
-shader = SubResource( 15 )
-shader_param/outline_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="ShaderMaterial" id=33]
+shader = SubResource( 14 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="ShaderMaterial" id=34]
-shader = SubResource( 15 )
-shader_param/outline_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="ShaderMaterial" id=35]
 
@@ -528,7 +430,79 @@ shader_param/outline_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="ShaderMaterial" id=41]
 
-[sub_resource type="ShaderMaterial" id=42]
+[sub_resource type="Animation" id=42]
+tracks/0/type = "value"
+tracks/0/path = NodePath("Layer0:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, -2, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -1 ), Vector2( 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Layer0:z_index")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 10 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Layer1:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, -2, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, 4 ), Vector2( 0, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Layer1:z_index")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Layer1:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = false
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 0, 0, 0, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Layer0:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = false
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ), Color( 1, 1, 1, 1 ) ]
+}
 
 [sub_resource type="Animation" id=43]
 tracks/0/type = "value"
@@ -539,80 +513,6 @@ tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
 "times": PoolRealArray( 0, 0.1, 0.2 ),
-"transitions": PoolRealArray( 1, -2, 1 ),
-"update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( 0, -1 ), Vector2( 0, 0 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Layer0:z_index")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 10 ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Layer1:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2 ),
-"transitions": PoolRealArray( 1, -2, 1 ),
-"update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( 0, 4 ), Vector2( 0, 0 ) ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("Layer1:z_index")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 0 ]
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("Layer1:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = false
-tracks/4/keys = {
-"times": PoolRealArray( 0, 0.2 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 0, 0, 0, 1 ) ]
-}
-tracks/5/type = "value"
-tracks/5/path = NodePath("Layer0:modulate")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = false
-tracks/5/keys = {
-"times": PoolRealArray( 0, 0.2 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 0, 0, 0, 1 ), Color( 1, 1, 1, 1 ) ]
-}
-
-[sub_resource type="Animation" id=44]
-tracks/0/type = "value"
-tracks/0/path = NodePath("Layer0:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 0, 0 ), Vector2( 0, 4 ), Vector2( 0, 0 ) ]
@@ -678,14 +578,14 @@ tracks/5/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 0, 0, 0, 1 ) ]
 }
 
-[sub_resource type="Gradient" id=45]
+[sub_resource type="Gradient" id=44]
 offsets = PoolRealArray( 0, 0.305011, 0.640523, 1 )
 colors = PoolColorArray( 0.27451, 0.27451, 0.27451, 0, 0.470588, 0.470588, 0.470588, 1, 0.470588, 0.470588, 0.470588, 1, 0.27451, 0.27451, 0.27451, 0 )
 
-[sub_resource type="GradientTexture" id=46]
-gradient = SubResource( 45 )
+[sub_resource type="GradientTexture" id=45]
+gradient = SubResource( 44 )
 
-[sub_resource type="ParticlesMaterial" id=47]
+[sub_resource type="ParticlesMaterial" id=46]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -695,16 +595,16 @@ initial_velocity = 8.0
 angular_velocity = 4.57384e-41
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-color_ramp = SubResource( 46 )
+color_ramp = SubResource( 45 )
 
-[sub_resource type="Gradient" id=48]
+[sub_resource type="Gradient" id=47]
 offsets = PoolRealArray( 0, 0.30719, 0.359477, 0.381264, 0.405229, 0.43573, 1 )
 colors = PoolColorArray( 0.388235, 0.388235, 0.388235, 0, 1, 1, 1, 0.109804, 0.996078, 0.996078, 0.996078, 0.137255, 0.992157, 0.992157, 0.992157, 0.0980392, 0.988235, 0.988235, 0.988235, 0.12549, 0.984314, 0.984314, 0.984314, 0.0941176, 0.937255, 0.937255, 0.937255, 0 )
 
-[sub_resource type="GradientTexture" id=49]
-gradient = SubResource( 48 )
+[sub_resource type="GradientTexture" id=48]
+gradient = SubResource( 47 )
 
-[sub_resource type="ParticlesMaterial" id=50]
+[sub_resource type="ParticlesMaterial" id=49]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -716,14 +616,14 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 0.05
 scale_random = 0.05
-color_ramp = SubResource( 49 )
+color_ramp = SubResource( 48 )
 
 [node name="Level_13" type="Node2D"]
-script = SubResource( 1 )
+script = ExtResource( 29 )
 __meta__ = {
 "_edit_lock_": true
 }
-next_level = ExtResource( 29 )
+float_enabled = false
 
 [node name="Player" parent="." instance=ExtResource( 7 )]
 light_mask = 1
@@ -745,7 +645,7 @@ collision_layer = 2147483649
 collision_mask = 30
 
 [node name="ColorRect" parent="Player/RespawnTransition" index="0"]
-material = SubResource( 3 )
+material = SubResource( 2 )
 
 [node name="cave-darkness" parent="Player" index="8"]
 position = Vector2( -0.470539, -6.71949 )
@@ -765,13 +665,13 @@ scale = Vector2( -1, 1 )
 facing_right = false
 
 [node name="Sprite" parent="Layer0/Blebs/Bleb_01" index="0"]
-material = SubResource( 5 )
+material = SubResource( 4 )
 
 [node name="Hitbox" parent="Layer0/Blebs/Bleb_01" index="3"]
 collision_mask = 9
 
 [node name="CollisionShape2D" parent="Layer0/Blebs/Bleb_01/Hitbox" index="0"]
-shape = SubResource( 6 )
+shape = SubResource( 5 )
 
 [node name="Bleb_02" parent="Layer0/Blebs" instance=ExtResource( 3 )]
 position = Vector2( 48, 48 )
@@ -780,19 +680,19 @@ scale = Vector2( -1, 1 )
 facing_right = false
 
 [node name="Sprite" parent="Layer0/Blebs/Bleb_02" index="0"]
-material = SubResource( 5 )
+material = SubResource( 4 )
 
 [node name="AnimationPlayer" parent="Layer0/Blebs/Bleb_02" index="1"]
-anims/acute-turn = SubResource( 7 )
-anims/back = SubResource( 8 )
-anims/crawl = SubResource( 9 )
-anims/obtuse-turn = SubResource( 10 )
+anims/acute-turn = SubResource( 6 )
+anims/back = SubResource( 7 )
+anims/crawl = SubResource( 8 )
+anims/obtuse-turn = SubResource( 9 )
 
 [node name="Hitbox" parent="Layer0/Blebs/Bleb_02" index="3"]
 collision_mask = 9
 
 [node name="CollisionShape2D" parent="Layer0/Blebs/Bleb_02/Hitbox" index="0"]
-shape = SubResource( 6 )
+shape = SubResource( 5 )
 
 [node name="Bleb_03" parent="Layer0/Blebs" instance=ExtResource( 3 )]
 position = Vector2( 48, 24 )
@@ -801,19 +701,19 @@ scale = Vector2( -1, 1 )
 facing_right = false
 
 [node name="Sprite" parent="Layer0/Blebs/Bleb_03" index="0"]
-material = SubResource( 5 )
+material = SubResource( 4 )
 
 [node name="AnimationPlayer" parent="Layer0/Blebs/Bleb_03" index="1"]
-anims/acute-turn = SubResource( 11 )
-anims/back = SubResource( 12 )
-anims/crawl = SubResource( 13 )
-anims/obtuse-turn = SubResource( 14 )
+anims/acute-turn = SubResource( 10 )
+anims/back = SubResource( 11 )
+anims/crawl = SubResource( 12 )
+anims/obtuse-turn = SubResource( 13 )
 
 [node name="Hitbox" parent="Layer0/Blebs/Bleb_03" index="3"]
 collision_mask = 9
 
 [node name="CollisionShape2D" parent="Layer0/Blebs/Bleb_03/Hitbox" index="0"]
-shape = SubResource( 6 )
+shape = SubResource( 5 )
 
 [node name="Blobs" type="Node2D" parent="Layer0"]
 __meta__ = {
@@ -827,11 +727,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_02/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_02/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_03" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -841,11 +741,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_03/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_03/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_04" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -854,12 +754,12 @@ rotation = -1.48353
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_04/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_04/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_05" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -868,12 +768,12 @@ rotation = -2.97589
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_05/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_05/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_06" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -883,11 +783,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_06/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_06/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_07" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -896,12 +796,12 @@ rotation = -2.76047
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_07/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_07/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_08" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -910,12 +810,12 @@ rotation = -4.30929
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_08/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_08/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_09" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -925,11 +825,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_09/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_09/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_16" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -939,11 +839,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_16/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_16/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_42" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -953,11 +853,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_42/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_42/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_43" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -966,12 +866,12 @@ rotation = -3.78781
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_43/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_43/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_17" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -980,12 +880,12 @@ rotation = -3.54511
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_17/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_17/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_18" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -995,11 +895,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_18/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_18/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_19" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1008,12 +908,12 @@ rotation = -4.03678
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_19/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_19/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_20" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1023,11 +923,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_20/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_20/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_21" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1037,11 +937,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_21/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_21/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_26" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1051,11 +951,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_26/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_26/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_27" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1064,12 +964,12 @@ rotation = -3.1697
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_27/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_27/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_28" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1078,12 +978,12 @@ rotation = -3.23413
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_28/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_28/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_29" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1092,12 +992,12 @@ rotation = -3.23413
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_29/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_29/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_30" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1107,11 +1007,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_30/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_30/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_31" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1120,12 +1020,12 @@ rotation = -3.70802
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_31/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_31/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_32" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1135,11 +1035,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_32/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_32/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_33" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1148,12 +1048,12 @@ rotation = -3.65302
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_33/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_33/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_34" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1163,11 +1063,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_34/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_34/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_35" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1177,11 +1077,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_35/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_35/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_36" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1191,11 +1091,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_36/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_36/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_37" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1205,11 +1105,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_37/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_37/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_38" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1218,12 +1118,12 @@ rotation = -5.75165
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_38/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_38/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_39" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1233,11 +1133,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_39/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_39/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_40" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1246,12 +1146,12 @@ rotation = -6.04348
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_40/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_40/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_44" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1261,11 +1161,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_44/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_44/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_45" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1274,12 +1174,12 @@ rotation = -7.96546
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_45/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_45/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_46" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1288,12 +1188,12 @@ rotation = -9.017
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_46/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_46/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_47" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1302,12 +1202,12 @@ rotation = -9.69191
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_47/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_47/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_48" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1316,12 +1216,12 @@ rotation = -10.5423
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_48/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_48/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_49" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1330,12 +1230,12 @@ rotation = -10.6664
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_49/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_49/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_50" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1345,11 +1245,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_50/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_50/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_51" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1358,12 +1258,12 @@ rotation = -7.79382
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_51/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_51/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_52" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1372,12 +1272,12 @@ rotation = -9.59297
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_52/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_52/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_53" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1386,12 +1286,12 @@ rotation = -6.77119
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_53/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_53/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_41" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1401,11 +1301,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_41/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_41/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_22" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1414,12 +1314,12 @@ rotation = -2.48434
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_22/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_22/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_23" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1428,12 +1328,12 @@ rotation = -2.37425
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_23/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_23/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_24" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1442,12 +1342,12 @@ rotation = -2.62677
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_24/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_24/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_25" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1456,12 +1356,12 @@ rotation = -3.12387
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_25/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_25/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_10" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1471,11 +1371,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_10/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_10/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_11" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1484,12 +1384,12 @@ rotation = -4.0564
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_11/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_11/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_12" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1499,11 +1399,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_12/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_12/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_13" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1512,12 +1412,12 @@ rotation = -3.96879
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_13/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_13/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_63" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1527,11 +1427,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_63/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_63/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_64" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1540,12 +1440,12 @@ rotation = -2.93145
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_64/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_64/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_65" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1555,11 +1455,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_65/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_65/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_66" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1568,12 +1468,12 @@ rotation = -2.69055
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_66/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_66/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_67" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1583,11 +1483,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_67/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_67/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_68" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1596,12 +1496,12 @@ rotation = -3.07023
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_68/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_68/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_69" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1610,12 +1510,12 @@ rotation = -2.07836
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_69/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_69/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_70" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1624,12 +1524,12 @@ rotation = -3.77255
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_70/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_70/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_71" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1639,11 +1539,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_71/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_71/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_72" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1653,11 +1553,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_72/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_72/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_73" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1666,12 +1566,12 @@ rotation = -1.87542
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_73/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_73/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_74" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1680,12 +1580,12 @@ rotation = -3.14957
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_74/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_74/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_75" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1694,12 +1594,12 @@ rotation = -4.87678
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_75/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_75/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_76" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1708,12 +1608,12 @@ rotation = -7.26386
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_76/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_76/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_77" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1723,11 +1623,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_77/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_77/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_78" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1737,11 +1637,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_78/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_78/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_14" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1750,12 +1650,12 @@ rotation = -4.95426
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_14/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_14/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_62" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1765,11 +1665,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_62/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_62/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_15" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1779,11 +1679,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_15/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_15/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_54" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1792,12 +1692,12 @@ rotation = -4.38044
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_54/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_54/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_55" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1806,12 +1706,12 @@ rotation = -4.38044
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_55/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_55/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_56" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1820,12 +1720,12 @@ rotation = -3.64741
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_56/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_56/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_57" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1835,11 +1735,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_57/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_57/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_58" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1848,12 +1748,12 @@ rotation = -4.70108
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_58/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_58/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_59" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1862,12 +1762,12 @@ rotation = -5.70677
 shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_59/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 16 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_59/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_60" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1877,11 +1777,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_60/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_60/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob1_61" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1891,11 +1791,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer0/Blobs/Blob1_61/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 16 )
+material = SubResource( 15 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob1_61/NoiseOffset" index="1"]
-material = SubResource( 17 )
+material = SubResource( 16 )
 texture = ExtResource( 19 )
 
 [node name="Blob2_52" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1903,12 +1803,12 @@ position = Vector2( -262.797, 274.058 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_52/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_52/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_53" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1916,12 +1816,12 @@ position = Vector2( 69.9723, 254.635 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_53/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_53/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_54" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1929,12 +1829,12 @@ position = Vector2( 78.7521, 254.347 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_54/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_54/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_55" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1943,12 +1843,12 @@ rotation = -0.536991
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_55/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_55/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_02" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1956,12 +1856,12 @@ position = Vector2( 90.7036, 232.225 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_02/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_02/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_56" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1970,12 +1870,12 @@ rotation = 0.456716
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_56/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_56/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_57" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1985,11 +1885,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_57/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_57/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_58" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -1999,11 +1899,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_58/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_58/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_59" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2012,12 +1912,12 @@ rotation = -0.948071
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_59/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_59/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_60" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2026,12 +1926,12 @@ rotation = -0.948071
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_60/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_60/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_61" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2041,11 +1941,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_61/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_61/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_62" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2055,11 +1955,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_62/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_62/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_63" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2068,12 +1968,12 @@ rotation = -1.02453
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_63/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_63/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_64" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2082,12 +1982,12 @@ rotation = -1.07114
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_64/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_64/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_65" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2096,12 +1996,12 @@ rotation = -1.81332
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_65/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_65/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_67" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2110,12 +2010,12 @@ rotation = -2.3695
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_67/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_67/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_66" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2125,11 +2025,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_66/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_66/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_49" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2137,12 +2037,12 @@ position = Vector2( 97.2642, 255.843 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_49/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_49/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_29" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2150,12 +2050,12 @@ position = Vector2( 326.237, 93.4754 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_29/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_29/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_80" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2164,11 +2064,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_80/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_80/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_30" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2176,12 +2076,12 @@ position = Vector2( 329.967, 116.12 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_30/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_30/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_31" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2190,12 +2090,12 @@ rotation = 1.00287
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_31/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_31/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_32" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2205,11 +2105,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_32/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_32/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_33" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2218,12 +2118,12 @@ rotation = 0.953338
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_33/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_33/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_34" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2233,11 +2133,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_34/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_34/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_35" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2247,11 +2147,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_35/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_35/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_06" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2260,12 +2160,12 @@ rotation = 0.439496
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_06/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_06/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_07" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2275,11 +2175,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_07/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_07/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_08" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2288,12 +2188,12 @@ rotation = 0.402557
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_08/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_08/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_09" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2302,12 +2202,12 @@ rotation = 1.09486
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_09/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_09/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_10" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2316,12 +2216,12 @@ rotation = 0.357242
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_10/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_10/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_11" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2330,12 +2230,12 @@ rotation = -0.610637
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_11/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_11/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_36" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2344,12 +2244,12 @@ rotation = -0.230382
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_36/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_36/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_37" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2358,12 +2258,12 @@ rotation = -0.230382
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_37/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_37/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_38" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2372,12 +2272,12 @@ rotation = 0.381205
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_38/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_38/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_39" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2386,12 +2286,12 @@ rotation = -0.172361
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_39/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_39/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_40" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2400,12 +2300,12 @@ rotation = -0.172361
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_40/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_40/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_41" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2414,12 +2314,12 @@ rotation = 0.160828
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_41/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_41/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_42" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2428,12 +2328,12 @@ rotation = 0.720198
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_42/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_42/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_43" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2442,12 +2342,12 @@ rotation = 0.720198
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_43/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_43/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_44" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2456,12 +2356,12 @@ rotation = 0.365981
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_44/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_44/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_45" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2470,12 +2370,12 @@ rotation = 0.617646
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_45/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_45/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_46" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2485,11 +2385,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_46/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_46/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_47" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2498,12 +2398,12 @@ rotation = -2.16681
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_47/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_47/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_48" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2512,12 +2412,12 @@ rotation = -2.13601
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_48/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_48/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_03" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2525,12 +2425,12 @@ position = Vector2( 88.5529, 223.417 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_03/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_03/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_04" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2538,12 +2438,12 @@ position = Vector2( 86.1261, 213.574 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_04/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_04/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_05" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2552,11 +2452,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_05/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_05/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_12" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2564,12 +2464,12 @@ position = Vector2( 170.213, 13.4434 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_12/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_12/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_13" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2577,12 +2477,12 @@ position = Vector2( 167.456, 3.20385 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_13/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_13/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_14" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2590,12 +2490,12 @@ position = Vector2( 197.577, 179.314 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_14/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_14/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_15" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2603,12 +2503,12 @@ position = Vector2( 198.549, 188.059 )
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_15/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_15/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_16" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2617,12 +2517,12 @@ rotation = 1.32464
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_16/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_16/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_17" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2631,12 +2531,12 @@ rotation = 0.805088
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_17/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_17/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_18" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2646,11 +2546,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_18/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_18/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_68" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2659,12 +2559,12 @@ rotation = 2.57478
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_68/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_68/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_69" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2673,12 +2573,12 @@ rotation = 1.45614
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_69/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_69/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_70" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2687,12 +2587,12 @@ rotation = -1.02098
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_70/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_70/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_71" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2702,11 +2602,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_71/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_71/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_72" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2715,12 +2615,12 @@ rotation = -0.520135
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_72/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_72/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_73" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2729,12 +2629,12 @@ rotation = -1.80646
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_73/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_73/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_74" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2743,12 +2643,12 @@ rotation = -0.680303
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_74/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_74/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_75" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2757,12 +2657,12 @@ rotation = 0.494832
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_75/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_75/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_76" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2771,12 +2671,12 @@ rotation = 0.494832
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_76/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_76/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_77" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2786,11 +2686,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_77/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_77/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_78" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2799,12 +2699,12 @@ rotation = 0.937611
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_78/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_78/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_79" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2813,12 +2713,12 @@ rotation = 1.17829
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_79/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_79/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_19" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2827,12 +2727,12 @@ rotation = 2.50746
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_19/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_19/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_20" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2841,12 +2741,12 @@ rotation = 0.440662
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_20/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_20/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_51" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2855,12 +2755,12 @@ rotation = -0.277079
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_51/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_51/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_50" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2869,12 +2769,12 @@ rotation = 1.94516
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_50/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_50/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_21" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2884,11 +2784,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_21/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_21/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_22" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2897,12 +2797,12 @@ rotation = 1.86284
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_22/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_22/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_23" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2912,11 +2812,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_23/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_23/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_24" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2925,12 +2825,12 @@ rotation = 2.29447
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_24/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_24/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_25" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2939,12 +2839,12 @@ rotation = 1.49145
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_25/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_25/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_26" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2953,12 +2853,12 @@ rotation = 1.79686
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_26/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_26/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_27" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2968,11 +2868,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_27/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 18 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_27/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob2_28" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2981,12 +2881,12 @@ rotation = 0.207128
 shape = "2"
 
 [node name="Outline" parent="Layer0/Blobs/Blob2_28/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 18 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 17 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob2_28/NoiseOffset" index="1"]
-material = SubResource( 19 )
+material = SubResource( 18 )
 texture = ExtResource( 21 )
 
 [node name="Blob3_02" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -2995,12 +2895,12 @@ rotation = -1.17631
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_02/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_02/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_03" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3009,12 +2909,12 @@ rotation = -0.652572
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_03/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_03/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_04" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3024,11 +2924,11 @@ shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_04/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 20 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_04/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_43" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3037,12 +2937,12 @@ rotation = -1.35387
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_43/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_43/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_44" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3051,12 +2951,12 @@ rotation = -0.0562603
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_44/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_44/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_45" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3066,11 +2966,11 @@ shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_45/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 20 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_45/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_05" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3079,12 +2979,12 @@ rotation = -0.73359
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_05/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_05/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_06" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3094,11 +2994,11 @@ shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_06/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 20 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_06/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_07" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3107,12 +3007,12 @@ rotation = -0.931749
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_07/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_07/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_32" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3121,12 +3021,12 @@ rotation = -0.281742
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_32/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_32/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_33" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3135,12 +3035,12 @@ rotation = -0.190038
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_33/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_33/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_34" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3149,12 +3049,12 @@ rotation = -0.333367
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_34/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_34/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_35" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3164,11 +3064,11 @@ shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_35/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 20 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_35/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_36" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3177,12 +3077,12 @@ rotation = 0.35597
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_36/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_36/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_37" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3192,11 +3092,11 @@ shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_37/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 20 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_37/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_38" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3205,12 +3105,12 @@ rotation = -0.046612
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_38/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_38/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_39" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3219,12 +3119,12 @@ rotation = 0.0896446
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_39/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_39/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_40" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3234,11 +3134,11 @@ shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_40/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 20 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_40/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_41" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3247,12 +3147,12 @@ rotation = -0.10553
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_41/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_41/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_42" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3262,11 +3162,11 @@ shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_42/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 20 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_42/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_08" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3275,12 +3175,12 @@ rotation = -1.43838
 shape = "3"
 
 [node name="Outline" parent="Layer0/Blobs/Blob3_08/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 20 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 19 )
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer0/Blobs/Blob3_08/NoiseOffset" index="1"]
-material = SubResource( 21 )
+material = SubResource( 20 )
 texture = ExtResource( 22 )
 
 [node name="Blob3_09" parent="Layer0/Blobs" instance=ExtResource( 4 )]
@@ -3407,13 +3307,13 @@ __meta__ = {
 position = Vector2( 363.666, 87.5491 )
 
 [node name="Particles" parent="Layer0/Joys/Joy_01/Offset" index="0"]
-material = SubResource( 22 )
+material = SubResource( 21 )
 
 [node name="Outline" parent="Layer0/Joys/Joy_01/Offset" index="1"]
-material = SubResource( 23 )
+material = SubResource( 22 )
 
 [node name="Sprite" parent="Layer0/Joys/Joy_01/Offset/AnimatedSprite" index="0"]
-material = SubResource( 24 )
+material = SubResource( 23 )
 region_rect = Rect2( 48, 0, 8, 8 )
 
 [node name="Gravel" type="Node2D" parent="Layer0"]
@@ -3433,7 +3333,7 @@ __meta__ = {
 }
 
 [node name="TileMap" type="TileMap" parent="Layer0"]
-material = SubResource( 25 )
+material = SubResource( 24 )
 z_index = 1
 tile_set = ExtResource( 16 )
 cell_size = Vector2( 8, 8 )
@@ -3449,12 +3349,12 @@ __meta__ = {
 }
 
 [node name="VineTileMap" type="TileMap" parent="Layer0"]
-material = SubResource( 26 )
+material = SubResource( 25 )
 z_index = 1
 format = 1
 
 [node name="BlobTileMap" type="TileMap" parent="Layer0"]
-material = SubResource( 27 )
+material = SubResource( 26 )
 tile_set = ExtResource( 6 )
 cell_size = Vector2( 4, 4 )
 cell_quadrant_size = 2
@@ -3468,7 +3368,7 @@ script = ExtResource( 14 )
 
 [node name="Bushes1" type="TextureRect" parent="Layer0/Environment"]
 visible = false
-material = SubResource( 28 )
+material = SubResource( 27 )
 margin_left = 12.0
 margin_top = 156.0
 margin_right = 126.0
@@ -3479,7 +3379,7 @@ __meta__ = {
 }
 
 [node name="Rocks1" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 29 )
+material = SubResource( 28 )
 margin_left = -2.6086
 margin_top = 164.032
 margin_right = 69.3914
@@ -3490,7 +3390,7 @@ __meta__ = {
 }
 
 [node name="Rocks2" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 29 )
+material = SubResource( 28 )
 margin_left = 529.988
 margin_top = 139.937
 margin_right = 601.988
@@ -3501,7 +3401,7 @@ __meta__ = {
 }
 
 [node name="Stalactites1" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 30 )
+material = SubResource( 29 )
 margin_left = 208.633
 margin_top = 17.0624
 margin_right = 216.633
@@ -3512,7 +3412,7 @@ __meta__ = {
 }
 
 [node name="Stalactites2" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 30 )
+material = SubResource( 29 )
 margin_left = 116.909
 margin_top = 182.706
 margin_right = 124.909
@@ -3523,7 +3423,7 @@ __meta__ = {
 }
 
 [node name="Stalactites3" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 30 )
+material = SubResource( 29 )
 margin_left = 131.901
 margin_top = 88.0
 margin_right = 139.901
@@ -3534,7 +3434,7 @@ __meta__ = {
 }
 
 [node name="Stalactites4" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 30 )
+material = SubResource( 29 )
 margin_left = 219.294
 margin_top = 95.6789
 margin_right = 227.294
@@ -3545,7 +3445,7 @@ __meta__ = {
 }
 
 [node name="Stalactites5" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 30 )
+material = SubResource( 29 )
 margin_left = 452.586
 margin_top = 118.35
 margin_right = 460.586
@@ -3557,7 +3457,7 @@ __meta__ = {
 
 [node name="Trees1" type="TextureRect" parent="Layer0/Environment"]
 visible = false
-material = SubResource( 31 )
+material = SubResource( 30 )
 margin_left = 228.0
 margin_top = -24.0
 margin_right = 324.0
@@ -3585,12 +3485,12 @@ position = Vector2( -2.37823, 254.17 )
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_02/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_02/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_02" index="1"]
@@ -3603,11 +3503,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_03/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 32 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_03/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_03" index="1"]
@@ -3621,11 +3521,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_04/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 32 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_04/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_04" index="1"]
@@ -3638,12 +3538,12 @@ rotation = 1.18809
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_05/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_05/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_05" index="1"]
@@ -3657,11 +3557,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_06/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 32 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_06/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_06" index="1"]
@@ -3674,12 +3574,12 @@ rotation = 1.94196
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_07/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_07/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_07" index="1"]
@@ -3692,12 +3592,12 @@ rotation = 0.928027
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_08/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_08/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_08" index="1"]
@@ -3710,12 +3610,12 @@ rotation = 0.806657
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_09/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_09/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_09" index="1"]
@@ -3728,12 +3628,12 @@ rotation = 0.806657
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_10/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_10/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_10" index="1"]
@@ -3746,12 +3646,12 @@ rotation = 1.4869
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_11/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_11/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_11" index="1"]
@@ -3765,11 +3665,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_12/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 32 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_12/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_12" index="1"]
@@ -3783,11 +3683,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_13/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 32 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_13/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_13" index="1"]
@@ -3800,12 +3700,12 @@ rotation = 1.19904
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_14/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_14/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_14" index="1"]
@@ -3818,12 +3718,12 @@ rotation = 1.4463
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_15/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_15/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_15" index="1"]
@@ -3836,12 +3736,12 @@ rotation = 1.4463
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_18/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_18/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_18" index="1"]
@@ -3854,12 +3754,12 @@ rotation = 2.28533
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_19/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_19/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_19" index="1"]
@@ -3872,12 +3772,12 @@ rotation = 1.08533
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_20/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_20/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_20" index="1"]
@@ -3890,12 +3790,12 @@ rotation = -0.859715
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_21/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_21/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_21" index="1"]
@@ -3908,12 +3808,12 @@ rotation = 0.52547
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_22/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_22/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_22" index="1"]
@@ -3926,12 +3826,12 @@ rotation = 1.84176
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_23/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_23/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_23" index="1"]
@@ -3944,12 +3844,12 @@ rotation = 1.20031
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_24/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_24/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_24" index="1"]
@@ -3962,12 +3862,12 @@ rotation = -0.631106
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_25/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_25/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_25" index="1"]
@@ -3981,11 +3881,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_26/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 32 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_26/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_26" index="1"]
@@ -3998,12 +3898,12 @@ rotation = 0.260337
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_27/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_27/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_27" index="1"]
@@ -4016,12 +3916,12 @@ rotation = -0.933442
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_28/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_28/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_28" index="1"]
@@ -4034,12 +3934,12 @@ rotation = -0.669702
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_29/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_29/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_29" index="1"]
@@ -4052,12 +3952,12 @@ rotation = -2.01095
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_30/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_30/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_30" index="1"]
@@ -4071,11 +3971,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_31/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 32 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_31/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_31" index="1"]
@@ -4088,12 +3988,12 @@ rotation = -1.56952
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_32/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_32/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_32" index="1"]
@@ -4106,12 +4006,12 @@ rotation = -0.730496
 shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_16/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 32 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_16/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_16" index="1"]
@@ -4125,11 +4025,11 @@ shape = "1"
 
 [node name="Outline" parent="Layer1/Blobs/Blob1_17/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 32 )
+material = SubResource( 31 )
 texture = ExtResource( 19 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob1_17/NoiseOffset" index="1"]
-material = SubResource( 33 )
+material = SubResource( 32 )
 texture = ExtResource( 19 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob1_17" index="1"]
@@ -4142,11 +4042,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_02/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 34 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_02/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_02" index="1"]
@@ -4160,11 +4060,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_13/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_13/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_13" index="1"]
@@ -4177,12 +4077,12 @@ rotation = -2.5654
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_14/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_14/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_14" index="1"]
@@ -4195,12 +4095,12 @@ rotation = -2.5654
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_15/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_15/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_15" index="1"]
@@ -4214,11 +4114,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_16/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 34 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_16/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_16" index="1"]
@@ -4231,12 +4131,12 @@ rotation = -1.49467
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_17/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_17/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_17" index="1"]
@@ -4250,11 +4150,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_18/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 34 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_18/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_18" index="1"]
@@ -4267,12 +4167,12 @@ rotation = -2.52892
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_19/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_19/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_19" index="1"]
@@ -4285,12 +4185,12 @@ rotation = -2.16418
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_20/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_20/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_20" index="1"]
@@ -4303,12 +4203,12 @@ rotation = -3.58867
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_21/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_21/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_21" index="1"]
@@ -4321,12 +4221,12 @@ rotation = -2.08291
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_22/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_22/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_22" index="1"]
@@ -4339,12 +4239,12 @@ rotation = -2.04654
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_23/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_23/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_23" index="1"]
@@ -4358,11 +4258,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_24/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 34 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_24/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_24" index="1"]
@@ -4375,12 +4275,12 @@ rotation = -1.17622
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_25/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_25/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_25" index="1"]
@@ -4393,12 +4293,12 @@ rotation = 0.478823
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_26/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_26/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_26" index="1"]
@@ -4412,11 +4312,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_27/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_27/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_27" index="1"]
@@ -4430,11 +4330,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_28/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 34 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_28/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_28" index="1"]
@@ -4447,12 +4347,12 @@ rotation = 2.1418
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_29/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_29/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_29" index="1"]
@@ -4466,11 +4366,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_30/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_30/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_30" index="1"]
@@ -4483,12 +4383,12 @@ rotation = 2.17166
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_31/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_31/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_31" index="1"]
@@ -4501,12 +4401,12 @@ rotation = 0.911063
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_32/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_32/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_32" index="1"]
@@ -4519,12 +4419,12 @@ rotation = 1.66604
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_33/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_33/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_33" index="1"]
@@ -4538,11 +4438,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_34/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_34/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_34" index="1"]
@@ -4556,11 +4456,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_03/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_03/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_03" index="1"]
@@ -4573,12 +4473,12 @@ rotation = -0.785178
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_04/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_04/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_04" index="1"]
@@ -4592,11 +4492,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_05/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_05/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_05" index="1"]
@@ -4610,11 +4510,11 @@ shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_06/NoiseOffset" index="0"]
 modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 34 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_06/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_06" index="1"]
@@ -4627,12 +4527,12 @@ rotation = -1.04779
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_07/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_07/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_07" index="1"]
@@ -4645,12 +4545,12 @@ rotation = -2.41083
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_08/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_08/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_08" index="1"]
@@ -4663,12 +4563,12 @@ rotation = -2.41083
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_09/NoiseOffset" index="0"]
-modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_09/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_09" index="1"]
@@ -4681,12 +4581,12 @@ rotation = -1.64493
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_10/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_10/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_10" index="1"]
@@ -4699,12 +4599,12 @@ rotation = -3.4011
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_11/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_11/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_11" index="1"]
@@ -4717,12 +4617,12 @@ rotation = -2.66964
 shape = "2"
 
 [node name="Outline" parent="Layer1/Blobs/Blob2_12/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 34 )
+modulate = Color( 0.823529, 0.294118, 0.380392, 1 )
+material = SubResource( 33 )
 texture = ExtResource( 21 )
 
 [node name="Sprite" parent="Layer1/Blobs/Blob2_12/NoiseOffset" index="1"]
-material = SubResource( 35 )
+material = SubResource( 34 )
 texture = ExtResource( 21 )
 
 [node name="Hitbox" parent="Layer1/Blobs/Blob2_12" index="1"]
@@ -4751,7 +4651,7 @@ __meta__ = {
 }
 
 [node name="TileMap" type="TileMap" parent="Layer1"]
-material = SubResource( 36 )
+material = SubResource( 35 )
 z_index = 1
 tile_set = ExtResource( 16 )
 cell_size = Vector2( 8, 8 )
@@ -4767,12 +4667,12 @@ __meta__ = {
 }
 
 [node name="VineTileMap" type="TileMap" parent="Layer1"]
-material = SubResource( 37 )
+material = SubResource( 36 )
 z_index = 1
 format = 1
 
 [node name="BlobTileMap" type="TileMap" parent="Layer1"]
-material = SubResource( 38 )
+material = SubResource( 37 )
 tile_set = ExtResource( 6 )
 cell_size = Vector2( 4, 4 )
 cell_quadrant_size = 2
@@ -4786,7 +4686,7 @@ z_index = -10
 script = ExtResource( 14 )
 
 [node name="Bushes1" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 39 )
+material = SubResource( 38 )
 margin_left = 212.0
 margin_top = 108.0
 margin_right = 326.0
@@ -4797,7 +4697,7 @@ __meta__ = {
 }
 
 [node name="Rocks1" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 40 )
+material = SubResource( 39 )
 margin_left = 36.0
 margin_top = 116.0
 margin_right = 108.0
@@ -4808,7 +4708,7 @@ __meta__ = {
 }
 
 [node name="Stalactites1" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 41 )
+material = SubResource( 40 )
 margin_left = 12.0
 margin_top = 128.0
 margin_right = 20.0
@@ -4819,7 +4719,7 @@ __meta__ = {
 }
 
 [node name="Trees1" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 42 )
+material = SubResource( 41 )
 margin_left = 92.0
 margin_top = 56.0
 margin_right = 188.0
@@ -4830,14 +4730,14 @@ __meta__ = {
 }
 
 [node name="Swapper" type="AnimationPlayer" parent="."]
-anims/swap_to_0 = SubResource( 43 )
-anims/swap_to_1 = SubResource( 44 )
+anims/swap_to_0 = SubResource( 42 )
+anims/swap_to_1 = SubResource( 43 )
 
 [node name="DustParticles" type="Particles2D" parent="."]
 position = Vector2( 160, 90 )
 z_index = 1
 local_coords = false
-process_material = SubResource( 47 )
+process_material = SubResource( 46 )
 script = ExtResource( 11 )
 
 [node name="LightParticles" type="Particles2D" parent="."]
@@ -4846,7 +4746,7 @@ z_index = 1
 amount = 2
 lifetime = 7.0
 local_coords = false
-process_material = SubResource( 50 )
+process_material = SubResource( 49 )
 texture = ExtResource( 8 )
 script = ExtResource( 11 )
 
@@ -4875,251 +4775,499 @@ motion_mirroring = Vector2( 640, 360 )
 centered = false
 
 [editable path="Player"]
+
 [editable path="Player/AnimatedSprite"]
+
 [editable path="Layer0/Blebs/Bleb_01"]
+
 [editable path="Layer0/Blebs/Bleb_02"]
+
 [editable path="Layer0/Blebs/Bleb_03"]
+
 [editable path="Layer0/Blobs/Blob1_02"]
+
 [editable path="Layer0/Blobs/Blob1_03"]
+
 [editable path="Layer0/Blobs/Blob1_04"]
+
 [editable path="Layer0/Blobs/Blob1_05"]
+
 [editable path="Layer0/Blobs/Blob1_06"]
+
 [editable path="Layer0/Blobs/Blob1_07"]
+
 [editable path="Layer0/Blobs/Blob1_08"]
+
 [editable path="Layer0/Blobs/Blob1_09"]
+
 [editable path="Layer0/Blobs/Blob1_16"]
+
 [editable path="Layer0/Blobs/Blob1_42"]
+
 [editable path="Layer0/Blobs/Blob1_43"]
+
 [editable path="Layer0/Blobs/Blob1_17"]
+
 [editable path="Layer0/Blobs/Blob1_18"]
+
 [editable path="Layer0/Blobs/Blob1_19"]
+
 [editable path="Layer0/Blobs/Blob1_20"]
+
 [editable path="Layer0/Blobs/Blob1_21"]
+
 [editable path="Layer0/Blobs/Blob1_26"]
+
 [editable path="Layer0/Blobs/Blob1_27"]
+
 [editable path="Layer0/Blobs/Blob1_28"]
+
 [editable path="Layer0/Blobs/Blob1_29"]
+
 [editable path="Layer0/Blobs/Blob1_30"]
+
 [editable path="Layer0/Blobs/Blob1_31"]
+
 [editable path="Layer0/Blobs/Blob1_32"]
+
 [editable path="Layer0/Blobs/Blob1_33"]
+
 [editable path="Layer0/Blobs/Blob1_34"]
+
 [editable path="Layer0/Blobs/Blob1_35"]
+
 [editable path="Layer0/Blobs/Blob1_36"]
+
 [editable path="Layer0/Blobs/Blob1_37"]
+
 [editable path="Layer0/Blobs/Blob1_38"]
+
 [editable path="Layer0/Blobs/Blob1_39"]
+
 [editable path="Layer0/Blobs/Blob1_40"]
+
 [editable path="Layer0/Blobs/Blob1_44"]
+
 [editable path="Layer0/Blobs/Blob1_45"]
+
 [editable path="Layer0/Blobs/Blob1_46"]
+
 [editable path="Layer0/Blobs/Blob1_47"]
+
 [editable path="Layer0/Blobs/Blob1_48"]
+
 [editable path="Layer0/Blobs/Blob1_49"]
+
 [editable path="Layer0/Blobs/Blob1_50"]
+
 [editable path="Layer0/Blobs/Blob1_51"]
+
 [editable path="Layer0/Blobs/Blob1_52"]
+
 [editable path="Layer0/Blobs/Blob1_53"]
+
 [editable path="Layer0/Blobs/Blob1_41"]
+
 [editable path="Layer0/Blobs/Blob1_22"]
+
 [editable path="Layer0/Blobs/Blob1_23"]
+
 [editable path="Layer0/Blobs/Blob1_24"]
+
 [editable path="Layer0/Blobs/Blob1_25"]
+
 [editable path="Layer0/Blobs/Blob1_10"]
+
 [editable path="Layer0/Blobs/Blob1_11"]
+
 [editable path="Layer0/Blobs/Blob1_12"]
+
 [editable path="Layer0/Blobs/Blob1_13"]
+
 [editable path="Layer0/Blobs/Blob1_63"]
+
 [editable path="Layer0/Blobs/Blob1_64"]
+
 [editable path="Layer0/Blobs/Blob1_65"]
+
 [editable path="Layer0/Blobs/Blob1_66"]
+
 [editable path="Layer0/Blobs/Blob1_67"]
+
 [editable path="Layer0/Blobs/Blob1_68"]
+
 [editable path="Layer0/Blobs/Blob1_69"]
+
 [editable path="Layer0/Blobs/Blob1_70"]
+
 [editable path="Layer0/Blobs/Blob1_71"]
+
 [editable path="Layer0/Blobs/Blob1_72"]
+
 [editable path="Layer0/Blobs/Blob1_73"]
+
 [editable path="Layer0/Blobs/Blob1_74"]
+
 [editable path="Layer0/Blobs/Blob1_75"]
+
 [editable path="Layer0/Blobs/Blob1_76"]
+
 [editable path="Layer0/Blobs/Blob1_77"]
+
 [editable path="Layer0/Blobs/Blob1_78"]
+
 [editable path="Layer0/Blobs/Blob1_14"]
+
 [editable path="Layer0/Blobs/Blob1_62"]
+
 [editable path="Layer0/Blobs/Blob1_15"]
+
 [editable path="Layer0/Blobs/Blob1_54"]
+
 [editable path="Layer0/Blobs/Blob1_55"]
+
 [editable path="Layer0/Blobs/Blob1_56"]
+
 [editable path="Layer0/Blobs/Blob1_57"]
+
 [editable path="Layer0/Blobs/Blob1_58"]
+
 [editable path="Layer0/Blobs/Blob1_59"]
+
 [editable path="Layer0/Blobs/Blob1_60"]
+
 [editable path="Layer0/Blobs/Blob1_61"]
+
 [editable path="Layer0/Blobs/Blob2_52"]
+
 [editable path="Layer0/Blobs/Blob2_53"]
+
 [editable path="Layer0/Blobs/Blob2_54"]
+
 [editable path="Layer0/Blobs/Blob2_55"]
+
 [editable path="Layer0/Blobs/Blob2_02"]
+
 [editable path="Layer0/Blobs/Blob2_56"]
+
 [editable path="Layer0/Blobs/Blob2_57"]
+
 [editable path="Layer0/Blobs/Blob2_58"]
+
 [editable path="Layer0/Blobs/Blob2_59"]
+
 [editable path="Layer0/Blobs/Blob2_60"]
+
 [editable path="Layer0/Blobs/Blob2_61"]
+
 [editable path="Layer0/Blobs/Blob2_62"]
+
 [editable path="Layer0/Blobs/Blob2_63"]
+
 [editable path="Layer0/Blobs/Blob2_64"]
+
 [editable path="Layer0/Blobs/Blob2_65"]
+
 [editable path="Layer0/Blobs/Blob2_67"]
+
 [editable path="Layer0/Blobs/Blob2_66"]
+
 [editable path="Layer0/Blobs/Blob2_49"]
+
 [editable path="Layer0/Blobs/Blob2_29"]
+
 [editable path="Layer0/Blobs/Blob2_80"]
+
 [editable path="Layer0/Blobs/Blob2_30"]
+
 [editable path="Layer0/Blobs/Blob2_31"]
+
 [editable path="Layer0/Blobs/Blob2_32"]
+
 [editable path="Layer0/Blobs/Blob2_33"]
+
 [editable path="Layer0/Blobs/Blob2_34"]
+
 [editable path="Layer0/Blobs/Blob2_35"]
+
 [editable path="Layer0/Blobs/Blob2_06"]
+
 [editable path="Layer0/Blobs/Blob2_07"]
+
 [editable path="Layer0/Blobs/Blob2_08"]
+
 [editable path="Layer0/Blobs/Blob2_09"]
+
 [editable path="Layer0/Blobs/Blob2_10"]
+
 [editable path="Layer0/Blobs/Blob2_11"]
+
 [editable path="Layer0/Blobs/Blob2_36"]
+
 [editable path="Layer0/Blobs/Blob2_37"]
+
 [editable path="Layer0/Blobs/Blob2_38"]
+
 [editable path="Layer0/Blobs/Blob2_39"]
+
 [editable path="Layer0/Blobs/Blob2_40"]
+
 [editable path="Layer0/Blobs/Blob2_41"]
+
 [editable path="Layer0/Blobs/Blob2_42"]
+
 [editable path="Layer0/Blobs/Blob2_43"]
+
 [editable path="Layer0/Blobs/Blob2_44"]
+
 [editable path="Layer0/Blobs/Blob2_45"]
+
 [editable path="Layer0/Blobs/Blob2_46"]
+
 [editable path="Layer0/Blobs/Blob2_47"]
+
 [editable path="Layer0/Blobs/Blob2_48"]
+
 [editable path="Layer0/Blobs/Blob2_03"]
+
 [editable path="Layer0/Blobs/Blob2_04"]
+
 [editable path="Layer0/Blobs/Blob2_05"]
+
 [editable path="Layer0/Blobs/Blob2_12"]
+
 [editable path="Layer0/Blobs/Blob2_13"]
+
 [editable path="Layer0/Blobs/Blob2_14"]
+
 [editable path="Layer0/Blobs/Blob2_15"]
+
 [editable path="Layer0/Blobs/Blob2_16"]
+
 [editable path="Layer0/Blobs/Blob2_17"]
+
 [editable path="Layer0/Blobs/Blob2_18"]
+
 [editable path="Layer0/Blobs/Blob2_68"]
+
 [editable path="Layer0/Blobs/Blob2_69"]
+
 [editable path="Layer0/Blobs/Blob2_70"]
+
 [editable path="Layer0/Blobs/Blob2_71"]
+
 [editable path="Layer0/Blobs/Blob2_72"]
+
 [editable path="Layer0/Blobs/Blob2_73"]
+
 [editable path="Layer0/Blobs/Blob2_74"]
+
 [editable path="Layer0/Blobs/Blob2_75"]
+
 [editable path="Layer0/Blobs/Blob2_76"]
+
 [editable path="Layer0/Blobs/Blob2_77"]
+
 [editable path="Layer0/Blobs/Blob2_78"]
+
 [editable path="Layer0/Blobs/Blob2_79"]
+
 [editable path="Layer0/Blobs/Blob2_19"]
+
 [editable path="Layer0/Blobs/Blob2_20"]
+
 [editable path="Layer0/Blobs/Blob2_51"]
+
 [editable path="Layer0/Blobs/Blob2_50"]
+
 [editable path="Layer0/Blobs/Blob2_21"]
+
 [editable path="Layer0/Blobs/Blob2_22"]
+
 [editable path="Layer0/Blobs/Blob2_23"]
+
 [editable path="Layer0/Blobs/Blob2_24"]
+
 [editable path="Layer0/Blobs/Blob2_25"]
+
 [editable path="Layer0/Blobs/Blob2_26"]
+
 [editable path="Layer0/Blobs/Blob2_27"]
+
 [editable path="Layer0/Blobs/Blob2_28"]
+
 [editable path="Layer0/Blobs/Blob3_02"]
+
 [editable path="Layer0/Blobs/Blob3_03"]
+
 [editable path="Layer0/Blobs/Blob3_04"]
+
 [editable path="Layer0/Blobs/Blob3_43"]
+
 [editable path="Layer0/Blobs/Blob3_44"]
+
 [editable path="Layer0/Blobs/Blob3_45"]
+
 [editable path="Layer0/Blobs/Blob3_05"]
+
 [editable path="Layer0/Blobs/Blob3_06"]
+
 [editable path="Layer0/Blobs/Blob3_07"]
+
 [editable path="Layer0/Blobs/Blob3_32"]
+
 [editable path="Layer0/Blobs/Blob3_33"]
+
 [editable path="Layer0/Blobs/Blob3_34"]
+
 [editable path="Layer0/Blobs/Blob3_35"]
+
 [editable path="Layer0/Blobs/Blob3_36"]
+
 [editable path="Layer0/Blobs/Blob3_37"]
+
 [editable path="Layer0/Blobs/Blob3_38"]
+
 [editable path="Layer0/Blobs/Blob3_39"]
+
 [editable path="Layer0/Blobs/Blob3_40"]
+
 [editable path="Layer0/Blobs/Blob3_41"]
+
 [editable path="Layer0/Blobs/Blob3_42"]
+
 [editable path="Layer0/Blobs/Blob3_08"]
+
 [editable path="Layer0/Joys/Joy_01"]
+
 [editable path="Layer0/Joys/Joy_01/Offset/AnimatedSprite"]
+
 [editable path="Layer0/Joys/Joy_01/Offset/AnimatedOutline"]
+
 [editable path="Layer1/Blobs/Blob1_02"]
+
 [editable path="Layer1/Blobs/Blob1_03"]
+
 [editable path="Layer1/Blobs/Blob1_04"]
+
 [editable path="Layer1/Blobs/Blob1_05"]
+
 [editable path="Layer1/Blobs/Blob1_06"]
+
 [editable path="Layer1/Blobs/Blob1_07"]
+
 [editable path="Layer1/Blobs/Blob1_08"]
+
 [editable path="Layer1/Blobs/Blob1_09"]
+
 [editable path="Layer1/Blobs/Blob1_10"]
+
 [editable path="Layer1/Blobs/Blob1_11"]
+
 [editable path="Layer1/Blobs/Blob1_12"]
+
 [editable path="Layer1/Blobs/Blob1_13"]
+
 [editable path="Layer1/Blobs/Blob1_14"]
+
 [editable path="Layer1/Blobs/Blob1_15"]
+
 [editable path="Layer1/Blobs/Blob1_18"]
+
 [editable path="Layer1/Blobs/Blob1_19"]
+
 [editable path="Layer1/Blobs/Blob1_20"]
+
 [editable path="Layer1/Blobs/Blob1_21"]
+
 [editable path="Layer1/Blobs/Blob1_22"]
+
 [editable path="Layer1/Blobs/Blob1_23"]
+
 [editable path="Layer1/Blobs/Blob1_24"]
+
 [editable path="Layer1/Blobs/Blob1_25"]
+
 [editable path="Layer1/Blobs/Blob1_26"]
+
 [editable path="Layer1/Blobs/Blob1_27"]
+
 [editable path="Layer1/Blobs/Blob1_28"]
+
 [editable path="Layer1/Blobs/Blob1_29"]
+
 [editable path="Layer1/Blobs/Blob1_30"]
+
 [editable path="Layer1/Blobs/Blob1_31"]
+
 [editable path="Layer1/Blobs/Blob1_32"]
+
 [editable path="Layer1/Blobs/Blob1_16"]
+
 [editable path="Layer1/Blobs/Blob1_17"]
+
 [editable path="Layer1/Blobs/Blob2_02"]
+
 [editable path="Layer1/Blobs/Blob2_13"]
+
 [editable path="Layer1/Blobs/Blob2_14"]
+
 [editable path="Layer1/Blobs/Blob2_15"]
+
 [editable path="Layer1/Blobs/Blob2_16"]
+
 [editable path="Layer1/Blobs/Blob2_17"]
+
 [editable path="Layer1/Blobs/Blob2_18"]
+
 [editable path="Layer1/Blobs/Blob2_19"]
+
 [editable path="Layer1/Blobs/Blob2_20"]
+
 [editable path="Layer1/Blobs/Blob2_21"]
+
 [editable path="Layer1/Blobs/Blob2_22"]
+
 [editable path="Layer1/Blobs/Blob2_23"]
+
 [editable path="Layer1/Blobs/Blob2_24"]
+
 [editable path="Layer1/Blobs/Blob2_25"]
+
 [editable path="Layer1/Blobs/Blob2_26"]
+
 [editable path="Layer1/Blobs/Blob2_27"]
+
 [editable path="Layer1/Blobs/Blob2_28"]
+
 [editable path="Layer1/Blobs/Blob2_29"]
+
 [editable path="Layer1/Blobs/Blob2_30"]
+
 [editable path="Layer1/Blobs/Blob2_31"]
+
 [editable path="Layer1/Blobs/Blob2_32"]
+
 [editable path="Layer1/Blobs/Blob2_33"]
+
 [editable path="Layer1/Blobs/Blob2_34"]
+
 [editable path="Layer1/Blobs/Blob2_03"]
+
 [editable path="Layer1/Blobs/Blob2_04"]
+
 [editable path="Layer1/Blobs/Blob2_05"]
+
 [editable path="Layer1/Blobs/Blob2_06"]
+
 [editable path="Layer1/Blobs/Blob2_07"]
+
 [editable path="Layer1/Blobs/Blob2_08"]
+
 [editable path="Layer1/Blobs/Blob2_09"]
+
 [editable path="Layer1/Blobs/Blob2_10"]
+
 [editable path="Layer1/Blobs/Blob2_11"]
+
 [editable path="Layer1/Blobs/Blob2_12"]

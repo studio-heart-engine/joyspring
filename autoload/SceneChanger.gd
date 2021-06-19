@@ -25,10 +25,10 @@ func change_scene_to(scene: PackedScene, color = Color.black):
 	$AnimationPlayer.play("fade")
 	yield($AnimationPlayer, "animation_finished")
 	
+	HDSceneChanger.change_scene_to(scene)
 	globals.save_game()
 	globals.set_time_of_day()
 	globals.set_bg()
-	HDSceneChanger.change_scene_to(scene)
 
 	call_deferred("emit_signal", "scene_changed")
 	$AnimationPlayer.play_backwards("fade")
@@ -59,10 +59,10 @@ func next_level(curr_index, color=Color.black):
 	else:
 		scene = load('res://platformer/levels/Level_TempEnd.tscn')  # ONLY FOR DEMO
 	
+	HDSceneChanger.change_scene_to(scene)
 	globals.save_game()
 	globals.set_time_of_day()
 	globals.set_bg()
-	HDSceneChanger.change_scene_to(scene)
 
 	call_deferred("emit_signal", "scene_changed")
 	$AnimationPlayer.play_backwards("fade")

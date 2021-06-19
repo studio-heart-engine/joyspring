@@ -31,8 +31,8 @@ func _ready():
 	var rand_advance = rand_range(0, anim_player.get_animation(anim_player.current_animation).length)
 	anim_player.advance(rand_advance)
 	outline_anim_player.advance(rand_advance)
-	if self.name.substr(0, 4) == 'Swap':
-		set_theme_texture()
+	set_theme_texture()
+	Events.connect('time_of_day_changed', self, 'set_theme_texture')
 
 #	$Offset/Outline.set_material($Offset/Outline.get_material().duplicate())
 	$Offset/AnimatedOutline/Sprite.set_material($Offset/AnimatedOutline/Sprite.get_material().duplicate())
@@ -42,6 +42,8 @@ func _ready():
 
 
 func set_theme_texture(time_of_day='default'):
+	if self.name.substr(0, 4) != 'Swap':
+		return
 	var texture
 	if time_of_day == 'default':
 		texture = load('res://graphics/sprites/joy/joy' + get_time_of_day().capitalize() + '.png')
@@ -65,6 +67,9 @@ func set_following_player(value):
 
 
 func set_on_cape(value):
+	var texture = load('res://graphics/sprites/joy/joy.png')
+	$Offset/AnimatedOutline/Sprite.texture = texture
+	$Offset/AnimatedSprite/Sprite.texture = texture
 	is_on_cape = value
 	if value:
 		$Offset/Particles.emitting = false

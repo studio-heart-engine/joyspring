@@ -14,8 +14,8 @@ func _ready():
 		var button = Button.new()
 		
 #		hbox.set_h_size_flags(Control.SIZE_EXPAND_FILL)
-#		label.set_h_size_flags(Control.SIZE_EXPAND_FILL)
-#		button.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+		label.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+		button.set_h_size_flags(Control.SIZE_EXPAND_FILL)
 		
 		label.text = key
 		if keybinds[key] != null:

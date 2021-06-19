@@ -5,7 +5,7 @@ var has_played_startup_animation = false
 var levels_completed = [0]
 var curr_state = "Opening"
 var prev_state = ""
-var total_levels = 17
+var total_levels = 18
 var peak_level = 12
 
 var time_of_day = 0  # 0-indexed
@@ -25,15 +25,15 @@ func _ready():
 	if not Engine.editor_hint:
 		Events.connect('level_completed', self, 'on_level_completed')
 		Events.connect('joy_collected', self, 'on_joy_collected')
+		for i in range(total_levels + 1):
+			joy_collected.append([])
+		for i in range(10):
+			cape.append('normal')
 		load_controls()
 		set_controls()
 		load_game()
 		set_time_of_day()
 		set_bg()
-		for i in range(total_levels + 1):
-			joy_collected.append([])
-		for i in range(10):
-			cape.append('normal')
 
 
 func on_level_completed(level_index):
@@ -68,6 +68,7 @@ func load_game():
 	if data.has('levels_completed'):
 		levels_completed = data['levels_completed']
 	if data.has('cape'):
+		cape = []
 		cape = data['cape']
 	if data.has('joy_collected'):
 		joy_collected = data['joy_collected']
@@ -127,6 +128,7 @@ func set_time_of_day():
 		time_of_day = 1
 	else:
 		time_of_day = 2
+	Events.emit_signal('time_of_day_changed')
 
 func set_bg():
 	if curr_state.substr(0, 5) != 'Level':
@@ -152,3 +154,4 @@ func set_bg():
 		bg_offset = int(180 + (60 / peak_level) * level_num)  # 180 to 240
 	else:
 		bg_offset = int(240 - (120 / (total_levels - peak_level)) * (level_num - peak_level))  # 240 to 120
+	Events.emit_signal('bg_num_changed')

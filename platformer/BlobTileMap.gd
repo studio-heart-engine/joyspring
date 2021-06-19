@@ -25,10 +25,14 @@ func check_collision():  # Check if player swapped layers into blob tile map
 	var player_pos = get_node('../../Player').position
 	var index1 = self.world_to_map(player_pos)  # Bottom half of player
 	var index2 = self.world_to_map(player_pos + Vector2(0, -8))  # Top half of player
-	var inside_tile = self.get_cellv(index1) != -1 or \
-					  self.get_cellv(index2) != -1
+	var inside_tile = self.get_cellv(index1) == 0 or \
+					  self.get_cellv(index2) == 0
+	print(player_pos)
+	print(str(index1) + ' ' + str(self.get_cellv(index1)))
+	print(str(index2) + ' ' + str(self.get_cellv(index2)))
 	if inside_tile:
 		Events.emit_signal('player_died', player_pos)
+		print('blob tile')
 
 #func get_time_of_day():
 #	return TIME_OF_DAY.keys()[time_of_day]
