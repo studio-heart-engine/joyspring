@@ -43,6 +43,7 @@ func _ready():
 	for i in range(6, 10):
 		collision_mask_vals[1] += pow(2, i)
 	update_collision()
+	update_occlusion()
 	
 	layers[layer_num].z_index = 10
 	layers[(layer_num + 1) % 2].z_index = 0
@@ -69,6 +70,7 @@ func swap_layers():
 		return
 	else:
 		update_collision()
+		update_occlusion()
 		$Swapper.play("swap_to_" + str(layer_num))
 		update_shader()
 		Events.emit_signal("layer_swapped")
@@ -85,6 +87,11 @@ func update_collision():
 	$Player.collision_mask = collision_mask_vals[layer_num]
 	$Player/Hitbox.collision_layer = $Player.collision_layer
 	$Player/Hitbox.collision_mask = $Player.collision_mask
+
+
+func update_occlusion():
+	get_node('Layer' + str(layer_num) + '/TileMap').light_mask = 1
+	get_node('Layer' + str((layer_num + 1) % 2) + '/TileMap').light_mask = 0
 
 
 func update_shader():
