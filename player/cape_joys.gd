@@ -55,7 +55,7 @@ func _process(delta):
 			for child in get_children():
 				if child.is_on_cape:
 					child.position += 1.8 * Vector2(horizontal_noise_offset, vertical_noise_offset)
-		
+
 		MovementType.NOT_FLOATING:
 			var horizontal_noise_offset =  noise.get_noise_2d(100 * time_elapsed, 0)
 			var vertical_noise_offset =  noise.get_noise_2d(0, 100 * time_elapsed)
