@@ -15,7 +15,7 @@ func _ready():
 	Events.connect('quit_game', self, 'quit_game')
 	
 func _process(delta):
-	print(Engine.get_frames_per_second())
+#	print(Engine.get_frames_per_second())
 	if globals.curr_state.substr(0, 5) == 'Level' or globals.curr_state == 'Temp_End':
 		set_level_text()
 	else:
