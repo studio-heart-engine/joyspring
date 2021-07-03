@@ -16,11 +16,18 @@ var possible_colors = [['#c97d54', '#c96254', '#d24b61', '#c9377b'],
 func _ready():
 	Events.connect('time_of_day_changed', self, 'update_image')
 	update_image()
+	$NoiseOffset/Outline.material = $NoiseOffset/Outline.material.duplicate()
+	$NoiseOffset/Sprite.material = $NoiseOffset/Sprite.material.duplicate()
+	if self.get_parent().get_parent().get_name() == 'Layer0':
+		$Hitbox.collision_layer = pow(2, 1)
+		$Hitbox.collision_mask = pow(2, 0)
+	if self.get_parent().get_parent().get_name() == 'Layer1':
+		$Hitbox.collision_layer = pow(2, 6)
+		$Hitbox.collision_mask = pow(2, 5)
 	
 	for i in range(1, 5):
 		get_node('Hitbox/CollisionPolygon2D_' + str(i)).disabled = true
 		get_node('Hitbox/CollisionPolygon2D_' + str(i)).hide()
-	print('Hitbox/CollisionPolygon2D_' + shape)
 	get_node('Hitbox/CollisionPolygon2D_' + shape).disabled = false
 	get_node('Hitbox/CollisionPolygon2D_' + shape).show()
 		
