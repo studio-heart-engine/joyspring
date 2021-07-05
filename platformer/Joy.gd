@@ -12,6 +12,7 @@ onready var outline_shader = preload('res://graphics/effects/outline-shader.shad
 
 var TIME_OF_DAY = ['evening', 'midnight', 'dawn']
 var texture_theme = 'normal'
+var theme_colors = ['e97d54', 'aee64d', '9583dd']
 
 func get_time_of_day():
 	return TIME_OF_DAY[globals.time_of_day]
@@ -51,9 +52,11 @@ func set_theme_texture(time_of_day='default'):
 	if time_of_day == 'default':
 		texture = load('res://graphics/sprites/joy/joy' + get_time_of_day().capitalize() + '.png')
 		texture_theme = get_time_of_day()
+		$Offset/Light2D.color = Color(theme_colors[globals.time_of_day])
 	else:
 		texture = load('res://graphics/sprites/joy/joy' + time_of_day.capitalize() + '.png')
 		texture_theme = time_of_day
+		$Offset/Light2D.color = Color(theme_colors[TIME_OF_DAY.find(time_of_day)])
 #	$Offset/Outline.texture = texture
 	$Offset/AnimatedOutline/Sprite.texture = texture
 	$Offset/AnimatedSprite/Sprite.texture = texture
