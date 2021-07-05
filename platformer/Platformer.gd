@@ -34,6 +34,7 @@ func _ready():
 	for child in ($Layer0/Joys.get_children() + $Layer1/Joys.get_children()):
 		if child.name in globals.joy_collected[level_index]:
 			child.already_collected = true
+			child.hide_light()
 #			child.modulate = Color(0, 0, 0 ,1)
 	
 	layers = [$Layer0, $Layer1]
@@ -96,6 +97,7 @@ func update_collision():
 
 func set_light(node, val):
 #	print(node.get_class())
+	# TODO: MAKE THIS MORE EFFICIENT
 	for property in node.get_property_list():
 		if property['name'] == 'light_mask':
 #			print('light_mask')
@@ -103,6 +105,8 @@ func set_light(node, val):
 		if property['name'] == 'occluder_light_mask':
 #			print('occluder')
 			node.occluder_light_mask = val
+		if property['name'] == 'range_item_cull_mask':
+			node.range_item_cull_mask = val
 
 	for child in node.get_children():
 		set_light(child, val)
