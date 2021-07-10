@@ -43,7 +43,6 @@ func _ready():
 	for i in range(6, 10):
 		collision_mask_vals[1] += pow(2, i)
 	update_collision()
-	update_occlusion()
 	
 	layers[layer_num].z_index = 10
 	layers[(layer_num + 1) % 2].z_index = 0
@@ -70,7 +69,6 @@ func swap_layers():
 		return
 	else:
 		update_collision()
-		update_occlusion()
 		$Swapper.play("swap_to_" + str(layer_num))
 		update_shader()
 		Events.emit_signal("layer_swapped")
@@ -88,20 +86,6 @@ func update_collision():
 	$Player/Hitbox.collision_layer = $Player.collision_layer
 	$Player/Hitbox.collision_mask = $Player.collision_mask
 
-
-func set_light_mask_dfs(root, val):
-	if root.get_child_count() == 0:
-		root.light_mask = val
-	else:
-		for child in root.get_children():
-			set_light_mask_dfs(child, val)
-
-
-func update_occlusion():
-	set_light_mask_dfs(get_node('Layer' + str(layer_num)), 1)
-	set_light_mask_dfs(get_node('Layer' + str((layer_num + 1) % 2)), 1)
-	
-	print($Player/Light2D.light_mask)
 	
 
 

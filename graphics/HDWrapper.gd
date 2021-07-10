@@ -74,7 +74,7 @@ func set_select_text():
 				var path = "Text/Select" + child.name.right(9)
 				get_node(path).rect_position = coord * scaling
 				get_node(path).rect_position -= Vector2(get_node(path + '/TextureRect').rect_size.x / 2, 0)  # Center align
-				if not child.get_locked():
+				if not child. get_locked():
 					show.append('S' + child.get_name().right(9))
 		for child in $Text.get_children():
 			if child.get_name().substr(0, 6) != 'Select':
