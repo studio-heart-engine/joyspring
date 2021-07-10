@@ -37,6 +37,22 @@ func _ready():
 	if not Engine.editor_hint:
 		anim_player.play("crawl")
 #	$Sprite.material.set_shader_param("outline_color", Color(possible_colors[randi() % len(possible_colors)]))
+	
+	$Sprite.material = $Sprite.material.duplicate()
+	if self.get_parent().get_parent().get_name() == 'Layer0':
+		$Hitbox.collision_layer = pow(2, 1)
+		$Hitbox.collision_mask = pow(2, 0) + pow(2, 3)
+		$RayCasts/Down1.collision_mask = pow(2, 3)
+		$RayCasts/Down2.collision_mask = pow(2, 3)
+		$RayCasts/ForwardBottom.collision_mask = pow(2, 3)
+		$RayCasts/ForwardTop.collision_mask = pow(2, 3)
+	if self.get_parent().get_parent().get_name() == 'Layer1':
+		$Hitbox.collision_layer = pow(2, 6)
+		$Hitbox.collision_mask = pow(2, 5) + pow(2, 8)
+		$RayCasts/Down1.collision_mask = pow(2, 8)
+		$RayCasts/Down2.collision_mask = pow(2, 8)
+		$RayCasts/ForwardBottom.collision_mask = pow(2, 8)
+		$RayCasts/ForwardTop.collision_mask = pow(2, 8)
 
 
 func _physics_process(delta):

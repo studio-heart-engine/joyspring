@@ -35,11 +35,15 @@ func _ready():
 	set_theme_texture()
 	Events.connect('time_of_day_changed', self, 'set_theme_texture')
 
-#	$Offset/Outline.set_material($Offset/Outline.get_material().duplicate())
-	$Offset/AnimatedOutline/Sprite.set_material($Offset/AnimatedOutline/Sprite.get_material().duplicate())
-	$Offset/Particles.set_material($Offset/Particles.get_material().duplicate())
-	$Offset/AnimatedSprite/Sprite.set_material($Offset/AnimatedSprite/Sprite.get_material().duplicate())
-	$Offset/AnimatedSprite/Sprite.set_material($Offset/AnimatedSprite/Sprite.get_material().duplicate())
+	$Offset/AnimatedOutline/Sprite.material = $Offset/AnimatedOutline/Sprite.material.duplicate()
+	$Offset/Particles.material = $Offset/Particles.material.duplicate()
+	$Offset/AnimatedSprite/Sprite.material = $Offset/AnimatedSprite/Sprite.material.duplicate()
+	if self.get_parent().get_parent().get_name() == 'Layer0':
+		$Offset/Hitbox.collision_layer = pow(2, 2)
+		$Offset/Hitbox.collision_mask = pow(2, 0)
+	if self.get_parent().get_parent().get_name() == 'Layer1':
+		$Offset/Hitbox.collision_layer = pow(2, 7)
+		$Offset/Hitbox.collision_mask = pow(2, 5)
 	
 	if already_collected or is_on_cape or is_following_player:
 		hide_light()

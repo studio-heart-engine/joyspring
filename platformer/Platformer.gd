@@ -12,10 +12,6 @@ var collision_layer_vals
 var collision_mask_vals
 var light_mask_vals
 
-onready var outline_mat = preload('res://graphics/effects/outline_material.tres')
-onready var solid_shader = preload('res://graphics/effects/solid_color.shader')
-onready var outline_shader = preload('res://graphics/effects/outline-shader.shader')
-
 signal level_exited
 
 
@@ -25,7 +21,7 @@ func _ready():
 	Events.connect('bg_num_changed', self, 'set_bg')
 	Events.connect('bg_num_changed', self, 'update_shader')
 	Events.connect('swap_layers', self, 'swap_layers')
-	
+
 	if globals.curr_state == 'LevelSelect':
 		if globals.prev_state.substr(0, 5) == 'Level' and globals.prev_state != 'LevelSelect':
 			$Player.position = get_node('LevelSigns/LevelSign' + str(int(globals.prev_state.right(5)))).position

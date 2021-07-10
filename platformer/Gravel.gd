@@ -9,6 +9,15 @@ func _ready():
 	update_image()
 	Events.connect('time_of_day_changed', self, 'update_image')
 	$CollisionShape2D.shape = $CollisionShape2D.shape.duplicate()
+	
+	$"weak-rock-outline".material = $"weak-rock-outline".material.duplicate()
+	$Sprite.material = $Sprite.material.duplicate()
+	if self.get_parent().get_parent().get_name() == 'Layer0':
+		$TopArea.collision_layer = pow(2, 3)
+		$TopArea.collision_mask = pow(2, 0)
+	if self.get_parent().get_parent().get_name() == 'Layer1':
+		$TopArea.collision_layer = pow(2, 8)
+		$TopArea.collision_mask = pow(2, 5)
 
 func _on_Area2D_area_entered(area):
 	$TopArea/CollisionShape2D.set_deferred("disabled", true)
