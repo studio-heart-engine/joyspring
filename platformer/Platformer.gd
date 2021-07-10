@@ -89,9 +89,20 @@ func update_collision():
 	$Player/Hitbox.collision_mask = $Player.collision_mask
 
 
+func set_light_mask_dfs(root, val):
+	if root.get_child_count() == 0:
+		root.light_mask = val
+	else:
+		for child in root.get_children():
+			set_light_mask_dfs(child, val)
+
+
 func update_occlusion():
-	get_node('Layer' + str(layer_num) + '/TileMap').light_mask = 1
-	get_node('Layer' + str((layer_num + 1) % 2) + '/TileMap').light_mask = 0
+	set_light_mask_dfs(get_node('Layer' + str(layer_num)), 1)
+	set_light_mask_dfs(get_node('Layer' + str((layer_num + 1) % 2)), 1)
+	
+	print($Player/Light2D.light_mask)
+	
 
 
 func update_shader():
