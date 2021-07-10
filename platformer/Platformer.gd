@@ -10,6 +10,7 @@ var layers
 var layer_num = 0
 var collision_layer_vals
 var collision_mask_vals
+var light_mask_vals
 
 onready var outline_mat = preload('res://graphics/effects/outline_material.tres')
 onready var solid_shader = preload('res://graphics/effects/solid_color.shader')
@@ -33,6 +34,7 @@ func _ready():
 	for child in ($Layer0/Joys.get_children() + $Layer1/Joys.get_children()):
 		if child.name in globals.joy_collected[level_index]:
 			child.already_collected = true
+			child.hide_light()
 #			child.modulate = Color(0, 0, 0 ,1)
 	
 	layers = [$Layer0, $Layer1]
@@ -43,6 +45,12 @@ func _ready():
 	for i in range(6, 10):
 		collision_mask_vals[1] += pow(2, i)
 	update_collision()
+	
+	light_mask_vals = [pow(2, 0), pow(2, 5)]
+	set_light($Layer0, light_mask_vals[0])
+	set_light($Layer1, light_mask_vals[1])
+	set_light($Player, light_mask_vals[0] + light_mask_vals[1])
+	update_light()
 	
 	layers[layer_num].z_index = 10
 	layers[(layer_num + 1) % 2].z_index = 0
@@ -69,6 +77,7 @@ func swap_layers():
 		return
 	else:
 		update_collision()
+		update_light()
 		$Swapper.play("swap_to_" + str(layer_num))
 		update_shader()
 		Events.emit_signal("layer_swapped")
@@ -83,11 +92,29 @@ func check_collision(layer_name):  # Check if player is inside tilemap
 func update_collision():
 	$Player.collision_layer = collision_layer_vals[layer_num]
 	$Player.collision_mask = collision_mask_vals[layer_num]
-	$Player/Hitbox.collision_layer = $Player.collision_layer
-	$Player/Hitbox.collision_mask = $Player.collision_mask
+	$Player/Hitbox.collision_layer = collision_layer_vals[layer_num]
+	$Player/Hitbox.collision_mask = collision_layer_vals[layer_num]
 
-	
+func set_light(node, val):
+#	print(node.get_class())
+	# TODO: MAKE THIS MORE EFFICIENT
+	for property in node.get_property_list():
+		if property['name'] == 'light_mask':
+#			print('light_mask')
+			node.light_mask = val
+		if property['name'] == 'occluder_light_mask':
+#			print('occluder')
+			node.occluder_light_mask = val
+		if property['name'] == 'range_item_cull_mask':
+			node.range_item_cull_mask = val
 
+	for child in node.get_children():
+		set_light(child, val)
+
+func update_light():
+	$Player/Light2D.range_item_cull_mask = light_mask_vals[layer_num]
+	$Player/Light2D.shadow_item_cull_mask = light_mask_vals[layer_num]
+#	set_light($Player, light_mask_vals[layer_num])
 
 func update_shader():
 	layers[layer_num].update_shader('normal')

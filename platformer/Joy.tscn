@@ -1,10 +1,11 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://platformer/Joy.gd" type="Script" id=1]
 [ext_resource path="res://graphics/effects/outline-shader.shader" type="Shader" id=2]
 [ext_resource path="res://graphics/sprites/joy/joy.png" type="Texture" id=3]
 [ext_resource path="res://platformer/JoyAnimatedSprite.tscn" type="PackedScene" id=4]
 [ext_resource path="res://music/effects/joy.wav" type="AudioStream" id=5]
+[ext_resource path="res://graphics/effects/white-radial-gradient.png" type="Texture" id=6]
 
 [sub_resource type="ShaderMaterial" id=1]
 
@@ -188,8 +189,14 @@ shape = SubResource( 9 )
 [node name="AnimationPlayer2" type="AnimationPlayer" parent="Offset"]
 autoplay = "float"
 anims/float = SubResource( 10 )
+
+[node name="Light2D" type="Light2D" parent="Offset"]
+texture = ExtResource( 6 )
+texture_scale = 0.05
+color = Color( 1, 0.807843, 0.262745, 1 )
+energy = 0.6
+
 [connection signal="area_entered" from="Offset/Hitbox" to="." method="_on_Hitbox_area_entered"]
 
 [editable path="Offset/AnimatedSprite"]
-
 [editable path="Offset/AnimatedOutline"]

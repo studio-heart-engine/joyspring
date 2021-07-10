@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://graphics/sprites/blobs/Blob.gd" type="Script" id=1]
 [ext_resource path="res://graphics/sprites/blobs/blob_noise_offset.gd" type="Script" id=2]
 [ext_resource path="res://graphics/effects/outline-shader.shader" type="Shader" id=3]
 [ext_resource path="res://graphics/sprites/blobs/Hitbox.gd" type="Script" id=4]
+[ext_resource path="res://graphics/sprites/blobs/evening/blobs1.png" type="Texture" id=5]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 3 )
@@ -21,12 +22,14 @@ script = ExtResource( 1 )
 script = ExtResource( 2 )
 
 [node name="Outline" type="Sprite" parent="NoiseOffset"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
 material = SubResource( 1 )
+texture = ExtResource( 5 )
 
 [node name="Sprite" type="Sprite" parent="NoiseOffset"]
 material = SubResource( 2 )
 z_index = 1
+texture = ExtResource( 5 )
 
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 2
