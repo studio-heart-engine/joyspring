@@ -21,9 +21,18 @@ func _ready():
 	if self.get_parent().get_parent().get_name() == 'Layer0':
 		$Hitbox.collision_layer = pow(2, 1)
 		$Hitbox.collision_mask = pow(2, 0)
+		
+		$NoiseOffset/Outline.light_mask = pow(2, 0)
+		$NoiseOffset/Sprite.light_mask = pow(2, 0)
 	if self.get_parent().get_parent().get_name() == 'Layer1':
 		$Hitbox.collision_layer = pow(2, 6)
 		$Hitbox.collision_mask = pow(2, 5)
+		
+		$NoiseOffset/Outline.light_mask = pow(2, 5)
+		$NoiseOffset/Sprite.light_mask = pow(2, 5)
+
+func set_collision(val):
+	$Hitbox/CollisionShape2D.disabled = (not val)
 
 var TIME_OF_DAY = ['evening', 'midnight', 'dawn']
 

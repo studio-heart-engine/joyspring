@@ -36,9 +36,9 @@ func _ready():
 	Events.connect('time_of_day_changed', self, 'update_image')
 	if not Engine.editor_hint:
 		anim_player.play("crawl")
-#	$Sprite.material.set_shader_param("outline_color", Color(possible_colors[randi() % len(possible_colors)]))
 	
 	$Sprite.material = $Sprite.material.duplicate()
+	$Outline.material = $Outline.material.duplicate()
 	if self.get_parent().get_parent().get_name() == 'Layer0':
 		$Hitbox.collision_layer = pow(2, 1)
 		$Hitbox.collision_mask = pow(2, 0) + pow(2, 3)
@@ -46,6 +46,9 @@ func _ready():
 		$RayCasts/Down2.collision_mask = pow(2, 3)
 		$RayCasts/ForwardBottom.collision_mask = pow(2, 3)
 		$RayCasts/ForwardTop.collision_mask = pow(2, 3)
+		
+		$Sprite.light_mask = pow(2, 0)
+		$Outline.light_mask = pow(2, 0)
 	if self.get_parent().get_parent().get_name() == 'Layer1':
 		$Hitbox.collision_layer = pow(2, 6)
 		$Hitbox.collision_mask = pow(2, 5) + pow(2, 8)
@@ -53,6 +56,9 @@ func _ready():
 		$RayCasts/Down2.collision_mask = pow(2, 8)
 		$RayCasts/ForwardBottom.collision_mask = pow(2, 8)
 		$RayCasts/ForwardTop.collision_mask = pow(2, 8)
+#
+		$Sprite.light_mask = pow(2, 5)
+		$Outline.light_mask = pow(2, 5)
 
 
 func _physics_process(delta):
@@ -112,13 +118,17 @@ func turn_obtuse():
 	position += Vector2(coef * 8, 8).rotated(dir)
 	rotation_degrees += coef * 90
 
+func set_collision(val):
+	$Hitbox/CollisionShape2D.disabled = (not val)
+
 
 var TIME_OF_DAY = ['evening', 'midnight', 'dawn']
 
 func update_image():
-	$Sprite.material.set_shader_param("outline_color", Color(possible_colors[globals.time_of_day][randi() % len(possible_colors)]))
+	$Outline.material.set_shader_param("outline_color", Color(possible_colors[globals.time_of_day][randi() % len(possible_colors)]))
 	var image_path = "res://graphics/sprites/blobs/" + get_time_of_day() + "/bleb.png"
 	$Sprite.set_texture(load(image_path))
+	$Outline.set_texture(load(image_path))
 
 func get_time_of_day():
 	return TIME_OF_DAY[globals.time_of_day]

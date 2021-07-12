@@ -15,9 +15,15 @@ func _ready():
 	if self.get_parent().get_parent().get_name() == 'Layer0':
 		$TopArea.collision_layer = pow(2, 3)
 		$TopArea.collision_mask = pow(2, 0)
+		
+		$"weak-rock-outline".light_mask = pow(2, 0)
+		$Sprite.light_mask = pow(2, 0)
 	if self.get_parent().get_parent().get_name() == 'Layer1':
 		$TopArea.collision_layer = pow(2, 8)
 		$TopArea.collision_mask = pow(2, 5)
+		
+		$"weak-rock-outline".light_mask = pow(2, 5)
+		$Sprite.light_mask = pow(2, 5)
 
 func _on_Area2D_area_entered(area):
 	$TopArea/CollisionShape2D.set_deferred("disabled", true)
@@ -31,6 +37,10 @@ func _on_Area2D_area_entered(area):
 	$Sprite.set_visible(false)
 	yield(anim_player2, "animation_finished")
 	$CollisionShape2D.set_deferred("disabled", true)
+
+func set_collision(val):
+	$TopArea/CollisionShape2D.disabled = (not val)
+	$CollisionShape2D.disabled = (not val)
 
 var TIME_OF_DAY = ['Evening', 'Midnight', 'Dawn']
 

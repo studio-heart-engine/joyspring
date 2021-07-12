@@ -7,6 +7,14 @@ var TIME_OF_DAY = ['evening', 'midnight', 'dawn']
 func _ready():
 	update_image()
 	Events.connect('time_of_day_changed', self, 'update_image')
+	
+	if self.get_parent().get_name() == 'Layer0':
+		for child in self.get_children():
+			child.light_mask = pow(2, 0)
+	if self.get_parent().get_parent().get_name() == 'Layer1':
+		for child in self.get_children():
+			child.light_mask = pow(2, 5)
+		
 
 func _process(delta):
 	if Engine.editor_hint:

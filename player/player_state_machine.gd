@@ -34,6 +34,8 @@ func _ready():
 		state_node.connect("finished", self, "change_state")
 	
 	change_state("fall")
+	
+	$AnimatedSprite/Sprite.light_mask = pow(2, 0) + pow(2, 5)
 
 
 func _input(event):

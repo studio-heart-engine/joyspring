@@ -8,7 +8,8 @@ var possible_colors = ['#306d78', '205f74', '3f3071', '292767', '3f3071', 'd2969
 func update_shader(mode):
 	if mode == 'normal':
 		for child in $Blebs.get_children():
-			get_node('Blebs/' + child.get_name() + '/Sprite').material.shader = outline_shader
+			get_node('Blebs/' + child.get_name() + '/Sprite').material.shader = null
+			get_node('Blebs/' + child.get_name() + '/Outline').material.shader = outline_shader
 			child.update_image()
 		for child in $Blobs.get_children():
 			get_node('Blobs/' + child.get_name() + '/NoiseOffset/Outline').material.shader = outline_shader
@@ -38,6 +39,7 @@ func update_shader(mode):
 		$Environment.modulate = Color(1, 1, 1, 1)
 	if mode == 'solid':
 		for child in $Blebs.get_children():
+			get_node('Blebs/' + child.get_name() + '/Outline').material.shader = null
 			get_node('Blebs/' + child.get_name() + '/Sprite').material.shader = solid_shader
 			get_node('Blebs/' + child.get_name() + '/Sprite').material.set_shader_param(
 				'color', Color(possible_colors[globals.bg_num - 1])
@@ -95,3 +97,9 @@ func update_shader(mode):
 				'color', Color(possible_colors[globals.bg_num - 1])
 			)
 		$Environment.modulate = Color(1, 1, 1, 0.8)
+
+# Unused
+func set_collision(val):
+	for child in ($Blebs.get_children() + $Blobs.get_children() + $Joys.get_children() + \
+				  $Gravel.get_children() + $MovingBlobs.get_children()):
+		child.set_collision(val)

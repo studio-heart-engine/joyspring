@@ -15,9 +15,24 @@ func _ready():
 	blob_sprite.rotation_degrees = a
 	blob_outline.rotation_degrees = a
 	$AnimationPlayer.seek(rand_range(0, 1) if START_RANDOMLY else LOOP_START)
+	
+	if self.get_parent().get_parent().get_name() == 'Layer0':
+		$Path2D/PathFollow2D/Blob/Hitbox.collision_layer = pow(2, 1)
+		$Path2D/PathFollow2D/Blob/Hitbox.collision_mask = pow(2, 0)
+		
+		$Path2D/PathFollow2D/Blob/NoiseOffset/Outline.light_mask = pow(2, 0)
+		$Path2D/PathFollow2D/Blob/NoiseOffset/Sprite.light_mask = pow(2, 0)
+	if self.get_parent().get_parent().get_name() == 'Layer1':
+		$Path2D/PathFollow2D/Blob/Hitbox.collision_layer = pow(2, 6)
+		$Path2D/PathFollow2D/Blob/Hitbox.collision_mask = pow(2, 5)
+		
+		$Path2D/PathFollow2D/Blob/NoiseOffset/Outline.light_mask = pow(2, 5)
+		$Path2D/PathFollow2D/Blob/NoiseOffset/Sprite.light_mask = pow(2, 5)
 
 
 func _process(delta):
 	blob_sprite.rotation_degrees = -path_follow.rotation_degrees
 	blob_outline.rotation_degrees = -path_follow.rotation_degrees
 	
+func set_collision(val):
+	$Path2D/PathFollow2D/Blob.set_collision(val)

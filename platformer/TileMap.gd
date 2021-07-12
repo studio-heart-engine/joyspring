@@ -22,7 +22,19 @@ func _ready():
 		)
 	update_tileset()
 	Events.connect('time_of_day_changed', self, 'update_tileset')
-
+	
+	if self.get_parent().get_name() == 'Layer0':
+		self.collision_layer = pow(2, 3)
+		self.collision_mask = pow(2, 0) + pow(2, 1) + pow(2, 4)
+		
+		self.light_mask = pow(2, 0)
+		self.occluder_light_mask = pow(2, 0)
+	if self.get_parent().get_name() == 'Layer1':
+		self.collision_layer = pow(2, 8)
+		self.collision_mask = pow(2, 5) + pow(2, 6) + pow(2, 9)
+		
+		self.light_mask = pow(2, 5)
+		self.occluder_light_mask = pow(2, 5)
 
 func update_tileset():
 	var tileset_image_path = "res://graphics/tilesets/" + get_time_of_day() + "/" + get_tile_material() + ".png"

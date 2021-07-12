@@ -41,9 +41,21 @@ func _ready():
 	if self.get_parent().get_parent().get_name() == 'Layer0':
 		$Offset/Hitbox.collision_layer = pow(2, 2)
 		$Offset/Hitbox.collision_mask = pow(2, 0)
+		
+		$Offset/AnimatedSprite/Sprite.light_mask = pow(2, 0)
+		$Offset/AnimatedOutline/Sprite.light_mask = pow(2, 0)
+		$Offset/Light2D.range_item_cull_mask = pow(2, 0)
 	if self.get_parent().get_parent().get_name() == 'Layer1':
 		$Offset/Hitbox.collision_layer = pow(2, 7)
 		$Offset/Hitbox.collision_mask = pow(2, 5)
+		
+		$Offset/AnimatedSprite/Sprite.light_mask = pow(2, 5)
+		$Offset/AnimatedOutline/Sprite.light_mask = pow(2, 5)
+		$Offset/Light2D.range_item_cull_mask = pow(2, 5)
+	if self.get_parent().get_parent().get_name() == 'Cape':  # On player cape
+		$Offset/AnimatedSprite/Sprite.light_mask = pow(2, 0) + pow(2, 5)
+		$Offset/AnimatedOutline/Sprite.light_mask = pow(2, 0) + pow(2, 5)
+		$Offset/Light2D.range_item_cull_mask = pow(2, 0) + pow(2, 5)
 	
 	if already_collected or is_on_cape or is_following_player:
 		hide_light()
@@ -61,7 +73,6 @@ func set_theme_texture(time_of_day='default'):
 		texture = load('res://graphics/sprites/joy/joy' + time_of_day.capitalize() + '.png')
 		texture_theme = time_of_day
 		$Offset/Light2D.color = Color(theme_colors[TIME_OF_DAY.find(time_of_day)])
-#	$Offset/Outline.texture = texture
 	$Offset/AnimatedOutline/Sprite.texture = texture
 	$Offset/AnimatedSprite/Sprite.texture = texture
 
@@ -125,3 +136,6 @@ func follow(target_pos, min_dist, max_dist, speed):
 
 func hide_light():
 	$Offset/Light2D.hide()
+
+func set_collision(val):
+	$Offset/Hitbox/CollisionShape2D.disabled = (not val)
