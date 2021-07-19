@@ -32,6 +32,7 @@ func update_shader(mode):
 		for child in $MovingPlatforms.get_children():
 			get_node('MovingPlatforms/' + child.get_name() + '/Path2D/PathFollow2D/TileMap').material.shader = null
 		$TileMap.material.shader = null
+		$TextureTileMap.material.shader = null
 		$VineTileMap.material.shader = null
 		$BlobTileMap.material.shader = null
 		for child in $Environment.get_children():
@@ -87,6 +88,8 @@ func update_shader(mode):
 			)
 		$TileMap.material.shader = solid_shader
 		$TileMap.material.set_shader_param('color', Color(possible_colors[globals.bg_num - 1]))
+		$TextureTileMap.material.shader = solid_shader
+		$TextureTileMap.material.set_shader_param('color', Color(possible_colors[globals.bg_num - 1]))
 		$VineTileMap.material.shader = solid_shader
 		$VineTileMap.material.set_shader_param('color', Color(possible_colors[globals.bg_num - 1]))
 		$BlobTileMap.material.shader = solid_shader

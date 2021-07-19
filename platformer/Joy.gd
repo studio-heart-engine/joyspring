@@ -57,7 +57,7 @@ func _ready():
 		$Offset/AnimatedOutline/Sprite.light_mask = pow(2, 0) + pow(2, 5)
 		$Offset/Light2D.range_item_cull_mask = pow(2, 0) + pow(2, 5)
 	
-	if already_collected or is_on_cape or is_following_player:
+	if already_collected or is_following_player:
 		hide_light()
 
 
@@ -95,7 +95,8 @@ func set_on_cape(value):
 	is_on_cape = value
 	if value:
 		$Offset/Particles.emitting = false
-		hide_light()
+		$Offset/Light2D.show()
+		$Offset/Light2D.energy = 0.08
 
 
 func _on_Hitbox_area_entered(area):
@@ -133,6 +134,14 @@ func follow(target_pos, min_dist, max_dist, speed):
 	
 	if mag > max_dist and is_on_cape:
 		position += (mag - max_dist) * dir
+	
+	var player = self.get_parent().get_parent().get_parent()
+	if player.get_name() == 'Player':
+		if not player.can_dash:
+			$Offset/Light2D.hide()
+		else:
+			$Offset/Light2D.show()
+		
 
 func hide_light():
 	$Offset/Light2D.hide()

@@ -34,7 +34,7 @@ func update(delta):
 		spawn_fall_particles()
 		owner.can_dash = true
 		var next_state = ""
-		if Input.is_action_pressed("up"):
+		if Input.is_action_pressed("jump"):
 			next_state = "jump"
 		elif owner.velocity.x == 0:
 			next_state = "idle"

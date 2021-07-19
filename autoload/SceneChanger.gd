@@ -57,7 +57,7 @@ func next_level(curr_index, color=Color.black):
 	if File.new().file_exists(next_level_path):
 		scene = load(next_level_path)
 	else:
-		scene = load('res://platformer/levels/Level_TempEnd.tscn')  # ONLY FOR DEMO
+		scene = load('res://gui/Menu.tscn')
 	
 	HDSceneChanger.change_scene_to(scene)
 	globals.save_game()

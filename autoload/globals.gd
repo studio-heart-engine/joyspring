@@ -14,7 +14,7 @@ var bg_num = 1  # 1-indexed
 var bg_num_start = [0, 5, 10, 13, 40, 50, 55]
 var bg_offset = 180  # Motion offset for parallax
 
-var configurable_keys = ['up', 'down', 'left', 'right', 'dash', 'wall', 'float', 'swap']
+var configurable_keys = ['jump', 'up', 'down', 'left', 'right', 'dash', 'wall', 'float', 'swap']
 var config_file
 var keybinds = {}
 

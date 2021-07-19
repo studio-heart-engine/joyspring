@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
 [ext_resource path="res://graphics/effects/swap_to_0.tres" type="Animation" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://graphics/sprites/blobs/Blob.tscn" type="PackedScene" id=5]
 [ext_resource path="res://graphics/effects/swap_to_1.tres" type="Animation" id=6]
 [ext_resource path="res://platformer/Gravel.tscn" type="PackedScene" id=7]
+[ext_resource path="res://platformer/TextureTileMap.gd" type="Script" id=8]
 [ext_resource path="res://graphics/tilesets/tileset.tres" type="TileSet" id=10]
 [ext_resource path="res://player/Player.tscn" type="PackedScene" id=11]
 [ext_resource path="res://graphics/effects/circle-transition.png" type="Texture" id=12]
@@ -62,14 +63,18 @@ shader_param/mask = ExtResource( 12 )
 
 [sub_resource type="ShaderMaterial" id=12]
 
-[sub_resource type="Gradient" id=13]
+[sub_resource type="ShaderMaterial" id=13]
+
+[sub_resource type="ShaderMaterial" id=14]
+
+[sub_resource type="Gradient" id=15]
 offsets = PoolRealArray( 0, 0.305011, 0.640523, 1 )
 colors = PoolColorArray( 0.27451, 0.27451, 0.27451, 0, 0.470588, 0.470588, 0.470588, 1, 0.470588, 0.470588, 0.470588, 1, 0.27451, 0.27451, 0.27451, 0 )
 
-[sub_resource type="GradientTexture" id=14]
-gradient = SubResource( 13 )
+[sub_resource type="GradientTexture" id=16]
+gradient = SubResource( 15 )
 
-[sub_resource type="ParticlesMaterial" id=15]
+[sub_resource type="ParticlesMaterial" id=17]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -79,16 +84,16 @@ initial_velocity = 8.0
 angular_velocity = 4.57384e-41
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-color_ramp = SubResource( 14 )
+color_ramp = SubResource( 16 )
 
-[sub_resource type="Gradient" id=16]
+[sub_resource type="Gradient" id=18]
 offsets = PoolRealArray( 0, 0.30719, 0.359477, 0.381264, 0.405229, 0.43573, 1 )
 colors = PoolColorArray( 0.388235, 0.388235, 0.388235, 0, 1, 1, 1, 0.109804, 0.996078, 0.996078, 0.996078, 0.137255, 0.992157, 0.992157, 0.992157, 0.0980392, 0.988235, 0.988235, 0.988235, 0.12549, 0.984314, 0.984314, 0.984314, 0.0941176, 0.937255, 0.937255, 0.937255, 0 )
 
-[sub_resource type="GradientTexture" id=17]
-gradient = SubResource( 16 )
+[sub_resource type="GradientTexture" id=19]
+gradient = SubResource( 18 )
 
-[sub_resource type="ParticlesMaterial" id=18]
+[sub_resource type="ParticlesMaterial" id=20]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -100,7 +105,7 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 0.05
 scale_random = 0.05
-color_ramp = SubResource( 17 )
+color_ramp = SubResource( 19 )
 
 [node name="Level_17" type="Node2D"]
 script = ExtResource( 1 )
@@ -273,6 +278,8 @@ __meta__ = {
 }
 
 [node name="TileMap" type="TileMap" parent="Layer0"]
+visible = false
+modulate = Color( 0, 0, 0, 1 )
 material = SubResource( 3 )
 z_index = 1
 tile_set = ExtResource( 10 )
@@ -288,13 +295,29 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="VineTileMap" type="TileMap" parent="Layer0"]
+[node name="TextureTileMap" type="TileMap" parent="Layer0"]
 material = SubResource( 4 )
+z_index = 1
+tile_set = ExtResource( 10 )
+cell_size = Vector2( 8, 8 )
+cell_quadrant_size = 2
+collision_layer = 8
+collision_mask = 19
+format = 1
+tile_data = PoolIntArray( 1114156, 7, 327681, 1114157, 7, 0, 1114158, 7, 0, 1114159, 9, 0, 1114160, 9, 262147, 1179688, 5, 262144, 1179689, 5, 0, 1179690, 5, 0, 1179691, 7, 65537, 1179692, 7, 458758, 1179693, 7, 8, 1179694, 5, 8, 1179695, 5, 8, 1179696, 5, 65541, 1245194, 5, 327681, 1245195, 7, 0, 1245196, 9, 0, 1245197, 9, 262147, 1245223, 9, 262145, 1245224, 7, 458758, 1245225, 7, 8, 1245226, 7, 393225, 1245227, 7, 8, 1245228, 7, 8, 1245229, 7, 8, 1245230, 5, 8, 1245231, 5, 8, 1245232, 5, 6, 1310726, 5, 262144, 1310727, 9, 0, 1310728, 9, 65536, 1310729, 7, 1, 1310730, 7, 393223, 1310731, 7, 8, 1310732, 7, 393224, 1310733, 9, 4, 1310759, 9, 196612, 1310760, 7, 8, 1310761, 7, 262153, 1310762, 5, 131080, 1310763, 7, 8, 1310764, 5, 393225, 1310765, 5, 8, 1310766, 5, 8, 1310767, 5, 8, 1310768, 5, 65543, 1441790, 5, 327680, 1441791, 5, 65537, 1376256, 7, 0, 1376257, 7, 0, 1376258, 7, 0, 1376259, 5, 131072, 1376260, 5, 0, 1376261, 5, 196608, 1376262, 5, 393222, 1376263, 7, 8, 1376264, 5, 131080, 1376265, 5, 8, 1376266, 7, 8, 1376267, 7, 8, 1376268, 7, 8, 1376269, 9, 65543, 1376295, 9, 458752, 1376296, 9, 131075, 1376297, 9, 327686, 1376298, 5, 8, 1376299, 5, 8, 1376300, 5, 8, 1376301, 5, 8, 1376302, 5, 8, 1376303, 5, 8, 1376304, 5, 7, 1507326, 5, 196614, 1507327, 5, 8, 1441792, 5, 8, 1441793, 7, 8, 1441794, 7, 8, 1441795, 7, 8, 1441796, 7, 8, 1441797, 7, 8, 1441798, 5, 8, 1441799, 5, 8, 1441800, 7, 8, 1441801, 7, 8, 1441802, 5, 8, 1441803, 5, 196617, 1441804, 7, 8, 1441805, 7, 65541, 1441833, 5, 458753, 1441834, 5, 327686, 1441835, 5, 8, 1441836, 5, 8, 1441837, 5, 8, 1441838, 5, 8, 1441839, 5, 8, 1441840, 5, 4, 1572862, 5, 131079, 1572863, 5, 8, 1507328, 5, 8, 1507329, 5, 8, 1507330, 5, 8, 1507331, 5, 8, 1507332, 5, 8, 1507333, 5, 393224, 1507334, 5, 8, 1507335, 5, 8, 1507336, 5, 8, 1507337, 5, 458761, 1507338, 5, 8, 1507339, 5, 8, 1507340, 5, 8, 1507341, 7, 6, 1507370, 5, 131077, 1507371, 5, 8, 1507372, 5, 8, 1507373, 5, 8, 1507374, 5, 131080, 1507375, 5, 8, 1507376, 5, 65542, 1638398, 5, 196614, 1638399, 5, 8, 1572864, 5, 8, 1572865, 5, 327689, 1572866, 5, 8, 1572867, 5, 8, 1572868, 5, 8, 1572869, 5, 8, 1572870, 5, 8, 1572871, 5, 327689, 1572872, 5, 8, 1572873, 5, 8, 1572874, 5, 8, 1572875, 5, 8, 1572876, 5, 8, 1572877, 5, 4, 1572906, 5, 196613, 1572907, 5, 262152, 1572908, 5, 8, 1572909, 5, 393225, 1572910, 5, 8, 1572911, 5, 8, 1572912, 5, 5, 1703934, 5, 196614, 1703935, 5, 8, 1638400, 5, 8, 1638401, 5, 8, 1638402, 5, 8, 1638403, 5, 8, 1638404, 5, 8, 1638405, 5, 8, 1638406, 5, 8, 1638407, 5, 8, 1638408, 5, 8, 1638409, 5, 8, 1638410, 5, 8, 1638411, 5, 8, 1638412, 5, 8, 1638413, 5, 4, 1638442, 5, 196615, 1638443, 5, 8, 1638444, 5, 8, 1638445, 5, 8, 1638446, 5, 393225, 1638447, 5, 8, 1638448, 5, 7, 1769470, 5, 196612, 1769471, 5, 8, 1703936, 5, 8, 1703937, 5, 8, 1703938, 5, 8, 1703939, 5, 8, 1703940, 5, 8, 1703941, 5, 8, 1703942, 5, 8, 1703943, 5, 8, 1703944, 5, 8, 1703945, 5, 8, 1703946, 5, 8, 1703947, 5, 8, 1703948, 5, 8, 1703949, 5, 7, 1703978, 5, 196614, 1703979, 5, 8, 1703980, 5, 8, 1703981, 5, 8, 1703982, 5, 8, 1703983, 5, 8, 1703984, 5, 65540, 1835006, 5, 393216, 1835007, 5, 65539, 1769472, 5, 131075, 1769473, 5, 65539, 1769474, 5, 65539, 1769475, 5, 196611, 1769476, 5, 131074, 1769477, 5, 65539, 1769478, 5, 65538, 1769479, 5, 131075, 1769480, 5, 65539, 1769481, 5, 196610, 1769482, 5, 3, 1769483, 5, 65538, 1769484, 5, 196610, 1769485, 5, 458755, 1769514, 5, 393216, 1769515, 5, 2, 1769516, 5, 3, 1769517, 5, 196611, 1769518, 5, 65538, 1769519, 5, 65538, 1769520, 5, 393218 )
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_bone_": true,
+"_edit_lock_": true
+}
+
+[node name="VineTileMap" type="TileMap" parent="Layer0"]
+material = SubResource( 5 )
 z_index = 1
 format = 1
 
 [node name="BlobTileMap" type="TileMap" parent="Layer0"]
-material = SubResource( 5 )
+material = SubResource( 6 )
 tile_set = ExtResource( 15 )
 cell_size = Vector2( 4, 4 )
 cell_quadrant_size = 2
@@ -307,7 +330,7 @@ z_index = -10
 script = ExtResource( 21 )
 
 [node name="Bushes1" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 6 )
+material = SubResource( 7 )
 margin_left = -5.0
 margin_top = 132.0
 margin_right = 109.0
@@ -318,7 +341,7 @@ __meta__ = {
 }
 
 [node name="Stalactites1" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 7 )
+material = SubResource( 8 )
 margin_left = 315.0
 margin_top = 176.0
 margin_right = 323.0
@@ -557,8 +580,10 @@ __meta__ = {
 }
 
 [node name="TileMap" type="TileMap" parent="Layer1"]
+visible = false
+modulate = Color( 0, 0, 0, 1 )
 light_mask = 32
-material = SubResource( 8 )
+material = SubResource( 9 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -574,14 +599,32 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="TextureTileMap" type="TileMap" parent="Layer1"]
+light_mask = 32
+material = SubResource( 10 )
+z_index = 1
+tile_set = ExtResource( 10 )
+cell_size = Vector2( 8, 8 )
+cell_quadrant_size = 2
+collision_layer = 256
+collision_mask = 608
+occluder_light_mask = 32
+format = 1
+tile_data = PoolIntArray( 1179646, 5, 327681, 1179647, 5, 196609, 1114112, 7, 0, 1114113, 7, 0, 1114114, 7, 327682, 1245182, 5, 131079, 1245183, 7, 8, 1179648, 7, 8, 1179649, 7, 196617, 1179650, 5, 458756, 1179651, 7, 0, 1179652, 7, 0, 1179653, 9, 262146, 1310718, 5, 131079, 1310719, 5, 8, 1245184, 5, 8, 1245185, 5, 8, 1245186, 5, 8, 1245187, 7, 8, 1245188, 7, 8, 1245189, 9, 393220, 1245190, 9, 262147, 1376254, 5, 131077, 1376255, 5, 8, 1310720, 5, 8, 1310721, 5, 8, 1310722, 5, 8, 1310723, 5, 8, 1310724, 5, 8, 1310725, 5, 327685, 1310726, 9, 393219, 1441790, 5, 131078, 1441791, 5, 8, 1376256, 5, 8, 1376257, 5, 8, 1376258, 5, 393224, 1376259, 5, 327685, 1376260, 7, 131075, 1376261, 5, 458755, 1507326, 5, 196612, 1507327, 5, 393225, 1441792, 5, 8, 1441793, 5, 8, 1441794, 5, 327684, 1441795, 5, 393219, 1572862, 5, 131079, 1572863, 5, 393224, 1507328, 5, 8, 1507329, 5, 8, 1507330, 5, 7, 1638398, 5, 131076, 1638399, 5, 327689, 1572864, 5, 8, 1572865, 5, 8, 1572866, 5, 5, 1703934, 5, 131077, 1703935, 5, 8, 1638400, 5, 8, 1638401, 5, 8, 1638402, 5, 7, 1769470, 5, 131077, 1769471, 5, 8, 1703936, 5, 8, 1703937, 5, 8, 1703938, 5, 5, 1835006, 5, 458752, 1835007, 5, 65539, 1769472, 5, 3, 1769473, 5, 65538, 1769474, 5, 393219 )
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_bone_": true,
+"_edit_lock_": true
+}
+
 [node name="VineTileMap" type="TileMap" parent="Layer1"]
-material = SubResource( 9 )
+material = SubResource( 11 )
 z_index = 1
 format = 1
 
 [node name="BlobTileMap" type="TileMap" parent="Layer1"]
 light_mask = 32
-material = SubResource( 10 )
+material = SubResource( 12 )
 tile_set = ExtResource( 15 )
 cell_size = Vector2( 4, 4 )
 cell_quadrant_size = 2
@@ -595,7 +638,7 @@ z_index = -10
 script = ExtResource( 21 )
 
 [node name="Rocks1" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 11 )
+material = SubResource( 13 )
 margin_left = -31.0
 margin_top = 108.0
 margin_right = 41.0
@@ -607,7 +650,7 @@ __meta__ = {
 }
 
 [node name="Stalactites1" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 12 )
+material = SubResource( 14 )
 margin_left = 22.0
 margin_top = 184.0
 margin_right = 30.0
@@ -618,7 +661,7 @@ __meta__ = {
 }
 
 [node name="Stalactites2" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 12 )
+material = SubResource( 14 )
 margin_left = 47.0
 margin_top = 168.0
 margin_right = 55.0
@@ -636,7 +679,7 @@ anims/swap_to_1 = ExtResource( 6 )
 position = Vector2( 160, 90 )
 z_index = 1
 local_coords = false
-process_material = SubResource( 15 )
+process_material = SubResource( 17 )
 script = ExtResource( 17 )
 
 [node name="LightParticles" type="Particles2D" parent="."]
@@ -645,7 +688,7 @@ z_index = 1
 amount = 2
 lifetime = 7.0
 local_coords = false
-process_material = SubResource( 18 )
+process_material = SubResource( 20 )
 texture = ExtResource( 18 )
 script = ExtResource( 17 )
 
