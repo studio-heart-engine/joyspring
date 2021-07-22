@@ -34,7 +34,6 @@ func _ready():
 		self.occluder_light_mask = pow(2, 5)
 	
 	self.show()
-#	self.hide() # FOR WILL
 
 func update_tileset():
 	for i in len(TILE_MATERIAL):
@@ -48,4 +47,3 @@ func update_tileset():
 			var autotile_coord = auto_tile.get_cell_autotile_coord(cell.x, cell.y)
 			self.set_cell(cell.x, cell.y, id, false, false, false, autotile_coord)
 	auto_tile.hide()
-#	auto_tile.show() # FOR WILL

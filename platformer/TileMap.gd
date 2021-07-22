@@ -3,7 +3,6 @@ extends TileMap
 
 func _ready():
 	self.modulate = Color(0, 0, 0)
-#	self.modulate = Color(1, 1, 1)  # FOR WILL
 	self.material = self.material.duplicate()
 
 	if self.get_parent().get_name() == 'Layer0':
