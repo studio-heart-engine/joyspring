@@ -4,6 +4,14 @@ extends Node
 onready var current_song = null
 onready var tween = $Tween
 
+var loop_start = {
+	"Silence": 0.0,
+	"Denial": 0.0,
+	"Legend": 0.0,
+	"Title": 0.0,
+	"Mirage": 0.0,
+	"Looper": 16.326
+}
 
 func _ready():
 	SceneChanger.connect("scene_changed", self, "play")
@@ -24,6 +32,8 @@ func play():
 
 	if globals.curr_state == 'LevelSelect':
 		current_song = $Title
+	elif globals.curr_state == 'LevelTemplate':
+		current_song = $Looper
 	elif globals.curr_state.substr(0, 5) == 'Level':
 		var level_index = int(globals.curr_state.right(5))
 		if level_index < 12:
@@ -64,9 +74,10 @@ func play():
 
 	elif not current_song.playing:
 		# fade in
-		tween.interpolate_property(
-			current_song, "volume_db", -30, -20, 2,
-			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
-		tween.start()
+		if loop_start[current_song.get_name()] == 0.0:
+			tween.interpolate_property(
+				current_song, "volume_db", -30, -20, 2,
+				Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
+			tween.start()
 #		yield(get_tree().create_timer(0.2), "timeout")
-		current_song.play()
+		current_song.play(loop_start[current_song.get_name()])
