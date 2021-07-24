@@ -42,7 +42,7 @@ func update_tileset():
 	
 	var auto_tile = get_node('../TileMap')
 	auto_tile.show()
-	for id in range(1, 11):
+	for id in range(1, 11, 2):
 		for cell in self.get_used_cells_by_id(id):
 			var autotile_coord = auto_tile.get_cell_autotile_coord(cell.x, cell.y)
 			self.set_cell(cell.x, cell.y, id, false, false, false, autotile_coord)
