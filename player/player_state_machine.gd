@@ -8,6 +8,8 @@ var current_state = null
 var previous_state = null
 var is_looking_right = true setget set_looking_right
 
+var on_tile = -1
+
 onready var sprite = $AnimatedSprite/Sprite
 
 onready var states = {
@@ -37,6 +39,8 @@ func _ready():
 	
 	$AnimatedSprite/Sprite.light_mask = pow(2, 0) + pow(2, 5)
 
+func _process(delta):
+	on_tile = self.get_parent().layers[self.get_parent().layer_num].get_collision_tile()
 
 func _input(event):
 	states[current_state].handle_input(event)

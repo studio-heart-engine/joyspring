@@ -56,7 +56,6 @@ func _ready():
 		$Switch._ready()
 		$Tut0.position = $Player.position
 
-
 func _input(event):
 	if event.is_action_pressed("swap"):
 		swap_layers()

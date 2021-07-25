@@ -30,7 +30,7 @@ func update_shader(mode):
 			get_node('MovingBlobs/' + child.get_name() + '/Path2D/PathFollow2D/Blob/NoiseOffset/Outline').material.shader = outline_shader
 			get_node('MovingBlobs/' + child.get_name() + '/Path2D/PathFollow2D/Blob/NoiseOffset/Sprite').material.shader = null
 		for child in $MovingPlatforms.get_children():
-			get_node('MovingPlatforms/' + child.get_name() + '/Path2D/PathFollow2D/TileMap').material.shader = null
+			get_node('MovingPlatforms/' + child.get_name() + '/Path2D/PathFollow2D/TextureTileMap').material.shader = null
 		$TileMap.material.shader = null
 		$TextureTileMap.material.shader = null
 		$VineTileMap.material.shader = null
@@ -82,8 +82,8 @@ func update_shader(mode):
 				'color', Color(possible_colors[globals.bg_num - 1])
 			)
 		for child in $MovingPlatforms.get_children():
-			get_node('MovingPlatforms/' + child.get_name() + '/Path2D/PathFollow2D/TileMap').material.shader = solid_shader
-			get_node('MovingPlatforms/' + child.get_name() + '/Path2D/PathFollow2D/TileMap').material.set_shader_param(
+			get_node('MovingPlatforms/' + child.get_name() + '/Path2D/PathFollow2D/TextureTileMap').material.shader = solid_shader
+			get_node('MovingPlatforms/' + child.get_name() + '/Path2D/PathFollow2D/TextureTileMap').material.set_shader_param(
 				'color', Color(possible_colors[globals.bg_num - 1])
 			)
 		$TileMap.material.shader = solid_shader
@@ -101,8 +101,17 @@ func update_shader(mode):
 			)
 		$Environment.modulate = Color(1, 1, 1, 0.8)
 
-# Unused
-func set_collision(val):
-	for child in ($Blebs.get_children() + $Blobs.get_children() + $Joys.get_children() + \
-				  $Gravel.get_children() + $MovingBlobs.get_children()):
-		child.set_collision(val)
+func get_collision_tile():
+	var player = get_node("../Player")
+	var tilemap = $TileMap
+	var texturetilemap = $TextureTileMap
+	var cell = tilemap.world_to_map(player.global_position + Vector2(0, 4))
+	var tile_id = texturetilemap.get_cellv(cell)
+	for platform in $MovingPlatforms.get_children():
+		tilemap = get_node("MovingPlatforms/" + platform.get_name() + "/Path2D/PathFollow2D/TileMap")
+		texturetilemap = get_node("MovingPlatforms/" + platform.get_name() + "/Path2D/PathFollow2D/TextureTileMap")
+		var path = get_node("MovingPlatforms/" + platform.get_name() + "/Path2D/PathFollow2D")
+		cell = tilemap.world_to_map(player.global_position - platform.position - path.position + Vector2(0, 4))
+		if tile_id == -1:
+			tile_id = texturetilemap.get_cellv(cell)
+	return tile_id
