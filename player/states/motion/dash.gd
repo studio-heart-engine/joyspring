@@ -22,6 +22,7 @@ func enter():
 	anim_player.stop()
 	anim_player.play("dash")
 	anim_player.stop(false)
+	$SoundEffect.pitch_scale = 1 + rand_range(-0.2, 0.2)
 	$SoundEffect.play()
 	if self.input_direction.x == 0:
 		anim_player.advance(0)
