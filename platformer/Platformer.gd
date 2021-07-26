@@ -46,7 +46,7 @@ func _ready():
 	update_light()
 	
 	layers[layer_num].z_index = 10
-	layers[(layer_num + 1) % 2].z_index = 0
+	layers[(layer_num + 1) % 2].z_index = -1
 	layers[layer_num]._ready()
 	layers[(layer_num + 1) % 2]._ready()
 	update_shader()
@@ -73,6 +73,8 @@ func swap_layers():
 		update_light()
 		update_shader()
 		$Swapper.play("swap_to_" + str(layer_num))
+		$Swapper/SoundEffect.pitch_scale = 1 + rand_range(-0.1, 0.1)
+		$Swapper/SoundEffect.play()
 		Events.emit_signal("layer_swapped")
 		pass
 

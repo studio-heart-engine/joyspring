@@ -4,6 +4,8 @@ export var INITIAL_JUMP_SPEED = 230
 
 func enter():
 	.enter()
+	$SoundEffect.pitch_scale = 1 + rand_range(-0.1, 0.1)
+	$SoundEffect.play()
 	play_anim("jump")
 	squish_stretch_player.play("stretch")
 	spawn_jump_particles()

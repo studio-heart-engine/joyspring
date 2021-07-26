@@ -69,6 +69,7 @@ func enter():
 	
 	Events.emit_signal("float_started")
 	play_anim("float")
+	$SoundEffect.stream = load('res://music/effects/float' + str(int(rand_range(1, 3))) + '.wav')
 	$SoundEffect.play()
 	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
 	

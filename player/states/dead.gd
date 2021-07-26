@@ -3,6 +3,7 @@ extends "../state.gd"
 var input_direction = Vector2.ZERO
 
 func enter():
+	$SoundEffect.play()
 	anim_player.stop(false)
 	owner.find_node("GlowAnimationPlayer").stop()
 	squish_stretch_player.stop()
