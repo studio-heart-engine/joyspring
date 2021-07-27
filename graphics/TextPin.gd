@@ -12,7 +12,7 @@ func set_colors(time_of_day):
 		$TextureRect.modulate = Color('222039')
 	if time_of_day == 2:
 		curr_anim = 'highlight_dawn'
-		$TextureRect.modulate = Color('d796d2')
+		$TextureRect.modulate = Color('a53f1b')
 
 func highlight():
 	$Label/AnimationPlayer.play(curr_anim)

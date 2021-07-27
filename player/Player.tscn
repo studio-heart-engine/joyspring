@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://player/player_state_machine.gd" type="Script" id=1]
 [ext_resource path="res://player/state.gd" type="Script" id=2]
@@ -19,7 +19,6 @@
 [ext_resource path="res://player/states/motion/on_wall/climb.gd" type="Script" id=17]
 [ext_resource path="res://graphics/effects/cave-darkness.png" type="Texture" id=18]
 [ext_resource path="res://graphics/sprites/riley/rileyEvening.png" type="Texture" id=19]
-[ext_resource path="res://music/effects/float.wav" type="AudioStream" id=20]
 [ext_resource path="res://music/effects/dash.wav" type="AudioStream" id=21]
 [ext_resource path="res://music/effects/jump.wav" type="AudioStream" id=22]
 [ext_resource path="res://music/effects/death.wav" type="AudioStream" id=23]
@@ -188,7 +187,8 @@ script = ExtResource( 8 )
 script = ExtResource( 9 )
 
 [node name="SoundEffect" type="AudioStreamPlayer" parent="States/Float"]
-stream = ExtResource( 20 )
+
+[node name="Timer" type="Timer" parent="States/Float"]
 
 [node name="Dead" type="Node" parent="States"]
 script = ExtResource( 10 )
@@ -288,5 +288,6 @@ z_index = 4
 texture = ExtResource( 18 )
 
 [connection signal="ready" from="." to="RespawnTransition" method="_on_Player_ready"]
+[connection signal="timeout" from="States/Float/Timer" to="States/Float" method="_on_Timer_timeout"]
 
 [editable path="AnimatedSprite"]

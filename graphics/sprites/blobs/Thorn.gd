@@ -11,7 +11,7 @@ export (String) var shape
 #]
 var possible_colors = [['#c97d54', '#c96254', '#d24b61', '#c9377b'],
 					   ['#aee64d', '#83d464', '#57be7c', '#5aa98c'],
-					   ['#9583dd', '#967ac9', '#8070be', '#6c6cba']]
+					   ['#71d8cf', '#5fc0c9', '#4ea1be', '#4a89bb']]
 
 func _ready():
 	Events.connect('time_of_day_changed', self, 'update_image')
