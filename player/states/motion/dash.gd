@@ -10,15 +10,15 @@ var timer
 func enter():
 	
 	Events.emit_signal("player_dashed")
-	
+#
 	spawn_dash_start_particles()
 	owner.can_dash = false
-	
+#
 	direction = self.input_direction.normalized()
-	
+
 	if self.input_direction.x != 0:
 		owner.is_looking_right = self.input_direction.x == 1
-	
+
 	anim_player.stop()
 	anim_player.play("dash")
 	anim_player.stop(false)
@@ -34,18 +34,16 @@ func enter():
 		anim_player.advance(3)
 	
 	
-	timer = Timer.new()
-	timer.set_wait_time(MAX_UP_DASH_TIME if direction.y < 0 else MAX_DASH_TIME)
-	timer.set_one_shot(true)
-	timer.connect("timeout", self, "finish")
-	add_child(timer)
-	timer.start()
+
+	$Timer.set_wait_time(MAX_UP_DASH_TIME if direction.y < 0 else MAX_DASH_TIME)
+	$Timer.set_one_shot(true)
+	$Timer.start()
 	
 	yield(get_tree().create_timer(0.07), "timeout")
 	spawn_dash_ring_particles()
 
 func exit():
-	timer.stop()
+	$Timer.stop()
 
 func update(delta):
 	owner.velocity = direction * DASH_SPEED
@@ -65,4 +63,3 @@ func finish():
 		emit_signal("finished", "float")
 	else:
 		emit_signal("finished", "previous")
-#	emit_signal("finished", "fall")
