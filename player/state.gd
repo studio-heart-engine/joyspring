@@ -22,7 +22,7 @@ onready var on_wall_timer = owner.get_node("OnWallTimer")
 
 func play_anim(anim_name):
 	anim_player.play(anim_name)
-	if anim_name == "run":
+	if anim_name == "run" or anim_name == "climb-side":
 		sound_anim_player.play(anim_name)
 	else:
 		sound_anim_player.stop()

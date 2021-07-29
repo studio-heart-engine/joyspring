@@ -10,7 +10,7 @@ var loop_start = {
 	"Legend": 0.0,
 	"Title": 0.0,
 	"Mirage": 0.0,
-	"TheRiver": 29.343,
+	"TheRiver": 18.844,
 	"IntoThinAir": 16.326
 }
 
@@ -38,9 +38,9 @@ func play():
 	elif globals.curr_state.substr(0, 5) == 'Level':
 		var level_index = int(globals.curr_state.right(5))
 		if level_index < 7:
-			current_song = $Mirage
-		elif level_index < 12:
 			current_song = $IntoThinAir
+		elif level_index < 12:
+			current_song = $Mirage
 		elif level_index == 12:
 			current_song = $Silence
 		elif level_index < 30:
@@ -73,7 +73,7 @@ func play():
 			current_song, "volume_db", -30, -20, 2,
 			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
 		tween.start()
-		current_song.play(90)
+		current_song.play()
 
 	elif not current_song.playing:
 		if loop_start[current_song.get_name()] == 0.0:

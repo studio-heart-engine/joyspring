@@ -55,7 +55,7 @@ func _ready():
 		stones_sound_effects.append(load('res://music/effects/footstep_stones_' + str(i) + '.wav'))
 
 func play_footstep():
-	on_tile = self.get_parent().layers[self.get_parent().layer_num].get_collision_tile()
+	on_tile = self.get_parent().layers[self.get_parent().layer_num].get_collision_tile(Vector2(0, 4))
 	$States/Run/SoundEffect.pitch_scale = 1 + rand_range(-0.05, 0.05)
 	if on_tile == 1:
 		$States/Run/SoundEffect.volume_db = -10
@@ -76,6 +76,30 @@ func play_footstep():
 		$States/Run/SoundEffect.volume_db = -15
 		$States/Run/SoundEffect.stream = pebbles_sound_effects[int(rand_range(0, 5))]
 	$States/Run/SoundEffect.play()
+
+func play_climb():
+	var dir = Vector2(4 if is_looking_right else -4, 0)
+	on_tile = self.get_parent().layers[self.get_parent().layer_num].get_collision_tile(dir)
+	$States/Climb/SoundEffect.pitch_scale = 1 + rand_range(-0.05, 0.05)
+	if on_tile == 1:
+		$States/Climb/SoundEffect.volume_db = -10
+		$States/Climb/SoundEffect.stream = dirt_sound_effects[int(rand_range(0, 5))]
+	elif on_tile == 3:
+		$States/Climb/SoundEffect.volume_db = -10
+		$States/Climb/SoundEffect.stream = grass_sound_effects[int(rand_range(0, 5))]
+	elif on_tile == 5:
+		$States/Climb/SoundEffect.volume_db = -20
+		$States/Climb/SoundEffect.stream = pebbles_sound_effects[int(rand_range(0, 5))]
+	elif on_tile == 7:
+		$States/Climb/SoundEffect.volume_db = -10
+		$States/Climb/SoundEffect.stream = rocks_sound_effects[int(rand_range(0, 5))]
+	elif on_tile == 9:
+		$States/Climb/SoundEffect.volume_db = -10
+		$States/Climb/SoundEffect.stream = stones_sound_effects[int(rand_range(0, 5))]
+	else:  # Assume player on gravel, play pebble sound
+		$States/Climb/SoundEffect.volume_db = -15
+		$States/Climb/SoundEffect.stream = pebbles_sound_effects[int(rand_range(0, 5))]
+	$States/Climb/SoundEffect.play()
 
 func _input(event):
 	states[current_state].handle_input(event)
