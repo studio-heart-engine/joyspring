@@ -9,12 +9,12 @@ var total_levels = 18
 var peak_level = 12
 
 var time_of_day = 0  # 0-indexed
-var time_of_day_start = [0, 10, 50]
+var time_of_day_start = [0, 10, 30]
 var bg_num = 1  # 1-indexed
-var bg_num_start = [0, 5, 10, 13, 40, 50, 55]
+var bg_num_start = [0, 5, 10, 13, 23, 30, 40]
 var bg_offset = 180  # Motion offset for parallax
 
-var configurable_keys = ['up', 'down', 'left', 'right', 'dash', 'wall', 'float', 'swap']
+var configurable_keys = ['jump', 'up', 'down', 'left', 'right', 'dash', 'wall', 'float', 'swap']
 var config_file
 var keybinds = {}
 

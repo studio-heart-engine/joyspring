@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://player/player_state_machine.gd" type="Script" id=1]
 [ext_resource path="res://player/state.gd" type="Script" id=2]
@@ -19,8 +19,11 @@
 [ext_resource path="res://player/states/motion/on_wall/climb.gd" type="Script" id=17]
 [ext_resource path="res://graphics/effects/cave-darkness.png" type="Texture" id=18]
 [ext_resource path="res://graphics/sprites/riley/rileyEvening.png" type="Texture" id=19]
-[ext_resource path="res://music/effects/float.wav" type="AudioStream" id=20]
+[ext_resource path="res://music/effects/footstep_grass.wav" type="AudioStream" id=20]
 [ext_resource path="res://music/effects/dash.wav" type="AudioStream" id=21]
+[ext_resource path="res://music/effects/jump.wav" type="AudioStream" id=22]
+[ext_resource path="res://music/effects/death.wav" type="AudioStream" id=23]
+[ext_resource path="res://music/effects/slide.wav" type="AudioStream" id=24]
 
 [sub_resource type="Animation" id=1]
 resource_name = "dash-glow"
@@ -36,7 +39,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.05, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ 0.4, 1.1, 0.5 ]
+"values": [ 0.4, 1.1, 0.2 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath(".:color")
@@ -75,7 +78,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.3, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ 0.5, 0.7, 0.5 ]
+"values": [ 0.2, 0.7, 0.2 ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -139,7 +142,47 @@ tracks/1/keys = {
 "values": [ true, false, true ]
 }
 
-[sub_resource type="RectangleShape2D" id=6]
+[sub_resource type="Animation" id=6]
+resource_name = "climb-side"
+length = 0.6
+loop = true
+tracks/0/type = "method"
+tracks/0/path = NodePath("..")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.4 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "play_climb"
+} ]
+}
+
+[sub_resource type="Animation" id=7]
+length = 0.52
+loop = true
+tracks/0/type = "method"
+tracks/0/path = NodePath("..")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.26 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "play_footstep"
+}, {
+"args": [  ],
+"method": "play_footstep"
+} ]
+}
+
+[sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 3, 7.5 )
 
 [node name="Player" type="KinematicBody2D"]
@@ -164,16 +207,27 @@ script = ExtResource( 4 )
 [node name="SoundEffect" type="AudioStreamPlayer" parent="States/Dash"]
 stream = ExtResource( 21 )
 
+[node name="Timer" type="Timer" parent="States/Dash"]
+
 [node name="Run" type="Node" parent="States"]
 script = ExtResource( 5 )
 
 [node name="SoundEffect" type="AudioStreamPlayer" parent="States/Run"]
+stream = ExtResource( 20 )
 
 [node name="Slide" type="Node" parent="States"]
 script = ExtResource( 6 )
 
+[node name="SoundEffect" type="AudioStreamPlayer" parent="States/Slide"]
+stream = ExtResource( 24 )
+volume_db = -10.0
+
 [node name="Jump" type="Node" parent="States"]
 script = ExtResource( 7 )
+
+[node name="SoundEffect" type="AudioStreamPlayer" parent="States/Jump"]
+stream = ExtResource( 22 )
+volume_db = -10.0
 
 [node name="Fall" type="Node" parent="States"]
 script = ExtResource( 8 )
@@ -182,10 +236,15 @@ script = ExtResource( 8 )
 script = ExtResource( 9 )
 
 [node name="SoundEffect" type="AudioStreamPlayer" parent="States/Float"]
-stream = ExtResource( 20 )
+
+[node name="Timer" type="Timer" parent="States/Float"]
 
 [node name="Dead" type="Node" parent="States"]
 script = ExtResource( 10 )
+
+[node name="SoundEffect" type="AudioStreamPlayer" parent="States/Dead"]
+stream = ExtResource( 23 )
+volume_db = -15.0
 
 [node name="Cling" type="Node" parent="States"]
 script = ExtResource( 11 )
@@ -193,12 +252,13 @@ script = ExtResource( 11 )
 [node name="Climb" type="Node" parent="States"]
 script = ExtResource( 17 )
 
+[node name="SoundEffect" type="AudioStreamPlayer" parent="States/Climb"]
+
 [node name="Light2D" type="Light2D" parent="."]
 position = Vector2( 0, -7.92011 )
 texture = ExtResource( 12 )
 texture_scale = 0.7
-color = Color( 0, 0.27451, 1, 1 )
-energy = 0.4
+energy = 0.2
 range_layer_min = -1
 shadow_enabled = true
 shadow_gradient_length = 2.0
@@ -234,7 +294,7 @@ one_shot = true
 light_mask = 0
 texture = ExtResource( 19 )
 offset = Vector2( 0, -8 )
-region_rect = Rect2( 480, 0, 16, 16 )
+region_rect = Rect2( 336, 0, 16, 16 )
 
 [node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
 anims/squish = SubResource( 3 )
@@ -243,16 +303,20 @@ anims/stretch = SubResource( 4 )
 [node name="BlinkAnimationPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
 anims/blink = SubResource( 5 )
 
+[node name="SoundAnimationPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
+anims/climb-side = SubResource( 6 )
+anims/run = SubResource( 7 )
+
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -7.5 )
-shape = SubResource( 6 )
+shape = SubResource( 8 )
 
 [node name="Hitbox" type="Area2D" parent="."]
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Hitbox"]
 visible = false
 position = Vector2( 0, -7.5 )
-shape = SubResource( 6 )
+shape = SubResource( 8 )
 
 [node name="RespawnTransition" type="CanvasLayer" parent="."]
 layer = 2
@@ -280,5 +344,7 @@ z_index = 4
 texture = ExtResource( 18 )
 
 [connection signal="ready" from="." to="RespawnTransition" method="_on_Player_ready"]
+[connection signal="timeout" from="States/Dash/Timer" to="States/Dash" method="finish"]
+[connection signal="timeout" from="States/Float/Timer" to="States/Float" method="_on_Timer_timeout"]
 
 [editable path="AnimatedSprite"]

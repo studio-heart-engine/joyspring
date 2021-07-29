@@ -12,10 +12,6 @@ var collision_layer_vals
 var collision_mask_vals
 var light_mask_vals
 
-onready var outline_mat = preload('res://graphics/effects/outline_material.tres')
-onready var solid_shader = preload('res://graphics/effects/solid_color.shader')
-onready var outline_shader = preload('res://graphics/effects/outline-shader.shader')
-
 signal level_exited
 
 
@@ -25,7 +21,7 @@ func _ready():
 	Events.connect('bg_num_changed', self, 'set_bg')
 	Events.connect('bg_num_changed', self, 'update_shader')
 	Events.connect('swap_layers', self, 'swap_layers')
-	
+
 	if globals.curr_state == 'LevelSelect':
 		if globals.prev_state.substr(0, 5) == 'Level' and globals.prev_state != 'LevelSelect':
 			$Player.position = get_node('LevelSigns/LevelSign' + str(int(globals.prev_state.right(5)))).position
@@ -47,21 +43,18 @@ func _ready():
 	update_collision()
 	
 	light_mask_vals = [pow(2, 0), pow(2, 5)]
-	set_light($Layer0, light_mask_vals[0])
-	set_light($Layer1, light_mask_vals[1])
-	set_light($Player, light_mask_vals[0] + light_mask_vals[1])
 	update_light()
 	
 	layers[layer_num].z_index = 10
-	layers[(layer_num + 1) % 2].z_index = 0
+	layers[(layer_num + 1) % 2].z_index = -1
 	layers[layer_num]._ready()
 	layers[(layer_num + 1) % 2]._ready()
 	update_shader()
+
 	
 	if globals.curr_state == 'LevelSelect':
 		$Switch._ready()
 		$Tut0.position = $Player.position
-
 
 func _input(event):
 	if event.is_action_pressed("swap"):
@@ -78,9 +71,12 @@ func swap_layers():
 	else:
 		update_collision()
 		update_light()
-		$Swapper.play("swap_to_" + str(layer_num))
 		update_shader()
+		$Swapper.play("swap_to_" + str(layer_num))
+		$Swapper/SoundEffect.pitch_scale = 1 + rand_range(-0.1, 0.1)
+		$Swapper/SoundEffect.play()
 		Events.emit_signal("layer_swapped")
+		pass
 
 func check_collision(layer_name):  # Check if player is inside tilemap
 	var index1 = get_node(layer_name + '/TileMap').world_to_map($Player.position)  # Bottom half of player
@@ -95,31 +91,13 @@ func update_collision():
 	$Player/Hitbox.collision_layer = collision_layer_vals[layer_num]
 	$Player/Hitbox.collision_mask = collision_layer_vals[layer_num]
 
-func set_light(node, val):
-#	print(node.get_class())
-	# TODO: MAKE THIS MORE EFFICIENT
-	for property in node.get_property_list():
-		if property['name'] == 'light_mask':
-#			print('light_mask')
-			node.light_mask = val
-		if property['name'] == 'occluder_light_mask':
-#			print('occluder')
-			node.occluder_light_mask = val
-		if property['name'] == 'range_item_cull_mask':
-			node.range_item_cull_mask = val
-
-	for child in node.get_children():
-		set_light(child, val)
-
 func update_light():
 	$Player/Light2D.range_item_cull_mask = light_mask_vals[layer_num]
 	$Player/Light2D.shadow_item_cull_mask = light_mask_vals[layer_num]
-#	set_light($Player, light_mask_vals[layer_num])
 
 func update_shader():
 	layers[layer_num].update_shader('normal')
 	layers[(layer_num + 1) % 2].update_shader('solid')
-
 
 func all_joys_collected():
 	return $Joys.get_child_count() == 0

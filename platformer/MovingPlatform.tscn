@@ -1,6 +1,8 @@
-[gd_scene load_steps=624 format=2]
+[gd_scene load_steps=627 format=2]
 
 [ext_resource path="res://platformer/MovingPlatform.gd" type="Script" id=1]
+[ext_resource path="res://graphics/tilesets/tileset.tres" type="TileSet" id=2]
+[ext_resource path="res://platformer/TextureTileMap.gd" type="Script" id=3]
 
 [sub_resource type="Curve2D" id=1]
 resource_local_to_scene = true
@@ -3896,6 +3898,8 @@ points = PoolVector2Array( 0, 0, 8, 0, 8, 8, 0, 8 )
 7/shapes = [  ]
 7/z_index = 0
 
+[sub_resource type="ShaderMaterial" id=623]
+
 [sub_resource type="Animation" id=621]
 resource_name = "follow-loop"
 loop = true
@@ -3948,6 +3952,22 @@ collision_use_kinematic = true
 collision_layer = 16
 format = 1
 tile_data = PoolIntArray( -2, 2, 327680, -1, 2, 0, -65536, 2, 1, -65535, 2, 327683, 65534, 2, 458752, 65535, 2, 196611, 0, 2, 3, 1, 2, 458755 )
+__meta__ = {
+"_edit_bone_": true
+}
+
+[node name="TextureTileMap" type="TileMap" parent="Path2D/PathFollow2D"]
+light_mask = 32
+material = SubResource( 623 )
+z_index = 1
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 8, 8 )
+cell_quadrant_size = 2
+collision_layer = 256
+collision_mask = 608
+occluder_light_mask = 32
+format = 1
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_bone_": true,
 "_edit_lock_": true

@@ -16,6 +16,13 @@ func _ready():
 	Events.connect('time_of_day_changed', self, 'update_tileset')
 	Events.connect('layer_swapped', self, 'check_collision')
 	update_tileset()
+	
+	if self.get_parent().get_name() == 'Layer0':
+		self.light_mask = pow(2, 0)
+		self.occluder_light_mask = pow(2, 0)
+	if self.get_parent().get_name() == 'Layer1':
+		self.light_mask = pow(2, 5)
+		self.occluder_light_mask = pow(2, 5)
 
 func update_tileset():
 	var tileset_image_path = "res://graphics/tilesets/" + get_time_of_day() + "/blobs.png"

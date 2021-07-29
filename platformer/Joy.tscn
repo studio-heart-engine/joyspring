@@ -1,8 +1,7 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://platformer/Joy.gd" type="Script" id=1]
 [ext_resource path="res://graphics/effects/outline-shader.shader" type="Shader" id=2]
-[ext_resource path="res://graphics/sprites/joy/joy.png" type="Texture" id=3]
 [ext_resource path="res://platformer/JoyAnimatedSprite.tscn" type="PackedScene" id=4]
 [ext_resource path="res://music/effects/joy.wav" type="AudioStream" id=5]
 [ext_resource path="res://graphics/effects/white-radial-gradient.png" type="Texture" id=6]
@@ -19,11 +18,7 @@ angular_velocity = 4.57384e-41
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = ExtResource( 2 )
-shader_param/outline_color = Color( 1, 1, 1, 1 )
-
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=3]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("..:modulate")
@@ -50,11 +45,11 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="ShaderMaterial" id=5]
+[sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 2 )
 shader_param/outline_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=5]
 length = 0.9
 loop = true
 tracks/0/type = "value"
@@ -70,7 +65,7 @@ tracks/0/keys = {
 "values": [ Rect2( 24, 0, 8, 8 ), Rect2( 32, 0, 8, 8 ), Rect2( 40, 0, 8, 8 ), Rect2( 48, 0, 8, 8 ), Rect2( 56, 0, 8, 8 ) ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=6]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("..:modulate")
@@ -97,7 +92,7 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=7]
 length = 0.9
 loop = true
 tracks/0/type = "value"
@@ -113,10 +108,10 @@ tracks/0/keys = {
 "values": [ Rect2( 0, 0, 8, 8 ), Rect2( 8, 0, 8, 8 ), Rect2( 16, 0, 8, 8 ) ]
 }
 
-[sub_resource type="CircleShape2D" id=9]
+[sub_resource type="CircleShape2D" id=8]
 radius = 6.35152
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=9]
 length = 2.0
 loop = true
 step = 0.5
@@ -151,44 +146,35 @@ visibility_rect = Rect2( -20, -20, 40, 40 )
 local_coords = false
 process_material = SubResource( 2 )
 
-[node name="Outline" type="Sprite" parent="Offset"]
-visible = false
-material = SubResource( 3 )
-position = Vector2( -0.102417, 0.102417 )
-z_index = -1
-texture = ExtResource( 3 )
-region_enabled = true
-region_rect = Rect2( 0, 0, 8, 8 )
-
 [node name="AnimatedSprite" parent="Offset" instance=ExtResource( 4 )]
 
 [node name="Sprite" parent="Offset/AnimatedSprite" index="0"]
 region_rect = Rect2( 0, 0, 8, 8 )
 
 [node name="AnimationPlayer" parent="Offset/AnimatedSprite" index="1"]
-anims/fade_out = SubResource( 4 )
+anims/fade_out = SubResource( 3 )
 
 [node name="AnimatedOutline" parent="Offset" instance=ExtResource( 4 )]
 z_index = -1
 
 [node name="Sprite" parent="Offset/AnimatedOutline" index="0"]
-material = SubResource( 5 )
+material = SubResource( 4 )
 region_rect = Rect2( 0, 0, 8, 8 )
 
 [node name="AnimationPlayer" parent="Offset/AnimatedOutline" index="1"]
-anims/collect1 = SubResource( 6 )
-anims/fade_out = SubResource( 7 )
-anims/float = SubResource( 8 )
+anims/collect1 = SubResource( 5 )
+anims/fade_out = SubResource( 6 )
+anims/float = SubResource( 7 )
 
 [node name="Hitbox" type="Area2D" parent="Offset"]
 collision_layer = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Offset/Hitbox"]
-shape = SubResource( 9 )
+shape = SubResource( 8 )
 
 [node name="AnimationPlayer2" type="AnimationPlayer" parent="Offset"]
 autoplay = "float"
-anims/float = SubResource( 10 )
+anims/float = SubResource( 9 )
 
 [node name="Light2D" type="Light2D" parent="Offset"]
 texture = ExtResource( 6 )

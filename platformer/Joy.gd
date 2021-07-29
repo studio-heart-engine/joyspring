@@ -35,13 +35,29 @@ func _ready():
 	set_theme_texture()
 	Events.connect('time_of_day_changed', self, 'set_theme_texture')
 
-#	$Offset/Outline.set_material($Offset/Outline.get_material().duplicate())
-	$Offset/AnimatedOutline/Sprite.set_material($Offset/AnimatedOutline/Sprite.get_material().duplicate())
-	$Offset/Particles.set_material($Offset/Particles.get_material().duplicate())
-	$Offset/AnimatedSprite/Sprite.set_material($Offset/AnimatedSprite/Sprite.get_material().duplicate())
-	$Offset/AnimatedSprite/Sprite.set_material($Offset/AnimatedSprite/Sprite.get_material().duplicate())
+	$Offset/AnimatedOutline/Sprite.material = $Offset/AnimatedOutline/Sprite.material.duplicate()
+	$Offset/Particles.material = $Offset/Particles.material.duplicate()
+	$Offset/AnimatedSprite/Sprite.material = $Offset/AnimatedSprite/Sprite.material.duplicate()
+	if self.get_parent().get_parent().get_name() == 'Layer0':
+		$Offset/Hitbox.collision_layer = pow(2, 2)
+		$Offset/Hitbox.collision_mask = pow(2, 0)
+		
+		$Offset/AnimatedSprite/Sprite.light_mask = pow(2, 0)
+		$Offset/AnimatedOutline/Sprite.light_mask = pow(2, 0)
+		$Offset/Light2D.range_item_cull_mask = pow(2, 0)
+	if self.get_parent().get_parent().get_name() == 'Layer1':
+		$Offset/Hitbox.collision_layer = pow(2, 7)
+		$Offset/Hitbox.collision_mask = pow(2, 5)
+		
+		$Offset/AnimatedSprite/Sprite.light_mask = pow(2, 5)
+		$Offset/AnimatedOutline/Sprite.light_mask = pow(2, 5)
+		$Offset/Light2D.range_item_cull_mask = pow(2, 5)
+	if self.get_parent().get_parent().get_name() == 'Cape':  # On player cape
+		$Offset/AnimatedSprite/Sprite.light_mask = pow(2, 0) + pow(2, 5)
+		$Offset/AnimatedOutline/Sprite.light_mask = pow(2, 0) + pow(2, 5)
+		$Offset/Light2D.range_item_cull_mask = pow(2, 0) + pow(2, 5)
 	
-	if already_collected or is_on_cape or is_following_player:
+	if already_collected or is_following_player:
 		hide_light()
 
 
@@ -57,7 +73,6 @@ func set_theme_texture(time_of_day='default'):
 		texture = load('res://graphics/sprites/joy/joy' + time_of_day.capitalize() + '.png')
 		texture_theme = time_of_day
 		$Offset/Light2D.color = Color(theme_colors[TIME_OF_DAY.find(time_of_day)])
-#	$Offset/Outline.texture = texture
 	$Offset/AnimatedOutline/Sprite.texture = texture
 	$Offset/AnimatedSprite/Sprite.texture = texture
 
@@ -80,7 +95,8 @@ func set_on_cape(value):
 	is_on_cape = value
 	if value:
 		$Offset/Particles.emitting = false
-		hide_light()
+		$Offset/Light2D.show()
+		$Offset/Light2D.energy = 0.08
 
 
 func _on_Hitbox_area_entered(area):
@@ -118,6 +134,17 @@ func follow(target_pos, min_dist, max_dist, speed):
 	
 	if mag > max_dist and is_on_cape:
 		position += (mag - max_dist) * dir
+	
+	var player = self.get_parent().get_parent().get_parent()
+	if player.get_name() == 'Player':  # CAUSING LAG
+		if not player.can_dash:
+			$Offset/Light2D.energy = 0
+		else:
+			$Offset/Light2D.energy = 0.08
+		
 
 func hide_light():
 	$Offset/Light2D.hide()
+
+func set_collision(val):
+	$Offset/Hitbox/CollisionShape2D.disabled = (not val)

@@ -94,6 +94,8 @@ func change_bind(key, value):
 		if k != key and value != null and keybinds[k] == value:
 			if (key == 'dash' and k == 'float') or (key == 'float' and k == 'dash'):
 				continue
+			if (key == 'jump' and k == 'up') or (key == 'up' and k == 'jump'):
+				continue
 			keybinds[k] = null
 			buttons[k].text = 'Unassigned'
 

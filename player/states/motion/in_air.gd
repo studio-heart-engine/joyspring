@@ -34,7 +34,7 @@ func update(delta):
 		spawn_fall_particles()
 		owner.can_dash = true
 		var next_state = ""
-		if Input.is_action_pressed("up"):
+		if Input.is_action_pressed("jump"):
 			next_state = "jump"
 		elif owner.velocity.x == 0:
 			next_state = "idle"
@@ -52,13 +52,6 @@ func update(delta):
 func handle_input(event):
 	.handle_input(event)
 	if event.is_action_pressed('dash') and owner.can_dash and self.input_direction != Vector2.ZERO and $"../../..".dash_enabled:
-#		emit_signal('finished', 'fall')  # So dash goes to fall after it's complete
 		emit_signal('finished', 'dash')
 	elif event.is_action_pressed('float') and not owner.can_dash:
 		emit_signal('finished', 'float')
-#	if event.is_action_pressed("float") and owner.current_state != "float" and not owner.can_dash:
-#		emit_signal("finished", "float")
-#	elif event.is_action_pressed("dash") and owner.can_dash and self.input_direction != Vector2.ZERO:
-#		emit_signal("finished", "fall")
-#		emit_signal("finished", "dash")
-	
