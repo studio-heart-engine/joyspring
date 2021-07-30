@@ -3,6 +3,7 @@ extends "../state.gd"
 var input_direction = Vector2.ZERO
 
 func enter():
+	$SoundEffect.pitch_scale = 1 + rand_range(-0.1, 0.1)
 	$SoundEffect.play()
 	anim_player.stop(false)
 	owner.find_node("GlowAnimationPlayer").stop()

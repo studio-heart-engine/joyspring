@@ -4,6 +4,7 @@ export var INITIAL_JUMP_SPEED = 230
 
 func enter():
 	.enter()
+	owner.play_footstep()
 	$SoundEffect.pitch_scale = 1 + rand_range(-0.1, 0.1)
 	$SoundEffect.play()
 	play_anim("jump")

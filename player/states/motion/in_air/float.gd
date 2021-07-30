@@ -11,6 +11,8 @@ onready var cape_shrink_timer = Timer.new()
 onready var cape_regrow_timer = Timer.new()
 onready var cape_joys
 
+var sound_effects = []
+
 func _ready():
 	cape_shrink_timer.connect("timeout", self, "shrink_cape")
 	cape_shrink_timer.set_wait_time(CAPE_SHRINK_TIME_PER_JOY)
@@ -24,7 +26,9 @@ func _ready():
 		cape_joys = owner.get_node("Cape/Joys")
 	
 	Events.connect("begin_cape_regrow", self, "on_begin_cape_regrow")
-
+	
+	for i in range(1, 5):
+		sound_effects.append(load('res://music/effects/float' + str(i) + '.wav'))
 
 func on_begin_cape_regrow():
 	cape_shrink_timer.stop()
@@ -69,8 +73,11 @@ func enter():
 	
 	Events.emit_signal("float_started")
 	play_anim("float")
-	$SoundEffect.stream = load('res://music/effects/float' + str(int(rand_range(1, 3))) + '.wav')
+	$SoundEffect.volume_db = 0
+	$SoundEffect.pitch_scale = 1 + rand_range(-0.1, 0.1)
+	$SoundEffect.stream = sound_effects[randi() % sound_effects.size()]
 	$SoundEffect.play()
+	$Timer.start(0.3 + rand_range(0, 1))
 	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
 	
 	cape_shrink_timer.start()
@@ -84,6 +91,7 @@ func reenter():
 func exit():
 	Events.emit_signal("float_ended")
 	$SoundEffect.stop()
+	$Timer.stop()
 
 
 func update(delta):
@@ -113,3 +121,12 @@ func handle_input(event):
 		emit_signal('finished', 'fall')
 #	if event.is_action_pressed("float") and owner.current_state != 'dash':
 #		emit_signal("finished", "fall")
+
+
+func _on_Timer_timeout():
+	if not $SoundEffect.is_playing():
+		$SoundEffect.volume_db = -15
+		$SoundEffect.pitch_scale = 1 + rand_range(-0.1, 0.1)
+		$SoundEffect.stream = sound_effects[randi() % sound_effects.size()]
+		$SoundEffect.play()
+		$Timer.start(0.3 + rand_range(0, 1))

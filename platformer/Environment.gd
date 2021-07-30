@@ -5,6 +5,7 @@ extends Node2D
 var TIME_OF_DAY = ['evening', 'midnight', 'dawn']
 
 func _ready():
+	self.z_index = -20
 	update_image()
 	Events.connect('time_of_day_changed', self, 'update_image')
 	

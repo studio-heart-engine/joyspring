@@ -3,7 +3,7 @@ extends Node2D
 onready var solid_shader = preload('res://graphics/effects/solid_color.shader')
 onready var outline_shader = preload('res://graphics/effects/outline-shader.shader')
 
-var possible_colors = ['#306d78', '205f74', '3f3071', '292767', '3f3071', 'd2969b', 'e6a57f']
+var possible_colors = ['#306d78', '#205f74', '#3f3071', '#292767', '#3f3071', '#d0603d', '#de743d']
 
 func update_shader(mode):
 	if mode == 'normal':
@@ -101,11 +101,11 @@ func update_shader(mode):
 			)
 		$Environment.modulate = Color(1, 1, 1, 0.8)
 
-func get_collision_tile():
+func get_collision_tile(dir):
 	var player = get_node("../Player")
 	var tilemap = $TileMap
 	var texturetilemap = $TextureTileMap
-	var cell = tilemap.world_to_map(player.global_position + Vector2(0, 4))
+	var cell = tilemap.world_to_map(player.global_position + dir)
 	var tile_id = texturetilemap.get_cellv(cell)
 	for platform in $MovingPlatforms.get_children():
 		tilemap = get_node("MovingPlatforms/" + platform.get_name() + "/Path2D/PathFollow2D/TileMap")

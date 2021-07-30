@@ -136,11 +136,11 @@ func follow(target_pos, min_dist, max_dist, speed):
 		position += (mag - max_dist) * dir
 	
 	var player = self.get_parent().get_parent().get_parent()
-	if player.get_name() == 'Player':
+	if player.get_name() == 'Player':  # CAUSING LAG
 		if not player.can_dash:
-			$Offset/Light2D.hide()
+			$Offset/Light2D.energy = 0
 		else:
-			$Offset/Light2D.show()
+			$Offset/Light2D.energy = 0.08
 		
 
 func hide_light():
