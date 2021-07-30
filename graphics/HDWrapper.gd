@@ -17,6 +17,8 @@ func _ready():
 func _process(delta):
 #	print(Performance.get_monitor(Performance.TIME_FPS))
 #	print(str(Performance.get_monitor(Performance.MEMORY_DYNAMIC)) + " " + str(Performance.get_monitor(Performance.MEMORY_STATIC)))
+	scaling = screen_res / sub_viewport.size
+	view_box.rect_scale = scaling
 	if globals.curr_state.substr(0, 5) == 'Level' or globals.curr_state == 'Temp_End':
 		set_level_text()
 	else:
