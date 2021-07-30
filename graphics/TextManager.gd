@@ -79,6 +79,9 @@ func _ready():
 	text_set = true
 
 func check_dialogue(level, ids):
+	if level == 'LevelSelect':
+		$Tutorial0.play()
+		return
 	var player = get_node("../ViewportContainer/Viewport/" + level + "/Player")
 	for child in get_children():
 		if child.get_name().substr(0, 8) != 'Dialogue' and child.get_name().substr(0, 8) != 'Tutorial':
