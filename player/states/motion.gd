@@ -15,6 +15,12 @@ func handle_input(event):
 	input_direction.y = int(Input.is_action_pressed("down")) - int(Input.is_action_pressed("up"))
 
 
+func update(delta):
+	# void death
+	if owner.position.y > owner.get_node("Camera").limit_bottom + 50:
+		Events.emit_signal("player_died", owner.position)
+
+
 func get_input_direction():
 	return input_direction
 
