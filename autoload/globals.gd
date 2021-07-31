@@ -3,16 +3,16 @@ extends Node
 
 var has_played_startup_animation = false
 var levels_completed = [0]
-var curr_state = "Opening"
+var curr_state = "Legend-Opening"
 var prev_state = ""
-var total_levels = 18
+var total_levels = 19
 var peak_level = 12
 
 var time_of_day = 0  # 0-indexed
 var time_of_day_start = [0, 10, 30]
 var bg_num = 1  # 1-indexed
 var bg_num_start = [0, 5, 10, 13, 23, 30, 40]
-var bg_offset = 180  # Motion offset for parallax
+var bg_offset = 320  # Motion offset for parallax
 
 var configurable_keys = ['jump', 'up', 'down', 'left', 'right', 'dash', 'wall', 'float', 'swap']
 var config_file
@@ -20,6 +20,8 @@ var keybinds = {}
 
 var cape = []
 var joy_collected = []
+
+var master_volume = 3
 
 func _ready():
 	if not Engine.editor_hint:
@@ -48,7 +50,8 @@ func save_game():
 	var save = File.new()
 	var data = {'levels_completed': levels_completed,
 				'cape': cape,
-				'joy_collected': joy_collected}
+				'joy_collected': joy_collected,
+				'master_volume': master_volume}
 	save.open('user://game.save', File.WRITE)
 	save.store_line(to_json(data))
 	save.close()
@@ -72,6 +75,10 @@ func load_game():
 		cape = data['cape']
 	if data.has('joy_collected'):
 		joy_collected = data['joy_collected']
+		while len(joy_collected) < total_levels + 1:
+			joy_collected.append([])
+	if data.has('master_volume'):
+		master_volume = int(data['master_volume'])
 
 func reset_game():
 	var dir = Directory.new()
@@ -151,7 +158,7 @@ func set_bg():
 	else:
 		bg_num = 7
 	if level_num <= 12:  # Before and at peak
-		bg_offset = int(180 + (60 / peak_level) * level_num)  # 180 to 240
+		bg_offset = int(320 + (60 / peak_level) * level_num)  # 320 to 380
 	else:
-		bg_offset = int(240 - (120 / (total_levels - peak_level)) * (level_num - peak_level))  # 240 to 120
+		bg_offset = int(380 - (260 / (total_levels - peak_level)) * (level_num - peak_level))  # 380 to 120
 	Events.emit_signal('bg_num_changed')

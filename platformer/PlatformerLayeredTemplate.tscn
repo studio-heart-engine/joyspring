@@ -65,11 +65,11 @@ _data = {
 
 [sub_resource type="ShaderMaterial" id=5]
 
-[sub_resource type="ShaderMaterial" id=38]
+[sub_resource type="ShaderMaterial" id=6]
 
-[sub_resource type="ShaderMaterial" id=39]
+[sub_resource type="ShaderMaterial" id=7]
 
-[sub_resource type="ShaderMaterial" id=40]
+[sub_resource type="ShaderMaterial" id=8]
 
 [sub_resource type="ShaderMaterial" id=9]
 
@@ -89,11 +89,11 @@ _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="ShaderMaterial" id=41]
+[sub_resource type="ShaderMaterial" id=16]
 shader = ExtResource( 20 )
 shader_param/outline_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="ShaderMaterial" id=42]
+[sub_resource type="ShaderMaterial" id=17]
 
 [sub_resource type="Animation" id=18]
 loop = true
@@ -127,7 +127,7 @@ tracks/0/keys = {
 
 [sub_resource type="ShaderMaterial" id=20]
 
-[sub_resource type="ShaderMaterial" id=43]
+[sub_resource type="ShaderMaterial" id=21]
 
 [sub_resource type="Animation" id=22]
 loop = true
@@ -159,9 +159,9 @@ tracks/0/keys = {
 "values": [ 0.0, 0.99 ]
 }
 
-[sub_resource type="ShaderMaterial" id=44]
+[sub_resource type="ShaderMaterial" id=24]
 
-[sub_resource type="ShaderMaterial" id=45]
+[sub_resource type="ShaderMaterial" id=25]
 
 [sub_resource type="ShaderMaterial" id=26]
 
@@ -232,8 +232,8 @@ texture_scale = 0.05
 [node name="Camera" parent="Player" index="3"]
 visible = true
 limit_top = 0
-limit_right = 320
-limit_bottom = 248
+limit_right = 400
+limit_bottom = 232
 
 [node name="Hitbox" parent="Player" index="6"]
 collision_layer = 2147483649
@@ -327,8 +327,11 @@ position = Vector2( 115, 107 )
 [node name="Path2D" parent="Layer0/MovingBlobs/MovingBlob_01" index="0"]
 curve = SubResource( 3 )
 
-[node name="Blob" parent="Layer0/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D" index="0"]
-shape = "1"
+[node name="PathFollow2D" parent="Layer0/MovingBlobs/MovingBlob_01/Path2D" index="0"]
+position = Vector2( 1.8176, 39.994 )
+
+[node name="AnimationPlayer" parent="Layer0/MovingBlobs/MovingBlob_01" index="1"]
+playback_speed = 0.333333
 
 [node name="MovingPlatforms" type="Node2D" parent="Layer0"]
 z_index = 1
@@ -349,7 +352,7 @@ tile_set = ExtResource( 10 )
 tile_data = PoolIntArray( 0, 0, 262145, 1, 0, 65536, 2, 0, 262147, 65536, 0, 393217, 65537, 0, 196610, 65538, 0, 458754 )
 
 [node name="TextureTileMap" parent="Layer0/MovingPlatforms/MovingPlatform/Path2D/PathFollow2D" index="1"]
-material = SubResource( 38 )
+material = SubResource( 6 )
 collision_layer = 0
 collision_mask = 0
 tile_data = PoolIntArray( 0, 3, 262145, 1, 5, 65536, 2, 3, 262147, 65536, 3, 393217, 65537, 3, 196610, 65538, 3, 458754 )
@@ -357,7 +360,7 @@ tile_data = PoolIntArray( 0, 3, 262145, 1, 5, 65536, 2, 3, 262147, 65536, 3, 393
 [node name="TileMap" type="TileMap" parent="Layer0"]
 visible = false
 modulate = Color( 0, 0, 0, 1 )
-material = SubResource( 39 )
+material = SubResource( 7 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -373,7 +376,7 @@ __meta__ = {
 }
 
 [node name="TextureTileMap" type="TileMap" parent="Layer0"]
-material = SubResource( 40 )
+material = SubResource( 8 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -403,7 +406,7 @@ tile_data = PoolIntArray( 1572865, 1, 0, 1572866, 1, 0, 1572867, 1, 0, 1572868, 
 script = ExtResource( 16 )
 
 [node name="Environment" type="Node2D" parent="Layer0"]
-z_index = -10
+z_index = -20
 script = ExtResource( 21 )
 
 [node name="Bushes1" type="TextureRect" parent="Layer0/Environment"]
@@ -538,16 +541,20 @@ position = Vector2( 164, 147 )
 [node name="Path2D" parent="Layer1/MovingBlobs/MovingBlob_01" index="0"]
 curve = SubResource( 15 )
 
-[node name="Blob" parent="Layer1/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D" index="0"]
-shape = "1"
+[node name="PathFollow2D" parent="Layer1/MovingBlobs/MovingBlob_01/Path2D" index="0"]
+position = Vector2( 1.8176, 39.994 )
 
 [node name="Outline" parent="Layer1/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D/Blob/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
-material = SubResource( 41 )
+light_mask = 32
+material = SubResource( 16 )
+rotation = -0.000993135
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer1/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D/Blob/NoiseOffset" index="1"]
-material = SubResource( 42 )
+light_mask = 32
+material = SubResource( 17 )
+rotation = -0.000993135
 texture = ExtResource( 22 )
 
 [node name="Hitbox" parent="Layer1/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D/Blob" index="1"]
@@ -555,6 +562,7 @@ collision_layer = 64
 collision_mask = 32
 
 [node name="AnimationPlayer" parent="Layer1/MovingBlobs/MovingBlob_01" index="1"]
+playback_speed = 0.333333
 anims/follow-loop = SubResource( 18 )
 anims/follow-ping-pong = SubResource( 19 )
 
@@ -579,7 +587,7 @@ collision_mask = 32
 tile_data = PoolIntArray( 0, 0, 327680, 1, 0, 196608, 2, 0, 262147, 65536, 0, 458752, 65537, 0, 65538, 65538, 0, 458754 )
 
 [node name="TextureTileMap" parent="Layer1/MovingPlatforms/MovingPlatform/Path2D/PathFollow2D" index="1"]
-material = SubResource( 43 )
+material = SubResource( 21 )
 collision_layer = 0
 collision_mask = 0
 tile_data = PoolIntArray( 0, 7, 327680, 1, 7, 196608, 2, 7, 262147, 65536, 7, 458752, 65537, 7, 65538, 65538, 7, 458754 )
@@ -592,7 +600,7 @@ anims/follow-ping-pong = SubResource( 23 )
 visible = false
 modulate = Color( 0, 0, 0, 1 )
 light_mask = 32
-material = SubResource( 44 )
+material = SubResource( 24 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -610,7 +618,7 @@ __meta__ = {
 
 [node name="TextureTileMap" type="TileMap" parent="Layer1"]
 light_mask = 32
-material = SubResource( 45 )
+material = SubResource( 25 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -644,7 +652,7 @@ script = ExtResource( 16 )
 
 [node name="Environment" type="Node2D" parent="Layer1"]
 visible = false
-z_index = -10
+z_index = -20
 script = ExtResource( 21 )
 
 [node name="Bushes1" type="TextureRect" parent="Layer1/Environment"]

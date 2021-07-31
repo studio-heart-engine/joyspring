@@ -5,6 +5,11 @@ var menu = 'main'
 var keybinds
 var buttons = {}
 
+onready var control_container = $MarginContainer/VBoxContainer/Controls
+onready var button_container = $MarginContainer/VBoxContainer/Buttons
+
+onready var volume_label = $MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/Volume/RichTextLabel
+
 func _ready():
 	var button_script = load('res://gui/KeybindButton.gd')
 	keybinds = globals.keybinds.duplicate()
@@ -47,13 +52,21 @@ func _ready():
 #		hbox.add_child(label)
 #		hbox.add_child(button)
 #		$MarginContainer/VBoxContainer/ControlMenu/ControlButtons.add_child(hbox)
-		$MarginContainer/VBoxContainer/ControlMenu.add_child(label)
-		$MarginContainer/VBoxContainer/ControlMenu.add_child(button)
+		control_container.add_child(label)
+		control_container.add_child(button)
+#		$MarginContainer/VBoxContainer/ControlMenu.add_child(label)
+#		$MarginContainer/VBoxContainer/ControlMenu.add_child(button)
 		
 		buttons[key] = button
 	
-	$MarginContainer/VBoxContainer/Buttons.show()
-	$MarginContainer/VBoxContainer/ControlMenu.hide()
+	button_container.show()
+	$MarginContainer/VBoxContainer/QuitButton.show()
+	control_container.hide()
+#	$MarginContainer/VBoxContainer/HBoxContainer.show()
+#	$MarginContainer/VBoxContainer/ControlMenu.hide()
+	volume_label.set_bbcode("[color=#ffce43]" + "Volume".left(globals.master_volume) + "[/color]" + "Volume".right(globals.master_volume))
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear2db(float(globals.master_volume) / 9))
+
 
 func _process(delta):
 	if Input.is_action_just_pressed('pause'):
@@ -62,8 +75,11 @@ func _process(delta):
 				resume()
 			else:
 				menu = 'main'
-				$MarginContainer/VBoxContainer/Buttons.show()
-				$MarginContainer/VBoxContainer/ControlMenu.hide()
+				button_container.show()
+				$MarginContainer/VBoxContainer/QuitButton.show()
+				control_container.hide()
+#				$MarginContainer/VBoxContainer/HBoxContainer.show()
+#				$MarginContainer/VBoxContainer/ControlMenu.hide()
 		else:
 			pause()
 
@@ -83,12 +99,17 @@ func _on_LevelSelectButton_pressed():
 	resume()
 
 func _on_ControlsButton_pressed():
+	$Click.play()
 	menu = 'controls'
-	$MarginContainer/VBoxContainer/Buttons.hide()
-	$MarginContainer/VBoxContainer/ControlMenu.show()
+	button_container.hide()
+	$MarginContainer/VBoxContainer/QuitButton.hide()
+	control_container.show()
+#	$MarginContainer/VBoxContainer/HBoxContainer.hide()
+#	$MarginContainer/VBoxContainer/ControlMenu.show()
 
 
 func change_bind(key, value):
+	$Tick.play()
 	keybinds[key] = value
 	for k in keybinds.keys():
 		if k != key and value != null and keybinds[k] == value:
@@ -115,8 +136,8 @@ func change_bind(key, value):
 func pause():
 	$MarginContainer.show()
 	get_tree().paused = true
-	$MarginContainer/VBoxContainer/Buttons/ResetButton.text = 'Reset Data'
-	$MarginContainer/VBoxContainer/Buttons/ResetButton.set('custom_colors/font_color', Color('ffffff'))
+	$MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/ResetButton.text = 'Reset Data'
+	$MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/ResetButton.set('custom_colors/font_color', Color('ffffff'))
 	# Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func resume():
@@ -124,22 +145,24 @@ func resume():
 	get_tree().paused = false
 
 func _on_QuitButton_pressed():
+	$Click.play()
+	globals.save_game()
 	Events.emit_signal('quit_game')
 
 # Reference: https://www.youtube.com/watch?v=I_Kzb-d-SvM
 
 
 func _on_ResetButton_pressed():
-	var button = $MarginContainer/VBoxContainer/Buttons/ResetButton
+	var button = $MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/ResetButton
 	if button.text == 'Reset Data':
 		button.text = 'Click Again to Confirm'
 		button.set('custom_colors/font_color', Color('ffce43'))
 		return
 	if button.text == 'Click Again to Confirm':
-		$MarginContainer/VBoxContainer/Buttons/ResumeButton.hide()
-		$MarginContainer/VBoxContainer/Buttons/ControlsButton.hide()
-		$MarginContainer/VBoxContainer/Buttons/LevelSelectButton.hide()
-		$MarginContainer/VBoxContainer/Buttons/QuitButton.hide()
+		$MarginContainer/VBoxContainer/Buttons/Column1/VBoxContainer/ResumeButton.hide()
+		$MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/ControlsButton.hide()
+		$MarginContainer/VBoxContainer/Buttons/Column1/VBoxContainer/LevelSelectButton.hide()
+		$MarginContainer/VBoxContainer/QuitButton.hide()
 		button.disabled = true
 		button.set('custom_colors/font_color', Color('ffffff'))
 		var t = Timer.new()
@@ -152,3 +175,18 @@ func _on_ResetButton_pressed():
 			yield(t, 'timeout')
 		
 		globals.reset_game()
+
+func _on_VolumeUpButton_pressed():
+	$Tick.play()
+	if globals.master_volume < 6:
+		globals.master_volume += 1
+	volume_label.set_bbcode("[color=#ffce43]" + "Volume".left(globals.master_volume) + "[/color]" + "Volume".right(globals.master_volume))
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear2db(float(globals.master_volume) / 6))
+
+
+func _on_VolumeDownButton_pressed():
+	$Tick.play()
+	if globals.master_volume > 0:
+		globals.master_volume -= 1
+	volume_label.set_bbcode("[color=#ffce43]" + "Volume".left(globals.master_volume) + "[/color]" + "Volume".right(globals.master_volume))
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear2db(float(globals.master_volume) / 6))

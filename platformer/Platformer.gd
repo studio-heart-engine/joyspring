@@ -56,7 +56,7 @@ func _ready():
 		$SignSelector.set_cur()
 		$Switch.update_time_and_bg()
 	else:
-		get_node('..').size = Vector2(320, 180)
+		get_node('..').size = Vector2(400, 225)
 		update_collision()
 		update_light()
 
@@ -85,8 +85,8 @@ func swap_layers():
 		pass
 
 func check_collision(layer_name):  # Check if player is inside tilemap
-	var index1 = get_node(layer_name + '/TileMap').world_to_map($Player.position)  # Bottom half of player
-	var index2 = get_node(layer_name + '/TileMap').world_to_map($Player.position + Vector2(0, -8))  # Top half of player
+	var index1 = get_node(layer_name + '/TileMap').world_to_map($Player.position + Vector2(0, -4))  # Bottom half of player
+	var index2 = get_node(layer_name + '/TileMap').world_to_map($Player.position + Vector2(0, -12))  # Top half of player
 	var inside_tile = get_node(layer_name + '/TileMap').get_cellv(index1) != -1 or \
 					  get_node(layer_name + '/TileMap').get_cellv(index2) != -1
 	return inside_tile
@@ -121,3 +121,4 @@ func set_bg():
 	var image_path = "res://graphics/environment/background" + str(globals.bg_num) + ".png"
 	$ParallaxBackground/ParallaxLayer/background.set_texture(load(image_path))
 	$ParallaxBackground/ParallaxLayer.motion_offset.y = globals.bg_offset
+	$ParallaxBackground/ParallaxLayer.motion_mirroring = Vector2(640, 640)

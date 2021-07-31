@@ -1,16 +1,31 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://graphics/HDWrapper.gd" type="Script" id=1]
 [ext_resource path="res://graphics/TextManager.tscn" type="PackedScene" id=2]
 [ext_resource path="res://gui/PauseScreen.tscn" type="PackedScene" id=3]
 [ext_resource path="res://graphics/Text.gd" type="Script" id=4]
 
-[sub_resource type="StreamTexture" id=1]
+[sub_resource type="Animation" id=1]
+resource_name = "zoom_out"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Viewport:size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 1, 0.210224 ),
+"update": 0,
+"values": [ Vector2( 400, 225 ), Vector2( 480, 270 ) ]
+}
+
+[sub_resource type="StreamTexture" id=2]
 flags = 4
 load_path = "res://.import/title.png-f866e5510b495183c6ff94b58a21301e.stex"
 
-[sub_resource type="Animation" id=2]
-resource_name = "fade_in"
+[sub_resource type="Animation" id=3]
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
@@ -51,6 +66,9 @@ size = Vector2( 320, 180 )
 handle_input_locally = false
 render_target_update_mode = 3
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ViewportContainer"]
+anims/zoom_out = SubResource( 1 )
+
 [node name="Text" parent="." instance=ExtResource( 2 )]
 
 [node name="Title" type="Control" parent="."]
@@ -65,10 +83,10 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0 )
 position = Vector2( 0, -40 )
 scale = Vector2( 0.624709, 0.624709 )
-texture = SubResource( 1 )
+texture = SubResource( 2 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Title/Label"]
-anims/fade_in = SubResource( 2 )
+anims/fade_in = SubResource( 3 )
 
 [node name="PauseScreen" parent="." instance=ExtResource( 3 )]
 

@@ -27,10 +27,10 @@ func _process(delta):
 		set_select_text()
 	else:
 		hide_select_text()
-	if globals.curr_state == 'Opening':
-		set_opening_text()
+	if globals.curr_state.left(6) == 'Legend':
+		set_legend_text()
 	else:
-		hide_opening_text()
+		hide_legend_text()
 	if globals.curr_state == 'Menu':
 		set_menu_text()
 	else:
@@ -93,7 +93,7 @@ func hide_select_text():
 		if child.name.substr(0, 6) == "Select":
 			child.hide()
 
-func set_opening_text():
+func set_legend_text():
 	if sub_viewport.get_child(0):
 		var path = "Text/Legend1"
 		get_node(path).show()
@@ -101,7 +101,7 @@ func set_opening_text():
 		get_node(path).rect_position.y -= 100
 		get_node(path).rect_position.x -= get_node(path).rect_size.x / 2
 
-func hide_opening_text():
+func hide_legend_text():
 	if sub_viewport.get_child(0):
 		$Text/Legend1.hide()
 

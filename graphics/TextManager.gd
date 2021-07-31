@@ -11,6 +11,7 @@ export var RADIUS = 36
 var text_set = false
 
 func _ready():
+	Events.connect("play_legend_text", self, "play_legend_text")
 	if text_set:
 		return
 	# Load legend
@@ -100,3 +101,6 @@ func check_dialogue(level, ids):
 		
 		if (trigger_pos.position + text_pos.position).distance_to(player.position) <= RADIUS:
 			child.play()
+
+func play_legend_text(type):
+	$Legend1/AnimationPlayer.play(type)

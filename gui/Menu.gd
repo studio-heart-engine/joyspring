@@ -5,7 +5,7 @@ export (bool) var has_level_select_button = false
 onready var begun = false
 
 func _ready():
-	
+	get_node('..').size = Vector2(320, 180)
 	if len(globals.levels_completed) > 1:
 		has_level_select_button = true
 	

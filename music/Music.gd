@@ -22,7 +22,7 @@ func _ready():
 	play()
 
 
-func play():
+func play(song=""):
 	if globals.curr_state == 'Menu' and \
 	   current_song.get_playback_position() > 50.0 and \
 	   current_song.is_playing():
@@ -49,8 +49,10 @@ func play():
 			current_song = $TheRiver
 		else:
 			current_song = $Silence
-	elif globals.curr_state == 'Opening':
+	elif globals.curr_state == 'Legend-Opening':
 		current_song = $Legend
+	elif globals.curr_state == 'Legend-Ending':
+		current_song = $Joyspring
 	elif globals.curr_state == 'Menu':
 		current_song = $Title
 	elif globals.curr_state == 'Temp_End':
