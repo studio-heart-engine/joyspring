@@ -5,6 +5,8 @@ extends StaticBody2D
 onready var anim_player = $AnimationPlayer
 onready var anim_player2 = $AnimationPlayer2
 
+var gravel_sound_effects = []
+
 func _ready():
 	update_image()
 	Events.connect('time_of_day_changed', self, 'update_image')
@@ -12,6 +14,10 @@ func _ready():
 	
 	$"weak-rock-outline".material = $"weak-rock-outline".material.duplicate()
 	$Sprite.material = $Sprite.material.duplicate()
+	
+	for i in range(1, 4):
+		gravel_sound_effects.append(load('res://music/effects/gravel_' + str(i) + '.wav'))
+	
 	if self.get_parent().get_parent().get_name() == 'Layer0':
 		$TopArea.collision_layer = pow(2, 3)
 		$TopArea.collision_mask = pow(2, 0)
@@ -30,6 +36,9 @@ func _on_Area2D_area_entered(area):
 	anim_player.play("wiggle")
 	yield(anim_player, "animation_finished")
 	anim_player.play(["rock1", "rock2"][randi() % 2])
+	$SoundEffect.volume_db = -5
+	$SoundEffect.stream = gravel_sound_effects[int(rand_range(0, 3))]
+	$SoundEffect.play()
 	anim_player2.play("shrink-hitbox")
 	$"weak-rock-outline".set_visible(true)
 	anim_player.get_animation(anim_player.current_animation).set_loop(false)

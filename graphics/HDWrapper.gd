@@ -133,7 +133,7 @@ func clear_all():
 	for child in $Text.get_children():
 		child.hide()
 	$Title/Sprite.hide()
-	
+
 
 func quit_game():
 	get_tree().quit()

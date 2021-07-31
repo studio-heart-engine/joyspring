@@ -1,7 +1,7 @@
 extends Node
 
-export (PackedScene) var opening = preload('res://graphics/Legend.tscn')
-#export (PackedScene) var opening = preload('res://platformer/levels/Colin_Story_01.tscn')
+#export (PackedScene) var opening = preload('res://graphics/Legend.tscn')
+export (PackedScene) var opening = preload('res://platformer/levels/Finished_Level_01.tscn')
 #export (PackedScene) var opening = preload('res://platformer/PlatformerLayeredTemplate.tscn')
 #export (PackedScene) var opening = preload('res://gui/LevelSelect.tscn')
 
@@ -19,7 +19,8 @@ func _ready():
 	
 	Events.connect('quit_game', self, 'free_scene')
 	yield(get_tree().root, "ready")
-	current_scene.play_opening()
+	if current_scene.name == 'Legend':
+		current_scene.play_opening()
 
 func change_scene_to(scene: PackedScene):
 	if current_scene:
