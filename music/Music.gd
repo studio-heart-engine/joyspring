@@ -75,7 +75,7 @@ func play(song=""):
 			current_song, "volume_db", -30, -20, 2,
 			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
 		tween.start()
-		current_song.play(70)
+		current_song.play()
 
 	elif not current_song.playing:
 		if loop_start[current_song.get_name()] == 0.0:
