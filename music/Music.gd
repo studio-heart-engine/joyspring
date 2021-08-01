@@ -10,7 +10,7 @@ var loop_start = {
 	"Legend": 0.0,
 	"Title": 0.0,
 	"Mirage": 0.0,
-	"TheRiver": 18.844,
+	"TheRiver": 23.396,
 	"IntoThinAir": 16.326
 }
 
@@ -75,7 +75,7 @@ func play(song=""):
 			current_song, "volume_db", -30, -20, 2,
 			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
 		tween.start()
-		current_song.play()
+		current_song.play(70)
 
 	elif not current_song.playing:
 		if loop_start[current_song.get_name()] == 0.0:
