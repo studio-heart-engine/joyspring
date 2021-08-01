@@ -13,7 +13,7 @@ func enter():
 
 func update(delta):
 	.update(delta)
-	if not is_near_wall():
+	if not is_near_wall() or owner.can_wall_climb == false:
 		emit_signal("finished", "jump" if input_direction.y == -1 else "fall")
 	if on_wall_timer.time_left < 1 and not on_wall_timer.is_stopped() and not blink_anim_player.is_playing():
 		start_blink()

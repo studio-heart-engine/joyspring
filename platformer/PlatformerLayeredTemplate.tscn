@@ -63,13 +63,13 @@ _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 6.86406, 0.100353, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="ShaderMaterial" id=5]
-
 [sub_resource type="ShaderMaterial" id=38]
 
 [sub_resource type="ShaderMaterial" id=39]
 
 [sub_resource type="ShaderMaterial" id=40]
+
+[sub_resource type="ShaderMaterial" id=41]
 
 [sub_resource type="ShaderMaterial" id=9]
 
@@ -89,11 +89,11 @@ _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="ShaderMaterial" id=41]
+[sub_resource type="ShaderMaterial" id=42]
 shader = ExtResource( 20 )
 shader_param/outline_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="ShaderMaterial" id=42]
+[sub_resource type="ShaderMaterial" id=43]
 
 [sub_resource type="Animation" id=18]
 loop = true
@@ -125,11 +125,12 @@ tracks/0/keys = {
 "values": [ 0.0, 0.99 ]
 }
 
-[sub_resource type="ShaderMaterial" id=20]
+[sub_resource type="ShaderMaterial" id=44]
 
-[sub_resource type="ShaderMaterial" id=43]
+[sub_resource type="ShaderMaterial" id=45]
 
 [sub_resource type="Animation" id=22]
+length = 3.19998
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Path2D/PathFollow2D:unit_offset")
@@ -138,10 +139,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
+"times": PoolRealArray( 0, 3.19998 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ 0.0, 1.0 ]
+"values": [ 0.0, 1 ]
 }
 
 [sub_resource type="Animation" id=23]
@@ -159,9 +160,9 @@ tracks/0/keys = {
 "values": [ 0.0, 0.99 ]
 }
 
-[sub_resource type="ShaderMaterial" id=44]
+[sub_resource type="ShaderMaterial" id=46]
 
-[sub_resource type="ShaderMaterial" id=45]
+[sub_resource type="ShaderMaterial" id=47]
 
 [sub_resource type="ShaderMaterial" id=26]
 
@@ -346,14 +347,12 @@ position = Vector2( 56, 112 )
 curve = SubResource( 4 )
 
 [node name="TileMap" parent="Layer0/MovingPlatforms/MovingPlatform/Path2D/PathFollow2D" index="0"]
-visible = false
-material = SubResource( 5 )
-tile_set = ExtResource( 10 )
+material = SubResource( 38 )
 tile_data = PoolIntArray( 0, 0, 262145, 1, 0, 65536, 2, 0, 262147, 65536, 0, 393217, 65537, 0, 196610, 65538, 0, 458754 )
 
 [node name="TextureTileMap" parent="Layer0/MovingPlatforms/MovingPlatform/Path2D/PathFollow2D" index="1"]
 light_mask = 1
-material = SubResource( 38 )
+material = SubResource( 39 )
 collision_layer = 8
 collision_mask = 19
 occluder_light_mask = 1
@@ -362,7 +361,7 @@ tile_data = PoolIntArray( 0, 3, 262145, 1, 5, 65536, 2, 3, 262147, 65536, 3, 393
 [node name="TileMap" type="TileMap" parent="Layer0"]
 visible = false
 modulate = Color( 0, 0, 0, 1 )
-material = SubResource( 39 )
+material = SubResource( 40 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -378,7 +377,7 @@ __meta__ = {
 }
 
 [node name="TextureTileMap" type="TileMap" parent="Layer0"]
-material = SubResource( 40 )
+material = SubResource( 41 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -547,15 +546,15 @@ curve = SubResource( 15 )
 position = Vector2( 1.8176, 39.994 )
 
 [node name="Outline" parent="Layer1/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D/Blob/NoiseOffset" index="0"]
-modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
+modulate = Color( 0.788235, 0.490196, 0.329412, 1 )
 light_mask = 32
-material = SubResource( 41 )
+material = SubResource( 42 )
 rotation = -0.000993135
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer1/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D/Blob/NoiseOffset" index="1"]
 light_mask = 32
-material = SubResource( 42 )
+material = SubResource( 43 )
 rotation = -0.000993135
 texture = ExtResource( 22 )
 
@@ -581,15 +580,15 @@ position = Vector2( 266, 29 )
 curve = SubResource( 4 )
 
 [node name="TileMap" parent="Layer1/MovingPlatforms/MovingPlatform/Path2D/PathFollow2D" index="0"]
-visible = false
-material = SubResource( 20 )
-tile_set = ExtResource( 10 )
+light_mask = 32
+material = SubResource( 44 )
 collision_layer = 512
 collision_mask = 32
+occluder_light_mask = 32
 tile_data = PoolIntArray( 0, 0, 327680, 1, 0, 196608, 2, 0, 262147, 65536, 0, 458752, 65537, 0, 65538, 65538, 0, 458754 )
 
 [node name="TextureTileMap" parent="Layer1/MovingPlatforms/MovingPlatform/Path2D/PathFollow2D" index="1"]
-material = SubResource( 43 )
+material = SubResource( 45 )
 tile_data = PoolIntArray( 0, 7, 327680, 1, 7, 196608, 2, 7, 262147, 65536, 7, 458752, 65537, 7, 65538, 65538, 7, 458754 )
 
 [node name="AnimationPlayer" parent="Layer1/MovingPlatforms/MovingPlatform" index="1"]
@@ -600,7 +599,7 @@ anims/follow-ping-pong = SubResource( 23 )
 visible = false
 modulate = Color( 0, 0, 0, 1 )
 light_mask = 32
-material = SubResource( 44 )
+material = SubResource( 46 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -618,7 +617,7 @@ __meta__ = {
 
 [node name="TextureTileMap" type="TileMap" parent="Layer1"]
 light_mask = 32
-material = SubResource( 45 )
+material = SubResource( 47 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -727,7 +726,7 @@ script = ExtResource( 17 )
 [node name="EndPositions" type="Node2D" parent="."]
 
 [node name="EndPosition1" type="Position2D" parent="EndPositions"]
-position = Vector2( 319.813, 58.5714 )
+position = Vector2( 424, 58.5714 )
 script = ExtResource( 19 )
 
 [node name="Text1" type="Node2D" parent="."]

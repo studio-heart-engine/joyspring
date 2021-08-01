@@ -33,7 +33,7 @@ onready var states = {
 	"climb": $States/Climb
 }
 
-func enable_dash(joy_name):
+func enable_dashd(joy_name):
 	can_dash = true
 
 func _ready():
