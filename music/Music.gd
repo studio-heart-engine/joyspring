@@ -10,8 +10,9 @@ var loop_start = {
 	"Legend": 0.0,
 	"Title": 0.0,
 	"Mirage": 0.0,
-	"TheRiver": 23.396,
-	"IntoThinAir": 16.326
+	"TheRiver": 18.396,
+	"IntoThinAir": 16.326,
+	"Acceptance": 28.8
 }
 
 func _ready():
@@ -34,7 +35,7 @@ func play(song=""):
 	if globals.curr_state == 'LevelSelect':
 		current_song = $Title
 	elif globals.curr_state == 'LevelTemplate':
-		current_song = $TheRiver
+		current_song = $Acceptance
 	elif globals.curr_state.substr(0, 5) == 'Level':
 		var level_index = int(globals.curr_state.right(5))
 		if level_index < 7:
@@ -45,6 +46,8 @@ func play(song=""):
 			current_song = $Silence
 		elif level_index < 30:
 			current_song = $Awakening
+		elif level_index < 40:
+			current_song = $Acceptance
 		elif level_index < 50:
 			current_song = $TheRiver
 		else:
@@ -61,7 +64,7 @@ func play(song=""):
 		if current_song != null:
 			current_song.stop()
 		return
-	
+
 	if current_song != previous_song and previous_song != null:
 		# fade out
 		tween.interpolate_property(

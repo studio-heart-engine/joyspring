@@ -13,7 +13,6 @@ func _ready():
 	var a = randi() % 360
 	blob_sprite.rotation_degrees = a
 	blob_outline.rotation_degrees = a
-	$AnimationPlayer.seek(rand_range(0, 1) if START_RANDOMLY else LOOP_START)
 	
 	if self.get_parent().get_parent().get_name() == 'Layer0':
 		$Path2D/PathFollow2D/Blob/Hitbox.collision_layer = pow(2, 1)
@@ -39,7 +38,12 @@ func _ready():
 	track.track_insert_key(0, path_time, 1.0)
 	track.loop = true
 	$AnimationPlayer.add_animation("follow_loop", track)
-	$AnimationPlayer.play("follow_loop")
+	if not Engine.editor_hint:
+		$AnimationPlayer.seek(rand_range(0, 1) if START_RANDOMLY else LOOP_START)
+		$AnimationPlayer.playback_speed = 1
+		$AnimationPlayer.play("follow_loop")
+	else:
+		$AnimationPlayer.stop()
 
 func _process(delta):
 	blob_sprite.rotation_degrees = -path_follow.rotation_degrees

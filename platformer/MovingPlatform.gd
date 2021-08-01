@@ -32,4 +32,7 @@ func _ready():
 	track.track_insert_key(0, path_time, 1.0)
 	track.loop = true
 	$AnimationPlayer.add_animation("follow_loop", track)
-	$AnimationPlayer.play("follow_loop")
+	if not Engine.editor_hint:
+		$AnimationPlayer.play("follow_loop")
+	else:
+		$AnimationPlayer.stop()
