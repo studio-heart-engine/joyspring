@@ -87,6 +87,7 @@ func reset_game():
 	Events.emit_signal('quit_game')
 	
 func load_controls():
+	load_default_controls()
 	config_file = ConfigFile.new()
 	if config_file.load('user://keybinds.ini') == OK:
 		for key in config_file.get_section_keys('keybinds'):
@@ -95,10 +96,7 @@ func load_controls():
 				keybinds[key] = value
 			else:
 				keybinds[key] = null
-	else:
-		print('Warning: Missing keybinds config file, loading default controls')
-		load_default_controls()
-		save_controls()
+	save_controls()
 
 func load_default_controls():
 	for key in configurable_keys:
