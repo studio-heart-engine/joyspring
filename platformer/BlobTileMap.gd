@@ -39,7 +39,6 @@ func check_collision():  # Check if player swapped layers into blob tile map
 #	print(str(index2) + ' ' + str(self.get_cellv(index2)))
 	if inside_tile:
 		Events.emit_signal('player_died', player_pos)
-#		print('blob tile')
 
 #func get_time_of_day():
 #	return TIME_OF_DAY.keys()[time_of_day]

@@ -1,4 +1,3 @@
-tool
 extends Node2D
 
 export (bool) var START_RANDOMLY = false
@@ -38,12 +37,9 @@ func _ready():
 	track.track_insert_key(0, path_time, 1.0)
 	track.loop = true
 	$AnimationPlayer.add_animation("follow_loop", track)
-	if not Engine.editor_hint:
-		$AnimationPlayer.seek(rand_range(0, 1) if START_RANDOMLY else LOOP_START)
-		$AnimationPlayer.playback_speed = 1
-		$AnimationPlayer.play("follow_loop")
-	else:
-		$AnimationPlayer.stop()
+#		$AnimationPlayer.seek(rand_range(0, 1) if START_RANDOMLY else LOOP_START)
+	$AnimationPlayer.playback_speed = 1
+	$AnimationPlayer.play("follow_loop")
 
 func _process(delta):
 	blob_sprite.rotation_degrees = -path_follow.rotation_degrees
