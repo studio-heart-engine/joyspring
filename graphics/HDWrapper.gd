@@ -5,6 +5,8 @@ onready var view_box = $ViewportContainer
 onready var sub_viewport = $ViewportContainer/Viewport
 onready var screen_res = get_viewport().size
 
+onready var animation_player = $ViewportContainer/AnimationPlayer
+
 var scaling = Vector2()
 var show = []
 
@@ -13,6 +15,8 @@ func _ready():
 	scaling = screen_res / sub_viewport.size
 	view_box.rect_scale = scaling
 	Events.connect('quit_game', self, 'quit_game')
+	Events.connect('zoom_out', self, 'zoom_out')
+	Events.connect('zoom_in', self, 'zoom_in')
 
 func _process(delta):
 #	print(Performance.get_monitor(Performance.TIME_FPS))
@@ -34,7 +38,8 @@ func _process(delta):
 	if globals.curr_state == 'Menu':
 		set_menu_text()
 	else:
-		hide_menu_text()
+		if globals.curr_state != 'Level_12':
+			hide_menu_text()
 
 func set_level_text():
 	show = []
@@ -107,24 +112,26 @@ func hide_legend_text():
 
 func set_menu_text():  # Including title image
 	if sub_viewport.get_child(0):
-		var path1 = "Text/Menu1"
+#		var path1 = "Text/Menu1"
 		var path2 = "Title"
-		get_node(path1).show()
-		get_node(path2).show()
-		get_node(path1).rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y)
-		get_node(path1).rect_position.y -= 100 + (get_node(path1 + "/Label").rect_size.y - 72)
-		get_node(path1).rect_position.x -= get_node(path1 + "/Label").rect_size.x / 2
-		get_node(path1).play()
+#		get_node(path1).show()
+#		get_node(path2).show()
+#		get_node(path1).rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y)
+#		get_node(path1).rect_position.y -= 100 + (get_node(path1 + "/Label").rect_size.y - 72)
+#		get_node(path1).rect_position.x -= get_node(path1 + "/Label").rect_size.x / 2
+#		get_node(path1).play()
 		
-		get_node(path2).rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y / 2)
+		get_node(path2).show()
+		get_node(path2).rect_position = Vector2(get_viewport().size.x * 2/ 7, get_viewport().size.y / 2)
 		get_node(path2).play()
 
 func hide_menu_text():
 	if sub_viewport.get_child(0):
-		var path1 = "Text/Menu1"
+#		var path1 = "Text/Menu1"
 		var path2 = "Title/Sprite"
-		get_node(path1).hide()
-		if globals.curr_state == 'MenuTransition':
+#		get_node(path1).hide()
+		if globals.curr_state == 'MenuTransition' or \
+		   globals.curr_state == 'Level_12':
 			$Title.play(true)
 		else:
 			$Title.hide()
@@ -134,6 +141,14 @@ func clear_all():
 		child.hide()
 	$Title/Sprite.hide()
 
+func zoom_out():
+	if sub_viewport.size != Vector2(640, 360):
+		animation_player.play('zoom_out')
+
+func zoom_in():
+	animation_player.play('zoom_in')
+	yield(animation_player, "animation_finished")
+	globals.finished_peak_zoom = true
 
 func quit_game():
 	get_tree().quit()

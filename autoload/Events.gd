@@ -15,6 +15,9 @@ signal keybind_changed
 signal time_of_day_changed
 signal bg_num_changed
 
+signal zoom_out
+signal zoom_in
+
 signal play_legend_text(type)
 
 signal quit_game

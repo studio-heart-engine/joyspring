@@ -3,6 +3,7 @@ extends "../motion.gd"
 export var GRAVITY = 12
 export var MAX_IN_AIR_SPEED = 80
 export var IN_AIR_ACCELERATION = 6
+export var TERMINAL_VELOCITY = 250
 
 
 func enter():

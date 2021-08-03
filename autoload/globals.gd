@@ -7,6 +7,8 @@ var curr_state = "Legend-Opening"
 var prev_state = ""
 var total_levels = 19
 var peak_level = 12
+var started_peak_zoom = false
+var finished_peak_zoom = false
 
 var time_of_day = 0  # 0-indexed
 var time_of_day_start = [0, 10, 30]

@@ -78,7 +78,7 @@ func enter():
 	$SoundEffect.stream = sound_effects[randi() % sound_effects.size()]
 	$SoundEffect.play()
 	$Timer.start(0.3 + rand_range(0, 1))
-	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
+#	owner.velocity.y = max(owner.velocity.y, MAX_GLIDE_FALL_SPEED)
 	
 	cape_shrink_timer.start()
 
@@ -96,8 +96,12 @@ func exit():
 
 func update(delta):
 	
-	owner.velocity.y = move_smoothly(
-		owner.velocity.y, 1, MAX_GLIDE_FALL_SPEED, GLIDE_FALL_ACCELERATION)
+	if owner.velocity.y > MAX_GLIDE_FALL_SPEED:
+		owner.velocity.y = move_smoothly(
+				owner.velocity.y, -1, MAX_IN_AIR_SPEED, GLIDE_FALL_ACCELERATION)
+	else:
+		owner.velocity.y = min(owner.velocity.y + GRAVITY, TERMINAL_VELOCITY)
+	
 	owner.velocity.x = move_smoothly(
 		owner.velocity.x, input_direction.x, MAX_GLIDE_HORIZONTAL_SPEED, GLIDE_HORIZONTAL_ACCELERATION)
 	.update(delta)

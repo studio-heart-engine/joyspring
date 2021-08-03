@@ -99,7 +99,20 @@ func check_dialogue(level, ids):
 			text_pos = get_node("../ViewportContainer/Viewport/" + level + "/Tut" + id)
 			trigger_pos = get_node("../ViewportContainer/Viewport/" + level + "/Tut" + id + "/Pos")
 		
-		if (trigger_pos.position + text_pos.position).distance_to(player.position) <= RADIUS:
+		if level == 'Level_12':
+			if not globals.finished_peak_zoom:
+				continue
+			if $Timer.time_left == 0 and not child.showed:
+				child.play()
+				if child.get_name() == 'Dialogue10':
+					$Timer.start(1)
+				if child.get_name() == 'Dialogue11':
+					$Timer.start(1.4)
+				if child.get_name() == 'Dialogue12':
+					$Timer.start(1.5)
+				if child.get_name() == 'Dialogue13':
+					$Timer.start(0.7)
+		elif (trigger_pos.position + text_pos.position).distance_to(player.position) <= RADIUS:
 			child.play()
 
 func play_legend_text(type):

@@ -84,12 +84,13 @@ func swap_layers():
 		Events.emit_signal("layer_swapped")
 		pass
 
-func check_collision(layer_name):  # Check if player is inside tilemap
-	var index1 = get_node(layer_name + '/TileMap').world_to_map($Player.position + Vector2(0, -4))  # Bottom half of player
-	var index2 = get_node(layer_name + '/TileMap').world_to_map($Player.position + Vector2(0, -12))  # Top half of player
-	var inside_tile = get_node(layer_name + '/TileMap').get_cellv(index1) != -1 or \
-					  get_node(layer_name + '/TileMap').get_cellv(index2) != -1
-	return inside_tile
+func check_collision(layer_name):
+	var dir1 = Vector2(0, -4) # Bottom half of player
+	var dir2 = Vector2(0, -12) # Top half of player
+	
+	var tile1 = layers[layer_num].get_collision_tile(dir1)
+	var tile2 = layers[layer_num].get_collision_tile(dir2)
+	return (tile1 != -1) or (tile2 != -1)
 
 func update_collision():
 	$Player.collision_layer = collision_layer_vals[layer_num]

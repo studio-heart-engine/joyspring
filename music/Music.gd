@@ -17,6 +17,7 @@ var loop_start = {
 
 func _ready():
 	SceneChanger.connect("scene_changed", self, "play")
+	Events.connect('zoom_out', self, 'play')
 	for child in get_children():
 		if child is AudioStreamPlayer:
 			child.connect("finished", self, "play")
@@ -32,10 +33,14 @@ func play(song=""):
 	var previous_song = current_song
 	current_song = $Silence
 
+	print(globals.curr_state)
+	print(globals.started_peak_zoom)
 	if globals.curr_state == 'LevelSelect':
 		current_song = $Title
 	elif globals.curr_state == 'LevelTemplate':
 		current_song = $Acceptance
+	elif globals.curr_state == 'Level_12' and globals.started_peak_zoom:
+		current_song = $Awakening
 	elif globals.curr_state.substr(0, 5) == 'Level':
 		var level_index = int(globals.curr_state.right(5))
 		if level_index < 7:
