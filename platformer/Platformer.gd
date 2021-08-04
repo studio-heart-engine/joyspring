@@ -121,5 +121,6 @@ func _on_ExitArea_area_entered(area):
 func set_bg():
 	var image_path = "res://graphics/environment/background" + str(globals.bg_num) + ".png"
 	$ParallaxBackground/ParallaxLayer/background.set_texture(load(image_path))
+	$ParallaxBackground/ParallaxLayer.motion_offset.x = 480
 	$ParallaxBackground/ParallaxLayer.motion_offset.y = globals.bg_offset
-	$ParallaxBackground/ParallaxLayer.motion_mirroring = Vector2(640, 640)
+	$ParallaxBackground/ParallaxLayer.motion_mirroring = Vector2(1024, 640)

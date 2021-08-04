@@ -112,6 +112,10 @@ func check_dialogue(level, ids):
 					$Timer.start(1.5)
 				if child.get_name() == 'Dialogue13':
 					$Timer.start(0.7)
+		if level == 'Level_F10':  # TODO: Change to 'Level_50' after integration
+			if player.position.x > (trigger_pos.position + text_pos.position).x + 12 and \
+			   not child.showed:
+				child.play()
 		elif (trigger_pos.position + text_pos.position).distance_to(player.position) <= RADIUS:
 			child.play()
 

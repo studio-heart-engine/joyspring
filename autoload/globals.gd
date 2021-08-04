@@ -141,6 +141,7 @@ func set_bg():
 	if curr_state.substr(0, 5) != 'Level':
 		return
 	if curr_state == 'LevelSelect':
+		bg_offset = 320
 		return
 	var level_num = int(curr_state.right(5))
 	if level_num < bg_num_start[1]:

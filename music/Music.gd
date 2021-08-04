@@ -33,8 +33,6 @@ func play(song=""):
 	var previous_song = current_song
 	current_song = $Silence
 
-	print(globals.curr_state)
-	print(globals.started_peak_zoom)
 	if globals.curr_state == 'LevelSelect':
 		current_song = $Title
 	elif globals.curr_state == 'LevelTemplate':
