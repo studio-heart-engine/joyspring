@@ -3,6 +3,7 @@ extends "../motion.gd"
 export var GRAVITY = 12
 export var MAX_IN_AIR_SPEED = 80
 export var IN_AIR_ACCELERATION = 6
+export var TERMINAL_VELOCITY = 250
 
 
 func enter():
@@ -42,9 +43,10 @@ func update(delta):
 			next_state = "run"
 		emit_signal("finished", next_state)
 	elif Input.is_action_pressed("wall") and is_near_wall():
-		on_wall_timer.start()
-		owner.can_wall_climb = true
-		emit_signal("finished", get_wall_state())
+		if owner.get_parent().climb_enabled:
+			on_wall_timer.start()
+			owner.can_wall_climb = true
+			emit_signal("finished", get_wall_state())
 	
 	.update(delta)
 

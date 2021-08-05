@@ -1,10 +1,9 @@
+tool
 extends Node2D
 
-export (float) var LOOP_TIME = 7
 
 func _ready():
-	$AnimationPlayer.playback_speed = 1.0 / LOOP_TIME
-	
+
 	var tilemap = $Path2D/PathFollow2D/TileMap
 	tilemap.modulate = Color(0, 0, 0)
 	tilemap.material = tilemap.material.duplicate()
@@ -21,3 +20,19 @@ func _ready():
 		
 		tilemap.light_mask = pow(2, 5)
 		tilemap.occluder_light_mask = pow(2, 5)
+
+	var path_len = $Path2D.curve.get_baked_length()
+	var speed = 50
+	var path_time = path_len / speed
+	var track = Animation.new()
+	var idx = track.add_track(Animation.TYPE_VALUE)
+	track.track_set_path(idx, "Path2D/PathFollow2D:unit_offset")
+	track.length = path_time
+	track.track_insert_key(0, 0, 0.0)
+	track.track_insert_key(0, path_time, 1.0)
+	track.loop = true
+	$AnimationPlayer.add_animation("follow_loop", track)
+	if not Engine.editor_hint:
+		$AnimationPlayer.play("follow_loop")
+	else:
+		$AnimationPlayer.stop()

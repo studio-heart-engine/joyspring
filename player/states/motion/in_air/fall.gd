@@ -1,10 +1,8 @@
 extends "../in_air.gd"
 
-export var TERMINAL_VELOCITY = 250
-
 func enter():
 	.enter()
-	owner.velocity.y = 0
+#	owner.velocity.y = 0
 	play_anim("fall")
 
 func reenter():

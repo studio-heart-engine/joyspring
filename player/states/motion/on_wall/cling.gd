@@ -18,9 +18,11 @@ func handle_input(event):
 	.handle_input(event)
 	
 	if self.input_direction.y == -1:
-		emit_signal("finished", "climb")
+		if owner.get_parent().climb_enabled:
+			emit_signal("finished", "climb")
 	elif self.input_direction.y == 1:
-		emit_signal("finished", "slide")
+		if owner.get_parent().climb_enabled:
+			emit_signal("finished", "slide")
 	if self.input_direction.x == -wall_direction:
 		if self.input_direction.y == -1:
 			emit_signal("finished", "jump")

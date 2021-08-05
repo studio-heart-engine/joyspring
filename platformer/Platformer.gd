@@ -21,11 +21,6 @@ func _ready():
 	Events.connect('bg_num_changed', self, 'set_bg')
 	Events.connect('bg_num_changed', self, 'update_shader')
 	Events.connect('swap_layers', self, 'swap_layers')
-
-	if globals.curr_state == 'LevelSelect':
-		if globals.prev_state.substr(0, 5) == 'Level' and globals.prev_state != 'LevelSelect':
-			$Player.position = get_node('LevelSigns/LevelSign' + str(int(globals.prev_state.right(5)))).position
-			layer_num = get_node('LevelSigns/LevelSign' + str(int(globals.prev_state.right(5)))).out_layer
 	
 	for child in ($Layer0/Joys.get_children() + $Layer1/Joys.get_children()):
 		if child.name in globals.joy_collected[level_index]:
@@ -40,21 +35,30 @@ func _ready():
 		collision_mask_vals[0] += pow(2, i)
 	for i in range(6, 10):
 		collision_mask_vals[1] += pow(2, i)
-	update_collision()
 	
 	light_mask_vals = [pow(2, 0), pow(2, 5)]
-	update_light()
 	
 	layers[layer_num].z_index = 10
 	layers[(layer_num + 1) % 2].z_index = -1
 	layers[layer_num]._ready()
 	layers[(layer_num + 1) % 2]._ready()
 	update_shader()
-
 	
 	if globals.curr_state == 'LevelSelect':
-		$Switch._ready()
-		$Tut0.position = $Player.position
+		get_node('..').size = Vector2(640, 320)
+		if globals.prev_state.substr(0, 5) == 'Level' and globals.prev_state != 'LevelSelect':
+			$SignSelector.cur = int(globals.prev_state.right(5))
+			$SignSelector.start = $SignSelector.cur
+		var camera = $Camera2D
+		self.remove_child(camera)
+		get_node("LevelSigns/LevelSign" + str($SignSelector.start)).add_child(camera)
+		$SignSelector.camera = camera
+		$SignSelector.set_cur()
+		$Switch.update_time_and_bg()
+	else:
+		get_node('..').size = Vector2(400, 225)
+		update_collision()
+		update_light()
 
 func _input(event):
 	if event.is_action_pressed("swap"):
@@ -62,6 +66,8 @@ func _input(event):
 
 
 func swap_layers():
+	if globals.curr_state == 'LevelSelect':
+		return
 	layer_num = (layer_num + 1) % 2
 	var layer_name = 'Layer' + str(layer_num)
 
@@ -78,12 +84,13 @@ func swap_layers():
 		Events.emit_signal("layer_swapped")
 		pass
 
-func check_collision(layer_name):  # Check if player is inside tilemap
-	var index1 = get_node(layer_name + '/TileMap').world_to_map($Player.position)  # Bottom half of player
-	var index2 = get_node(layer_name + '/TileMap').world_to_map($Player.position + Vector2(0, -8))  # Top half of player
-	var inside_tile = get_node(layer_name + '/TileMap').get_cellv(index1) != -1 or \
-					  get_node(layer_name + '/TileMap').get_cellv(index2) != -1
-	return inside_tile
+func check_collision(layer_name):
+	var dir1 = Vector2(0, -4) # Bottom half of player
+	var dir2 = Vector2(0, -12) # Top half of player
+	
+	var tile1 = layers[layer_num].get_collision_tile(dir1)
+	var tile2 = layers[layer_num].get_collision_tile(dir2)
+	return (tile1 != -1) or (tile2 != -1)
 
 func update_collision():
 	$Player.collision_layer = collision_layer_vals[layer_num]
@@ -114,4 +121,6 @@ func _on_ExitArea_area_entered(area):
 func set_bg():
 	var image_path = "res://graphics/environment/background" + str(globals.bg_num) + ".png"
 	$ParallaxBackground/ParallaxLayer/background.set_texture(load(image_path))
+	$ParallaxBackground/ParallaxLayer.motion_offset.x = 480
 	$ParallaxBackground/ParallaxLayer.motion_offset.y = globals.bg_offset
+	$ParallaxBackground/ParallaxLayer.motion_mirroring = Vector2(1024, 640)

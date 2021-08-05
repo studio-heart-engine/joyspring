@@ -17,7 +17,7 @@
 [ext_resource path="res://graphics/sprites/riley/rileyDawn.json" type="PackedScene" id=15]
 [ext_resource path="res://player/PlayerRespawnTransition.gd" type="Script" id=16]
 [ext_resource path="res://player/states/motion/on_wall/climb.gd" type="Script" id=17]
-[ext_resource path="res://graphics/effects/cave-darkness.png" type="Texture" id=18]
+[ext_resource path="res://graphics/effects/cave_darkness.png" type="Texture" id=18]
 [ext_resource path="res://graphics/sprites/riley/rileyEvening.png" type="Texture" id=19]
 [ext_resource path="res://music/effects/footstep_grass.wav" type="AudioStream" id=20]
 [ext_resource path="res://music/effects/dash.wav" type="AudioStream" id=21]
@@ -258,7 +258,7 @@ script = ExtResource( 17 )
 position = Vector2( 0, -7.92011 )
 texture = ExtResource( 12 )
 texture_scale = 0.7
-energy = 0.2
+energy = 0.4
 range_layer_min = -1
 shadow_enabled = true
 shadow_gradient_length = 2.0
@@ -282,7 +282,6 @@ smoothing_speed = 10.0
 drag_margin_top = 0.5
 drag_margin_bottom = 0.0
 editor_draw_limits = true
-editor_draw_drag_margin = true
 script = ExtResource( 14 )
 
 [node name="CameraShakeTimer" type="Timer" parent="Camera"]
@@ -294,7 +293,7 @@ one_shot = true
 light_mask = 0
 texture = ExtResource( 19 )
 offset = Vector2( 0, -8 )
-region_rect = Rect2( 336, 0, 16, 16 )
+region_rect = Rect2( 400, 0, 16, 16 )
 
 [node name="SquishStretchPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
 anims/squish = SubResource( 3 )
@@ -323,6 +322,7 @@ layer = 2
 script = ExtResource( 16 )
 
 [node name="ColorRect" type="ColorRect" parent="RespawnTransition"]
+visible = false
 light_mask = 2
 anchor_right = 1.0
 anchor_bottom = 1.0

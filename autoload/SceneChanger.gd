@@ -54,11 +54,11 @@ func next_level(curr_index, color=Color.black):
 	
 	var next_level_path = 'res://platformer/levels/Level_' + ('%02d' % (curr_index + 1)) + '.tscn'
 	var scene
-	if File.new().file_exists(next_level_path):
+	if curr_index != globals.total_levels:
 		scene = load(next_level_path)
 	else:
-		scene = load('res://gui/Menu.tscn')
-	
+		scene = load('res://graphics/Legend.tscn')
+
 	HDSceneChanger.change_scene_to(scene)
 	globals.save_game()
 	globals.set_time_of_day()

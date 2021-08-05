@@ -10,19 +10,21 @@ var loop_start = {
 	"Legend": 0.0,
 	"Title": 0.0,
 	"Mirage": 0.0,
-	"TheRiver": 18.844,
-	"IntoThinAir": 16.326
+	"TheRiver": 18.396,
+	"IntoThinAir": 16.326,
+	"Acceptance": 28.8
 }
 
 func _ready():
 	SceneChanger.connect("scene_changed", self, "play")
+	Events.connect('zoom_out', self, 'play')
 	for child in get_children():
 		if child is AudioStreamPlayer:
 			child.connect("finished", self, "play")
 	play()
 
 
-func play():
+func play(song=""):
 	if globals.curr_state == 'Menu' and \
 	   current_song.get_playback_position() > 50.0 and \
 	   current_song.is_playing():
@@ -34,7 +36,9 @@ func play():
 	if globals.curr_state == 'LevelSelect':
 		current_song = $Title
 	elif globals.curr_state == 'LevelTemplate':
-		current_song = $TheRiver
+		current_song = $Acceptance
+	elif globals.curr_state == 'Level_12' and globals.started_peak_zoom:
+		current_song = $Awakening
 	elif globals.curr_state.substr(0, 5) == 'Level':
 		var level_index = int(globals.curr_state.right(5))
 		if level_index < 7:
@@ -45,12 +49,16 @@ func play():
 			current_song = $Silence
 		elif level_index < 30:
 			current_song = $Awakening
+		elif level_index < 40:
+			current_song = $Acceptance
 		elif level_index < 50:
 			current_song = $TheRiver
 		else:
 			current_song = $Silence
-	elif globals.curr_state == 'Opening':
+	elif globals.curr_state == 'Legend-Opening':
 		current_song = $Legend
+	elif globals.curr_state == 'Legend-Ending':
+		current_song = $Joyspring
 	elif globals.curr_state == 'Menu':
 		current_song = $Title
 	elif globals.curr_state == 'Temp_End':
@@ -59,7 +67,7 @@ func play():
 		if current_song != null:
 			current_song.stop()
 		return
-	
+
 	if current_song != previous_song and previous_song != null:
 		# fade out
 		tween.interpolate_property(

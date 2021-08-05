@@ -3,7 +3,7 @@ extends Node2D
 onready var solid_shader = preload('res://graphics/effects/solid_color.shader')
 onready var outline_shader = preload('res://graphics/effects/outline-shader.shader')
 
-var possible_colors = ['#306d78', '#205f74', '#3f3071', '#292767', '#3f3071', '#d0603d', '#de743d']
+var possible_colors = ['#306d78', '#205f74', '#2e3d67', '#222b4f', '#29355b', '#d0603d', '#de743d']
 
 func update_shader(mode):
 	if mode == 'normal':
@@ -111,7 +111,7 @@ func get_collision_tile(dir):
 		tilemap = get_node("MovingPlatforms/" + platform.get_name() + "/Path2D/PathFollow2D/TileMap")
 		texturetilemap = get_node("MovingPlatforms/" + platform.get_name() + "/Path2D/PathFollow2D/TextureTileMap")
 		var path = get_node("MovingPlatforms/" + platform.get_name() + "/Path2D/PathFollow2D")
-		cell = tilemap.world_to_map(player.global_position - platform.position - path.position + Vector2(0, 4))
+		cell = tilemap.world_to_map(player.global_position - platform.position - path.position + dir)
 		if tile_id == -1:
 			tile_id = texturetilemap.get_cellv(cell)
 	return tile_id

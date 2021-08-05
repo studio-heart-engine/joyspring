@@ -11,6 +11,7 @@ export var RADIUS = 36
 var text_set = false
 
 func _ready():
+	Events.connect("play_legend_text", self, "play_legend_text")
 	if text_set:
 		return
 	# Load legend
@@ -79,6 +80,9 @@ func _ready():
 	text_set = true
 
 func check_dialogue(level, ids):
+	if level == 'LevelSelect':
+		$Tutorial0.play()
+		return
 	var player = get_node("../ViewportContainer/Viewport/" + level + "/Player")
 	for child in get_children():
 		if child.get_name().substr(0, 8) != 'Dialogue' and child.get_name().substr(0, 8) != 'Tutorial':
@@ -95,5 +99,25 @@ func check_dialogue(level, ids):
 			text_pos = get_node("../ViewportContainer/Viewport/" + level + "/Tut" + id)
 			trigger_pos = get_node("../ViewportContainer/Viewport/" + level + "/Tut" + id + "/Pos")
 		
-		if (trigger_pos.position + text_pos.position).distance_to(player.position) <= RADIUS:
+		if level == 'Level_12':
+			if not globals.finished_peak_zoom:
+				continue
+			if $Timer.time_left == 0 and not child.showed:
+				child.play()
+				if child.get_name() == 'Dialogue10':
+					$Timer.start(1)
+				if child.get_name() == 'Dialogue11':
+					$Timer.start(1.4)
+				if child.get_name() == 'Dialogue12':
+					$Timer.start(1.5)
+				if child.get_name() == 'Dialogue13':
+					$Timer.start(0.7)
+		if level == 'Level_F10':  # TODO: Change to 'Level_50' after integration
+			if player.position.x > (trigger_pos.position + text_pos.position).x + 12 and \
+			   not child.showed:
+				child.play()
+		elif (trigger_pos.position + text_pos.position).distance_to(player.position) <= RADIUS:
 			child.play()
+
+func play_legend_text(type):
+	$Legend1/AnimationPlayer.play(type)

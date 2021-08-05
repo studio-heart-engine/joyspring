@@ -1,3 +1,4 @@
+
 extends Node2D
 
 #export (Texture) var texture
@@ -5,7 +6,7 @@ var level_index = -1
 export (bool) var locked setget set_locked, get_locked
 export (int) var out_layer
 
-var is_player_in_box = false
+var selected = false
 
 var rep_level
 
@@ -30,25 +31,20 @@ func _ready():
 		level_select.float_enabled = level_select.float_enabled or rep_level_instance.float_enabled
 		rep_level_instance.queue_free()
 
-func _on_Hitbox_area_entered(area):
-#	set_locked(-1)
+func select():
 	if not locked:
 		get_node('/root/HDWrapper/Text/Select' + str(level_index)).highlight()
-	is_player_in_box = true
+	selected = true
 
-
-func _on_Hitbox_area_exited(area):
-#	set_locked(-1)
+func deselect():
 	if not locked:
 		get_node('/root/HDWrapper/Text/Select' + str(level_index)).unhighlight()
-	is_player_in_box = false
-
+	selected = false
 
 func _input(event):
-	if is_player_in_box and event.is_action_pressed('level_select'):
+	if selected and event.is_action_pressed('level_select'):
 		set_locked(-1)
 		if not locked:
 			$Click.play()
-#			var level_path = 'platformer/levels/Level_' + '%02d' % level_index + '.tscn'
-#			SceneChanger.change_scene_to(load(level_path))
+			self.deselect()
 			SceneChanger.change_scene_to(rep_level)

@@ -16,7 +16,7 @@ func enter():
 	
 	if not $"../../..".climb_enabled:
 		emit_signal("finished", "previous")
-	
+
 	wall_direction = get_wall_direction()
 	owner.is_looking_right = wall_direction == 1
 	owner.velocity = Vector2.ZERO

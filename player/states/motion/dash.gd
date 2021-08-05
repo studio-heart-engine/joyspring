@@ -33,8 +33,6 @@ func enter():
 	else:
 		anim_player.advance(3)
 	
-	
-
 	$Timer.set_wait_time(MAX_UP_DASH_TIME if direction.y < 0 else MAX_DASH_TIME)
 	$Timer.set_one_shot(true)
 	$Timer.start()
@@ -62,4 +60,5 @@ func finish():
 	if Input.is_action_pressed('float') and not owner.can_dash and $"../../..".float_enabled:
 		emit_signal("finished", "float")
 	else:
-		emit_signal("finished", "previous")
+		emit_signal("finished", "fall")
+#		emit_signal("finished", "previous")
