@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=2]
+[gd_scene load_steps=71 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
 [ext_resource path="res://graphics/sprites/blobs/Thorn.tscn" type="PackedScene" id=2]
@@ -30,6 +30,7 @@
 [ext_resource path="res://graphics/environment/evening/rocks1.png" type="Texture" id=28]
 [ext_resource path="res://graphics/environment/evening/trees1.png" type="Texture" id=29]
 [ext_resource path="res://graphics/environment/evening/stalactites1.png" type="Texture" id=30]
+[ext_resource path="res://platformer/BlobPath.tscn" type="PackedScene" id=31]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -63,11 +64,11 @@ _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 6.86406, 0.100353, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="ShaderMaterial" id=5]
+[sub_resource type="ShaderMaterial" id=40]
 
-[sub_resource type="ShaderMaterial" id=6]
+[sub_resource type="ShaderMaterial" id=41]
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=42]
 length = 3.19998
 loop = true
 tracks/0/type = "value"
@@ -83,9 +84,9 @@ tracks/0/keys = {
 "values": [ 0.0, 1.0 ]
 }
 
-[sub_resource type="ShaderMaterial" id=8]
+[sub_resource type="ShaderMaterial" id=43]
 
-[sub_resource type="ShaderMaterial" id=9]
+[sub_resource type="ShaderMaterial" id=44]
 
 [sub_resource type="ShaderMaterial" id=10]
 
@@ -105,11 +106,11 @@ _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="ShaderMaterial" id=17]
+[sub_resource type="ShaderMaterial" id=45]
 shader = ExtResource( 20 )
 shader_param/outline_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="ShaderMaterial" id=18]
+[sub_resource type="ShaderMaterial" id=46]
 
 [sub_resource type="Animation" id=19]
 loop = true
@@ -141,9 +142,9 @@ tracks/0/keys = {
 "values": [ 0.0, 0.99 ]
 }
 
-[sub_resource type="ShaderMaterial" id=21]
+[sub_resource type="ShaderMaterial" id=47]
 
-[sub_resource type="ShaderMaterial" id=22]
+[sub_resource type="ShaderMaterial" id=48]
 
 [sub_resource type="Animation" id=23]
 length = 3.19998
@@ -176,7 +177,7 @@ tracks/0/keys = {
 "values": [ 0.0, 0.99 ]
 }
 
-[sub_resource type="Animation" id=25]
+[sub_resource type="Animation" id=49]
 length = 3.19998
 loop = true
 tracks/0/type = "value"
@@ -192,9 +193,9 @@ tracks/0/keys = {
 "values": [ 0.0, 1.0 ]
 }
 
-[sub_resource type="ShaderMaterial" id=26]
+[sub_resource type="ShaderMaterial" id=50]
 
-[sub_resource type="ShaderMaterial" id=27]
+[sub_resource type="ShaderMaterial" id=51]
 
 [sub_resource type="ShaderMaterial" id=28]
 
@@ -286,6 +287,7 @@ script = ExtResource( 3 )
 [node name="Bleb_01" parent="Layer0/Blebs" instance=ExtResource( 4 )]
 position = Vector2( 105, 56 )
 scale = Vector2( -1, 1 )
+SPEED = 10
 facing_right = false
 
 [node name="Blobs" type="Node2D" parent="Layer0"]
@@ -329,6 +331,9 @@ shape = "3"
 [node name="Thorn4_01" parent="Layer0/Blobs" instance=ExtResource( 2 )]
 position = Vector2( 272.773, 61.7361 )
 shape = "4"
+
+[node name="BlobPath" parent="Layer0/Blobs" instance=ExtResource( 31 )]
+position = Vector2( 82.1838, 23.659 )
 
 [node name="Joys" type="Node2D" parent="Layer0"]
 __meta__ = {
@@ -379,24 +384,24 @@ curve = SubResource( 4 )
 position = Vector2( 39.9943, 38.0719 )
 
 [node name="TileMap" parent="Layer0/MovingPlatforms/MovingPlatform/Path2D/PathFollow2D" index="0"]
-material = SubResource( 5 )
+material = SubResource( 40 )
 tile_data = PoolIntArray( 0, 0, 262145, 1, 0, 65536, 2, 0, 262147, 65536, 0, 393217, 65537, 0, 196610, 65538, 0, 458754 )
 
 [node name="TextureTileMap" parent="Layer0/MovingPlatforms/MovingPlatform/Path2D/PathFollow2D" index="1"]
 light_mask = 1
-material = SubResource( 6 )
+material = SubResource( 41 )
 collision_layer = 8
 collision_mask = 19
 occluder_light_mask = 1
 tile_data = PoolIntArray( 0, 3, 262145, 1, 5, 65536, 2, 3, 262147, 65536, 3, 393217, 65537, 3, 196610, 65538, 3, 458754 )
 
 [node name="AnimationPlayer" parent="Layer0/MovingPlatforms/MovingPlatform" index="1"]
-anims/follow_loop = SubResource( 7 )
+anims/follow_loop = SubResource( 42 )
 
 [node name="TileMap" type="TileMap" parent="Layer0"]
 visible = false
 modulate = Color( 0, 0, 0, 1 )
-material = SubResource( 8 )
+material = SubResource( 43 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -412,7 +417,7 @@ __meta__ = {
 }
 
 [node name="TextureTileMap" type="TileMap" parent="Layer0"]
-material = SubResource( 9 )
+material = SubResource( 44 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -502,6 +507,7 @@ __meta__ = {
 [node name="Bleb_01" parent="Layer1/Blebs" instance=ExtResource( 4 )]
 position = Vector2( 16, 104 )
 scale = Vector2( -1, 1 )
+SPEED = 10
 facing_right = false
 
 [node name="Blobs" type="Node2D" parent="Layer1"]
@@ -580,13 +586,13 @@ curve = SubResource( 16 )
 [node name="Outline" parent="Layer1/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D/Blob/NoiseOffset" index="0"]
 modulate = Color( 0.788235, 0.384314, 0.329412, 1 )
 light_mask = 32
-material = SubResource( 17 )
+material = SubResource( 45 )
 rotation = -0.000993135
 texture = ExtResource( 22 )
 
 [node name="Sprite" parent="Layer1/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D/Blob/NoiseOffset" index="1"]
 light_mask = 32
-material = SubResource( 18 )
+material = SubResource( 46 )
 rotation = -0.000993135
 texture = ExtResource( 22 )
 
@@ -616,26 +622,26 @@ position = Vector2( 39.9943, 38.0719 )
 
 [node name="TileMap" parent="Layer1/MovingPlatforms/MovingPlatform/Path2D/PathFollow2D" index="0"]
 light_mask = 32
-material = SubResource( 21 )
+material = SubResource( 47 )
 collision_layer = 512
 collision_mask = 32
 occluder_light_mask = 32
 tile_data = PoolIntArray( 0, 0, 327680, 1, 0, 196608, 2, 0, 262147, 65536, 0, 458752, 65537, 0, 65538, 65538, 0, 458754 )
 
 [node name="TextureTileMap" parent="Layer1/MovingPlatforms/MovingPlatform/Path2D/PathFollow2D" index="1"]
-material = SubResource( 22 )
+material = SubResource( 48 )
 tile_data = PoolIntArray( 0, 7, 327680, 1, 7, 196608, 2, 7, 262147, 65536, 7, 458752, 65537, 7, 65538, 65538, 7, 458754 )
 
 [node name="AnimationPlayer" parent="Layer1/MovingPlatforms/MovingPlatform" index="1"]
 anims/follow-loop = SubResource( 23 )
 anims/follow-ping-pong = SubResource( 24 )
-anims/follow_loop = SubResource( 25 )
+anims/follow_loop = SubResource( 49 )
 
 [node name="TileMap" type="TileMap" parent="Layer1"]
 visible = false
 modulate = Color( 0, 0, 0, 1 )
 light_mask = 32
-material = SubResource( 26 )
+material = SubResource( 50 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -653,7 +659,7 @@ __meta__ = {
 
 [node name="TextureTileMap" type="TileMap" parent="Layer1"]
 light_mask = 32
-material = SubResource( 27 )
+material = SubResource( 51 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -782,9 +788,15 @@ motion_mirroring = Vector2( 640, 360 )
 centered = false
 
 [editable path="Player"]
+
 [editable path="Player/AnimatedSprite"]
+
 [editable path="Layer0/MovingBlobs/MovingBlob_01"]
+
 [editable path="Layer0/MovingPlatforms/MovingPlatform"]
+
 [editable path="Layer1/MovingBlobs/MovingBlob_01"]
+
 [editable path="Layer1/MovingBlobs/MovingBlob_01/Path2D/PathFollow2D/Blob"]
+
 [editable path="Layer1/MovingPlatforms/MovingPlatform"]
