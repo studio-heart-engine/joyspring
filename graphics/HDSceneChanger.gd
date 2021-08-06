@@ -1,7 +1,7 @@
 extends Node
 
 #export (PackedScene) var opening = preload('res://graphics/Legend.tscn')
-export (PackedScene) var opening = preload('res://platformer/levels/Finished_Level_14.tscn')
+export (PackedScene) var opening = preload('res://platformer/levels/Colin_Story_04.tscn')
 #export (PackedScene) var opening = preload('res://platformer/PlatformerLayeredTemplate.tscn')
 #export (PackedScene) var opening = preload('res://gui/LevelSelect.tscn')
 
