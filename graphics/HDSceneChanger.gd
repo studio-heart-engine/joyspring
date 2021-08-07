@@ -1,7 +1,7 @@
 extends Node
 
 #export (PackedScene) var opening = preload('res://graphics/Legend.tscn')
-export (PackedScene) var opening = preload('res://platformer/PlatformerLayeredTemplate.tscn')
+export (PackedScene) var opening = preload('res://platformer/levels/Level_19.tscn')
 #export (PackedScene) var opening = preload('res://platformer/PlatformerLayeredTemplate.tscn')
 #export (PackedScene) var opening = preload('res://gui/LevelSelect.tscn')
 
@@ -30,13 +30,12 @@ func change_scene_to(scene: PackedScene):
 	packed_current_scene = scene
 	globals.prev_state = globals.curr_state
 	globals.curr_state = current_scene.get_name()
-	get_node('/root/HDWrapper/ViewportContainer/Viewport').add_child(current_scene)
 	if globals.curr_state == 'Legend':
 		if globals.prev_state.left(5) == 'Level':
 			globals.curr_state = 'Legend-Ending'
-			current_scene.play_ending()
 		else:
 			globals.curr_state = 'Legend_Opening'
+	get_node('/root/HDWrapper/ViewportContainer/Viewport').add_child(current_scene)
 	
 func reload_scene():
 	change_scene_to(packed_current_scene)

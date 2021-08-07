@@ -14,6 +14,8 @@ var light_mask_vals
 
 signal level_exited
 
+var level_complete = false
+
 
 func _ready():
 	level_index = int(name.right(6))
@@ -46,6 +48,7 @@ func _ready():
 	
 	if globals.curr_state == 'LevelSelect':
 		get_node('..').size = Vector2(640, 320)
+		globals.set_bg()
 		if globals.prev_state.substr(0, 5) == 'Level' and globals.prev_state != 'LevelSelect':
 			$SignSelector.cur = int(globals.prev_state.right(5))
 			$SignSelector.start = $SignSelector.cur

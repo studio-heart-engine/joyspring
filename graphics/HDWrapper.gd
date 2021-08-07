@@ -35,11 +35,12 @@ func _process(delta):
 		set_legend_text()
 	else:
 		hide_legend_text()
-	if globals.curr_state == 'Menu':
-		set_menu_text()
+	if globals.curr_state == 'End':
+		set_title_text()
 	else:
 		if globals.curr_state != 'Level_12':
-			hide_menu_text()
+			pass
+			hide_title_text()
 
 func set_level_text():
 	show = []
@@ -110,29 +111,36 @@ func hide_legend_text():
 	if sub_viewport.get_child(0):
 		$Text/Legend1.hide()
 
-func set_menu_text():  # Including title image
+func set_title_text():
 	if sub_viewport.get_child(0):
-#		var path1 = "Text/Menu1"
-		var path2 = "Title"
-#		get_node(path1).show()
-#		get_node(path2).show()
-#		get_node(path1).rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y)
-#		get_node(path1).rect_position.y -= 100 + (get_node(path1 + "/Label").rect_size.y - 72)
-#		get_node(path1).rect_position.x -= get_node(path1 + "/Label").rect_size.x / 2
-#		get_node(path1).play()
+		var title = get_node("Title")
+		var tag
 		
-		get_node(path2).show()
-		get_node(path2).rect_position = Vector2(get_viewport().size.x * 2/ 7, get_viewport().size.y / 2)
-		get_node(path2).play()
+		if globals.curr_state == 'Level_12':
+			title.rect_position = Vector2(get_viewport().size.x * 2/ 7, get_viewport().size.y / 2)
+			tag = get_node("Text/Tag1")
+			tag.rect_position = title.rect_position
+			tag.rect_position.x -= ($Title/Label.texture.get_width() - 320) * $Title/Label.scale.x / 2
+			tag.rect_position.y += ($Title/Label.texture.get_height() - 100) * $Title/Label.scale.y / 2
+		elif globals.curr_state == 'End':
+			title.rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y / 2)
+			tag = get_node("Text/Tag2")
+			tag.rect_position = title.rect_position
+			tag.rect_position.x -= $Text/Tag2/Label.rect_size.x / 2
+			tag.rect_position.y += ($Title/Label.texture.get_height()) * $Title/Label.scale.y / 2
+		title.show()
+		tag.show()
+		title.play()
+		tag.play(false, 1.0)
 
-func hide_menu_text():
+func hide_title_text():
 	if sub_viewport.get_child(0):
-#		var path1 = "Text/Menu1"
-		var path2 = "Title/Sprite"
-#		get_node(path1).hide()
-		if globals.curr_state == 'MenuTransition' or \
-		   globals.curr_state == 'Level_12':
+		if globals.curr_state == 'Level_12' or globals.curr_state == 'EndTransition':
 			$Title.play(true)
+			if globals.curr_state == 'Level_12':
+				$Text/Tag1.play(true)
+			elif globals.curr_state == 'EndTransition':
+				$Text/Tag2.play(true)
 		else:
 			$Title.hide()
 

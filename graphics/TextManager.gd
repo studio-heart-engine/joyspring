@@ -102,6 +102,8 @@ func check_dialogue(level, ids):
 		if level == 'Level_12':
 			if not globals.finished_peak_zoom:
 				continue
+			if not get_node("Dialogue" + str(int(id) - 1)).showed and id != "10":
+				continue
 			if $Timer.time_left == 0 and not child.showed:
 				child.play()
 				if child.get_name() == 'Dialogue10':
@@ -112,7 +114,7 @@ func check_dialogue(level, ids):
 					$Timer.start(1.5)
 				if child.get_name() == 'Dialogue13':
 					$Timer.start(0.7)
-		if level == 'Level_F10':  # TODO: Change to 'Level_50' after integration
+		elif level == 'Level_F10':  # TODO: Change to 'Level_50' after integration
 			if player.position.x > (trigger_pos.position + text_pos.position).x + 12 and \
 			   not child.showed:
 				child.play()
@@ -120,4 +122,5 @@ func check_dialogue(level, ids):
 			child.play()
 
 func play_legend_text(type):
+	$Legend1/AnimationPlayer.stop(true)
 	$Legend1/AnimationPlayer.play(type)

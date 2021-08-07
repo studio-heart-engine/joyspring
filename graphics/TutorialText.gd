@@ -55,7 +55,11 @@ func update_text():
 		var keybind_text_2 = 'Unassigned'
 		if not globals.keybinds['right'] == null:
 			keybind_text_2 = OS.get_scancode_string(globals.keybinds['right'])
+		var keybind_text_3 = 'Unassigned'
+		if not globals.keybinds['dash'] == null:
+			keybind_text_3 = OS.get_scancode_string(globals.keybinds['dash'])
 		var new_text = template_text
 		new_text = new_text.replace('[left]', keybind_text_1)
 		new_text = new_text.replace('[right]', keybind_text_2)
+		new_text = new_text.replace('[dash]', keybind_text_3)
 		self.text = new_text
