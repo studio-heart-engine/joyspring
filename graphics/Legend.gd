@@ -8,7 +8,6 @@ func _ready():
 		play_opening()
 	elif globals.curr_state == 'Legend-Ending':
 		play_ending()
-	print('end of ready')
 
 func _input(event):
 	if event.is_action_pressed("ui_select"):

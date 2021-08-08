@@ -55,7 +55,10 @@ func set_level_text():
 			if child.name.substr(0, 3) == "Tut":
 				var path = "Text/Tutorial" + child.name.right(3)
 				get_node(path).rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y)
-				get_node(path).rect_position.y -= 100 + (get_node(path + "/Label").rect_size.y - 72)
+				if child.name == 'Tut99':
+					get_node(path).rect_position.y = 100 - (get_node(path + "/Label").rect_size.y - 72)
+				else:
+					get_node(path).rect_position.y -= 100 + (get_node(path + "/Label").rect_size.y - 72)
 				get_node(path).rect_position.x -= get_node(path + "/Label").rect_size.x / 2
 				show.append('T' + child.get_name().right(3))
 		for child in $Text.get_children():
@@ -71,6 +74,7 @@ func hide_level_text():
 	for child in $Text.get_children():
 		if child.get_name().substr(0, 8) == 'Dialogue' or child.get_name().substr(0, 8) == 'Tutorial':
 			child.hide()
+			child.showed = false
 
 func set_select_text():
 	show = []

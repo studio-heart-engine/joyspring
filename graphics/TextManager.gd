@@ -98,7 +98,7 @@ func check_dialogue(level, ids):
 		elif child.get_name().substr(0, 8) == 'Tutorial':
 			text_pos = get_node("../ViewportContainer/Viewport/" + level + "/Tut" + id)
 			trigger_pos = get_node("../ViewportContainer/Viewport/" + level + "/Tut" + id + "/Pos")
-		
+
 		if level == 'Level_12':
 			if not globals.finished_peak_zoom:
 				continue
