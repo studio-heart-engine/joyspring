@@ -55,10 +55,7 @@ func set_level_text():
 			if child.name.substr(0, 3) == "Tut":
 				var path = "Text/Tutorial" + child.name.right(3)
 				get_node(path).rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y)
-				if child.name == 'Tut99':
-					get_node(path).rect_position.y = 100 - (get_node(path + "/Label").rect_size.y - 72)
-				else:
-					get_node(path).rect_position.y -= 100 + (get_node(path + "/Label").rect_size.y - 72)
+				get_node(path).rect_position.y -= 100 + (get_node(path + "/Label").rect_size.y - 72)
 				get_node(path).rect_position.x -= get_node(path + "/Label").rect_size.x / 2
 				show.append('T' + child.get_name().right(3))
 		for child in $Text.get_children():
@@ -121,17 +118,15 @@ func set_title_text():
 		var tag
 		
 		if globals.curr_state == 'Level_12':
-			title.rect_position = Vector2(get_viewport().size.x * 2/ 7, get_viewport().size.y / 2)
+			title.rect_position = Vector2(get_viewport().size.x * 2 / 7, get_viewport().size.y / 2)
 			tag = get_node("Text/Tag1")
-			tag.rect_position = title.rect_position
-			tag.rect_position.x -= ($Title/Label.texture.get_width() - 320) * $Title/Label.scale.x / 2
-			tag.rect_position.y += ($Title/Label.texture.get_height() - 100) * $Title/Label.scale.y / 2
 		elif globals.curr_state == 'End':
 			title.rect_position = Vector2(get_viewport().size.x / 2, get_viewport().size.y / 2)
 			tag = get_node("Text/Tag2")
 			tag.rect_position = title.rect_position
-			tag.rect_position.x -= $Text/Tag2/Label.rect_size.x / 2
-			tag.rect_position.y += ($Title/Label.texture.get_height()) * $Title/Label.scale.y / 2
+		tag.rect_position = title.rect_position
+		tag.rect_position.x -= $Text/Tag2/Label.rect_size.x / 2
+		tag.rect_position.y += ($Title/Label.texture.get_height()) * $Title/Label.scale.y / 2
 		title.show()
 		tag.show()
 		title.play()

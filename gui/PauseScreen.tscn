@@ -1,10 +1,43 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://gui/PauseScreen.gd" type="Script" id=1]
 [ext_resource path="res://graphics/font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://music/effects/click.wav" type="AudioStream" id=3]
+[ext_resource path="res://graphics/HappyFox-Condensed.otf" type="DynamicFontData" id=4]
 
 [sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="Animation" id=2]
+resource_name = "show"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("SettingsButton:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 0.4, 1 ),
+"update": 0,
+"values": [ Vector2( -200, 0 ), Vector2( 10, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ControlsButton:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.6 ),
+"transitions": PoolRealArray( 1, 0.4, 1 ),
+"update": 0,
+"values": [ Vector2( -200, 68 ), Vector2( -200, 68 ), Vector2( 10, 68 ) ]
+}
+
+[sub_resource type="DynamicFont" id=3]
+size = 40
+font_data = ExtResource( 4 )
 
 [node name="PauseScreen" type="CanvasLayer"]
 pause_mode = 2
@@ -207,6 +240,70 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+margin_left = 30.0
+margin_top = 30.0
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2"]
+margin_right = 112.0
+margin_bottom = 132.0
+
+[node name="SettingsButton" type="Button" parent="MarginContainer2/VBoxContainer"]
+margin_left = 10.0
+margin_right = 113.0
+margin_bottom = 64.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.286275, 0.286275, 0.286275, 1 )
+custom_colors/font_color_pressed = Color( 0.168627, 0.168627, 0.168627, 1 )
+text = "Settings"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ControlsButton" type="Button" parent="MarginContainer2/VBoxContainer"]
+margin_left = 10.0
+margin_top = 68.0
+margin_right = 122.0
+margin_bottom = 132.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.286275, 0.286275, 0.286275, 1 )
+custom_colors/font_color_pressed = Color( 0.168627, 0.168627, 0.168627, 1 )
+text = "Controls"
+flat = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MarginContainer2/VBoxContainer"]
+anims/show = SubResource( 2 )
+
+[node name="MarginContainer3" type="MarginContainer" parent="."]
+margin_top = 700.0
+margin_right = 1600.0
+margin_bottom = 748.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="MarginContainer3"]
+margin_right = 1600.0
+margin_bottom = 48.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 1, 1, 1, 0.627451 )
+text = "Pause or resume with esc."
+align = 1
+
 [node name="Click" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
 volume_db = -20.0
@@ -224,3 +321,5 @@ pitch_scale = 3.0
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/Volume/VolumeDownButton" to="." method="_on_VolumeDownButton_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/Volume/VolumeUpButton" to="." method="_on_VolumeUpButton_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
+[connection signal="pressed" from="MarginContainer2/VBoxContainer/SettingsButton" to="." method="_on_SettingsButton_pressed"]
+[connection signal="pressed" from="MarginContainer2/VBoxContainer/ControlsButton" to="." method="_on_ControlsButton2_pressed"]
