@@ -1,8 +1,5 @@
 extends Node2D
 
-var past_time_of_day = globals.time_of_day
-var past_bg_num = globals.bg_num
-
 func _ready():
 	update_time_and_bg()
 

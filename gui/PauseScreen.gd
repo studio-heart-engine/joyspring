@@ -10,6 +10,8 @@ onready var button_container = $MarginContainer/VBoxContainer/Buttons
 
 onready var volume_label = $MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/Volume/RichTextLabel
 
+var margincontainer2_showed = false
+
 func _ready():
 	var button_script = load('res://gui/KeybindButton.gd')
 	keybinds = globals.keybinds.duplicate()
@@ -62,27 +64,43 @@ func _ready():
 	button_container.show()
 	$MarginContainer/VBoxContainer/QuitButton.show()
 	control_container.hide()
-#	$MarginContainer/VBoxContainer/HBoxContainer.show()
-#	$MarginContainer/VBoxContainer/ControlMenu.hide()
+	$MarginContainer2.hide()
+	$MarginContainer3.hide()
+	
+	$MarginContainer/VBoxContainer/Buttons/Column1/VBoxContainer/ResumeButton.focus_mode = Control.FOCUS_NONE
+	$MarginContainer/VBoxContainer/Buttons/Column1/VBoxContainer/LevelSelectButton.focus_mode = Control.FOCUS_NONE
+	$MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/ControlsButton.focus_mode = Control.FOCUS_NONE
+	$MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/Volume/VolumeDownButton.focus_mode = Control.FOCUS_NONE
+	$MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/Volume/VolumeUpButton.focus_mode = Control.FOCUS_NONE
+	$MarginContainer/VBoxContainer/QuitButton.focus_mode = Control.FOCUS_NONE
+	$MarginContainer2/VBoxContainer/SettingsButton.focus_mode = Control.FOCUS_NONE
+	$MarginContainer2/VBoxContainer/ControlsButton.focus_mode = Control.FOCUS_NONE
+
 	volume_label.set_bbcode("[color=#ffce43]" + "Volume".left(globals.master_volume) + "[/color]" + "Volume".right(globals.master_volume))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear2db(float(globals.master_volume) / 9))
 
 
 func _process(delta):
 	if Input.is_action_just_pressed('pause'):
-		if get_tree().paused:
-			if menu == 'main':
-				resume()
-			else:
-				menu = 'main'
-				button_container.show()
-				$MarginContainer/VBoxContainer/QuitButton.show()
-				control_container.hide()
-#				$MarginContainer/VBoxContainer/HBoxContainer.show()
-#				$MarginContainer/VBoxContainer/ControlMenu.hide()
-		else:
-			pause()
+		_on_SettingsButton_pressed()
+	if globals.curr_state == 'Level_01' and not margincontainer2_showed and not get_tree().paused:
+		margincontainer2_showed = true
+		$MarginContainer2.show()
+		$MarginContainer2/VBoxContainer/AnimationPlayer.play("show")
 
+func _on_SettingsButton_pressed():
+	if get_tree().paused:
+		if menu == 'main':
+			resume()
+		else:
+			menu = 'main'
+			button_container.show()
+			$MarginContainer/VBoxContainer/QuitButton.show()
+			control_container.hide()
+			$MarginContainer2.hide()
+			$MarginContainer3.show()
+	else:
+		pause()
 
 func _on_ResumeButton_pressed():
 	$Click.play()
@@ -103,9 +121,15 @@ func _on_ControlsButton_pressed():
 	menu = 'controls'
 	button_container.hide()
 	$MarginContainer/VBoxContainer/QuitButton.hide()
+	$MarginContainer2.hide()
 	control_container.show()
+	$MarginContainer3.hide()
 #	$MarginContainer/VBoxContainer/HBoxContainer.hide()
 #	$MarginContainer/VBoxContainer/ControlMenu.show()
+
+func _on_ControlsButton2_pressed():
+	_on_SettingsButton_pressed()
+	_on_ControlsButton_pressed()
 
 
 func change_bind(key, value):
@@ -135,6 +159,8 @@ func change_bind(key, value):
 
 func pause():
 	$MarginContainer.show()
+	$MarginContainer3.show()
+	$MarginContainer2.hide()
 	get_tree().paused = true
 	$MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/ResetButton.text = 'Reset Data'
 	$MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/ResetButton.set('custom_colors/font_color', Color('ffffff'))
@@ -142,6 +168,8 @@ func pause():
 
 func resume():
 	$MarginContainer.hide()
+	$MarginContainer2.hide()
+	$MarginContainer3.hide()
 	get_tree().paused = false
 
 func _on_QuitButton_pressed():
@@ -190,3 +218,4 @@ func _on_VolumeDownButton_pressed():
 		globals.master_volume -= 1
 	volume_label.set_bbcode("[color=#ffce43]" + "Volume".left(globals.master_volume) + "[/color]" + "Volume".right(globals.master_volume))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear2db(float(globals.master_volume) / 6))
+

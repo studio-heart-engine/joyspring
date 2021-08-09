@@ -42,7 +42,7 @@ func deselect():
 	selected = false
 
 func _input(event):
-	if selected and event.is_action_pressed('level_select'):
+	if selected and event.is_action_pressed('dash'):
 		set_locked(-1)
 		if not locked:
 			$Click.play()
