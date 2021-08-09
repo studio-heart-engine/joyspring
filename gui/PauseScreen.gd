@@ -87,6 +87,9 @@ func _process(delta):
 		margincontainer2_showed = true
 		$MarginContainer2.show()
 		$MarginContainer2/VBoxContainer/AnimationPlayer.play("show")
+	elif globals.curr_state != 'Level_01' and margincontainer2_showed:
+		$MarginContainer2.hide()
+		margincontainer2_showed = false
 
 func _on_SettingsButton_pressed():
 	if get_tree().paused:
