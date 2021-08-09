@@ -19,15 +19,18 @@ func _process(delta):
 		set_blobs()
 
 func set_blobs():
-	var count = [2, 2]
+	var count = [1, 1]
 	while path_follow.unit_offset < 1:
 		print(path_follow.offset)
 		var blob = Blob.instance()
 		blob.shape = str(randi() % 2 + 1)
 #		blob.rotation_degrees = path_follow.rotation_degrees
 		blob.position = path_follow.position + self.position
-		blob.name = "Blob" + blob.shape + "_" + str(count[int(blob.shape) - 1]).pad_zeros(2)
-		count[int(blob.shape) - 1] += 1
+		var new_name = "Blob" + blob.shape + "_" + str(count[int(blob.shape) - 1]).pad_zeros(2)
+		while get_parent().has_node(new_name):
+			count[int(blob.shape) - 1] += 1
+			new_name = "Blob" + blob.shape + "_" + str(count[int(blob.shape) - 1]).pad_zeros(2)
+		blob.name = new_name
 		
 		if not Engine.editor_hint and not push:
 			get_parent().call_deferred('add_child', blob)

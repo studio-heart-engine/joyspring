@@ -6,13 +6,13 @@ onready var tween = $Tween
 
 var loop_start = {
 	"Silence": 0.0,
-	"Awakening": 3.281,
+	"Denial": 3.281,
 	"Legend": 0.0,
 	"Title": 0.0,
 	"Mirage": 0.0,
 	"TheRiver": 18.396,
 	"IntoThinAir": 16.326,
-	"Acceptance": 28.8
+	"Acceptance": 0.3
 }
 
 func _ready():
@@ -38,7 +38,7 @@ func play(song=""):
 	elif globals.curr_state == 'LevelTemplate':
 		current_song = $Acceptance
 	elif globals.curr_state == 'Level_12' and globals.started_peak_zoom:
-		current_song = $Awakening
+		current_song = $Denial
 	elif globals.curr_state.substr(0, 5) == 'Level':
 		var level_index = int(globals.curr_state.right(5))
 		if level_index < 7:
@@ -48,7 +48,7 @@ func play(song=""):
 		elif level_index == 12:
 			current_song = $Silence
 		elif level_index < 30:
-			current_song = $Awakening
+			current_song = $Denial
 		elif level_index < 40:
 			current_song = $Acceptance
 		elif level_index < 50:
