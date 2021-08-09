@@ -12,7 +12,7 @@ func update_shader(mode):
 			get_node('Blebs/' + child.get_name() + '/Outline').material.shader = outline_shader
 			child.update_image()
 		for child in $Blobs.get_children():
-			if child.get_class() != 'Node2D':
+			if child.get_name().substr(0, 8) == 'BlobPath':
 				continue
 			get_node('Blobs/' + child.get_name() + '/NoiseOffset/Outline').material.shader = outline_shader
 			get_node('Blobs/' + child.get_name() + '/NoiseOffset/Sprite').material.shader = null
@@ -48,7 +48,7 @@ func update_shader(mode):
 				'color', Color(possible_colors[globals.bg_num - 1])
 			)
 		for child in $Blobs.get_children():
-			if child.get_class() != 'Node2D':
+			if child.get_name().substr(0, 8) == 'BlobPath':
 				continue
 			get_node('Blobs/' + child.get_name() + '/NoiseOffset/Outline').material.shader = null
 			get_node('Blobs/' + child.get_name() + '/NoiseOffset/Sprite').material.shader = solid_shader
