@@ -1,6 +1,8 @@
 tool
 extends Node2D
 
+export (int) var speed = 50
+
 
 func _ready():
 
@@ -22,7 +24,6 @@ func _ready():
 		tilemap.occluder_light_mask = pow(2, 5)
 
 	var path_len = $Path2D.curve.get_baked_length()
-	var speed = 50
 	var path_time = path_len / speed
 	var track = Animation.new()
 	var idx = track.add_track(Animation.TYPE_VALUE)
