@@ -1,7 +1,7 @@
 extends Node
 
-#export (PackedScene) var opening = preload('res://graphics/Legend.tscn')
-export (PackedScene) var opening = preload('res://platformer/levels/Finished_Level_19.tscn')
+export (PackedScene) var opening = preload('res://graphics/Legend.tscn')
+#export (PackedScene) var opening = preload('res://platformer/levels/Finished_Level_15.tscn')
 #export (PackedScene) var opening = preload('res://platformer/PlatformerLayeredTemplate.tscn')
 #export (PackedScene) var opening = preload('res://gui/LevelSelect.tscn')
 
@@ -16,7 +16,7 @@ func _ready():
 	globals.curr_state = current_scene.get_name()
 	globals.set_time_of_day()
 	globals.set_bg()
-	
+
 	Events.connect('quit_game', self, 'free_scene')
 	yield(get_tree().root, "ready")
 	if current_scene.name == 'Legend':
