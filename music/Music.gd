@@ -36,7 +36,7 @@ func play(song=""):
 	if globals.curr_state == 'LevelSelect':
 		current_song = $Title
 	elif globals.curr_state == 'LevelTemplate':
-		current_song = $Acceptance
+		current_song = $Mirage
 	elif globals.curr_state == 'Level_12' and globals.started_peak_zoom:
 		current_song = $Denial
 	elif globals.curr_state.substr(0, 5) == 'Level':
@@ -72,24 +72,36 @@ func play(song=""):
 
 	if current_song != previous_song and previous_song != null:
 		# fade out
+#		tween.interpolate_property(
+#			previous_song, "volume_db", -20, -80, 2,
+#			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
 		tween.interpolate_property(
-			previous_song, "volume_db", -20, -80, 2,
-			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
+			previous_song, "volume_db", previous_song.volume_db, previous_song.volume_db - 60,
+			2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT
+		)
 		tween.start()
 		previous_song.stop()
 		
 		# fade in
+#		tween.interpolate_property(
+#			current_song, "volume_db", -30, -20, 2,
+#			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
 		tween.interpolate_property(
-			current_song, "volume_db", -30, -20, 2,
-			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
+			current_song, "volume_db", current_song.volume_db - 20, current_song.volume_db,
+			2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT
+		)
 		tween.start()
 		current_song.play()
 
 	elif not current_song.playing:
 		if loop_start[current_song.get_name()] == 0.0:
 			# fade in
+#			tween.interpolate_property(
+#				current_song, "volume_db", -30, -20, 2,
+#				Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
 			tween.interpolate_property(
-				current_song, "volume_db", -30, -20, 2,
-				Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
+				current_song, "volume_db", current_song.volume_db - 20, current_song.volume_db,
+				2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT
+			)
 			tween.start()
 		current_song.play(loop_start[current_song.get_name()])
