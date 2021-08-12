@@ -39,7 +39,6 @@ func _process(delta):
 		set_title_text()
 	else:
 		if globals.curr_state != 'Level_12':
-			pass
 			hide_title_text()
 
 func set_level_text():
@@ -142,6 +141,8 @@ func hide_title_text():
 				$Text/Tag2.play(true)
 		else:
 			$Title.hide()
+			$Text/Tag1.hide()
+			$Text/Tag2.hide()
 
 func clear_all():
 	for child in $Text.get_children():
