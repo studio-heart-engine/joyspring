@@ -7,7 +7,7 @@
 # Joyspring
 **ASCEND the peak in search of the Joyspring.** Explore every cavern and cave, crevasse and chasm. Hear the wind sing. Keep dashing and find the spring. And when you return, return smiling.
 
-* A story-driven 2D adventure that explores the strength of hope and the courage to move on
+* A story-driven 2D adventure that explores the strength of hope and the courage to let go
 * A mountaintop structured in 50 rooms full of platforming challenges that demand precision and ingenuity
 * Unique 2-layered platform mechanics testing problem-solving and pathfinding
 * Simple controls that combine in unique combos to master
