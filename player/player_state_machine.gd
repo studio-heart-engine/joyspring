@@ -55,7 +55,7 @@ func _ready():
 		stones_sound_effects.append(load('res://music/effects/footstep_stones_' + str(i) + '.wav'))
 
 func play_footstep():
-	on_tile = self.get_parent().layers[self.get_parent().layer_num].get_collision_tile(Vector2(0, 4))
+	on_tile = self.get_parent().layers[self.get_parent().layer_num].get_collision_tile(Vector2(0, 2))
 	$States/Run/SoundEffect.pitch_scale = 1 + rand_range(-0.05, 0.05)
 	if on_tile == 1:
 		$States/Run/SoundEffect.volume_db = -10
