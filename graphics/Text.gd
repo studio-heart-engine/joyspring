@@ -1,14 +1,28 @@
 extends Control
 
 var showed = false
+var character = 'Riley'
+var note = 0
 
-onready var texts = [
-	load("res://music/effects/text_1.wav"),
-	load("res://music/effects/text_2.wav"),
-	load('res://music/effects/text_3.wav')
-]
+# Riley notes
+# 1 - neutral
+# 2 - dejected
+# 3 - interested
+# 4 - serious
+
+# Spirit notes
+# 1 - neutral
+# 2 - surprised
+# 3 - serious
+# 4 - reassuring
+
+var voices = {'Riley': ['placeholder'], 'Spirit': ['placeholder']}
 
 func _ready():
+	for i in range(1, 5):
+		voices['Riley'].append(load('res://music/effects/Kalim-' + str(i) + '.wav'))
+		voices['Spirit'].append(load('res://music/effects/Harp-' + str(i) + '.wav'))
+
 	if self.name.substr(0, 6) == 'Select':
 		$Label.text = name.right(6)
 		$Label.rect_position = Vector2(0, 0)
@@ -30,7 +44,9 @@ func play(reverse=false, delay=0.0):
 			yield(get_tree().create_timer(delay), "timeout")
 		$Label/AnimationPlayer.play('fade_in')
 		if name.begins_with("Dialogue"):
-			$Label/SoundEffect.set_stream(texts[randi() % len(texts)])
+			if character == 'Riley':
+				$Label/SoundEffect.volume_db = 5
+			$Label/SoundEffect.set_stream(voices[character][note])
 			$Label/SoundEffect.play()
 
 	if showed and reverse:

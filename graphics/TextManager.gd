@@ -23,6 +23,8 @@ func _ready():
 	# Load dialogue
 	var dialogue_file = File.new()
 	dialogue_file.open('res://text/dialogue.txt', File.READ)
+	var voice_file = File.new()
+	voice_file.open('res://text/voices.txt', File.READ)
 	var i = 1
 	while not dialogue_file.eof_reached():
 		var line = dialogue_file.get_line()
@@ -33,9 +35,12 @@ func _ready():
 		dialogue_text.set_script(text_script)
 		self.add_child(dialogue_text)
 		get_node(dialogue_text.name + '/Label').text = line
+		get_node(dialogue_text.name).character = 'Riley'
+		get_node(dialogue_text.name).note = int(voice_file.get_line())
 		if line.substr(0, 1) == '*':
 			get_node(dialogue_text.name + '/Label').text = line.right(1)
 			get_node(dialogue_text.name).modulate = Color('ffce43')
+			get_node(dialogue_text.name).character = 'Spirit'
 		i += 1
 	dialogue_file.close()
 
