@@ -137,7 +137,3 @@ func update_image():
 
 func get_time_of_day():
 	return TIME_OF_DAY[globals.time_of_day]
-
-
-func finish():
-	pass # Replace with function body.

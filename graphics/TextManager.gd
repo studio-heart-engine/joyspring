@@ -67,18 +67,11 @@ func _ready():
 	tutorial_file.close()
 
 	# Load select
-	var curr_time_of_day = 0
 	for k in range(1, globals.total_levels + 1):
-		if k >= globals.time_of_day_start[0]:
-			curr_time_of_day = 0
-		if k >= globals.time_of_day_start[1]:
-			curr_time_of_day = 1
-		if k >= globals.time_of_day_start[2]:
-			curr_time_of_day = 2
 		var select_text = text_pin_scene.instance()
 		select_text.name = 'Select' + str(k)
 		select_text.set_script(text_pin_script)
-		select_text.set_colors(curr_time_of_day)
+		select_text.set_colors()
 		self.add_child(select_text)
 		get_node(select_text.name + '/Label').text = str(k)
 	

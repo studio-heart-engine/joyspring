@@ -17,18 +17,18 @@ func _input(event):
 	if event.is_action_pressed("left"):
 		if cur == 1:
 			return
-		signs[cur - 1].deselect()
 		cur -= 1
+		get_node("../Switch").update_time_and_bg()
+		signs[cur].deselect()
 		set_cur()
 		$SoundEffect.play()
-		get_node("../Switch").update_time_and_bg()
 	elif event.is_action_pressed("right"):
 		if cur == globals.total_levels:
 			return
 		if signs[cur].get_locked():
 			return
-		signs[cur - 1].deselect()
 		cur += 1
+		get_node("../Switch").update_time_and_bg()
+		signs[cur - 2].deselect()
 		set_cur()
 		$SoundEffect.play()
-		get_node("../Switch").update_time_and_bg()

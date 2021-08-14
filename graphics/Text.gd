@@ -45,6 +45,8 @@ func play(reverse=false, delay=0.0):
 		$Label/AnimationPlayer.play('fade_in')
 		if name.begins_with("Dialogue"):
 			if character == 'Riley':
+				$Label/SoundEffect.volume_db = -10
+			elif character == 'Spirit':
 				$Label/SoundEffect.volume_db = 5
 			$Label/SoundEffect.set_stream(voices[character][note])
 			$Label/SoundEffect.play()
