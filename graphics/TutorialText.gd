@@ -4,7 +4,8 @@ export(String) var action
 var template_text
 
 func _ready():
-	template_text = self.text
+	if self.text != '':
+		template_text = self.text
 	Events.connect('keybind_changed', self, 'update_text')
 	update_text()
 
@@ -23,21 +24,30 @@ func update_text():
 		var keybind_text_1 = 'Unassigned'
 		if not globals.keybinds['wall'] == null:
 			keybind_text_1 = OS.get_scancode_string(globals.keybinds['wall'])
-		var keybind_text_2 = 'Unassigned'
-		if not globals.keybinds['up'] == null:
-			keybind_text_2 = OS.get_scancode_string(globals.keybinds['up'])
-		var keybind_text_3a = 'Unassigned'
-		if not globals.keybinds['left'] == null:
-			keybind_text_3a = OS.get_scancode_string(globals.keybinds['left'])
-		var keybind_text_3b = 'Unassigned'
-		if not globals.keybinds['right'] == null:
-			keybind_text_3b = OS.get_scancode_string(globals.keybinds['right'])
-		var new_text = template_text
-		new_text = new_text.replace('[wall]', keybind_text_1)
-		new_text = new_text.replace('[up]', keybind_text_2)
-		new_text = new_text.replace('[left]', keybind_text_3a)
-		new_text = new_text.replace('[right]', keybind_text_3b)
-		self.text = new_text
+		if globals.unique_jump:
+			var keybind_text_2 = 'Unassigned'
+			if not globals.keybinds['jump'] == null:
+				keybind_text_2 = OS.get_scancode_string(globals.keybinds['jump'])
+			var new_text = template_text[1]
+			new_text = new_text.replace('[wall]', keybind_text_1)
+			new_text = new_text.replace('[jump]', keybind_text_2)
+			self.text = new_text
+		else:
+			var keybind_text_2 = 'Unassigned'
+			if not globals.keybinds['up'] == null:
+				keybind_text_2 = OS.get_scancode_string(globals.keybinds['up'])
+			var keybind_text_3a = 'Unassigned'
+			if not globals.keybinds['left'] == null:
+				keybind_text_3a = OS.get_scancode_string(globals.keybinds['left'])
+			var keybind_text_3b = 'Unassigned'
+			if not globals.keybinds['right'] == null:
+				keybind_text_3b = OS.get_scancode_string(globals.keybinds['right'])
+			var new_text = template_text[0]
+			new_text = new_text.replace('[wall]', keybind_text_1)
+			new_text = new_text.replace('[up]', keybind_text_2)
+			new_text = new_text.replace('[left]', keybind_text_3a)
+			new_text = new_text.replace('[right]', keybind_text_3b)
+			self.text = new_text
 	if action == 'dash':
 		var keybind_text = 'Unassigned'
 		if not globals.keybinds[action] == null:

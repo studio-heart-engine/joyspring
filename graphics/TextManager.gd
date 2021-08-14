@@ -23,6 +23,8 @@ func _ready():
 	# Load dialogue
 	var dialogue_file = File.new()
 	dialogue_file.open('res://text/dialogue.txt', File.READ)
+	var voice_file = File.new()
+	voice_file.open('res://text/voices.txt', File.READ)
 	var i = 1
 	while not dialogue_file.eof_reached():
 		var line = dialogue_file.get_line()
@@ -33,9 +35,12 @@ func _ready():
 		dialogue_text.set_script(text_script)
 		self.add_child(dialogue_text)
 		get_node(dialogue_text.name + '/Label').text = line
+		get_node(dialogue_text.name).character = 'Riley'
+		get_node(dialogue_text.name).note = int(voice_file.get_line())
 		if line.substr(0, 1) == '*':
 			get_node(dialogue_text.name + '/Label').text = line.right(1)
 			get_node(dialogue_text.name).modulate = Color('ffce43')
+			get_node(dialogue_text.name).character = 'Spirit'
 		i += 1
 	dialogue_file.close()
 
@@ -45,35 +50,37 @@ func _ready():
 	var j = 1
 	while not tutorial_file.eof_reached():
 		var type = tutorial_file.get_line()
-		var line = tutorial_file.get_line()
-		line = line.replace('\\n', '\n')
-		line = line.replace('’', '\'')
 		var tutorial_text = text_scene.instance()
 		tutorial_text.name = 'Tutorial' + str(j)
 		tutorial_text.set_script(text_script)
 		tutorial_text.modulate = Color(1, 1, 1, 0.5)
 		self.add_child(tutorial_text)
-		get_node(tutorial_text.name + '/Label').text = line
-		get_node(tutorial_text.name + '/Label').align = HALIGN_CENTER
 		get_node(tutorial_text.name + '/Label').set_script(tutorial_script)
+		if type == 'wall jump':
+			var line1 = tutorial_file.get_line()
+			var line2 = tutorial_file.get_line()
+			line1 = line1.replace('\\n', '\n')
+			line1 = line1.replace('’', '\'')
+			line2 = line2.replace('\\n', '\n')
+			line2 = line2.replace('’', '\'')
+			get_node(tutorial_text.name + '/Label').template_text = [line1, line2]
+		else:
+			var line = tutorial_file.get_line()
+			line = line.replace('\\n', '\n')
+			line = line.replace('’', '\'')
+			get_node(tutorial_text.name + '/Label').template_text = line
+		get_node(tutorial_text.name + '/Label').align = HALIGN_CENTER
 		get_node(tutorial_text.name + '/Label').action = type
 		get_node(tutorial_text.name + '/Label')._ready()
 		j += 1
 	tutorial_file.close()
 
 	# Load select
-	var curr_time_of_day = 0
 	for k in range(1, globals.total_levels + 1):
-		if k >= globals.time_of_day_start[0]:
-			curr_time_of_day = 0
-		if k >= globals.time_of_day_start[1]:
-			curr_time_of_day = 1
-		if k >= globals.time_of_day_start[2]:
-			curr_time_of_day = 2
 		var select_text = text_pin_scene.instance()
 		select_text.name = 'Select' + str(k)
 		select_text.set_script(text_pin_script)
-		select_text.set_colors(curr_time_of_day)
+		select_text.set_colors()
 		self.add_child(select_text)
 		get_node(select_text.name + '/Label').text = str(k)
 	

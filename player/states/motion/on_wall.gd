@@ -1,7 +1,7 @@
 extends "../motion.gd"
 
 var wall_direction
-
+export var INITIAL_WALL_JUMP_SPEED = 50
 
 func _ready():
 	on_wall_timer.connect("timeout", self, "on_wall_timer_timeout")
@@ -37,6 +37,8 @@ func handle_input(event):
 	# Prevent immediately attaching back onto wall by
 	# moving the player 1 pixel away from it
 	if self.input_direction.x == -wall_direction:
+		owner.move_and_collide(Vector2(-wall_direction, 0))
+	if globals.unique_jump and event.is_action_pressed("jump"):
 		owner.move_and_collide(Vector2(-wall_direction, 0))
 	
 	if event.is_action_released("wall") and owner.current_state != "slide":

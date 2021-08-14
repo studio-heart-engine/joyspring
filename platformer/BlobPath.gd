@@ -21,7 +21,6 @@ func _process(delta):
 func set_blobs():
 	var count = [1, 1]
 	while path_follow.unit_offset < 1:
-		print(path_follow.offset)
 		var blob = Blob.instance()
 		blob.shape = str(randi() % 2 + 1)
 #		blob.rotation_degrees = path_follow.rotation_degrees

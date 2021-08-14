@@ -128,6 +128,9 @@ func set_looking_right(value):
 	is_looking_right = value
 	sprite.scale.x = 1 if value else -1
 
+#func _process(delta):
+#	print(current_state)
+
 var TIME_OF_DAY = ['Evening', 'Midnight', 'Dawn']
 
 func update_image():
@@ -137,7 +140,3 @@ func update_image():
 
 func get_time_of_day():
 	return TIME_OF_DAY[globals.time_of_day]
-
-
-func finish():
-	pass # Replace with function body.

@@ -113,4 +113,3 @@ func spawn_dash_ring_particles():
 	dash_ring_particles.init(input_direction)
 	dash_ring_particles.position = owner.position
 
-
