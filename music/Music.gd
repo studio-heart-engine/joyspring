@@ -10,9 +10,10 @@ var loop_start = {
 	"Legend": 0.0,
 	"Title": 0.0,
 	"Mirage": 0.0,
-	"TheRiver": 18.396,
+	"TheRiver": 18.394,
 	"IntoThinAir": 42.448,  # 16.326
-	"Acceptance": 0.3
+	"Acceptance": 0.3,
+	"OutOfThinAir": 42.448
 }
 
 func _ready():
