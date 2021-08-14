@@ -50,17 +50,26 @@ func _ready():
 	var j = 1
 	while not tutorial_file.eof_reached():
 		var type = tutorial_file.get_line()
-		var line = tutorial_file.get_line()
-		line = line.replace('\\n', '\n')
-		line = line.replace('’', '\'')
 		var tutorial_text = text_scene.instance()
 		tutorial_text.name = 'Tutorial' + str(j)
 		tutorial_text.set_script(text_script)
 		tutorial_text.modulate = Color(1, 1, 1, 0.5)
 		self.add_child(tutorial_text)
-		get_node(tutorial_text.name + '/Label').text = line
-		get_node(tutorial_text.name + '/Label').align = HALIGN_CENTER
 		get_node(tutorial_text.name + '/Label').set_script(tutorial_script)
+		if type == 'wall jump':
+			var line1 = tutorial_file.get_line()
+			var line2 = tutorial_file.get_line()
+			line1 = line1.replace('\\n', '\n')
+			line1 = line1.replace('’', '\'')
+			line2 = line2.replace('\\n', '\n')
+			line2 = line2.replace('’', '\'')
+			get_node(tutorial_text.name + '/Label').template_text = [line1, line2]
+		else:
+			var line = tutorial_file.get_line()
+			line = line.replace('\\n', '\n')
+			line = line.replace('’', '\'')
+			get_node(tutorial_text.name + '/Label').template_text = line
+		get_node(tutorial_text.name + '/Label').align = HALIGN_CENTER
 		get_node(tutorial_text.name + '/Label').action = type
 		get_node(tutorial_text.name + '/Label')._ready()
 		j += 1

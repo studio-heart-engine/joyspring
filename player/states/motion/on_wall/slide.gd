@@ -1,8 +1,8 @@
 extends "../on_wall.gd"
 
 export var WALL_SLIDE_SPEED = 40
-onready var wall_slide_particles = preload("res://graphics/particles/WallSlideParticles.tscn")
 var particles_instance
+onready var wall_slide_particles = preload('res://graphics/particles/WallSlideParticles.tscn')
 
 func enter():
 	.enter()
@@ -17,6 +17,7 @@ func enter():
 	play_anim("slide")
 	particles_instance = wall_slide_particles.instance()
 	player_sprite.add_child(particles_instance)
+	particles_instance.scale.x = 1 if owner.is_looking_right else -1
 
 
 func exit():
@@ -36,8 +37,13 @@ func update(delta):
 func handle_input(event):
 	.handle_input(event)
 	
-	if self.input_direction.x == -wall_direction:
-		emit_signal("finished", "jump" if self.input_direction.y == -1 else "fall")
-	elif self.input_direction.y == -1 and owner.can_wall_climb:
+	if self.input_direction.y == 0:
+		emit_signal("finished", get_wall_state())
+	if globals.unique_jump and event.is_action_pressed("jump"):
+		owner.velocity.x = -wall_direction * INITIAL_WALL_JUMP_SPEED
+		emit_signal("finished", "jump")
+	if self.input_direction.y == -1 and owner.can_wall_climb:
 		if owner.get_parent().climb_enabled:
 			emit_signal("finished", "climb")
+	if self.input_direction.x == -wall_direction:
+		emit_signal("finished", "fall")

@@ -19,6 +19,7 @@ var bg_offset = 320  # Motion offset for parallax
 var configurable_keys = ['jump', 'up', 'down', 'left', 'right', 'dash', 'wall', 'float', 'swap']
 var config_file
 var keybinds = {}
+var unique_jump = false  # true if jump is different from up
 
 var cape = []
 var joy_collected = []
@@ -116,6 +117,10 @@ func set_controls():
 			InputMap.action_add_event(key, new_value)
 
 func save_controls():
+	if keybinds['up'] != keybinds['jump']:
+		unique_jump = true
+	else:
+		unique_jump = false
 	for key in keybinds.keys():
 		if keybinds[key] != null:
 			config_file.set_value('keybinds', key, keybinds[key])

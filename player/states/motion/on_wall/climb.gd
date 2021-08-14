@@ -1,7 +1,6 @@
 extends "../on_wall.gd"
 
 export var WALL_CLIMB_SPEED = 30
-export var INITIAL_WALL_JUMP_SPEED = 50
 
 
 func enter():
@@ -24,7 +23,9 @@ func handle_input(event):
 	
 	if self.input_direction.y == 0:
 		emit_signal("finished", get_wall_state())
-	
+	if globals.unique_jump and event.is_action_pressed("jump"):
+		owner.velocity.x = -wall_direction * INITIAL_WALL_JUMP_SPEED
+		emit_signal("finished", "jump")
 	if self.input_direction.x == -wall_direction:
 		if self.input_direction.y == -1:
 			owner.velocity.x = -wall_direction * INITIAL_WALL_JUMP_SPEED
