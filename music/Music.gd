@@ -37,7 +37,7 @@ func play(song=""):
 	if globals.curr_state == 'LevelSelect':
 		current_song = $Title
 	elif globals.curr_state == 'LevelTemplate':
-		current_song = $Mirage
+		current_song = $Departure
 	elif globals.curr_state == 'Level_12' and globals.started_peak_zoom:
 		current_song = $Denial
 	elif globals.curr_state.substr(0, 5) == 'Level':
