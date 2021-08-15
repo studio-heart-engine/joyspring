@@ -13,7 +13,9 @@ var loop_start = {
 	"TheRiver": 18.394,
 	"IntoThinAir": 42.448,  # 16.326
 	"Acceptance": 0.3,
-	"OutOfThinAir": 42.448
+	"OutOfThinAir": 42.448,
+	"Departure": 0,
+	"LostDreams": 0
 }
 
 func _ready():
