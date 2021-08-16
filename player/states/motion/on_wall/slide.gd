@@ -13,6 +13,7 @@ func enter():
 	if cape != null:
 		cape.visible = true
 	owner.velocity.y = WALL_SLIDE_SPEED
+	print('play')
 	$SoundEffect.play(rand_range(0, 15))
 	play_anim("slide")
 	particles_instance = wall_slide_particles.instance()

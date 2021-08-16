@@ -27,9 +27,9 @@ func exit():
 
 func update(delta):
 	owner.velocity = owner.move_and_slide_with_snap(
-			owner.velocity, wall_direction * Vector2.RIGHT, wall_direction * Vector2.LEFT,
+			owner.velocity, wall_direction * Vector2.RIGHT * 4, wall_direction * Vector2.LEFT,
 			false, 4, 0.785398, false)
-	push_bodies()
+#	push_bodies()
 
 
 func handle_input(event):
