@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://gui/PauseScreen.gd" type="Script" id=1]
 [ext_resource path="res://graphics/font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://music/effects/click.wav" type="AudioStream" id=3]
 [ext_resource path="res://graphics/HappyFox-Condensed.otf" type="DynamicFontData" id=4]
+[ext_resource path="res://platformer/levelSnapshots/level_1.png" type="Texture" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -303,6 +304,86 @@ custom_colors/font_color = Color( 1, 1, 1, 0.627451 )
 text = "Pause or resume with esc."
 align = 1
 
+[node name="MarginContainer4" type="MarginContainer" parent="."]
+margin_top = 200.0
+margin_right = 1600.0
+margin_bottom = 900.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer4"]
+margin_right = 1600.0
+margin_bottom = 700.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer4/VBoxContainer"]
+margin_right = 1600.0
+margin_bottom = 225.0
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer4/VBoxContainer/HBoxContainer2"]
+margin_left = 600.0
+margin_right = 1000.0
+margin_bottom = 225.0
+texture = ExtResource( 5 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer4/VBoxContainer"]
+margin_top = 229.0
+margin_right = 1600.0
+margin_bottom = 293.0
+alignment = 1
+
+[node name="LevelDownButton" type="Button" parent="MarginContainer4/VBoxContainer/HBoxContainer"]
+margin_left = 744.0
+margin_right = 775.0
+margin_bottom = 64.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.286275, 0.286275, 0.286275, 1 )
+custom_colors/font_color_pressed = Color( 0.168627, 0.168627, 0.168627, 1 )
+text = "-"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LevelButton" type="Button" parent="MarginContainer4/VBoxContainer/HBoxContainer"]
+margin_left = 779.0
+margin_right = 814.0
+margin_bottom = 64.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.286275, 0.286275, 0.286275, 1 )
+custom_colors/font_color_pressed = Color( 0.168627, 0.168627, 0.168627, 1 )
+text = "01"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LevelUpButton" type="Button" parent="MarginContainer4/VBoxContainer/HBoxContainer"]
+margin_left = 818.0
+margin_right = 856.0
+margin_bottom = 64.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.286275, 0.286275, 0.286275, 1 )
+custom_colors/font_color_pressed = Color( 0.168627, 0.168627, 0.168627, 1 )
+text = "+"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Click" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
 volume_db = -20.0
@@ -322,3 +403,6 @@ pitch_scale = 3.0
 [connection signal="pressed" from="MarginContainer/VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
 [connection signal="pressed" from="MarginContainer2/VBoxContainer/SettingsButton" to="." method="_on_SettingsButton_pressed"]
 [connection signal="pressed" from="MarginContainer2/VBoxContainer/ControlsButton" to="." method="_on_ControlsButton2_pressed"]
+[connection signal="pressed" from="MarginContainer4/VBoxContainer/HBoxContainer/LevelDownButton" to="." method="_on_LevelDownButton_pressed"]
+[connection signal="pressed" from="MarginContainer4/VBoxContainer/HBoxContainer/LevelButton" to="." method="_on_LevelButton_pressed"]
+[connection signal="pressed" from="MarginContainer4/VBoxContainer/HBoxContainer/LevelUpButton" to="." method="_on_LevelUpButton_pressed"]

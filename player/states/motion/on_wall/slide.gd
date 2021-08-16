@@ -22,6 +22,7 @@ func enter():
 
 func exit():
 	.exit()
+	print('stop')
 	$SoundEffect.stop()
 	particles_instance.queue_free()
 

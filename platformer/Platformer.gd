@@ -66,6 +66,8 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed("swap"):
 		swap_layers()
+	if event.is_action_pressed("screenshot"):
+		get_screenshot()
 
 
 func swap_layers():
@@ -127,3 +129,8 @@ func set_bg():
 	$ParallaxBackground/ParallaxLayer.motion_offset.x = 480
 	$ParallaxBackground/ParallaxLayer.motion_offset.y = globals.bg_offset
 	$ParallaxBackground/ParallaxLayer.motion_mirroring = Vector2(1024, 640)
+
+func get_screenshot():
+	var image = get_viewport().get_texture().get_data()
+	image.flip_y()
+	image.save_png("res://platformer/levelSnapshots/level_" + str(level_index) + ".png")
