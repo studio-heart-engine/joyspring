@@ -242,12 +242,16 @@ func _on_VolumeDownButton_pressed():
 var cur_level = 1
 
 func _on_LevelDownButton_pressed():
+	if not cur_level - 1 in globals.levels_completed:
+		return
 	if cur_level > 1:
 		$Tick.play()
 		cur_level -= 1
 		update_level()
 
 func _on_LevelUpButton_pressed():
+	if not cur_level + 1 in globals.levels_completed and not cur_level in globals.levels_completed:
+		return
 	if cur_level < globals.total_levels:
 		$Tick.play()
 		cur_level += 1

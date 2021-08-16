@@ -3,7 +3,7 @@ extends Node2D
 onready var solid_shader = preload('res://graphics/effects/solid_color.shader')
 onready var outline_shader = preload('res://graphics/effects/outline-shader.shader')
 
-var possible_colors = ['#306d78', '#205f74', '#2e3d67', '#222b4f', '#29355b', '#d0603d', '#de743d']
+var possible_colors = ['#306d78', '#205f74', '#2e3d67', '#222b4f', '#29355b', '#b74730', '#c95036']
 
 func update_shader(mode):
 	if mode == 'normal':
