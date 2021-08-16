@@ -78,8 +78,8 @@ func check_collision(layer_name):
 	var dir1 = Vector2(0, -4) # Bottom half of player
 	var dir2 = Vector2(0, -12) # Top half of player
 	
-	var tile1 = layers[layer_num].get_collision_tile(dir1)
-	var tile2 = layers[layer_num].get_collision_tile(dir2)
+	var tile1 = layers[layer_num].get_collision_tile(dir1, 'TileMap')
+	var tile2 = layers[layer_num].get_collision_tile(dir2, 'TileMap')
 	return (tile1 != -1) or (tile2 != -1)
 
 func update_collision():
