@@ -19,6 +19,21 @@ var loop_start = {
 	"Joyspring": 0
 }
 
+var volumes = {
+	"Silence": -20,
+	"Denial": -10,
+	"Legend": -20,
+	"Title": -20,
+	"Mirage": -20,
+	"TheRiver": -15,
+	"IntoThinAir": -15,
+	"Joyspring": -10,
+	"Acceptance": -10,
+	"OutOfThinAir": -15,
+	"Departure": -15,
+	"LostDreams": -10
+}
+
 func _ready():
 	SceneChanger.connect("scene_changed", self, "play")
 	Events.connect('zoom_out', self, 'play')
@@ -86,7 +101,8 @@ func play(song=""):
 #			previous_song, "volume_db", -20, -80, 2,
 #			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
 		tween.interpolate_property(
-			previous_song, "volume_db", previous_song.volume_db, previous_song.volume_db - 60,
+			previous_song, "volume_db",
+			volumes[previous_song.name], volumes[previous_song.name] - 60,
 			2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT
 		)
 		tween.start()
@@ -97,7 +113,8 @@ func play(song=""):
 #			current_song, "volume_db", -30, -20, 2,
 #			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
 		tween.interpolate_property(
-			current_song, "volume_db", current_song.volume_db - 20, current_song.volume_db,
+			current_song, "volume_db",
+			volumes[current_song.name] - 20, volumes[current_song.name],
 			2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT
 		)
 		tween.start()
@@ -110,7 +127,8 @@ func play(song=""):
 #				current_song, "volume_db", -30, -20, 2,
 #				Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
 			tween.interpolate_property(
-				current_song, "volume_db", current_song.volume_db - 20, current_song.volume_db,
+				current_song, "volume_db",
+				volumes[current_song.name] - 20, volumes[current_song.name],
 				2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT
 			)
 			tween.start()
