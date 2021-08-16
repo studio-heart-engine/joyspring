@@ -37,8 +37,6 @@ script = ExtResource( 1 )
 curve = SubResource( 1 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
-position = Vector2( 39.9943, 38.0719 )
-offset = 81.9292
 rotate = false
 cubic_interp = false
 
@@ -50,6 +48,7 @@ z_index = 1
 tile_set = ExtResource( 2 )
 cell_size = Vector2( 8, 8 )
 cell_quadrant_size = 2
+collision_use_kinematic = true
 collision_layer = 16
 format = 1
 tile_data = PoolIntArray( 0, 0, 262145, 1, 0, 65536, 2, 0, 262146, 65536, 0, 458752, 65537, 0, 196610, 65538, 0, 393219 )
@@ -64,8 +63,9 @@ z_index = 1
 tile_set = ExtResource( 2 )
 cell_size = Vector2( 8, 8 )
 cell_quadrant_size = 2
-collision_layer = 256
-collision_mask = 608
+collision_use_kinematic = true
+collision_layer = 0
+collision_mask = 0
 occluder_light_mask = 32
 format = 1
 tile_data = PoolIntArray( 0, 5, 262145, 1, 5, 65536, 2, 5, 262146, 65536, 5, 458752, 65537, 5, 196610, 65538, 5, 393219 )
@@ -76,4 +76,5 @@ __meta__ = {
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+playback_process_mode = 0
 anims/follow_loop = SubResource( 4 )

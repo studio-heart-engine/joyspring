@@ -17,7 +17,7 @@ func enter():
 
 func update(delta):
 	owner.velocity = owner.move_and_slide_with_snap(owner.velocity, Vector2.DOWN * 4, Vector2.UP,
-			false, 4, 0.785398, false)
+			true, 4, 0.785398, false)
 #	push_bodies()
 	
 	if owner.velocity.x != 0:
