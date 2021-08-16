@@ -59,9 +59,9 @@ func play(song=""):
 		elif level_index < 30:
 			current_song = $LostDreams
 		elif level_index < 35:
-			current_song = $Mirage
-		elif level_index < 39:
 			current_song = $Acceptance
+		elif level_index < 39:
+			current_song = $Mirage
 		elif level_index < 42:
 			current_song = $OutOfThinAir
 		elif level_index < 49:
