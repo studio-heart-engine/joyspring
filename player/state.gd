@@ -17,7 +17,7 @@ onready var SkidParticles = preload("res://graphics/particles/SkidParticles.tscn
 onready var DashStartParticles = preload("res://graphics/particles/DashStartParticles.tscn")
 onready var DashRingParticles = preload("res://graphics/particles/DashRingParticles.tscn")
 
-onready var on_wall_timer = owner.get_node("OnWallTimer")
+#onready var on_wall_timer = owner.get_node("OnWallTimer")
 
 
 func play_anim(anim_name):

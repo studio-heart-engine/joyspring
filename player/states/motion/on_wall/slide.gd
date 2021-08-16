@@ -8,7 +8,7 @@ func enter():
 	.enter()
 	blink_anim_player.stop()
 #	on_wall_timer.stop()
-	on_wall_timer.paused = true
+#	on_wall_timer.paused = true
 	player_sprite.visible = true
 	if cape != null:
 		cape.visible = true

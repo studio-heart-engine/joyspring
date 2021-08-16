@@ -3,15 +3,15 @@ extends "../on_wall.gd"
 func enter():
 	play_anim("hang")
 	.enter()
-	on_wall_timer.paused = false
+#	on_wall_timer.paused = false
 
 
 func update(delta):
 	.update(delta)
 	if not is_near_wall():
 		emit_signal("finished", "fall")
-	if on_wall_timer.time_left < 1 and not on_wall_timer.is_stopped() and not blink_anim_player.is_playing():
-		start_blink()
+#	if on_wall_timer.time_left < 1 and not on_wall_timer.is_stopped() and not blink_anim_player.is_playing():
+#		start_blink()
 
 
 func handle_input(event):

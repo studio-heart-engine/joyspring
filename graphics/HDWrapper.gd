@@ -27,10 +27,6 @@ func _process(delta):
 		set_level_text()
 	else:
 		hide_level_text()
-	if globals.curr_state == 'LevelSelect':
-		set_select_text()
-	else:
-		hide_select_text()
 	if globals.curr_state.left(6) == 'Legend':
 		set_legend_text()
 	else:
@@ -72,32 +68,6 @@ func hide_level_text():
 			child.hide()
 			child.showed = false
 
-func set_select_text():
-	show = []
-	if sub_viewport.get_child(0):
-		if sub_viewport.get_child(0).get_name() != 'LevelSelect':
-			return
-		var children = $ViewportContainer/Viewport/LevelSelect/LevelSigns.get_children()
-		for child in children:
-			if child.name.substr(0, 9) == "LevelSign":
-				var coord = child.get_node("Number").get_global_transform_with_canvas().origin
-				var path = "Text/Select" + child.name.right(9)
-				get_node(path).rect_position = coord * scaling
-				get_node(path).rect_position -= Vector2(get_node(path + '/TextureRect').rect_size.x / 2, 0)  # Center align
-				if not child. get_locked():
-					show.append('S' + child.get_name().right(9))
-		for child in $Text.get_children():
-			if child.get_name().substr(0, 6) != 'Select':
-				continue
-			if (child.get_name().substr(0, 1) + child.get_name().right(6)) in show:
-				child.show()
-			else:
-				child.hide()
-
-func hide_select_text():
-	for child in $Text.get_children():
-		if child.name.substr(0, 6) == "Select":
-			child.hide()
 
 func set_legend_text():
 	if sub_viewport.get_child(0):

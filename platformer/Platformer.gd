@@ -46,22 +46,9 @@ func _ready():
 	layers[(layer_num + 1) % 2]._ready()
 	update_shader()
 	
-	if globals.curr_state == 'LevelSelect':
-		get_node('..').size = Vector2(640, 320)
-		globals.set_bg()
-		if globals.prev_state.substr(0, 5) == 'Level' and globals.prev_state != 'LevelSelect':
-			$SignSelector.cur = int(globals.prev_state.right(5))
-			$SignSelector.start = $SignSelector.cur
-		var camera = $Camera2D
-		self.remove_child(camera)
-		get_node("LevelSigns/LevelSign" + str($SignSelector.start)).add_child(camera)
-		$SignSelector.camera = camera
-		$SignSelector.set_cur()
-		$Switch.update_time_and_bg()
-	else:
-		get_node('..').size = Vector2(400, 225)
-		update_collision()
-		update_light()
+	get_node('..').size = Vector2(400, 225)
+	update_collision()
+	update_light()
 
 func _input(event):
 	if event.is_action_pressed("swap"):
@@ -71,8 +58,6 @@ func _input(event):
 
 
 func swap_layers():
-	if globals.curr_state == 'LevelSelect':
-		return
 	layer_num = (layer_num + 1) % 2
 	var layer_name = 'Layer' + str(layer_num)
 

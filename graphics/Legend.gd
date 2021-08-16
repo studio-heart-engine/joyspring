@@ -32,7 +32,7 @@ func start():
 		var curr_level = globals.levels_completed[-1] + 1
 		curr_level = str(curr_level).pad_zeros(2)
 		if not File.new().file_exists('res://platformer/levels/Level_' + curr_level + '.tscn'):
-			SceneChanger.change_scene_to(load('res://gui/LevelSelect.tscn'))
+			SceneChanger.change_scene_to(load('res://platformer/levels/Level_50.tscn'))
 		else:
 			SceneChanger.change_scene_to(load('res://platformer/levels/Level_' + curr_level + '.tscn'))
 	elif mode == 'ending':

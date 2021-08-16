@@ -5,7 +5,7 @@ export var ON_GROUND_ACCELERATION = 7
 func enter():
 	owner.can_dash = true
 	owner.can_wall_climb = true
-	on_wall_timer.stop()
+#	on_wall_timer.stop()
 	if owner.previous_state == "fall":
 		squish_stretch_player.play("squish")
 	
@@ -27,7 +27,7 @@ func update(delta):
 		emit_signal("finished", "fall")
 	elif Input.is_action_pressed("wall") and is_near_wall():
 		if owner.get_parent().climb_enabled:
-			on_wall_timer.start()
+#			on_wall_timer.start()
 			owner.can_wall_climb = true
 			emit_signal("finished", get_wall_state())
 
