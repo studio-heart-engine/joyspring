@@ -3,13 +3,13 @@ extends "../motion.gd"
 var wall_direction
 export var INITIAL_WALL_JUMP_SPEED = 50
 
-func _ready():
-	on_wall_timer.connect("timeout", self, "on_wall_timer_timeout")
+#func _ready():
+#	on_wall_timer.connect("timeout", self, "on_wall_timer_timeout")
 
 
-func on_wall_timer_timeout():
-	owner.can_wall_climb = false
-	emit_signal("finished", "slide")
+#func on_wall_timer_timeout():
+#	owner.can_wall_climb = false
+#	emit_signal("finished", "slide")
 
 
 func enter():
@@ -22,7 +22,8 @@ func enter():
 	owner.velocity = Vector2.ZERO
 
 func exit():
-	stop_blink()
+	pass
+#	stop_blink()
 
 func update(delta):
 	owner.velocity = owner.move_and_slide_with_snap(

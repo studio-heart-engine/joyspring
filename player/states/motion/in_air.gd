@@ -10,7 +10,7 @@ func enter():
 	
 	# from coming off wall
 #	on_wall_timer.stop()
-	on_wall_timer.paused = true
+#	on_wall_timer.paused = true
 	blink_anim_player.stop()
 	player_sprite.visible = true
 	if cape != null:
@@ -44,7 +44,7 @@ func update(delta):
 		emit_signal("finished", next_state)
 	elif Input.is_action_pressed("wall") and is_near_wall():
 		if owner.get_parent().climb_enabled:
-			on_wall_timer.start()
+#			on_wall_timer.start()
 			owner.can_wall_climb = true
 			emit_signal("finished", get_wall_state())
 	
