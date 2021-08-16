@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
 [ext_resource path="res://graphics/sprites/blobs/Thorn.tscn" type="PackedScene" id=2]
@@ -21,6 +21,8 @@
 [ext_resource path="res://platformer/EndPosition.gd" type="Script" id=19]
 [ext_resource path="res://graphics/environment/evening/stalactites3.png" type="Texture" id=20]
 [ext_resource path="res://platformer/Environment.gd" type="Script" id=21]
+[ext_resource path="res://platformer/Gravel.gd" type="Script" id=22]
+[ext_resource path="res://platformer/Gravel.tscn" type="PackedScene" id=23]
 [ext_resource path="res://graphics/effects/swap_to_0.tres" type="Animation" id=24]
 [ext_resource path="res://graphics/effects/swap_to_1.tres" type="Animation" id=25]
 [ext_resource path="res://platformer/TextureTileMap.gd" type="Script" id=26]
@@ -2355,8 +2357,8 @@ position = Vector2( 133, 29 )
 rotation = -2.17755
 
 [node name="Thorn4_01" parent="Layer1/Blobs" instance=ExtResource( 2 )]
-position = Vector2( 530, 153 )
-rotation = -0.772494
+position = Vector2( 614, 37 )
+rotation = -1.72171
 shape = "4"
 
 [node name="Joys" type="Node2D" parent="Layer1"]
@@ -2371,6 +2373,17 @@ position = Vector2( 665, 121 )
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="Gravel_01" type="StaticBody2D" parent="Layer1/Gravel" instance=ExtResource( 23 )]
+position = Vector2( 544, 144 )
+collision_layer = 512
+collision_mask = 32
+script = ExtResource( 22 )
+
+[node name="Gravel_02" parent="Layer1/Gravel" instance=ExtResource( 23 )]
+position = Vector2( 528, 144 )
+collision_layer = 512
+collision_mask = 32
 
 [node name="MovingBlobs" type="Node2D" parent="Layer1"]
 __meta__ = {
