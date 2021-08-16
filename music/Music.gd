@@ -15,7 +15,8 @@ var loop_start = {
 	"Acceptance": 0.3,
 	"OutOfThinAir": 42.448,
 	"Departure": 0,
-	"LostDreams": 0
+	"LostDreams": 0,
+	"Joyspring": 0
 }
 
 func _ready():
@@ -37,25 +38,36 @@ func play(song=""):
 	current_song = $Silence
 
 	if globals.curr_state == 'LevelSelect':
-		current_song = $Title
+		if previous_song == $Joyspring:
+			current_song = $Joyspring
+		else:
+			current_song = $Title
 	elif globals.curr_state == 'LevelTemplate':
 		current_song = $Departure
 	elif globals.curr_state == 'Level_12' and globals.started_peak_zoom:
 		current_song = $Denial
 	elif globals.curr_state.substr(0, 5) == 'Level':
 		var level_index = int(globals.curr_state.right(5))
-		if level_index < 7:
-			current_song = $IntoThinAir
+		if level_index < 8:
+			current_song = $Departure
 		elif level_index < 12:
-			current_song = $Mirage
+			current_song = $IntoThinAir
 		elif level_index == 12:
 			current_song = $Silence
-		elif level_index < 30:
+		elif level_index < 24:
 			current_song = $Denial
-		elif level_index < 40:
+		elif level_index < 30:
+			current_song = $LostDreams
+		elif level_index < 35:
+			current_song = $Mirage
+		elif level_index < 39:
 			current_song = $Acceptance
-		elif level_index < 50:
+		elif level_index < 42:
+			current_song = $OutOfThinAir
+		elif level_index < 49:
 			current_song = $TheRiver
+		elif level_index <= 50:
+			current_song = $Joyspring
 		else:
 			current_song = $Silence
 	elif globals.curr_state == 'Legend-Opening':

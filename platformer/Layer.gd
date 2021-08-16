@@ -25,6 +25,7 @@ func update_shader(mode):
 			)
 			get_node('Joys/' + child.get_name() + '/Offset/Particles').material.shader = null
 			get_node('Joys/' + child.get_name() + '/Offset/AnimatedSprite/Sprite').material.shader = null
+			get_node('Joys/' + child.get_name() + '/Offset/Light2D').energy = 0.6
 		for child in $Gravel.get_children():
 			get_node('Gravel/' + child.get_name() + '/Sprite').material.shader = null
 			get_node('Gravel/' + child.get_name() + '/weak-rock-outline').material.shader = null
@@ -72,6 +73,7 @@ func update_shader(mode):
 			get_node('Joys/' + child.get_name() + '/Offset/AnimatedSprite/Sprite').material.set_shader_param(
 				'color', Color(possible_colors[globals.bg_num - 1])
 			)
+			get_node('Joys/' + child.get_name() + '/Offset/Light2D').energy = 0.2
 		for child in $Gravel.get_children():
 			get_node('Gravel/' + child.get_name() + '/Sprite').material.shader = solid_shader
 			get_node('Gravel/' + child.get_name() + '/Sprite').material.set_shader_param(
