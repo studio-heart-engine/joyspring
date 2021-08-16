@@ -8,6 +8,8 @@ onready var blob = $Path2D/PathFollow2D/Blob
 onready var blob_sprite = $Path2D/PathFollow2D/Blob/NoiseOffset/Sprite
 onready var blob_outline = $Path2D/PathFollow2D/Blob/NoiseOffset/Outline
 
+onready var Dot = preload("res://graphics/particles/pathDot.tscn")
+
 func _ready():
 	var a = randi() % 360
 	blob_sprite.rotation_degrees = a
@@ -26,6 +28,7 @@ func _ready():
 		$Path2D/PathFollow2D/Blob/NoiseOffset/Outline.light_mask = pow(2, 5)
 		$Path2D/PathFollow2D/Blob/NoiseOffset/Sprite.light_mask = pow(2, 5)
 
+	set_dots()
 	var path_len = $Path2D.curve.get_baked_length()
 	var speed = 50
 	var path_time = path_len / speed
@@ -47,3 +50,19 @@ func _process(delta):
 	
 func set_collision(val):
 	$Path2D/PathFollow2D/Blob.set_collision(val)
+
+func set_dots():
+	var path_follow = $Path2D/PathFollow2D
+	var last_offset = 0
+	while path_follow.unit_offset < 1:
+		var dot = Dot.instance()
+		dot.position = path_follow.position
+		$Dots.call_deferred('add_child', dot)
+		path_follow.offset += 10
+		
+		# Loop detection
+		if path_follow.offset - last_offset != 10:
+			break
+		last_offset = path_follow.offset
+	path_follow.unit_offset = 0
+

@@ -16,7 +16,7 @@ func _ready():
 	Events.connect("layer_swapped", self, "swap_shake")
 
 
-func _process(delta):
+func _physics_process(delta):
 	if is_shaking:
 		var damping = ease(timer.time_left / timer.wait_time, 1.0)
 		offset = Vector2(

@@ -66,6 +66,7 @@ func _ready():
 	control_container.hide()
 	$MarginContainer2.hide()
 	$MarginContainer3.hide()
+	$MarginContainer4.hide()
 	
 	$MarginContainer/VBoxContainer/Buttons/Column1/VBoxContainer/ResumeButton.focus_mode = Control.FOCUS_NONE
 	$MarginContainer/VBoxContainer/Buttons/Column1/VBoxContainer/LevelSelectButton.focus_mode = Control.FOCUS_NONE
@@ -102,6 +103,7 @@ func _on_SettingsButton_pressed():
 			control_container.hide()
 			$MarginContainer2.hide()
 			$MarginContainer3.show()
+			$MarginContainer4.hide()
 	else:
 		pause()
 
@@ -111,13 +113,22 @@ func _on_ResumeButton_pressed():
 	# Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _on_LevelSelectButton_pressed():
+	menu = 'select'
 	$Click.play()
-	if get_parent().name.substr(0, 5) == 'Level':
-		get_parent().emit_signal('level_exited')
-	PlayerData.score = 0
-	SceneChanger.change_scene_to(load("res://gui/LevelSelect.tscn"))
-	yield($"/root/SceneChanger/AnimationPlayer", "animation_finished")
-	resume()
+	if globals.curr_state.left(6) == 'Level_':
+		cur_level = int(globals.curr_state.right(6))
+		update_level()
+	button_container.hide()
+	$MarginContainer2.hide()
+	$MarginContainer4.show()
+	$MarginContainer/VBoxContainer/QuitButton.hide()
+	
+#	if get_parent().name.substr(0, 5) == 'Level':
+#		get_parent().emit_signal('level_exited')
+#	PlayerData.score = 0
+#	SceneChanger.change_scene_to(load("res://gui/LevelSelect.tscn"))
+#	yield($"/root/SceneChanger/AnimationPlayer", "animation_finished")
+#	resume()
 
 func _on_ControlsButton_pressed():
 	$Click.play()
@@ -127,6 +138,7 @@ func _on_ControlsButton_pressed():
 	$MarginContainer2.hide()
 	control_container.show()
 	$MarginContainer3.hide()
+	$MarginContainer4.hide()
 #	$MarginContainer/VBoxContainer/HBoxContainer.hide()
 #	$MarginContainer/VBoxContainer/ControlMenu.show()
 
@@ -162,8 +174,11 @@ func change_bind(key, value):
 
 func pause():
 	$MarginContainer.show()
+	button_container.show()
 	$MarginContainer3.show()
 	$MarginContainer2.hide()
+	$MarginContainer4.hide()
+	$MarginContainer/VBoxContainer/QuitButton.show()
 	get_tree().paused = true
 	$MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/ResetButton.text = 'Reset Data'
 	$MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/ResetButton.set('custom_colors/font_color', Color('ffffff'))
@@ -173,6 +188,7 @@ func resume():
 	$MarginContainer.hide()
 	$MarginContainer2.hide()
 	$MarginContainer3.hide()
+	$MarginContainer4.hide()
 	get_tree().paused = false
 
 func _on_QuitButton_pressed():
@@ -222,3 +238,28 @@ func _on_VolumeDownButton_pressed():
 	volume_label.set_bbcode("[color=#ffce43]" + "Volume".left(globals.master_volume) + "[/color]" + "Volume".right(globals.master_volume))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear2db(float(globals.master_volume) / 6))
 
+
+var cur_level = 1
+
+func _on_LevelDownButton_pressed():
+	if cur_level > 1:
+		$Tick.play()
+		cur_level -= 1
+		update_level()
+
+func _on_LevelUpButton_pressed():
+	if cur_level < globals.total_levels:
+		$Tick.play()
+		cur_level += 1
+		update_level()
+
+func _on_LevelButton_pressed():
+	menu = 'main'
+	$Click.play()
+	var level = load('res://platformer/levels/Level_' + ('%02d' % cur_level) + '.tscn')
+	SceneChanger.change_scene_to(level)
+	resume()
+
+func update_level():
+	$MarginContainer4/VBoxContainer/HBoxContainer/LevelButton.text = str(cur_level).pad_zeros(2)
+	$MarginContainer4/VBoxContainer/HBoxContainer2/TextureRect.texture = load('res://platformer/levelSnapshots/level_' + str(cur_level) + '.png')

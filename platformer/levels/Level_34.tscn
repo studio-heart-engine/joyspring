@@ -1,0 +1,2841 @@
+[gd_scene load_steps=47 format=2]
+
+[ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
+[ext_resource path="res://graphics/sprites/blobs/Thorn.tscn" type="PackedScene" id=2]
+[ext_resource path="res://platformer/Layer.gd" type="Script" id=3]
+[ext_resource path="res://graphics/environment/evening/stalactites4.png" type="Texture" id=4]
+[ext_resource path="res://graphics/sprites/blobs/Blob.tscn" type="PackedScene" id=5]
+[ext_resource path="res://graphics/environment/evening/stalactites2.png" type="Texture" id=6]
+[ext_resource path="res://graphics/environment/evening/stalactites3.png" type="Texture" id=7]
+[ext_resource path="res://graphics/environment/evening/stalactites1.png" type="Texture" id=8]
+[ext_resource path="res://graphics/environment/evening/rocks2.png" type="Texture" id=9]
+[ext_resource path="res://graphics/tilesets/tileset.tres" type="TileSet" id=10]
+[ext_resource path="res://player/Player.tscn" type="PackedScene" id=11]
+[ext_resource path="res://graphics/effects/circle-transition.png" type="Texture" id=12]
+[ext_resource path="res://player/Cape.tscn" type="PackedScene" id=13]
+[ext_resource path="res://platformer/TileMap.gd" type="Script" id=14]
+[ext_resource path="res://graphics/tilesets/blobs_tileset.tres" type="TileSet" id=15]
+[ext_resource path="res://platformer/BlobTileMap.gd" type="Script" id=16]
+[ext_resource path="res://platformer/Particles2D.gd" type="Script" id=17]
+[ext_resource path="res://graphics/effects/white-radial-gradient.png" type="Texture" id=18]
+[ext_resource path="res://platformer/EndPosition.gd" type="Script" id=19]
+[ext_resource path="res://graphics/environment/evening/rocks3.png" type="Texture" id=20]
+[ext_resource path="res://platformer/Environment.gd" type="Script" id=21]
+[ext_resource path="res://graphics/environment/evening/bushes1.png" type="Texture" id=23]
+[ext_resource path="res://graphics/effects/swap_to_0.tres" type="Animation" id=24]
+[ext_resource path="res://graphics/effects/swap_to_1.tres" type="Animation" id=25]
+[ext_resource path="res://platformer/TextureTileMap.gd" type="Script" id=26]
+[ext_resource path="res://music/effects/swap.wav" type="AudioStream" id=27]
+[ext_resource path="res://platformer/Gravel.tscn" type="PackedScene" id=29]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform sampler2D mask;
+uniform float cutoff: hint_range(0f, 1f);
+uniform float smooth_size: hint_range(0f, 1f);
+
+void fragment() {
+	float value = texture(mask, UV).r;
+	float alpha = smoothstep(cutoff + smooth_size, cutoff, value * (1f - smooth_size) + smooth_size);
+	COLOR = vec4(COLOR.rgb, alpha);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/cutoff = 0.0
+shader_param/smooth_size = 0.1
+shader_param/mask = ExtResource( 12 )
+
+[sub_resource type="ShaderMaterial" id=3]
+
+[sub_resource type="ShaderMaterial" id=4]
+
+[sub_resource type="ShaderMaterial" id=5]
+
+[sub_resource type="ShaderMaterial" id=6]
+
+[sub_resource type="ShaderMaterial" id=7]
+
+[sub_resource type="ShaderMaterial" id=8]
+
+[sub_resource type="ShaderMaterial" id=9]
+
+[sub_resource type="ShaderMaterial" id=10]
+
+[sub_resource type="ShaderMaterial" id=11]
+
+[sub_resource type="ShaderMaterial" id=12]
+
+[sub_resource type="ShaderMaterial" id=13]
+
+[sub_resource type="Gradient" id=14]
+offsets = PoolRealArray( 0, 0.305011, 0.640523, 1 )
+colors = PoolColorArray( 0.27451, 0.27451, 0.27451, 0, 0.470588, 0.470588, 0.470588, 1, 0.470588, 0.470588, 0.470588, 1, 0.27451, 0.27451, 0.27451, 0 )
+
+[sub_resource type="GradientTexture" id=15]
+gradient = SubResource( 14 )
+
+[sub_resource type="ParticlesMaterial" id=16]
+emission_shape = 2
+emission_box_extents = Vector3( 160, 90, 1 )
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 10, 0 )
+initial_velocity = 8.0
+angular_velocity = 4.57384e-41
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color_ramp = SubResource( 15 )
+
+[sub_resource type="Gradient" id=17]
+offsets = PoolRealArray( 0, 0.30719, 0.359477, 0.381264, 0.405229, 0.43573, 1 )
+colors = PoolColorArray( 0.388235, 0.388235, 0.388235, 0, 1, 1, 1, 0.109804, 0.996078, 0.996078, 0.996078, 0.137255, 0.992157, 0.992157, 0.992157, 0.0980392, 0.988235, 0.988235, 0.988235, 0.12549, 0.984314, 0.984314, 0.984314, 0.0941176, 0.937255, 0.937255, 0.937255, 0 )
+
+[sub_resource type="GradientTexture" id=18]
+gradient = SubResource( 17 )
+
+[sub_resource type="ParticlesMaterial" id=19]
+emission_shape = 2
+emission_box_extents = Vector3( 160, 90, 1 )
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 10.0
+angular_velocity = -1.0842e-19
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 0.05
+scale_random = 0.05
+color_ramp = SubResource( 18 )
+
+[node name="Level_34" type="Node2D"]
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Player" parent="." instance=ExtResource( 11 )]
+light_mask = 1
+position = Vector2( 40, 144 )
+z_index = 100
+
+[node name="Light2D" parent="Player" index="2"]
+texture_scale = 0.05
+
+[node name="Camera" parent="Player" index="3"]
+visible = true
+limit_top = 0
+limit_right = 768
+limit_bottom = 336
+
+[node name="Hitbox" parent="Player" index="6"]
+collision_layer = 2147483649
+collision_mask = 30
+
+[node name="ColorRect" parent="Player/RespawnTransition" index="0"]
+material = SubResource( 2 )
+
+[node name="Cape" parent="Player" instance=ExtResource( 13 )]
+
+[node name="Layer0" type="Node2D" parent="."]
+z_index = 10
+script = ExtResource( 3 )
+
+[node name="Blebs" type="Node2D" parent="Layer0"]
+
+[node name="Blobs" type="Node2D" parent="Layer0"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Blob1_35" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 224, 352 )
+shape = "1"
+
+[node name="Blob1_36" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 216, 352 )
+shape = "1"
+
+[node name="Blob1_37" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 208, 352 )
+shape = "1"
+
+[node name="Blob1_38" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 200, 352 )
+shape = "1"
+
+[node name="Blob1_39" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 192, 352 )
+shape = "1"
+
+[node name="Blob1_40" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 184, 352 )
+shape = "1"
+
+[node name="Blob1_41" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 176, 352 )
+shape = "1"
+
+[node name="Blob1_42" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 168, 352 )
+shape = "1"
+
+[node name="Blob1_43" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 160, 352 )
+shape = "1"
+
+[node name="Blob1_44" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 152, 352 )
+shape = "1"
+
+[node name="Blob1_45" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 144, 352 )
+shape = "1"
+
+[node name="Blob1_46" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 136, 352 )
+shape = "1"
+
+[node name="Blob1_47" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 128, 352 )
+shape = "1"
+
+[node name="Blob1_48" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 120, 352 )
+shape = "1"
+
+[node name="Blob1_49" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 112, 352 )
+shape = "1"
+
+[node name="Blob1_50" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 344, 352 )
+shape = "1"
+
+[node name="Blob1_51" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 336, 352 )
+shape = "1"
+
+[node name="Blob1_52" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 328, 352 )
+shape = "1"
+
+[node name="Blob1_53" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 320, 352 )
+shape = "1"
+
+[node name="Blob1_54" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 312, 352 )
+shape = "1"
+
+[node name="Blob1_55" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 304, 352 )
+shape = "1"
+
+[node name="Blob1_56" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 296, 352 )
+shape = "1"
+
+[node name="Blob1_57" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 288, 352 )
+shape = "1"
+
+[node name="Blob1_58" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 280, 352 )
+shape = "1"
+
+[node name="Blob1_59" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 272, 352 )
+shape = "1"
+
+[node name="Blob1_60" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 264, 352 )
+shape = "1"
+
+[node name="Blob1_61" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 256, 352 )
+shape = "1"
+
+[node name="Blob1_62" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 248, 352 )
+shape = "1"
+
+[node name="Blob1_63" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 240, 352 )
+shape = "1"
+
+[node name="Blob1_64" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 232, 352 )
+shape = "1"
+
+[node name="Blob1_65" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 464, 352 )
+shape = "1"
+
+[node name="Blob1_66" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 456, 352 )
+shape = "1"
+
+[node name="Blob1_67" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 448, 352 )
+shape = "1"
+
+[node name="Blob1_68" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 440, 352 )
+shape = "1"
+
+[node name="Blob1_69" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 432, 352 )
+shape = "1"
+
+[node name="Blob1_70" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 424, 352 )
+shape = "1"
+
+[node name="Blob1_71" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 416, 352 )
+shape = "1"
+
+[node name="Blob1_72" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 408, 352 )
+shape = "1"
+
+[node name="Blob1_73" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 400, 352 )
+shape = "1"
+
+[node name="Blob1_74" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 392, 352 )
+shape = "1"
+
+[node name="Blob1_75" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 384, 352 )
+shape = "1"
+
+[node name="Blob1_76" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 376, 352 )
+shape = "1"
+
+[node name="Blob1_77" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 368, 352 )
+shape = "1"
+
+[node name="Blob1_78" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 360, 352 )
+shape = "1"
+
+[node name="Blob1_79" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 352, 352 )
+shape = "1"
+
+[node name="Blob1_80" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 520, 352 )
+shape = "1"
+
+[node name="Blob1_81" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 512, 352 )
+shape = "1"
+
+[node name="Blob1_82" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 504, 352 )
+shape = "1"
+
+[node name="Blob1_83" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 496, 352 )
+shape = "1"
+
+[node name="Blob1_84" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 488, 352 )
+shape = "1"
+
+[node name="Blob1_85" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 480, 352 )
+shape = "1"
+
+[node name="Blob1_86" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 472, 352 )
+shape = "1"
+
+[node name="Blob1_89" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 624, 352 )
+shape = "1"
+
+[node name="Blob1_90" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 616, 352 )
+shape = "1"
+
+[node name="Blob1_91" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 608, 352 )
+shape = "1"
+
+[node name="Blob1_92" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 600, 352 )
+shape = "1"
+
+[node name="Blob1_93" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 592, 352 )
+shape = "1"
+
+[node name="Blob1_94" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 584, 352 )
+shape = "1"
+
+[node name="Blob1_95" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 576, 352 )
+shape = "1"
+
+[node name="Blob1_96" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 568, 352 )
+shape = "1"
+
+[node name="Blob1_97" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 560, 352 )
+shape = "1"
+
+[node name="Blob1_102" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 696, 352 )
+shape = "1"
+
+[node name="Blob1_103" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 688, 352 )
+shape = "1"
+
+[node name="Blob1_104" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 680, 352 )
+shape = "1"
+
+[node name="Blob1_105" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 672, 352 )
+shape = "1"
+
+[node name="Blob1_106" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 664, 352 )
+shape = "1"
+
+[node name="Blob1_107" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 656, 352 )
+shape = "1"
+
+[node name="Blob1_108" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 648, 352 )
+shape = "1"
+
+[node name="Blob1_109" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 640, 352 )
+shape = "1"
+
+[node name="Blob1_110" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 632, 352 )
+shape = "1"
+
+[node name="Blob1_98" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 552, 352 )
+shape = "1"
+
+[node name="Blob1_99" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 544, 352 )
+shape = "1"
+
+[node name="Blob1_100" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 536, 352 )
+shape = "1"
+
+[node name="Blob1_101" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 528, 352 )
+shape = "1"
+
+[node name="Blob1_01" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 161, 199 )
+shape = "1"
+
+[node name="Blob1_02" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 217, 178 )
+shape = "1"
+
+[node name="Blob1_03" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 222, 172 )
+shape = "1"
+
+[node name="Blob1_04" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 244, 145 )
+shape = "1"
+
+[node name="Blob1_05" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 250, 140 )
+shape = "1"
+
+[node name="Blob1_06" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 272, 131 )
+shape = "1"
+
+[node name="Blob1_07" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 279, 123 )
+shape = "1"
+
+[node name="Blob1_08" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 284, 102 )
+shape = "1"
+
+[node name="Blob1_09" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 286, 93 )
+shape = "1"
+
+[node name="Blob1_10" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 293, 86 )
+shape = "1"
+
+[node name="Blob1_11" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 307, 73 )
+shape = "1"
+
+[node name="Blob1_12" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 313, 65 )
+shape = "1"
+
+[node name="Blob1_13" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 312, 41 )
+shape = "1"
+
+[node name="Blob1_14" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 308, 33 )
+shape = "1"
+
+[node name="Blob1_15" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 306, 14 )
+shape = "1"
+
+[node name="Blob1_16" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 310, 7 )
+shape = "1"
+
+[node name="Blob1_17" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 315, -10 )
+shape = "1"
+
+[node name="Blob1_18" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 317, 70 )
+shape = "1"
+
+[node name="Blob1_19" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 340, 105 )
+shape = "1"
+
+[node name="Blob1_20" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 340, 117 )
+shape = "1"
+
+[node name="Blob1_21" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 334, 133 )
+shape = "1"
+
+[node name="Blob1_22" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 330, 158 )
+shape = "1"
+
+[node name="Blob1_23" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 331, 164 )
+shape = "1"
+
+[node name="Blob1_24" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 344, 192 )
+shape = "1"
+
+[node name="Blob1_25" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 352, 198 )
+shape = "1"
+
+[node name="Blob1_26" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 392, 204 )
+shape = "1"
+
+[node name="Blob1_27" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 394, 210 )
+shape = "1"
+
+[node name="Blob1_28" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 365, 243 )
+shape = "1"
+
+[node name="Blob1_29" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 358, 249 )
+shape = "1"
+
+[node name="Blob1_30" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 350, 276 )
+shape = "1"
+
+[node name="Blob1_31" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 376, 296 )
+shape = "1"
+
+[node name="Blob1_32" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 386, 302 )
+shape = "1"
+
+[node name="Blob1_33" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 435, 294 )
+shape = "1"
+
+[node name="Blob1_34" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 443, 289 )
+shape = "1"
+
+[node name="Blob1_87" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 476, 279 )
+shape = "1"
+
+[node name="Blob1_88" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 485, 283 )
+shape = "1"
+
+[node name="Blob1_111" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 518, 310 )
+shape = "1"
+
+[node name="Blob1_112" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 520, 316 )
+shape = "1"
+
+[node name="Blob1_113" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 518, 336 )
+shape = "1"
+
+[node name="Blob1_114" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 513, 344 )
+shape = "1"
+
+[node name="Blob1_115" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 401, 202 )
+shape = "1"
+
+[node name="Blob1_116" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 432, 190 )
+shape = "1"
+
+[node name="Blob1_117" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 442, 192 )
+shape = "1"
+
+[node name="Blob1_118" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 490, 187 )
+shape = "1"
+
+[node name="Blob1_119" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 517, 173 )
+shape = "1"
+
+[node name="Blob1_120" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 543, 164 )
+shape = "1"
+
+[node name="Blob1_121" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 574, 185 )
+shape = "1"
+
+[node name="Blob1_122" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 581, 186 )
+shape = "1"
+
+[node name="Blob1_123" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 605, 174 )
+shape = "1"
+
+[node name="Blob1_124" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 618, 158 )
+shape = "1"
+
+[node name="Blob1_125" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 633, 151 )
+shape = "1"
+
+[node name="Blob1_126" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 644, 155 )
+shape = "1"
+
+[node name="Blob1_127" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 670, 162 )
+shape = "1"
+
+[node name="Blob1_128" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 675, 159 )
+shape = "1"
+
+[node name="Blob1_129" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 701, 156 )
+shape = "1"
+
+[node name="Blob1_130" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 728, 171 )
+shape = "1"
+
+[node name="Blob1_131" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 747, 181 )
+shape = "1"
+
+[node name="Blob1_132" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 764, 183 )
+shape = "1"
+
+[node name="Blob1_133" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 770, 182 )
+shape = "1"
+
+[node name="Blob1_134" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 777, 177 )
+shape = "1"
+
+[node name="Blob1_135" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 364, 83 )
+shape = "1"
+
+[node name="Blob1_136" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 371, 83 )
+shape = "1"
+
+[node name="Blob1_137" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 375, 72 )
+shape = "1"
+
+[node name="Blob1_138" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 400, 55 )
+shape = "1"
+
+[node name="Blob1_139" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 418, 47 )
+shape = "1"
+
+[node name="Blob1_140" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 427, 48 )
+shape = "1"
+
+[node name="Blob1_141" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 475, 54 )
+shape = "1"
+
+[node name="Blob1_142" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 475, 60 )
+shape = "1"
+
+[node name="Blob1_150" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 496, 74 )
+shape = "1"
+
+[node name="Blob1_151" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 312, 49 )
+shape = "1"
+
+[node name="Blob1_152" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 282, 107 )
+shape = "1"
+
+[node name="Blob1_153" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 242, 152 )
+shape = "1"
+
+[node name="Blob1_154" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 231, 169 )
+shape = "1"
+
+[node name="Blob1_155" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 213, 183 )
+shape = "1"
+
+[node name="Blob1_156" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 172, 202 )
+shape = "1"
+
+[node name="Blob1_157" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 180, 205 )
+shape = "1"
+
+[node name="Blob1_158" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 212, 194 )
+shape = "1"
+
+[node name="Blob1_159" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 197, 206 )
+shape = "1"
+
+[node name="Blob1_160" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 326, 149 )
+shape = "1"
+
+[node name="Blob1_161" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 324, 74 )
+shape = "1"
+
+[node name="Blob1_162" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 334, 84 )
+shape = "1"
+
+[node name="Blob1_163" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 339, 92 )
+shape = "1"
+
+[node name="Blob1_164" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 339, 95 )
+shape = "1"
+
+[node name="Blob1_165" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 357, 207 )
+shape = "1"
+
+[node name="Blob1_166" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 358, 217 )
+shape = "1"
+
+[node name="Blob1_167" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 367, 232 )
+shape = "1"
+
+[node name="Blob1_168" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 355, 256 )
+shape = "1"
+
+[node name="Blob1_169" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 353, 285 )
+shape = "1"
+
+[node name="Blob1_170" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 365, 295 )
+shape = "1"
+
+[node name="Blob1_171" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 394, 306 )
+shape = "1"
+
+[node name="Blob1_172" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 429, 303 )
+shape = "1"
+
+[node name="Blob1_173" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 413, 310 )
+shape = "1"
+
+[node name="Blob1_174" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 448, 284 )
+shape = "1"
+
+[node name="Blob1_175" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 459, 276 )
+shape = "1"
+
+[node name="Blob1_176" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 494, 284 )
+shape = "1"
+
+[node name="Blob1_177" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 507, 296 )
+shape = "1"
+
+[node name="Blob1_178" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 513, 305 )
+shape = "1"
+
+[node name="Blob1_179" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 520, 327 )
+shape = "1"
+
+[node name="Blob1_180" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 452, 198 )
+shape = "1"
+
+[node name="Blob1_181" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 474, 199 )
+shape = "1"
+
+[node name="Blob1_182" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 482, 194 )
+shape = "1"
+
+[node name="Blob1_183" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 524, 168 )
+shape = "1"
+
+[node name="Blob1_184" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 533, 164 )
+shape = "1"
+
+[node name="Blob1_185" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 591, 187 )
+shape = "1"
+
+[node name="Blob1_186" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 660, 163 )
+shape = "1"
+
+[node name="Blob1_187" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 707, 159 )
+shape = "1"
+
+[node name="Blob1_188" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 734, 177 )
+shape = "1"
+
+[node name="Blob1_189" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 695, 155 )
+shape = "1"
+
+[node name="Blob1_190" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 468, 51 )
+shape = "1"
+
+[node name="Blob1_191" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 460, 44 )
+shape = "1"
+
+[node name="Blob1_192" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 436, 43 )
+shape = "1"
+
+[node name="Blob1_193" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 383, 66 )
+shape = "1"
+
+[node name="Blob1_194" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 503, 86 )
+shape = "1"
+
+[node name="Blob1_195" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 529, 98 )
+shape = "1"
+
+[node name="Blob1_196" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 522, 96 )
+shape = "1"
+
+[node name="Blob1_197" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 548, 114 )
+shape = "1"
+
+[node name="Blob1_198" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 565, 123 )
+shape = "1"
+
+[node name="Blob1_143" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 503, 80 )
+shape = "1"
+
+[node name="Blob1_144" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 538, 101 )
+shape = "1"
+
+[node name="Blob1_145" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 544, 109 )
+shape = "1"
+
+[node name="Blob1_146" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 576, 123 )
+shape = "1"
+
+[node name="Blob1_147" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 603, 133 )
+shape = "1"
+
+[node name="Blob1_148" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 612, 137 )
+shape = "1"
+
+[node name="Blob1_149" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 627, 150 )
+shape = "1"
+
+[node name="Blob2_01" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 188, 206 )
+shape = "2"
+
+[node name="Blob2_02" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 207, 201 )
+shape = "2"
+
+[node name="Blob2_03" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 239, 162 )
+shape = "2"
+
+[node name="Blob2_04" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 258, 140 )
+shape = "2"
+
+[node name="Blob2_05" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 263, 136 )
+shape = "2"
+
+[node name="Blob2_06" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 280, 115 )
+shape = "2"
+
+[node name="Blob2_07" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 299, 79 )
+shape = "2"
+
+[node name="Blob2_08" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 314, 56 )
+shape = "2"
+
+[node name="Blob2_09" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 306, 23 )
+shape = "2"
+
+[node name="Blob2_10" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 315, -1 )
+shape = "2"
+
+[node name="Blob2_11" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 326, 79 )
+shape = "2"
+
+[node name="Blob2_12" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 340, 111 )
+shape = "2"
+
+[node name="Blob2_13" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 337, 124 )
+shape = "2"
+
+[node name="Blob2_14" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 329, 141 )
+shape = "2"
+
+[node name="Blob2_15" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 332, 172 )
+shape = "2"
+
+[node name="Blob2_16" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 334, 178 )
+shape = "2"
+
+[node name="Blob2_17" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 338, 185 )
+shape = "2"
+
+[node name="Blob2_18" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 362, 225 )
+shape = "2"
+
+[node name="Blob2_19" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 352, 263 )
+shape = "2"
+
+[node name="Blob2_20" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 351, 267 )
+shape = "2"
+
+[node name="Blob2_21" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 357, 293 )
+shape = "2"
+
+[node name="Blob2_22" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 404, 308 )
+shape = "2"
+
+[node name="Blob2_23" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 421, 308 )
+shape = "2"
+
+[node name="Blob2_24" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 453, 278 )
+shape = "2"
+
+[node name="Blob2_25" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 466, 279 )
+shape = "2"
+
+[node name="Blob2_26" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 500, 290 )
+shape = "2"
+
+[node name="Blob2_27" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 522, 321 )
+shape = "2"
+
+[node name="Blob2_28" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 385, 205 )
+shape = "2"
+
+[node name="Blob2_29" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 378, 205 )
+shape = "2"
+
+[node name="Blob2_30" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 372, 208 )
+shape = "2"
+
+[node name="Blob2_31" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 365, 207 )
+shape = "2"
+
+[node name="Blob2_32" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 410, 202 )
+shape = "2"
+
+[node name="Blob2_33" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 414, 197 )
+shape = "2"
+
+[node name="Blob2_34" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 425, 192 )
+shape = "2"
+
+[node name="Blob2_35" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 420, 196 )
+shape = "2"
+
+[node name="Blob2_36" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 458, 201 )
+shape = "2"
+
+[node name="Blob2_37" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 465, 203 )
+shape = "2"
+
+[node name="Blob2_38" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 496, 183 )
+shape = "2"
+
+[node name="Blob2_39" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 500, 183 )
+shape = "2"
+
+[node name="Blob2_40" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 510, 177 )
+shape = "2"
+
+[node name="Blob2_41" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 504, 180 )
+shape = "2"
+
+[node name="Blob2_42" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 548, 168 )
+shape = "2"
+
+[node name="Blob2_43" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 551, 173 )
+shape = "2"
+
+[node name="Blob2_44" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 569, 183 )
+shape = "2"
+
+[node name="Blob2_45" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 563, 181 )
+shape = "2"
+
+[node name="Blob2_46" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 556, 178 )
+shape = "2"
+
+[node name="Blob2_47" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 599, 182 )
+shape = "2"
+
+[node name="Blob2_48" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 613, 168 )
+shape = "2"
+
+[node name="Blob2_49" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 624, 155 )
+shape = "2"
+
+[node name="Blob2_50" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 620, 144 )
+shape = "2"
+
+[node name="Blob2_51" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 598, 133 )
+shape = "2"
+
+[node name="Blob2_52" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 590, 132 )
+shape = "2"
+
+[node name="Blob2_53" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 583, 126 )
+shape = "2"
+
+[node name="Blob2_54" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 556, 120 )
+shape = "2"
+
+[node name="Blob2_55" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 515, 94 )
+shape = "2"
+
+[node name="Blob2_56" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 512, 90 )
+shape = "2"
+
+[node name="Blob2_57" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 490, 71 )
+shape = "2"
+
+[node name="Blob2_58" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 483, 64 )
+shape = "2"
+
+[node name="Blob2_59" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 453, 46 )
+shape = "2"
+
+[node name="Blob2_60" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 445, 44 )
+shape = "2"
+
+[node name="Blob2_61" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 413, 50 )
+shape = "2"
+
+[node name="Blob2_62" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 409, 53 )
+shape = "2"
+
+[node name="Blob2_63" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 396, 59 )
+shape = "2"
+
+[node name="Blob2_64" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 389, 63 )
+shape = "2"
+
+[node name="Blob2_65" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 375, 79 )
+shape = "2"
+
+[node name="Blob2_66" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 357, 87 )
+shape = "2"
+
+[node name="Blob2_67" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 350, 87 )
+shape = "2"
+
+[node name="Blob2_68" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 346, 89 )
+shape = "2"
+
+[node name="Blob2_69" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 651, 159 )
+shape = "2"
+
+[node name="Blob2_70" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 637, 152 )
+shape = "2"
+
+[node name="Blob2_71" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 683, 154 )
+shape = "2"
+
+[node name="Blob2_72" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 686, 153 )
+shape = "2"
+
+[node name="Blob2_73" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 711, 163 )
+shape = "2"
+
+[node name="Blob2_74" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 720, 168 )
+shape = "2"
+
+[node name="Blob2_75" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 738, 177 )
+shape = "2"
+
+[node name="Blob2_76" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 755, 182 )
+shape = "2"
+
+[node name="Blob3_01" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 161, 205 )
+shape = "3"
+
+[node name="Blob4_01" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 163, 193 )
+shape = "4"
+
+[node name="Blob5_01" parent="Layer0/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 342, 85 )
+shape = "5"
+
+[node name="Thorn1_01" parent="Layer0/Blobs" instance=ExtResource( 2 )]
+position = Vector2( 527, 304 )
+rotation = 0.823822
+
+[node name="Thorn2_01" parent="Layer0/Blobs" instance=ExtResource( 2 )]
+position = Vector2( 213, 164 )
+rotation = -0.979963
+shape = "2"
+
+[node name="Thorn3_01" parent="Layer0/Blobs" instance=ExtResource( 2 )]
+position = Vector2( 525, 157 )
+rotation = -1.041
+shape = "3"
+
+[node name="Thorn4_01" parent="Layer0/Blobs" instance=ExtResource( 2 )]
+position = Vector2( 352, 124 )
+rotation = 1.74635
+shape = "4"
+
+[node name="Joys" type="Node2D" parent="Layer0"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Gravel" type="Node2D" parent="Layer0"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Gravel_01" parent="Layer0/Gravel" instance=ExtResource( 29 )]
+position = Vector2( 424, 176 )
+
+[node name="Gravel_02" parent="Layer0/Gravel" instance=ExtResource( 29 )]
+position = Vector2( 440, 176 )
+
+[node name="Gravel_03" parent="Layer0/Gravel" instance=ExtResource( 29 )]
+position = Vector2( 496, 272 )
+
+[node name="MovingBlobs" type="Node2D" parent="Layer0"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="MovingPlatforms" type="Node2D" parent="Layer0"]
+z_index = 1
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="TileMap" type="TileMap" parent="Layer0"]
+visible = false
+modulate = Color( 0, 0, 0, 1 )
+material = SubResource( 3 )
+z_index = 1
+tile_set = ExtResource( 10 )
+cell_size = Vector2( 8, 8 )
+cell_quadrant_size = 2
+collision_layer = 8
+collision_mask = 19
+format = 1
+tile_data = PoolIntArray( -65538, 0, 0, -65537, 0, 0, -131072, 0, 0, -131071, 0, 0, -131070, 0, 0, -131069, 0, 0, -131068, 0, 0, -131067, 0, 0, -131066, 0, 0, -131065, 0, 0, -131064, 0, 0, -131063, 0, 0, -131062, 0, 0, -131061, 0, 0, -131060, 0, 0, -131059, 0, 0, -131058, 0, 0, -131057, 0, 0, -131056, 0, 0, -131055, 0, 0, -131054, 0, 0, -131053, 0, 0, -131052, 0, 0, -131051, 0, 0, -131050, 0, 0, -131049, 0, 0, -131048, 0, 0, -131047, 0, 0, -131046, 0, 0, -131045, 0, 0, -131044, 0, 0, -131043, 0, 0, -131042, 0, 0, -131041, 0, 0, -131040, 0, 0, -131039, 0, 0, -131038, 0, 0, -131037, 0, 0, -131036, 0, 0, -131035, 0, 0, -131034, 0, 0, -131033, 0, 0, -131032, 0, 0, -131031, 0, 0, -131030, 0, 0, -131029, 0, 0, -131028, 0, 0, -131027, 0, 0, -131026, 0, 0, -131025, 0, 0, -131024, 0, 0, -131023, 0, 0, -131022, 0, 0, -131021, 0, 0, -131020, 0, 0, -131019, 0, 0, -131018, 0, 0, -131017, 0, 0, -131016, 0, 0, -131015, 0, 0, -131014, 0, 0, -131013, 0, 0, -131012, 0, 0, -131011, 0, 0, -131010, 0, 0, -131009, 0, 0, -131008, 0, 0, -131007, 0, 0, -131006, 0, 0, -131005, 0, 0, -131004, 0, 0, -131003, 0, 0, -131002, 0, 0, -131001, 0, 0, -131000, 0, 0, -130999, 0, 0, -130998, 0, 0, -130997, 0, 0, -130996, 0, 0, -130995, 0, 0, -130994, 0, 0, -130993, 0, 0, -130992, 0, 0, -130991, 0, 0, -130990, 0, 0, -130989, 0, 0, -130988, 0, 0, -130987, 0, 0, -130986, 0, 0, -130985, 0, 0, -130984, 0, 0, -130983, 0, 0, -130982, 0, 0, -130981, 0, 0, -130980, 0, 0, -130979, 0, 0, -130978, 0, 0, -130977, 0, 0, -130976, 0, 0, -130975, 0, 0, -2, 0, 0, -65439, 0, 0, 65534, 0, 0, 97, 0, 0, 131070, 0, 0, 65633, 0, 0, 196606, 0, 0, 131169, 0, 0, 262142, 0, 0, 196705, 0, 0, 327678, 0, 0, 262241, 0, 0, 393214, 0, 0, 327777, 0, 0, 458750, 0, 0, 393313, 0, 0, 524286, 0, 0, 458849, 0, 0, 589822, 0, 0, 524385, 0, 0, 655358, 0, 0, 589921, 0, 0, 720894, 0, 0, 655457, 0, 0, 786430, 0, 0, 720993, 0, 0, 851966, 0, 0, 786529, 0, 0, 917502, 0, 0, 852065, 0, 0, 983038, 0, 0, 917601, 0, 0, 1048574, 0, 0, 983137, 0, 0, 1114110, 0, 0, 1048673, 0, 0, 1179646, 0, 0, 1114209, 0, 0, 1245182, 0, 262145, 1245183, 0, 1, 1179648, 0, 0, 1179649, 0, 65537, 1179650, 0, 65537, 1179651, 0, 196609, 1179652, 0, 65536, 1179653, 0, 1, 1179654, 0, 131072, 1179655, 0, 196608, 1179656, 0, 327682, 1179745, 0, 0, 1310718, 0, 131078, 1310719, 0, 8, 1245184, 0, 8, 1245185, 0, 8, 1245186, 0, 8, 1245187, 0, 393224, 1245188, 0, 8, 1245189, 0, 8, 1245190, 0, 8, 1245191, 0, 8, 1245192, 0, 65541, 1245281, 0, 0, 1376254, 0, 131076, 1376255, 0, 8, 1310720, 0, 8, 1310721, 0, 8, 1310722, 0, 8, 1310723, 0, 8, 1310724, 0, 8, 1310725, 0, 8, 1310726, 0, 8, 1310727, 0, 8, 1310728, 0, 393221, 1310729, 0, 65537, 1310730, 0, 131072, 1310731, 0, 196608, 1310732, 0, 65537, 1310733, 0, 65537, 1310734, 0, 0, 1310735, 0, 131073, 1310736, 0, 196609, 1310737, 0, 131072, 1310738, 0, 131072, 1310739, 0, 262146, 1310817, 0, 0, 1441790, 0, 196613, 1441791, 0, 8, 1376256, 0, 8, 1376257, 0, 458760, 1376258, 0, 8, 1376259, 0, 8, 1376260, 0, 8, 1376261, 0, 8, 1376262, 0, 8, 1376263, 0, 8, 1376264, 0, 8, 1376265, 0, 8, 1376266, 0, 8, 1376267, 0, 8, 1376268, 0, 8, 1376269, 0, 8, 1376270, 0, 131081, 1376271, 0, 8, 1376272, 0, 8, 1376273, 0, 8, 1376274, 0, 8, 1376275, 0, 7, 1376353, 0, 0, 1507326, 0, 131076, 1507327, 0, 8, 1441792, 0, 8, 1441793, 0, 8, 1441794, 0, 8, 1441795, 0, 458761, 1441796, 0, 8, 1441797, 0, 8, 1441798, 0, 8, 1441799, 0, 8, 1441800, 0, 8, 1441801, 0, 131081, 1441802, 0, 327689, 1441803, 0, 8, 1441804, 0, 8, 1441805, 0, 8, 1441806, 0, 8, 1441807, 0, 8, 1441808, 0, 8, 1441809, 0, 8, 1441810, 0, 8, 1441811, 0, 65542, 1441889, 0, 0, 1572862, 0, 196615, 1572863, 0, 8, 1507328, 0, 262153, 1507329, 0, 131081, 1507330, 0, 196616, 1507331, 0, 458760, 1507332, 0, 8, 1507333, 0, 8, 1507334, 0, 8, 1507335, 0, 8, 1507336, 0, 8, 1507337, 0, 8, 1507338, 0, 8, 1507339, 0, 8, 1507340, 0, 8, 1507341, 0, 8, 1507342, 0, 8, 1507343, 0, 8, 1507344, 0, 8, 1507345, 0, 8, 1507346, 0, 8, 1507347, 0, 65540, 1507425, 0, 0, 1638398, 0, 131077, 1638399, 0, 262152, 1572864, 0, 8, 1572865, 0, 8, 1572866, 0, 8, 1572867, 0, 8, 1572868, 0, 8, 1572869, 0, 131081, 1572870, 0, 8, 1572871, 0, 8, 1572872, 0, 8, 1572873, 0, 8, 1572874, 0, 8, 1572875, 0, 8, 1572876, 0, 8, 1572877, 0, 8, 1572878, 0, 8, 1572879, 0, 8, 1572880, 0, 8, 1572881, 0, 8, 1572882, 0, 8, 1572883, 0, 4, 1572961, 0, 0, 1703934, 0, 196615, 1703935, 0, 196616, 1638400, 0, 8, 1638401, 0, 8, 1638402, 0, 8, 1638403, 0, 8, 1638404, 0, 8, 1638405, 0, 8, 1638406, 0, 8, 1638407, 0, 8, 1638408, 0, 8, 1638409, 0, 8, 1638410, 0, 8, 1638411, 0, 8, 1638412, 0, 8, 1638413, 0, 8, 1638414, 0, 327689, 1638415, 0, 8, 1638416, 0, 8, 1638417, 0, 8, 1638418, 0, 8, 1638419, 0, 65543, 1638497, 0, 0, 1769470, 0, 131079, 1769471, 0, 393225, 1703936, 0, 8, 1703937, 0, 8, 1703938, 0, 8, 1703939, 0, 8, 1703940, 0, 8, 1703941, 0, 8, 1703942, 0, 8, 1703943, 0, 8, 1703944, 0, 8, 1703945, 0, 8, 1703946, 0, 8, 1703947, 0, 8, 1703948, 0, 8, 1703949, 0, 8, 1703950, 0, 327688, 1703951, 0, 8, 1703952, 0, 8, 1703953, 0, 8, 1703954, 0, 8, 1703955, 0, 65543, 1704033, 0, 0, 1835006, 0, 131077, 1835007, 0, 8, 1769472, 0, 196616, 1769473, 0, 8, 1769474, 0, 8, 1769475, 0, 8, 1769476, 0, 8, 1769477, 0, 8, 1769478, 0, 8, 1769479, 0, 8, 1769480, 0, 8, 1769481, 0, 8, 1769482, 0, 8, 1769483, 0, 8, 1769484, 0, 8, 1769485, 0, 8, 1769486, 0, 8, 1769487, 0, 8, 1769488, 0, 327685, 1769489, 0, 3, 1769490, 0, 65539, 1769491, 0, 393219, 1769569, 0, 0, 1900542, 0, 196613, 1900543, 0, 8, 1835008, 0, 8, 1835009, 0, 8, 1835010, 0, 8, 1835011, 0, 8, 1835012, 0, 8, 1835013, 0, 8, 1835014, 0, 8, 1835015, 0, 8, 1835016, 0, 8, 1835017, 0, 8, 1835018, 0, 393224, 1835019, 0, 8, 1835020, 0, 8, 1835021, 0, 8, 1835022, 0, 8, 1835023, 0, 327684, 1835024, 0, 458755, 1835105, 0, 0, 1966078, 0, 131078, 1966079, 0, 8, 1900544, 0, 262152, 1900545, 0, 8, 1900546, 0, 8, 1900547, 0, 8, 1900548, 0, 8, 1900549, 0, 8, 1900550, 0, 131080, 1900551, 0, 8, 1900552, 0, 8, 1900553, 0, 8, 1900554, 0, 8, 1900555, 0, 8, 1900556, 0, 8, 1900557, 0, 8, 1900558, 0, 131080, 1900559, 0, 6, 1900641, 0, 0, 2031614, 0, 196612, 2031615, 0, 8, 1966080, 0, 8, 1966081, 0, 8, 1966082, 0, 8, 1966083, 0, 8, 1966084, 0, 8, 1966085, 0, 8, 1966086, 0, 8, 1966087, 0, 8, 1966088, 0, 8, 1966089, 0, 327688, 1966090, 0, 196617, 1966091, 0, 8, 1966092, 0, 8, 1966093, 0, 8, 1966094, 0, 8, 1966095, 0, 6, 1966177, 0, 0, 2097150, 0, 131076, 2097151, 0, 8, 2031616, 0, 8, 2031617, 0, 8, 2031618, 0, 8, 2031619, 0, 8, 2031620, 0, 8, 2031621, 0, 8, 2031622, 0, 8, 2031623, 0, 8, 2031624, 0, 8, 2031625, 0, 8, 2031626, 0, 8, 2031627, 0, 8, 2031628, 0, 8, 2031629, 0, 393225, 2031630, 0, 327685, 2031631, 0, 393219, 2031713, 0, 0, 2162686, 0, 131077, 2162687, 0, 8, 2097152, 0, 262153, 2097153, 0, 8, 2097154, 0, 8, 2097155, 0, 8, 2097156, 0, 8, 2097157, 0, 8, 2097158, 0, 8, 2097159, 0, 8, 2097160, 0, 8, 2097161, 0, 8, 2097162, 0, 8, 2097163, 0, 8, 2097164, 0, 8, 2097165, 0, 8, 2097166, 0, 6, 2097249, 0, 0, 2228222, 0, 131077, 2228223, 0, 8, 2162688, 0, 8, 2162689, 0, 8, 2162690, 0, 8, 2162691, 0, 8, 2162692, 0, 8, 2162693, 0, 8, 2162694, 0, 8, 2162695, 0, 8, 2162696, 0, 131080, 2162697, 0, 8, 2162698, 0, 8, 2162699, 0, 8, 2162700, 0, 458761, 2162701, 0, 262148, 2162702, 0, 393218, 2162785, 0, 0, 2293758, 0, 196613, 2293759, 0, 458760, 2228224, 0, 8, 2228225, 0, 8, 2228226, 0, 8, 2228227, 0, 196616, 2228228, 0, 8, 2228229, 0, 8, 2228230, 0, 8, 2228231, 0, 8, 2228232, 0, 8, 2228233, 0, 8, 2228234, 0, 131080, 2228235, 0, 8, 2228236, 0, 8, 2228237, 0, 65543, 2228308, 0, 327680, 2228309, 0, 196609, 2228310, 0, 1, 2228311, 0, 1, 2228312, 0, 131072, 2228313, 0, 131073, 2228314, 0, 131072, 2228315, 0, 1, 2228316, 0, 65536, 2228317, 0, 131073, 2228318, 0, 65537, 2228319, 0, 131072, 2228320, 0, 131073, 2228321, 0, 327682, 2359294, 0, 196615, 2359295, 0, 8, 2293760, 0, 8, 2293761, 0, 8, 2293762, 0, 8, 2293763, 0, 8, 2293764, 0, 8, 2293765, 0, 8, 2293766, 0, 8, 2293767, 0, 8, 2293768, 0, 8, 2293769, 0, 131080, 2293770, 0, 8, 2293771, 0, 8, 2293772, 0, 8, 2293773, 0, 65543, 2293844, 0, 196612, 2293845, 0, 8, 2293846, 0, 8, 2293847, 0, 327689, 2293848, 0, 8, 2293849, 0, 8, 2293850, 0, 8, 2293851, 0, 8, 2293852, 0, 8, 2293853, 0, 8, 2293854, 0, 393224, 2293855, 0, 8, 2293856, 0, 8, 2293857, 0, 6, 2424830, 0, 196615, 2424831, 0, 8, 2359296, 0, 8, 2359297, 0, 8, 2359298, 0, 8, 2359299, 0, 8, 2359300, 0, 393225, 2359301, 0, 8, 2359302, 0, 8, 2359303, 0, 8, 2359304, 0, 8, 2359305, 0, 8, 2359306, 0, 8, 2359307, 0, 8, 2359308, 0, 8, 2359309, 0, 5, 2359380, 0, 131076, 2359381, 0, 262153, 2359382, 0, 8, 2359383, 0, 8, 2359384, 0, 8, 2359385, 0, 8, 2359386, 0, 8, 2359387, 0, 8, 2359388, 0, 8, 2359389, 0, 8, 2359390, 0, 8, 2359391, 0, 8, 2359392, 0, 8, 2359393, 0, 6, 2490366, 0, 131077, 2490367, 0, 8, 2424832, 0, 8, 2424833, 0, 8, 2424834, 0, 8, 2424835, 0, 196616, 2424836, 0, 327689, 2424837, 0, 393224, 2424838, 0, 8, 2424839, 0, 8, 2424840, 0, 458761, 2424841, 0, 8, 2424842, 0, 8, 2424843, 0, 8, 2424844, 0, 8, 2424845, 0, 7, 2424916, 0, 393216, 2424917, 0, 196611, 2424918, 0, 3, 2424919, 0, 327687, 2424920, 0, 8, 2424921, 0, 8, 2424922, 0, 8, 2424923, 0, 8, 2424924, 0, 8, 2424925, 0, 8, 2424926, 0, 8, 2424927, 0, 8, 2424928, 0, 8, 2424929, 0, 65541, 2555902, 0, 131078, 2555903, 0, 8, 2490368, 0, 8, 2490369, 0, 8, 2490370, 0, 8, 2490371, 0, 8, 2490372, 0, 327688, 2490373, 0, 196616, 2490374, 0, 8, 2490375, 0, 8, 2490376, 0, 8, 2490377, 0, 8, 2490378, 0, 327689, 2490379, 0, 8, 2490380, 0, 8, 2490381, 0, 5, 2490455, 0, 196614, 2490456, 0, 393225, 2490457, 0, 8, 2490458, 0, 8, 2490459, 0, 8, 2490460, 0, 8, 2490461, 0, 8, 2490462, 0, 458760, 2490463, 0, 327689, 2490464, 0, 8, 2490465, 0, 65541, 2621438, 0, 196613, 2621439, 0, 8, 2555904, 0, 8, 2555905, 0, 8, 2555906, 0, 8, 2555907, 0, 8, 2555908, 0, 196617, 2555909, 0, 8, 2555910, 0, 8, 2555911, 0, 8, 2555912, 0, 8, 2555913, 0, 8, 2555914, 0, 8, 2555915, 0, 8, 2555916, 0, 458761, 2555917, 0, 65541, 2555991, 0, 196612, 2555992, 0, 8, 2555993, 0, 8, 2555994, 0, 8, 2555995, 0, 327689, 2555996, 0, 8, 2555997, 0, 8, 2555998, 0, 8, 2555999, 0, 8, 2556000, 0, 8, 2556001, 0, 4, 2686974, 0, 196615, 2686975, 0, 8, 2621440, 0, 8, 2621441, 0, 8, 2621442, 0, 8, 2621443, 0, 8, 2621444, 0, 8, 2621445, 0, 8, 2621446, 0, 8, 2621447, 0, 8, 2621448, 0, 327688, 2621449, 0, 8, 2621450, 0, 8, 2621451, 0, 8, 2621452, 0, 8, 2621453, 0, 6, 2621527, 0, 196612, 2621528, 0, 8, 2621529, 0, 8, 2621530, 0, 8, 2621531, 0, 8, 2621532, 0, 8, 2621533, 0, 8, 2621534, 0, 8, 2621535, 0, 8, 2621536, 0, 8, 2621537, 0, 5, 2752510, 0, 131077, 2752511, 0, 8, 2686976, 0, 8, 2686977, 0, 8, 2686978, 0, 8, 2686979, 0, 8, 2686980, 0, 8, 2686981, 0, 8, 2686982, 0, 8, 2686983, 0, 8, 2686984, 0, 8, 2686985, 0, 8, 2686986, 0, 8, 2686987, 0, 262152, 2686988, 0, 8, 2686989, 0, 6, 2687063, 0, 131079, 2687064, 0, 8, 2687065, 0, 196616, 2687066, 0, 8, 2687067, 0, 8, 2687068, 0, 8, 2687069, 0, 8, 2687070, 0, 8, 2687071, 0, 8, 2687072, 0, 8, 2687073, 0, 65541, 2818046, 0, 196613, 2818047, 0, 8, 2752512, 0, 327688, 2752513, 0, 8, 2752514, 0, 8, 2752515, 0, 8, 2752516, 0, 8, 2752517, 0, 8, 2752518, 0, 8, 2752519, 0, 8, 2752520, 0, 8, 2752521, 0, 327689, 2752522, 0, 8, 2752523, 0, 8, 2752524, 0, 8, 2752525, 0, 65541, 2752599, 0, 131077, 2752600, 0, 262153, 2752601, 0, 8, 2752602, 0, 8, 2752603, 0, 8, 2752604, 0, 8, 2752605, 0, 8, 2752606, 0, 8, 2752607, 0, 8, 2752608, 0, 8, 2752609, 0, 4, 2883582, 0, 458752, 2883583, 0, 65538, 2818048, 0, 196610, 2818049, 0, 65538, 2818050, 0, 131075, 2818051, 0, 196611, 2818052, 0, 196610, 2818053, 0, 131074, 2818054, 0, 196611, 2818055, 0, 196610, 2818056, 0, 196610, 2818057, 0, 2, 2818058, 0, 3, 2818059, 0, 3, 2818060, 0, 65539, 2818061, 0, 458755, 2818135, 0, 458752, 2818136, 0, 196610, 2818137, 0, 131075, 2818138, 0, 65538, 2818139, 0, 65538, 2818140, 0, 131074, 2818141, 0, 65538, 2818142, 0, 196610, 2818143, 0, 131075, 2818144, 0, 196610, 2818145, 0, 393218 )
+script = ExtResource( 14 )
+__meta__ = {
+"_edit_bone_": true,
+"_edit_lock_": true
+}
+
+[node name="TextureTileMap" type="TileMap" parent="Layer0"]
+material = SubResource( 4 )
+z_index = 1
+tile_set = ExtResource( 10 )
+cell_size = Vector2( 8, 8 )
+cell_quadrant_size = 2
+collision_layer = 0
+collision_mask = 0
+format = 1
+tile_data = PoolIntArray( 1114114, 10, 9, 1114115, 8, 8, 1114117, 6, 9, 1245182, 5, 262145, 1245183, 5, 1, 1179648, 5, 0, 1179649, 5, 65537, 1179650, 7, 65537, 1179651, 7, 196609, 1179652, 7, 65536, 1179653, 7, 1, 1179654, 9, 131072, 1179655, 9, 196608, 1179656, 9, 327682, 1310718, 5, 131078, 1310719, 5, 8, 1245184, 5, 8, 1245185, 5, 8, 1245186, 5, 8, 1245187, 5, 393224, 1245188, 5, 8, 1245189, 5, 8, 1245190, 7, 8, 1245191, 7, 8, 1245192, 9, 65541, 1245193, 8, 65538, 1245196, 6, 8, 1245198, 10, 9, 1245200, 8, 8, 1245201, 8, 9, 1245202, 6, 9, 1376254, 5, 131076, 1376255, 5, 8, 1310720, 5, 8, 1310721, 5, 8, 1310722, 5, 8, 1310723, 5, 8, 1310724, 5, 8, 1310725, 5, 8, 1310726, 5, 8, 1310727, 7, 8, 1310728, 7, 393221, 1310729, 5, 65537, 1310730, 5, 131072, 1310731, 5, 196608, 1310732, 5, 65537, 1310733, 7, 65537, 1310734, 9, 0, 1310735, 9, 131073, 1310736, 9, 196609, 1310737, 9, 131072, 1310738, 9, 131072, 1310739, 5, 262146, 1441790, 5, 196613, 1441791, 5, 8, 1376256, 5, 8, 1376257, 5, 458760, 1376258, 5, 8, 1376259, 5, 8, 1376260, 5, 8, 1376261, 5, 8, 1376262, 5, 8, 1376263, 5, 8, 1376264, 5, 8, 1376265, 5, 8, 1376266, 5, 8, 1376267, 7, 8, 1376268, 7, 8, 1376269, 7, 8, 1376270, 7, 131081, 1376271, 7, 8, 1376272, 7, 8, 1376273, 9, 8, 1376274, 9, 8, 1376275, 5, 7, 1507326, 5, 131076, 1507327, 5, 8, 1441792, 5, 8, 1441793, 5, 8, 1441794, 5, 8, 1441795, 5, 458761, 1441796, 5, 8, 1441797, 5, 8, 1441798, 5, 8, 1441799, 5, 8, 1441800, 5, 8, 1441801, 5, 131081, 1441802, 5, 327689, 1441803, 5, 8, 1441804, 5, 8, 1441805, 5, 8, 1441806, 5, 8, 1441807, 7, 8, 1441808, 5, 8, 1441809, 7, 8, 1441810, 7, 8, 1441811, 7, 65542, 1572862, 5, 196615, 1572863, 5, 8, 1507328, 5, 262153, 1507329, 5, 131081, 1507330, 5, 196616, 1507331, 5, 458760, 1507332, 5, 8, 1507333, 5, 8, 1507334, 5, 8, 1507335, 5, 8, 1507336, 5, 8, 1507337, 5, 8, 1507338, 5, 8, 1507339, 5, 8, 1507340, 5, 8, 1507341, 5, 8, 1507342, 7, 8, 1507343, 7, 8, 1507344, 7, 8, 1507345, 7, 8, 1507346, 7, 8, 1507347, 7, 65540, 1638398, 5, 131077, 1638399, 5, 262152, 1572864, 5, 8, 1572865, 5, 8, 1572866, 5, 8, 1572867, 5, 8, 1572868, 5, 8, 1572869, 5, 131081, 1572870, 5, 8, 1572871, 5, 8, 1572872, 5, 8, 1572873, 5, 8, 1572874, 5, 8, 1572875, 5, 8, 1572876, 5, 8, 1572877, 5, 8, 1572878, 5, 8, 1572879, 5, 8, 1572880, 5, 8, 1572881, 5, 8, 1572882, 5, 8, 1572883, 5, 4, 1703934, 5, 196615, 1703935, 5, 196616, 1638400, 5, 8, 1638401, 5, 8, 1638402, 5, 8, 1638403, 5, 8, 1638404, 5, 8, 1638405, 5, 8, 1638406, 5, 8, 1638407, 5, 8, 1638408, 5, 8, 1638409, 5, 8, 1638410, 5, 8, 1638411, 5, 8, 1638412, 5, 8, 1638413, 5, 8, 1638414, 5, 327689, 1638415, 5, 8, 1638416, 5, 8, 1638417, 5, 8, 1638418, 5, 8, 1638419, 5, 65543, 1769470, 5, 131079, 1769471, 5, 393225, 1703936, 5, 8, 1703937, 5, 8, 1703938, 5, 8, 1703939, 5, 8, 1703940, 5, 8, 1703941, 5, 8, 1703942, 5, 8, 1703943, 5, 8, 1703944, 5, 8, 1703945, 5, 8, 1703946, 5, 8, 1703947, 5, 8, 1703948, 5, 8, 1703949, 5, 8, 1703950, 5, 327688, 1703951, 5, 8, 1703952, 5, 8, 1703953, 5, 8, 1703954, 5, 8, 1703955, 5, 65543, 1835006, 5, 131077, 1835007, 5, 8, 1769472, 5, 196616, 1769473, 5, 8, 1769474, 5, 8, 1769475, 5, 8, 1769476, 5, 8, 1769477, 5, 8, 1769478, 5, 8, 1769479, 5, 8, 1769480, 5, 8, 1769481, 5, 8, 1769482, 5, 8, 1769483, 5, 8, 1769484, 5, 8, 1769485, 5, 8, 1769486, 5, 8, 1769487, 5, 8, 1769488, 5, 327685, 1769489, 5, 3, 1769490, 5, 65539, 1769491, 5, 393219, 1900542, 5, 196613, 1900543, 5, 8, 1835008, 5, 8, 1835009, 5, 8, 1835010, 5, 8, 1835011, 5, 8, 1835012, 5, 8, 1835013, 5, 8, 1835014, 5, 8, 1835015, 5, 8, 1835016, 5, 8, 1835017, 5, 8, 1835018, 5, 393224, 1835019, 5, 8, 1835020, 5, 8, 1835021, 5, 8, 1835022, 5, 8, 1835023, 5, 327684, 1835024, 5, 458755, 1835025, 6, 6, 1966078, 5, 131078, 1966079, 5, 8, 1900544, 5, 262152, 1900545, 5, 8, 1900546, 5, 8, 1900547, 5, 8, 1900548, 5, 8, 1900549, 5, 8, 1900550, 5, 131080, 1900551, 5, 8, 1900552, 5, 8, 1900553, 5, 8, 1900554, 5, 8, 1900555, 5, 8, 1900556, 5, 8, 1900557, 5, 8, 1900558, 5, 131080, 1900559, 5, 6, 1900560, 6, 7, 2031614, 5, 196612, 2031615, 5, 8, 1966080, 5, 8, 1966081, 5, 8, 1966082, 5, 8, 1966083, 5, 8, 1966084, 5, 8, 1966085, 5, 8, 1966086, 5, 8, 1966087, 5, 8, 1966088, 5, 8, 1966089, 5, 327688, 1966090, 5, 196617, 1966091, 5, 8, 1966092, 5, 8, 1966093, 5, 8, 1966094, 5, 8, 1966095, 5, 6, 2097150, 5, 131076, 2097151, 5, 8, 2031616, 5, 8, 2031617, 5, 8, 2031618, 5, 8, 2031619, 5, 8, 2031620, 5, 8, 2031621, 5, 8, 2031622, 5, 8, 2031623, 5, 8, 2031624, 5, 8, 2031625, 5, 8, 2031626, 5, 8, 2031627, 5, 8, 2031628, 5, 8, 2031629, 5, 393225, 2031630, 5, 327685, 2031631, 5, 393219, 2162686, 5, 131077, 2162687, 5, 8, 2097152, 5, 262153, 2097153, 5, 8, 2097154, 5, 8, 2097155, 5, 8, 2097156, 5, 8, 2097157, 5, 8, 2097158, 5, 8, 2097159, 5, 8, 2097160, 5, 8, 2097161, 5, 8, 2097162, 5, 8, 2097163, 5, 8, 2097164, 5, 8, 2097165, 5, 8, 2097166, 5, 6, 2097167, 6, 6, 2228222, 5, 131077, 2228223, 5, 8, 2162688, 5, 8, 2162689, 5, 8, 2162690, 5, 8, 2162691, 5, 8, 2162692, 5, 8, 2162693, 5, 8, 2162694, 5, 8, 2162695, 5, 8, 2162696, 5, 131080, 2162697, 5, 8, 2162698, 5, 8, 2162699, 5, 8, 2162700, 5, 458761, 2162701, 5, 262148, 2162702, 5, 393218, 2162773, 10, 9, 2162774, 8, 8, 2162776, 6, 8, 2162779, 10, 65537, 2162782, 6, 9, 2162784, 8, 9, 2293758, 5, 196613, 2293759, 5, 458760, 2228224, 5, 8, 2228225, 5, 8, 2228226, 5, 8, 2228227, 5, 196616, 2228228, 5, 8, 2228229, 5, 8, 2228230, 5, 8, 2228231, 5, 8, 2228232, 5, 8, 2228233, 5, 8, 2228234, 5, 131080, 2228235, 5, 8, 2228236, 5, 8, 2228237, 5, 65543, 2228308, 5, 327680, 2228309, 5, 196609, 2228310, 7, 1, 2228311, 7, 1, 2228312, 7, 131072, 2228313, 9, 131073, 2228314, 9, 131072, 2228315, 9, 1, 2228316, 9, 65536, 2228317, 9, 131073, 2228318, 5, 65537, 2228319, 5, 131072, 2228320, 5, 131073, 2228321, 5, 327682, 2359294, 5, 196615, 2359295, 5, 8, 2293760, 5, 8, 2293761, 5, 8, 2293762, 5, 8, 2293763, 5, 8, 2293764, 5, 8, 2293765, 5, 8, 2293766, 5, 8, 2293767, 5, 8, 2293768, 5, 8, 2293769, 5, 131080, 2293770, 5, 8, 2293771, 5, 8, 2293772, 5, 8, 2293773, 5, 65543, 2293844, 9, 196612, 2293845, 7, 8, 2293846, 7, 8, 2293847, 7, 327689, 2293848, 9, 8, 2293849, 9, 8, 2293850, 9, 8, 2293851, 9, 8, 2293852, 7, 8, 2293853, 7, 8, 2293854, 7, 393224, 2293855, 7, 8, 2293856, 7, 8, 2293857, 5, 6, 2424830, 5, 196615, 2424831, 5, 8, 2359296, 5, 8, 2359297, 5, 8, 2359298, 5, 8, 2359299, 5, 8, 2359300, 5, 393225, 2359301, 5, 8, 2359302, 5, 8, 2359303, 5, 8, 2359304, 5, 8, 2359305, 5, 8, 2359306, 5, 8, 2359307, 5, 8, 2359308, 5, 8, 2359309, 5, 5, 2359380, 9, 131076, 2359381, 5, 262153, 2359382, 7, 8, 2359383, 9, 8, 2359384, 9, 8, 2359385, 9, 8, 2359386, 5, 8, 2359387, 5, 8, 2359388, 5, 8, 2359389, 5, 8, 2359390, 5, 8, 2359391, 5, 8, 2359392, 5, 8, 2359393, 5, 6, 2490366, 5, 131077, 2490367, 5, 8, 2424832, 5, 8, 2424833, 5, 8, 2424834, 5, 8, 2424835, 5, 196616, 2424836, 5, 327689, 2424837, 5, 393224, 2424838, 5, 8, 2424839, 5, 8, 2424840, 5, 458761, 2424841, 5, 8, 2424842, 5, 8, 2424843, 5, 8, 2424844, 5, 8, 2424845, 5, 7, 2424916, 7, 393216, 2424917, 7, 196611, 2424918, 7, 3, 2424919, 7, 327687, 2424920, 5, 8, 2424921, 5, 8, 2424922, 5, 8, 2424923, 5, 8, 2424924, 5, 8, 2424925, 5, 8, 2424926, 5, 8, 2424927, 5, 8, 2424928, 5, 8, 2424929, 5, 65541, 2555902, 5, 131078, 2555903, 5, 8, 2490368, 5, 8, 2490369, 5, 8, 2490370, 5, 8, 2490371, 5, 8, 2490372, 5, 327688, 2490373, 5, 196616, 2490374, 5, 8, 2490375, 5, 8, 2490376, 5, 8, 2490377, 5, 8, 2490378, 5, 327689, 2490379, 5, 8, 2490380, 5, 8, 2490381, 5, 5, 2490454, 8, 65541, 2490455, 5, 196614, 2490456, 5, 393225, 2490457, 5, 8, 2490458, 5, 8, 2490459, 5, 8, 2490460, 5, 8, 2490461, 5, 8, 2490462, 5, 458760, 2490463, 5, 327689, 2490464, 5, 8, 2490465, 5, 65541, 2621438, 5, 196613, 2621439, 5, 8, 2555904, 5, 8, 2555905, 5, 8, 2555906, 5, 8, 2555907, 5, 8, 2555908, 5, 196617, 2555909, 5, 8, 2555910, 5, 8, 2555911, 5, 8, 2555912, 5, 8, 2555913, 5, 8, 2555914, 5, 8, 2555915, 5, 8, 2555916, 5, 458761, 2555917, 5, 65541, 2555991, 5, 196612, 2555992, 5, 8, 2555993, 5, 8, 2555994, 5, 8, 2555995, 5, 327689, 2555996, 5, 8, 2555997, 5, 8, 2555998, 5, 8, 2555999, 5, 8, 2556000, 5, 8, 2556001, 5, 4, 2686974, 5, 196615, 2686975, 5, 8, 2621440, 5, 8, 2621441, 5, 8, 2621442, 5, 8, 2621443, 5, 8, 2621444, 5, 8, 2621445, 5, 8, 2621446, 5, 8, 2621447, 5, 8, 2621448, 5, 327688, 2621449, 5, 8, 2621450, 5, 8, 2621451, 5, 8, 2621452, 5, 8, 2621453, 5, 6, 2621527, 5, 196612, 2621528, 5, 8, 2621529, 5, 8, 2621530, 5, 8, 2621531, 5, 8, 2621532, 5, 8, 2621533, 5, 8, 2621534, 5, 8, 2621535, 5, 8, 2621536, 5, 8, 2621537, 5, 5, 2752510, 5, 131077, 2752511, 5, 8, 2686976, 5, 8, 2686977, 5, 8, 2686978, 5, 8, 2686979, 5, 8, 2686980, 5, 8, 2686981, 5, 8, 2686982, 5, 8, 2686983, 5, 8, 2686984, 5, 8, 2686985, 5, 8, 2686986, 5, 8, 2686987, 5, 262152, 2686988, 5, 8, 2686989, 5, 6, 2687063, 5, 131079, 2687064, 5, 8, 2687065, 5, 196616, 2687066, 5, 8, 2687067, 5, 8, 2687068, 5, 8, 2687069, 5, 8, 2687070, 5, 8, 2687071, 5, 8, 2687072, 5, 8, 2687073, 5, 65541, 2818046, 5, 196613, 2818047, 5, 8, 2752512, 5, 327688, 2752513, 5, 8, 2752514, 5, 8, 2752515, 5, 8, 2752516, 5, 8, 2752517, 5, 8, 2752518, 5, 8, 2752519, 5, 8, 2752520, 5, 8, 2752521, 5, 327689, 2752522, 5, 8, 2752523, 5, 8, 2752524, 5, 8, 2752525, 5, 65541, 2752599, 5, 131077, 2752600, 5, 262153, 2752601, 5, 8, 2752602, 5, 8, 2752603, 5, 8, 2752604, 5, 8, 2752605, 5, 8, 2752606, 5, 8, 2752607, 5, 8, 2752608, 5, 8, 2752609, 5, 4, 2883582, 5, 458752, 2883583, 5, 65538, 2818048, 5, 196610, 2818049, 5, 65538, 2818050, 5, 131075, 2818051, 5, 196611, 2818052, 5, 196610, 2818053, 5, 131074, 2818054, 5, 196611, 2818055, 5, 196610, 2818056, 5, 196610, 2818057, 5, 2, 2818058, 5, 3, 2818059, 5, 3, 2818060, 5, 65539, 2818061, 5, 458755, 2818135, 5, 458752, 2818136, 5, 196610, 2818137, 5, 131075, 2818138, 5, 65538, 2818139, 5, 65538, 2818140, 5, 131074, 2818141, 5, 65538, 2818142, 5, 196610, 2818143, 5, 131075, 2818144, 5, 196610, 2818145, 5, 393218 )
+script = ExtResource( 26 )
+__meta__ = {
+"_edit_bone_": true,
+"_edit_lock_": true
+}
+
+[node name="VineTileMap" type="TileMap" parent="Layer0"]
+material = SubResource( 5 )
+z_index = 1
+format = 1
+
+[node name="BlobTileMap" type="TileMap" parent="Layer0"]
+material = SubResource( 6 )
+tile_set = ExtResource( 15 )
+cell_size = Vector2( 4, 4 )
+cell_quadrant_size = 2
+format = 1
+tile_data = PoolIntArray( 1572865, 1, 0, 1572866, 1, 0, 1572867, 1, 0, 1572868, 1, 0, 1572869, 1, 0, 1638401, 1, 0, 1638402, 1, 0, 1638403, 1, 0, 1638404, 1, 0, 1703939, 1, 0, 1703940, 1, 0, 3669697, 0, 0 )
+script = ExtResource( 16 )
+
+[node name="Environment" type="Node2D" parent="Layer0"]
+z_index = -20
+script = ExtResource( 21 )
+
+[node name="Rocks2" type="TextureRect" parent="Layer0/Environment"]
+material = SubResource( 7 )
+margin_left = 75.0
+margin_top = 129.0
+margin_right = 147.0
+margin_bottom = 169.0
+texture = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Rocks3" type="TextureRect" parent="Layer0/Environment"]
+material = SubResource( 7 )
+margin_left = 690.0
+margin_top = 236.0
+margin_right = 762.0
+margin_bottom = 276.0
+texture = ExtResource( 20 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Stalactites2" type="TextureRect" parent="Layer0/Environment"]
+material = SubResource( 8 )
+margin_left = 141.0
+margin_top = 222.0
+margin_right = 149.0
+margin_bottom = 238.0
+texture = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Stalactites4" type="TextureRect" parent="Layer0/Environment"]
+material = SubResource( 8 )
+margin_left = 112.0
+margin_top = 269.0
+margin_right = 120.0
+margin_bottom = 285.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Stalactites3" type="TextureRect" parent="Layer0/Environment"]
+material = SubResource( 8 )
+margin_left = 681.0
+margin_top = 301.0
+margin_right = 689.0
+margin_bottom = 317.0
+texture = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Layer1" type="Node2D" parent="."]
+light_mask = 0
+z_index = -1
+script = ExtResource( 3 )
+
+[node name="Blebs" type="Node2D" parent="Layer1"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Blobs" type="Node2D" parent="Layer1"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Blob1_22" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 528, 352 )
+shape = "1"
+
+[node name="Blob1_23" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 520, 352 )
+shape = "1"
+
+[node name="Blob1_24" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 512, 352 )
+shape = "1"
+
+[node name="Blob1_25" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 504, 352 )
+shape = "1"
+
+[node name="Blob1_26" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 496, 352 )
+shape = "1"
+
+[node name="Blob1_27" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 488, 352 )
+shape = "1"
+
+[node name="Blob1_28" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 480, 352 )
+shape = "1"
+
+[node name="Blob1_29" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 472, 352 )
+shape = "1"
+
+[node name="Blob1_30" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 464, 352 )
+shape = "1"
+
+[node name="Blob1_31" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 456, 352 )
+shape = "1"
+
+[node name="Blob1_32" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 448, 352 )
+shape = "1"
+
+[node name="Blob1_33" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 440, 352 )
+shape = "1"
+
+[node name="Blob1_34" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 432, 352 )
+shape = "1"
+
+[node name="Blob1_82" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 632, 352 )
+shape = "1"
+
+[node name="Blob1_83" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 624, 352 )
+shape = "1"
+
+[node name="Blob1_84" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 616, 352 )
+shape = "1"
+
+[node name="Blob1_85" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 608, 352 )
+shape = "1"
+
+[node name="Blob1_86" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 600, 352 )
+shape = "1"
+
+[node name="Blob1_87" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 592, 352 )
+shape = "1"
+
+[node name="Blob1_88" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 584, 352 )
+shape = "1"
+
+[node name="Blob1_89" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 576, 352 )
+shape = "1"
+
+[node name="Blob1_90" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 568, 352 )
+shape = "1"
+
+[node name="Blob1_91" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 560, 352 )
+shape = "1"
+
+[node name="Blob1_92" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 552, 352 )
+shape = "1"
+
+[node name="Blob1_93" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 544, 352 )
+shape = "1"
+
+[node name="Blob1_94" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 536, 352 )
+shape = "1"
+
+[node name="Blob1_102" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 680, 352 )
+shape = "1"
+
+[node name="Blob1_103" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 672, 352 )
+shape = "1"
+
+[node name="Blob1_104" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 664, 352 )
+shape = "1"
+
+[node name="Blob1_105" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 656, 352 )
+shape = "1"
+
+[node name="Blob1_106" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 648, 352 )
+shape = "1"
+
+[node name="Blob1_107" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 640, 352 )
+shape = "1"
+
+[node name="Blob1_95" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 720, 352 )
+shape = "1"
+
+[node name="Blob1_96" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 712, 352 )
+shape = "1"
+
+[node name="Blob1_97" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 704, 352 )
+shape = "1"
+
+[node name="Blob1_98" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 696, 352 )
+shape = "1"
+
+[node name="Blob1_99" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 688, 352 )
+shape = "1"
+
+[node name="Blob1_108" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 768, 352 )
+shape = "1"
+
+[node name="Blob1_114" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 776, 352 )
+shape = "1"
+
+[node name="Blob1_109" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 760, 352 )
+shape = "1"
+
+[node name="Blob1_110" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 752, 352 )
+shape = "1"
+
+[node name="Blob1_111" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 744, 352 )
+shape = "1"
+
+[node name="Blob1_112" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 736, 352 )
+shape = "1"
+
+[node name="Blob1_113" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 728, 352 )
+shape = "1"
+
+[node name="Blob1_35" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 424, 352 )
+shape = "1"
+
+[node name="Blob1_36" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 416, 352 )
+shape = "1"
+
+[node name="Blob1_37" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 408, 352 )
+shape = "1"
+
+[node name="Blob1_38" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 400, 352 )
+shape = "1"
+
+[node name="Blob1_39" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 392, 352 )
+shape = "1"
+
+[node name="Blob1_40" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 384, 352 )
+shape = "1"
+
+[node name="Blob1_41" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 376, 352 )
+shape = "1"
+
+[node name="Blob1_42" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 368, 352 )
+shape = "1"
+
+[node name="Blob1_43" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 360, 352 )
+shape = "1"
+
+[node name="Blob1_44" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 352, 352 )
+shape = "1"
+
+[node name="Blob1_45" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 344, 352 )
+shape = "1"
+
+[node name="Blob1_46" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 336, 352 )
+shape = "1"
+
+[node name="Blob1_47" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 328, 352 )
+shape = "1"
+
+[node name="Blob1_48" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 320, 352 )
+shape = "1"
+
+[node name="Blob1_49" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 312, 352 )
+shape = "1"
+
+[node name="Blob1_50" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 304, 352 )
+shape = "1"
+
+[node name="Blob1_51" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 296, 352 )
+shape = "1"
+
+[node name="Blob1_52" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 288, 352 )
+shape = "1"
+
+[node name="Blob1_53" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 280, 352 )
+shape = "1"
+
+[node name="Blob1_54" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 272, 352 )
+shape = "1"
+
+[node name="Blob1_55" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 264, 352 )
+shape = "1"
+
+[node name="Blob1_56" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 256, 352 )
+shape = "1"
+
+[node name="Blob1_57" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 248, 352 )
+shape = "1"
+
+[node name="Blob1_58" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 240, 352 )
+shape = "1"
+
+[node name="Blob1_59" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 232, 352 )
+shape = "1"
+
+[node name="Blob1_60" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 224, 352 )
+shape = "1"
+
+[node name="Blob1_61" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 216, 352 )
+shape = "1"
+
+[node name="Blob1_62" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 208, 352 )
+shape = "1"
+
+[node name="Blob1_63" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 200, 352 )
+shape = "1"
+
+[node name="Blob1_64" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 192, 352 )
+shape = "1"
+
+[node name="Blob1_65" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 184, 352 )
+shape = "1"
+
+[node name="Blob1_66" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 176, 352 )
+shape = "1"
+
+[node name="Blob1_67" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 168, 352 )
+shape = "1"
+
+[node name="Blob1_68" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 160, 352 )
+shape = "1"
+
+[node name="Blob1_69" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 152, 352 )
+shape = "1"
+
+[node name="Blob1_70" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 144, 352 )
+shape = "1"
+
+[node name="Blob1_71" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 136, 352 )
+shape = "1"
+
+[node name="Blob1_72" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 128, 352 )
+shape = "1"
+
+[node name="Blob1_73" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 120, 352 )
+shape = "1"
+
+[node name="Blob1_74" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 112, 352 )
+shape = "1"
+
+[node name="Blob1_75" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 104, 352 )
+shape = "1"
+
+[node name="Blob1_76" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 96, 352 )
+shape = "1"
+
+[node name="Blob1_77" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 88, 352 )
+shape = "1"
+
+[node name="Blob1_78" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 80, 352 )
+shape = "1"
+
+[node name="Blob1_79" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 72, 352 )
+shape = "1"
+
+[node name="Blob1_80" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 64, 352 )
+shape = "1"
+
+[node name="Blob1_81" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 56, 352 )
+shape = "1"
+
+[node name="Blob1_01" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 103, 170 )
+shape = "1"
+
+[node name="Blob1_02" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 125, 179 )
+shape = "1"
+
+[node name="Blob1_03" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 131, 184 )
+shape = "1"
+
+[node name="Blob1_04" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 144, 208 )
+shape = "1"
+
+[node name="Blob1_05" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 147, 227 )
+shape = "1"
+
+[node name="Blob1_06" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 154, 246 )
+shape = "1"
+
+[node name="Blob1_07" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 171, 273 )
+shape = "1"
+
+[node name="Blob1_08" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 205, 286 )
+shape = "1"
+
+[node name="Blob1_09" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 225, 299 )
+shape = "1"
+
+[node name="Blob1_10" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 244, 320 )
+shape = "1"
+
+[node name="Blob1_11" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 254, 340 )
+shape = "1"
+
+[node name="Blob1_12" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 256, 345 )
+shape = "1"
+
+[node name="Blob1_13" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 317, 345 )
+shape = "1"
+
+[node name="Blob1_14" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 346, 319 )
+shape = "1"
+
+[node name="Blob1_15" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 349, 280 )
+shape = "1"
+
+[node name="Blob1_16" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 316, 243 )
+shape = "1"
+
+[node name="Blob1_17" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 279, 208 )
+shape = "1"
+
+[node name="Blob1_18" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 266, 177 )
+shape = "1"
+
+[node name="Blob1_19" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 267, 150 )
+shape = "1"
+
+[node name="Blob1_20" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 305, 103 )
+shape = "1"
+
+[node name="Blob1_21" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 310, 77 )
+shape = "1"
+
+[node name="Blob1_100" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 308, 47 )
+shape = "1"
+
+[node name="Blob1_101" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 295, 20 )
+shape = "1"
+
+[node name="Blob1_115" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 269, 1 )
+shape = "1"
+
+[node name="Blob1_149" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 276, 5 )
+shape = "1"
+
+[node name="Blob1_150" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 292, 14 )
+shape = "1"
+
+[node name="Blob1_151" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 310, 53 )
+shape = "1"
+
+[node name="Blob1_152" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 312, 70 )
+shape = "1"
+
+[node name="Blob1_153" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 308, 96 )
+shape = "1"
+
+[node name="Blob1_154" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 300, 108 )
+shape = "1"
+
+[node name="Blob1_155" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 286, 118 )
+shape = "1"
+
+[node name="Blob1_156" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 280, 123 )
+shape = "1"
+
+[node name="Blob1_157" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 268, 137 )
+shape = "1"
+
+[node name="Blob1_158" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 267, 143 )
+shape = "1"
+
+[node name="Blob1_159" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 263, 156 )
+shape = "1"
+
+[node name="Blob1_160" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 260, 162 )
+shape = "1"
+
+[node name="Blob1_161" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 260, 168 )
+shape = "1"
+
+[node name="Blob1_162" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 273, 198 )
+shape = "1"
+
+[node name="Blob1_163" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 280, 214 )
+shape = "1"
+
+[node name="Blob1_164" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 288, 231 )
+shape = "1"
+
+[node name="Blob1_165" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 292, 235 )
+shape = "1"
+
+[node name="Blob1_166" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 306, 242 )
+shape = "1"
+
+[node name="Blob1_167" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 326, 247 )
+shape = "1"
+
+[node name="Blob1_168" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 337, 259 )
+shape = "1"
+
+[node name="Blob1_169" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 342, 265 )
+shape = "1"
+
+[node name="Blob1_170" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 347, 274 )
+shape = "1"
+
+[node name="Blob1_171" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 352, 289 )
+shape = "1"
+
+[node name="Blob1_172" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 348, 308 )
+shape = "1"
+
+[node name="Blob1_173" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 341, 325 )
+shape = "1"
+
+[node name="Blob1_174" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 334, 333 )
+shape = "1"
+
+[node name="Blob1_175" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 328, 339 )
+shape = "1"
+
+[node name="Blob1_176" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 325, 342 )
+shape = "1"
+
+[node name="Blob1_177" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 255, 332 )
+shape = "1"
+
+[node name="Blob1_178" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 250, 324 )
+shape = "1"
+
+[node name="Blob1_179" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 229, 307 )
+shape = "1"
+
+[node name="Blob1_180" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 218, 293 )
+shape = "1"
+
+[node name="Blob1_181" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 181, 278 )
+shape = "1"
+
+[node name="Blob1_182" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 166, 268 )
+shape = "1"
+
+[node name="Blob1_183" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 164, 261 )
+shape = "1"
+
+[node name="Blob1_184" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 149, 232 )
+shape = "1"
+
+[node name="Blob1_185" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 152, 242 )
+shape = "1"
+
+[node name="Blob1_186" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 146, 220 )
+shape = "1"
+
+[node name="Blob1_187" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 143, 202 )
+shape = "1"
+
+[node name="Blob1_188" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 139, 194 )
+shape = "1"
+
+[node name="Blob1_189" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 134, 187 )
+shape = "1"
+
+[node name="Blob1_190" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 314, 51 )
+shape = "1"
+
+[node name="Blob1_191" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 331, 45 )
+shape = "1"
+
+[node name="Blob1_192" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 347, 52 )
+shape = "1"
+
+[node name="Blob1_193" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 362, 59 )
+shape = "1"
+
+[node name="Blob1_194" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 367, 59 )
+shape = "1"
+
+[node name="Blob1_195" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 383, 51 )
+shape = "1"
+
+[node name="Blob1_196" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 412, 47 )
+shape = "1"
+
+[node name="Blob1_197" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 417, 42 )
+shape = "1"
+
+[node name="Blob1_198" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 450, 38 )
+shape = "1"
+
+[node name="Blob1_199" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 466, 44 )
+shape = "1"
+
+[node name="Blob1_200" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 476, 55 )
+shape = "1"
+
+[node name="Blob1_201" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 474, 59 )
+shape = "1"
+
+[node name="Blob1_202" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 463, 98 )
+shape = "1"
+
+[node name="Blob1_203" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 460, 105 )
+shape = "1"
+
+[node name="Blob1_204" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 451, 113 )
+shape = "1"
+
+[node name="Blob1_205" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 436, 119 )
+shape = "1"
+
+[node name="Blob1_206" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 426, 128 )
+shape = "1"
+
+[node name="Blob1_207" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 422, 133 )
+shape = "1"
+
+[node name="Blob1_208" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 416, 147 )
+shape = "1"
+
+[node name="Blob1_209" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 416, 154 )
+shape = "1"
+
+[node name="Blob1_210" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 417, 183 )
+shape = "1"
+
+[node name="Blob1_211" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 427, 195 )
+shape = "1"
+
+[node name="Blob1_212" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 437, 209 )
+shape = "1"
+
+[node name="Blob1_213" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 442, 225 )
+shape = "1"
+
+[node name="Blob1_214" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 461, 230 )
+shape = "1"
+
+[node name="Blob1_215" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 472, 230 )
+shape = "1"
+
+[node name="Blob1_216" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 482, 248 )
+shape = "1"
+
+[node name="Blob1_217" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 484, 256 )
+shape = "1"
+
+[node name="Blob1_218" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 484, 270 )
+shape = "1"
+
+[node name="Blob1_219" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 485, 293 )
+shape = "1"
+
+[node name="Blob1_220" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 477, 308 )
+shape = "1"
+
+[node name="Blob1_221" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 474, 315 )
+shape = "1"
+
+[node name="Blob1_222" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 473, 319 )
+shape = "1"
+
+[node name="Blob1_223" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 473, 337 )
+shape = "1"
+
+[node name="Blob1_224" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 483, 49 )
+shape = "1"
+
+[node name="Blob1_225" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 498, 42 )
+shape = "1"
+
+[node name="Blob1_226" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 513, 46 )
+shape = "1"
+
+[node name="Blob1_227" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 527, 49 )
+shape = "1"
+
+[node name="Blob1_228" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 533, 49 )
+shape = "1"
+
+[node name="Blob1_229" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 545, 56 )
+shape = "1"
+
+[node name="Blob1_230" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 563, 77 )
+shape = "1"
+
+[node name="Blob1_231" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 567, 91 )
+shape = "1"
+
+[node name="Blob1_232" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 580, 105 )
+shape = "1"
+
+[node name="Blob1_233" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 600, 133 )
+shape = "1"
+
+[node name="Blob1_234" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 607, 154 )
+shape = "1"
+
+[node name="Blob1_235" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 610, 159 )
+shape = "1"
+
+[node name="Blob1_236" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 622, 171 )
+shape = "1"
+
+[node name="Blob1_237" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 641, 192 )
+shape = "1"
+
+[node name="Blob1_238" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 649, 198 )
+shape = "1"
+
+[node name="Blob1_239" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 666, 201 )
+shape = "1"
+
+[node name="Blob1_240" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 690, 203 )
+shape = "1"
+
+[node name="Blob1_241" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 704, 198 )
+shape = "1"
+
+[node name="Blob1_242" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 723, 191 )
+shape = "1"
+
+[node name="Blob1_243" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 732, 178 )
+shape = "1"
+
+[node name="Blob1_244" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 739, 170 )
+shape = "1"
+
+[node name="Blob1_116" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 252, -10 )
+shape = "1"
+
+[node name="Blob1_117" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 302, 26 )
+shape = "1"
+
+[node name="Blob1_118" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 354, 56 )
+shape = "1"
+
+[node name="Blob1_119" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 374, 58 )
+shape = "1"
+
+[node name="Blob1_120" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 403, 50 )
+shape = "1"
+
+[node name="Blob1_121" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 421, 38 )
+shape = "1"
+
+[node name="Blob1_122" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 445, 36 )
+shape = "1"
+
+[node name="Blob1_123" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 470, 68 )
+shape = "1"
+
+[node name="Blob1_124" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 467, 91 )
+shape = "1"
+
+[node name="Blob1_125" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 431, 122 )
+shape = "1"
+
+[node name="Blob1_126" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 419, 139 )
+shape = "1"
+
+[node name="Blob1_127" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 416, 160 )
+shape = "1"
+
+[node name="Blob1_128" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 420, 190 )
+shape = "1"
+
+[node name="Blob1_129" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 437, 217 )
+shape = "1"
+
+[node name="Blob1_130" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 466, 227 )
+shape = "1"
+
+[node name="Blob1_131" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 483, 263 )
+shape = "1"
+
+[node name="Blob1_132" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 482, 301 )
+shape = "1"
+
+[node name="Blob1_133" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 473, 327 )
+shape = "1"
+
+[node name="Blob1_134" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 470, 346 )
+shape = "1"
+
+[node name="Blob1_135" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 475, 49 )
+shape = "1"
+
+[node name="Blob1_136" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 519, 48 )
+shape = "1"
+
+[node name="Blob1_137" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 540, 52 )
+shape = "1"
+
+[node name="Blob1_138" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 564, 72 )
+shape = "1"
+
+[node name="Blob1_139" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 588, 108 )
+shape = "1"
+
+[node name="Blob1_140" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 598, 125 )
+shape = "1"
+
+[node name="Blob1_141" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 615, 164 )
+shape = "1"
+
+[node name="Blob1_142" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 636, 186 )
+shape = "1"
+
+[node name="Blob1_143" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 658, 198 )
+shape = "1"
+
+[node name="Blob1_144" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 695, 200 )
+shape = "1"
+
+[node name="Blob1_145" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 726, 186 )
+shape = "1"
+
+[node name="Blob1_146" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 746, 165 )
+shape = "1"
+
+[node name="Blob1_147" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 761, 146 )
+shape = "1"
+
+[node name="Blob1_148" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 775, 134 )
+shape = "1"
+
+[node name="Blob2_01" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 110, 169 )
+shape = "2"
+
+[node name="Blob2_02" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 116, 172 )
+shape = "2"
+
+[node name="Blob2_03" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 146, 214 )
+shape = "2"
+
+[node name="Blob2_04" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 158, 253 )
+shape = "2"
+
+[node name="Blob2_05" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 188, 283 )
+shape = "2"
+
+[node name="Blob2_06" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 195, 284 )
+shape = "2"
+
+[node name="Blob2_07" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 212, 291 )
+shape = "2"
+
+[node name="Blob2_08" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 236, 315 )
+shape = "2"
+
+[node name="Blob2_09" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 352, 297 )
+shape = "2"
+
+[node name="Blob2_10" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 332, 252 )
+shape = "2"
+
+[node name="Blob2_11" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 300, 242 )
+shape = "2"
+
+[node name="Blob2_12" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 281, 222 )
+shape = "2"
+
+[node name="Blob2_13" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 273, 192 )
+shape = "2"
+
+[node name="Blob2_14" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 269, 184 )
+shape = "2"
+
+[node name="Blob2_15" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 272, 128 )
+shape = "2"
+
+[node name="Blob2_16" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 293, 115 )
+shape = "2"
+
+[node name="Blob2_17" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 311, 86 )
+shape = "2"
+
+[node name="Blob2_18" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 314, 61 )
+shape = "2"
+
+[node name="Blob2_19" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 308, 39 )
+shape = "2"
+
+[node name="Blob2_20" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 307, 34 )
+shape = "2"
+
+[node name="Blob2_21" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 284, 9 )
+shape = "2"
+
+[node name="Blob2_22" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 262, -4 )
+shape = "2"
+
+[node name="Blob2_23" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 257, -7 )
+shape = "2"
+
+[node name="Blob2_24" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 322, 47 )
+shape = "2"
+
+[node name="Blob2_25" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 341, 50 )
+shape = "2"
+
+[node name="Blob2_26" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 316, 43 )
+shape = "2"
+
+[node name="Blob2_27" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 393, 51 )
+shape = "2"
+
+[node name="Blob2_28" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 427, 33 )
+shape = "2"
+
+[node name="Blob2_29" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 436, 33 )
+shape = "2"
+
+[node name="Blob2_30" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 458, 42 )
+shape = "2"
+
+[node name="Blob2_31" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 471, 73 )
+shape = "2"
+
+[node name="Blob2_32" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 469, 82 )
+shape = "2"
+
+[node name="Blob2_33" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 445, 115 )
+shape = "2"
+
+[node name="Blob2_34" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 412, 166 )
+shape = "2"
+
+[node name="Blob2_35" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 413, 174 )
+shape = "2"
+
+[node name="Blob2_36" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 434, 200 )
+shape = "2"
+
+[node name="Blob2_37" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 449, 232 )
+shape = "2"
+
+[node name="Blob2_38" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 452, 231 )
+shape = "2"
+
+[node name="Blob2_39" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 476, 237 )
+shape = "2"
+
+[node name="Blob2_40" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 479, 242 )
+shape = "2"
+
+[node name="Blob2_41" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 486, 277 )
+shape = "2"
+
+[node name="Blob2_42" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 487, 286 )
+shape = "2"
+
+[node name="Blob2_43" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 604, 147 )
+shape = "2"
+
+[node name="Blob2_44" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 603, 138 )
+shape = "2"
+
+[node name="Blob2_45" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 591, 117 )
+shape = "2"
+
+[node name="Blob2_46" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 573, 98 )
+shape = "2"
+
+[node name="Blob2_47" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 563, 84 )
+shape = "2"
+
+[node name="Blob2_48" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 561, 67 )
+shape = "2"
+
+[node name="Blob2_49" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 554, 62 )
+shape = "2"
+
+[node name="Blob2_50" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 490, 44 )
+shape = "2"
+
+[node name="Blob2_51" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 505, 43 )
+shape = "2"
+
+[node name="Blob2_52" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 625, 178 )
+shape = "2"
+
+[node name="Blob2_53" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 629, 182 )
+shape = "2"
+
+[node name="Blob2_54" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 673, 206 )
+shape = "2"
+
+[node name="Blob2_55" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 680, 205 )
+shape = "2"
+
+[node name="Blob2_56" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 713, 198 )
+shape = "2"
+
+[node name="Blob2_57" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 718, 197 )
+shape = "2"
+
+[node name="Blob2_58" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 748, 159 )
+shape = "2"
+
+[node name="Blob2_59" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 754, 153 )
+shape = "2"
+
+[node name="Blob2_60" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 768, 139 )
+shape = "2"
+
+[node name="Blob4_01" parent="Layer1/Blobs" instance=ExtResource( 5 )]
+position = Vector2( 104, 164 )
+shape = "4"
+
+[node name="Thorn1_01" parent="Layer1/Blobs" instance=ExtResource( 2 )]
+position = Vector2( 590, 143 )
+rotation = -2.54408
+
+[node name="Thorn2_01" parent="Layer1/Blobs" instance=ExtResource( 2 )]
+position = Vector2( 273, 162 )
+rotation = 1.32361
+shape = "2"
+
+[node name="Thorn3_01" parent="Layer1/Blobs" instance=ExtResource( 2 )]
+position = Vector2( 164, 231 )
+rotation = 1.02776
+shape = "3"
+
+[node name="Thorn4_01" parent="Layer1/Blobs" instance=ExtResource( 2 )]
+position = Vector2( 267, 115 )
+rotation = -0.678991
+shape = "4"
+
+[node name="Joys" type="Node2D" parent="Layer1"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Gravel" type="Node2D" parent="Layer1"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Gravel_01" parent="Layer1/Gravel" instance=ExtResource( 29 )]
+position = Vector2( 304, 224 )
+collision_layer = 512
+collision_mask = 32
+
+[node name="Gravel_02" parent="Layer1/Gravel" instance=ExtResource( 29 )]
+position = Vector2( 288, 224 )
+collision_layer = 512
+collision_mask = 32
+
+[node name="MovingBlobs" type="Node2D" parent="Layer1"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="MovingPlatforms" type="Node2D" parent="Layer1"]
+z_index = 1
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="TileMap" type="TileMap" parent="Layer1"]
+visible = false
+modulate = Color( 0, 0, 0, 1 )
+light_mask = 32
+material = SubResource( 9 )
+z_index = 1
+tile_set = ExtResource( 10 )
+cell_size = Vector2( 8, 8 )
+cell_quadrant_size = 2
+collision_layer = 256
+collision_mask = 608
+occluder_light_mask = 32
+format = 1
+tile_data = PoolIntArray( -65538, 0, 0, -65537, 0, 0, -131072, 0, 0, -131071, 0, 0, -131070, 0, 0, -131069, 0, 0, -131068, 0, 0, -131067, 0, 0, -131066, 0, 0, -131065, 0, 0, -131064, 0, 0, -131063, 0, 0, -131062, 0, 0, -131061, 0, 0, -131060, 0, 0, -131059, 0, 0, -131058, 0, 0, -131057, 0, 0, -131056, 0, 0, -131055, 0, 0, -131054, 0, 0, -131053, 0, 0, -131052, 0, 0, -131051, 0, 0, -131050, 0, 0, -131049, 0, 0, -131048, 0, 0, -131047, 0, 0, -131046, 0, 0, -131045, 0, 0, -131044, 0, 0, -131043, 0, 0, -131042, 0, 0, -131041, 0, 0, -131040, 0, 0, -131039, 0, 0, -131038, 0, 0, -131037, 0, 0, -131036, 0, 0, -131035, 0, 0, -131034, 0, 0, -131033, 0, 0, -131032, 0, 0, -131031, 0, 0, -131030, 0, 0, -131029, 0, 0, -131028, 0, 0, -131027, 0, 0, -131026, 0, 0, -131025, 0, 0, -131024, 0, 0, -131023, 0, 0, -131022, 0, 0, -131021, 0, 0, -131020, 0, 0, -131019, 0, 0, -131018, 0, 0, -131017, 0, 0, -131016, 0, 0, -131015, 0, 0, -131014, 0, 0, -131013, 0, 0, -131012, 0, 0, -131011, 0, 0, -131010, 0, 0, -131009, 0, 0, -131008, 0, 0, -131007, 0, 0, -131006, 0, 0, -131005, 0, 0, -131004, 0, 0, -131003, 0, 0, -131002, 0, 0, -131001, 0, 0, -131000, 0, 0, -130999, 0, 0, -130998, 0, 0, -130997, 0, 0, -130996, 0, 0, -130995, 0, 0, -130994, 0, 0, -130993, 0, 0, -130992, 0, 0, -130991, 0, 0, -130990, 0, 0, -130989, 0, 0, -130988, 0, 0, -130987, 0, 0, -130986, 0, 0, -130985, 0, 0, -130984, 0, 0, -130983, 0, 0, -130982, 0, 0, -130981, 0, 0, -130980, 0, 0, -130979, 0, 0, -130978, 0, 0, -130977, 0, 0, -130976, 0, 0, -130975, 0, 0, -2, 0, 0, -65439, 0, 0, 65534, 0, 0, 97, 0, 0, 131070, 0, 0, 65633, 0, 0, 196606, 0, 0, 131169, 0, 0, 262142, 0, 0, 196705, 0, 0, 327678, 0, 0, 262241, 0, 0, 393214, 0, 0, 327777, 0, 0, 458750, 0, 0, 393313, 0, 0, 524286, 0, 0, 458849, 0, 0, 589822, 0, 0, 524385, 0, 0, 655358, 0, 0, 589921, 0, 0, 720894, 0, 0, 655457, 0, 0, 786430, 0, 0, 720993, 0, 0, 851966, 0, 0, 786529, 0, 0, 917502, 0, 0, 852065, 0, 0, 983038, 0, 0, 917601, 0, 0, 1048574, 0, 262145, 1048575, 0, 65537, 983040, 0, 131073, 983041, 0, 1, 983042, 0, 196608, 983043, 0, 196608, 983044, 0, 1, 983045, 0, 196608, 983046, 0, 0, 983047, 0, 131073, 983048, 0, 262147, 983137, 0, 0, 1114110, 0, 196615, 1114111, 0, 8, 1048576, 0, 8, 1048577, 0, 8, 1048578, 0, 8, 1048579, 0, 8, 1048580, 0, 8, 1048581, 0, 8, 1048582, 0, 262152, 1048583, 0, 8, 1048584, 0, 393220, 1048585, 0, 327683, 1048673, 0, 0, 1179646, 0, 131077, 1179647, 0, 8, 1114112, 0, 8, 1114113, 0, 8, 1114114, 0, 262152, 1114115, 0, 8, 1114116, 0, 393225, 1114117, 0, 8, 1114118, 0, 8, 1114119, 0, 8, 1114120, 0, 8, 1114121, 0, 65540, 1114209, 0, 0, 1245182, 0, 131079, 1245183, 0, 8, 1179648, 0, 8, 1179649, 0, 8, 1179650, 0, 8, 1179651, 0, 8, 1179652, 0, 8, 1179653, 0, 8, 1179654, 0, 8, 1179655, 0, 8, 1179656, 0, 8, 1179657, 0, 4, 1179745, 0, 0, 1310718, 0, 131079, 1310719, 0, 131080, 1245184, 0, 8, 1245185, 0, 8, 1245186, 0, 393225, 1245187, 0, 8, 1245188, 0, 8, 1245189, 0, 458761, 1245190, 0, 262152, 1245191, 0, 8, 1245192, 0, 8, 1245193, 0, 393220, 1245194, 0, 0, 1245195, 0, 196609, 1245196, 0, 262146, 1245281, 0, 0, 1376254, 0, 196612, 1376255, 0, 8, 1310720, 0, 8, 1310721, 0, 8, 1310722, 0, 8, 1310723, 0, 8, 1310724, 0, 8, 1310725, 0, 8, 1310726, 0, 8, 1310727, 0, 8, 1310728, 0, 262152, 1310729, 0, 8, 1310730, 0, 8, 1310731, 0, 8, 1310732, 0, 65543, 1310817, 0, 0, 1441790, 0, 131076, 1441791, 0, 327688, 1376256, 0, 8, 1376257, 0, 8, 1376258, 0, 8, 1376259, 0, 8, 1376260, 0, 8, 1376261, 0, 8, 1376262, 0, 8, 1376263, 0, 8, 1376264, 0, 8, 1376265, 0, 8, 1376266, 0, 8, 1376267, 0, 8, 1376268, 0, 7, 1376353, 0, 0, 1507326, 0, 131077, 1507327, 0, 8, 1441792, 0, 8, 1441793, 0, 8, 1441794, 0, 8, 1441795, 0, 8, 1441796, 0, 8, 1441797, 0, 8, 1441798, 0, 8, 1441799, 0, 8, 1441800, 0, 8, 1441801, 0, 8, 1441802, 0, 8, 1441803, 0, 8, 1441804, 0, 65541, 1441889, 0, 0, 1572862, 0, 196615, 1572863, 0, 8, 1507328, 0, 8, 1507329, 0, 8, 1507330, 0, 8, 1507331, 0, 8, 1507332, 0, 8, 1507333, 0, 458760, 1507334, 0, 131081, 1507335, 0, 8, 1507336, 0, 8, 1507337, 0, 8, 1507338, 0, 8, 1507339, 0, 8, 1507340, 0, 4, 1507425, 0, 0, 1638398, 0, 131078, 1638399, 0, 327688, 1572864, 0, 8, 1572865, 0, 8, 1572866, 0, 8, 1572867, 0, 8, 1572868, 0, 8, 1572869, 0, 8, 1572870, 0, 8, 1572871, 0, 8, 1572872, 0, 8, 1572873, 0, 8, 1572874, 0, 327688, 1572875, 0, 8, 1572876, 0, 6, 1572961, 0, 0, 1703934, 0, 131077, 1703935, 0, 8, 1638400, 0, 8, 1638401, 0, 262152, 1638402, 0, 8, 1638403, 0, 8, 1638404, 0, 8, 1638405, 0, 8, 1638406, 0, 8, 1638407, 0, 393225, 1638408, 0, 8, 1638409, 0, 8, 1638410, 0, 8, 1638411, 0, 8, 1638412, 0, 5, 1638497, 0, 0, 1769470, 0, 196613, 1769471, 0, 8, 1703936, 0, 8, 1703937, 0, 8, 1703938, 0, 8, 1703939, 0, 8, 1703940, 0, 8, 1703941, 0, 8, 1703942, 0, 8, 1703943, 0, 8, 1703944, 0, 8, 1703945, 0, 8, 1703946, 0, 8, 1703947, 0, 8, 1703948, 0, 6, 1704033, 0, 0, 1835006, 0, 196613, 1835007, 0, 8, 1769472, 0, 8, 1769473, 0, 8, 1769474, 0, 8, 1769475, 0, 8, 1769476, 0, 8, 1769477, 0, 262153, 1769478, 0, 8, 1769479, 0, 8, 1769480, 0, 8, 1769481, 0, 8, 1769482, 0, 8, 1769483, 0, 8, 1769484, 0, 65541, 1769569, 0, 0, 1900542, 0, 131079, 1900543, 0, 8, 1835008, 0, 8, 1835009, 0, 8, 1835010, 0, 8, 1835011, 0, 8, 1835012, 0, 8, 1835013, 0, 327688, 1835014, 0, 8, 1835015, 0, 8, 1835016, 0, 8, 1835017, 0, 196617, 1835018, 0, 8, 1835019, 0, 8, 1835020, 0, 65542, 1835105, 0, 0, 1966078, 0, 196613, 1966079, 0, 8, 1900544, 0, 196617, 1900545, 0, 8, 1900546, 0, 8, 1900547, 0, 8, 1900548, 0, 8, 1900549, 0, 8, 1900550, 0, 196616, 1900551, 0, 8, 1900552, 0, 8, 1900553, 0, 393224, 1900554, 0, 8, 1900555, 0, 8, 1900556, 0, 5, 1900641, 0, 0, 2031614, 0, 196615, 2031615, 0, 8, 1966080, 0, 8, 1966081, 0, 8, 1966082, 0, 8, 1966083, 0, 8, 1966084, 0, 393225, 1966085, 0, 327689, 1966086, 0, 8, 1966087, 0, 8, 1966088, 0, 8, 1966089, 0, 262153, 1966090, 0, 8, 1966091, 0, 131080, 1966092, 0, 65541, 1966177, 0, 0, 2097150, 0, 131076, 2097151, 0, 8, 2031616, 0, 8, 2031617, 0, 8, 2031618, 0, 8, 2031619, 0, 8, 2031620, 0, 8, 2031621, 0, 8, 2031622, 0, 8, 2031623, 0, 8, 2031624, 0, 8, 2031625, 0, 8, 2031626, 0, 8, 2031627, 0, 8, 2031628, 0, 6, 2031713, 0, 0, 2162686, 0, 196612, 2162687, 0, 8, 2097152, 0, 8, 2097153, 0, 8, 2097154, 0, 8, 2097155, 0, 8, 2097156, 0, 262153, 2097157, 0, 8, 2097158, 0, 8, 2097159, 0, 8, 2097160, 0, 8, 2097161, 0, 8, 2097162, 0, 262148, 2097163, 0, 65538, 2097164, 0, 393219, 2097249, 0, 0, 2228222, 0, 196615, 2228223, 0, 8, 2162688, 0, 8, 2162689, 0, 8, 2162690, 0, 8, 2162691, 0, 8, 2162692, 0, 8, 2162693, 0, 8, 2162694, 0, 8, 2162695, 0, 131081, 2162696, 0, 327684, 2162697, 0, 196611, 2162698, 0, 458754, 2162785, 0, 0, 2293758, 0, 131079, 2293759, 0, 8, 2228224, 0, 8, 2228225, 0, 8, 2228226, 0, 8, 2228227, 0, 131080, 2228228, 0, 8, 2228229, 0, 8, 2228230, 0, 8, 2228231, 0, 8, 2228232, 0, 65542, 2228321, 0, 0, 2359294, 0, 131077, 2359295, 0, 8, 2293760, 0, 393225, 2293761, 0, 131081, 2293762, 0, 8, 2293763, 0, 8, 2293764, 0, 8, 2293765, 0, 8, 2293766, 0, 327688, 2293767, 0, 8, 2293768, 0, 5, 2293857, 0, 0, 2424830, 0, 131079, 2424831, 0, 8, 2359296, 0, 393224, 2359297, 0, 8, 2359298, 0, 8, 2359299, 0, 8, 2359300, 0, 8, 2359301, 0, 8, 2359302, 0, 8, 2359303, 0, 8, 2359304, 0, 4, 2359393, 0, 0, 2490366, 0, 196613, 2490367, 0, 393224, 2424832, 0, 8, 2424833, 0, 262153, 2424834, 0, 8, 2424835, 0, 8, 2424836, 0, 8, 2424837, 0, 8, 2424838, 0, 262148, 2424839, 0, 196610, 2424840, 0, 393219, 2424929, 0, 0, 2555902, 0, 196615, 2555903, 0, 8, 2490368, 0, 393224, 2490369, 0, 8, 2490370, 0, 8, 2490371, 0, 8, 2490372, 0, 8, 2490373, 0, 8, 2490374, 0, 4, 2490465, 0, 0, 2621438, 0, 131079, 2621439, 0, 8, 2555904, 0, 8, 2555905, 0, 8, 2555906, 0, 8, 2555907, 0, 8, 2555908, 0, 8, 2555909, 0, 8, 2555910, 0, 65543, 2556001, 0, 0, 2686974, 0, 196614, 2686975, 0, 262152, 2621440, 0, 8, 2621441, 0, 8, 2621442, 0, 8, 2621443, 0, 8, 2621444, 0, 8, 2621445, 0, 8, 2621446, 0, 6, 2621537, 0, 0, 2752510, 0, 131076, 2752511, 0, 8, 2686976, 0, 8, 2686977, 0, 8, 2686978, 0, 327689, 2686979, 0, 8, 2686980, 0, 8, 2686981, 0, 8, 2686982, 0, 65543, 2687073, 0, 0, 2818046, 0, 131078, 2818047, 0, 8, 2752512, 0, 8, 2752513, 0, 8, 2752514, 0, 8, 2752515, 0, 8, 2752516, 0, 8, 2752517, 0, 8, 2752518, 0, 65542, 2752609, 0, 0, 2883582, 0, 458753, 2883583, 0, 196610, 2818048, 0, 2, 2818049, 0, 65539, 2818050, 0, 65538, 2818051, 0, 65539, 2818052, 0, 3, 2818053, 0, 196610, 2818054, 0, 458754, 2818145, 0, 0 )
+script = ExtResource( 14 )
+__meta__ = {
+"_edit_bone_": true,
+"_edit_lock_": true
+}
+
+[node name="TextureTileMap" type="TileMap" parent="Layer1"]
+light_mask = 32
+material = SubResource( 10 )
+z_index = 1
+tile_set = ExtResource( 10 )
+cell_size = Vector2( 8, 8 )
+cell_quadrant_size = 2
+collision_layer = 0
+collision_mask = 0
+occluder_light_mask = 32
+format = 1
+tile_data = PoolIntArray( 917505, 8, 8, 917506, 6, 8, 917509, 6, 9, 917510, 10, 8, 1048574, 5, 262145, 1048575, 5, 65537, 983040, 7, 131073, 983041, 7, 1, 983042, 7, 196608, 983043, 9, 196608, 983044, 9, 1, 983045, 9, 196608, 983046, 9, 0, 983047, 7, 131073, 983048, 5, 262147, 983049, 8, 3, 1114110, 5, 196615, 1114111, 5, 8, 1048576, 7, 8, 1048577, 9, 8, 1048578, 7, 8, 1048579, 7, 8, 1048580, 7, 8, 1048581, 7, 8, 1048582, 7, 262152, 1048583, 7, 8, 1048584, 7, 393220, 1048585, 5, 327683, 1179646, 5, 131077, 1179647, 5, 8, 1114112, 5, 8, 1114113, 5, 8, 1114114, 5, 262152, 1114115, 5, 8, 1114116, 9, 393225, 1114117, 9, 8, 1114118, 9, 8, 1114119, 7, 8, 1114120, 7, 8, 1114121, 5, 65540, 1245182, 5, 131079, 1245183, 5, 8, 1179648, 5, 8, 1179649, 5, 8, 1179650, 5, 8, 1179651, 5, 8, 1179652, 5, 8, 1179653, 9, 8, 1179654, 7, 8, 1179655, 7, 8, 1179656, 9, 8, 1179657, 9, 4, 1179658, 8, 2, 1179659, 6, 9, 1179660, 8, 9, 1310718, 5, 131079, 1310719, 5, 131080, 1245184, 5, 8, 1245185, 5, 8, 1245186, 5, 393225, 1245187, 5, 8, 1245188, 5, 8, 1245189, 5, 458761, 1245190, 7, 262152, 1245191, 7, 8, 1245192, 7, 8, 1245193, 7, 393220, 1245194, 7, 0, 1245195, 9, 196609, 1245196, 5, 262146, 1376254, 5, 196612, 1376255, 5, 8, 1310720, 5, 8, 1310721, 5, 8, 1310722, 5, 8, 1310723, 5, 8, 1310724, 5, 8, 1310725, 5, 8, 1310726, 7, 8, 1310727, 5, 8, 1310728, 7, 262152, 1310729, 7, 8, 1310730, 7, 8, 1310731, 7, 8, 1310732, 9, 65543, 1441790, 5, 131076, 1441791, 5, 327688, 1376256, 5, 8, 1376257, 5, 8, 1376258, 5, 8, 1376259, 5, 8, 1376260, 5, 8, 1376261, 5, 8, 1376262, 5, 8, 1376263, 5, 8, 1376264, 5, 8, 1376265, 5, 8, 1376266, 5, 8, 1376267, 5, 8, 1376268, 9, 7, 1507326, 5, 131077, 1507327, 5, 8, 1441792, 5, 8, 1441793, 5, 8, 1441794, 5, 8, 1441795, 5, 8, 1441796, 5, 8, 1441797, 5, 8, 1441798, 5, 8, 1441799, 5, 8, 1441800, 5, 8, 1441801, 5, 8, 1441802, 5, 8, 1441803, 5, 8, 1441804, 5, 65541, 1572862, 5, 196615, 1572863, 5, 8, 1507328, 5, 8, 1507329, 5, 8, 1507330, 5, 8, 1507331, 5, 8, 1507332, 5, 8, 1507333, 5, 458760, 1507334, 5, 131081, 1507335, 5, 8, 1507336, 5, 8, 1507337, 5, 8, 1507338, 5, 8, 1507339, 5, 8, 1507340, 5, 4, 1638398, 5, 131078, 1638399, 5, 327688, 1572864, 5, 8, 1572865, 5, 8, 1572866, 5, 8, 1572867, 5, 8, 1572868, 5, 8, 1572869, 5, 8, 1572870, 5, 8, 1572871, 5, 8, 1572872, 5, 8, 1572873, 5, 8, 1572874, 5, 327688, 1572875, 5, 8, 1572876, 5, 6, 1703934, 5, 131077, 1703935, 5, 8, 1638400, 5, 8, 1638401, 5, 262152, 1638402, 5, 8, 1638403, 5, 8, 1638404, 5, 8, 1638405, 5, 8, 1638406, 5, 8, 1638407, 5, 393225, 1638408, 5, 8, 1638409, 5, 8, 1638410, 5, 8, 1638411, 5, 8, 1638412, 5, 5, 1769470, 5, 196613, 1769471, 5, 8, 1703936, 5, 8, 1703937, 5, 8, 1703938, 5, 8, 1703939, 5, 8, 1703940, 5, 8, 1703941, 5, 8, 1703942, 5, 8, 1703943, 5, 8, 1703944, 5, 8, 1703945, 5, 8, 1703946, 5, 8, 1703947, 5, 8, 1703948, 5, 6, 1835006, 5, 196613, 1835007, 5, 8, 1769472, 5, 8, 1769473, 5, 8, 1769474, 5, 8, 1769475, 5, 8, 1769476, 5, 8, 1769477, 5, 262153, 1769478, 5, 8, 1769479, 5, 8, 1769480, 5, 8, 1769481, 5, 8, 1769482, 5, 8, 1769483, 5, 8, 1769484, 5, 65541, 1900542, 5, 131079, 1900543, 5, 8, 1835008, 5, 8, 1835009, 5, 8, 1835010, 5, 8, 1835011, 5, 8, 1835012, 5, 8, 1835013, 5, 327688, 1835014, 5, 8, 1835015, 5, 8, 1835016, 5, 8, 1835017, 5, 196617, 1835018, 5, 8, 1835019, 5, 8, 1835020, 5, 65542, 1966078, 5, 196613, 1966079, 5, 8, 1900544, 5, 196617, 1900545, 5, 8, 1900546, 5, 8, 1900547, 5, 8, 1900548, 5, 8, 1900549, 5, 8, 1900550, 5, 196616, 1900551, 5, 8, 1900552, 5, 8, 1900553, 5, 393224, 1900554, 5, 8, 1900555, 5, 8, 1900556, 5, 5, 2031614, 5, 196615, 2031615, 5, 8, 1966080, 5, 8, 1966081, 5, 8, 1966082, 5, 8, 1966083, 5, 8, 1966084, 5, 393225, 1966085, 5, 327689, 1966086, 5, 8, 1966087, 5, 8, 1966088, 5, 8, 1966089, 5, 262153, 1966090, 5, 8, 1966091, 5, 131080, 1966092, 5, 65541, 2097150, 5, 131076, 2097151, 5, 8, 2031616, 5, 8, 2031617, 5, 8, 2031618, 5, 8, 2031619, 5, 8, 2031620, 5, 8, 2031621, 5, 8, 2031622, 5, 8, 2031623, 5, 8, 2031624, 5, 8, 2031625, 5, 8, 2031626, 5, 8, 2031627, 5, 8, 2031628, 5, 6, 2162686, 5, 196612, 2162687, 5, 8, 2097152, 5, 8, 2097153, 5, 8, 2097154, 5, 8, 2097155, 5, 8, 2097156, 5, 262153, 2097157, 5, 8, 2097158, 5, 8, 2097159, 5, 8, 2097160, 5, 8, 2097161, 5, 8, 2097162, 5, 262148, 2097163, 5, 65538, 2097164, 5, 393219, 2228222, 5, 196615, 2228223, 5, 8, 2162688, 5, 8, 2162689, 5, 8, 2162690, 5, 8, 2162691, 5, 8, 2162692, 5, 8, 2162693, 5, 8, 2162694, 5, 8, 2162695, 5, 131081, 2162696, 5, 327684, 2162697, 5, 196611, 2162698, 5, 458754, 2162699, 6, 6, 2293758, 5, 131079, 2293759, 5, 8, 2228224, 5, 8, 2228225, 5, 8, 2228226, 5, 8, 2228227, 5, 131080, 2228228, 5, 8, 2228229, 5, 8, 2228230, 5, 8, 2228231, 5, 8, 2228232, 5, 65542, 2228233, 6, 7, 2359294, 5, 131077, 2359295, 5, 8, 2293760, 5, 393225, 2293761, 5, 131081, 2293762, 5, 8, 2293763, 5, 8, 2293764, 5, 8, 2293765, 5, 8, 2293766, 5, 327688, 2293767, 5, 8, 2293768, 5, 5, 2424830, 5, 131079, 2424831, 5, 8, 2359296, 5, 393224, 2359297, 5, 8, 2359298, 5, 8, 2359299, 5, 8, 2359300, 5, 8, 2359301, 5, 8, 2359302, 5, 8, 2359303, 5, 8, 2359304, 5, 4, 2490366, 5, 196613, 2490367, 5, 393224, 2424832, 5, 8, 2424833, 5, 262153, 2424834, 5, 8, 2424835, 5, 8, 2424836, 5, 8, 2424837, 5, 8, 2424838, 5, 262148, 2424839, 5, 196610, 2424840, 5, 393219, 2555902, 5, 196615, 2555903, 5, 8, 2490368, 5, 393224, 2490369, 5, 8, 2490370, 5, 8, 2490371, 5, 8, 2490372, 5, 8, 2490373, 5, 8, 2490374, 5, 4, 2490375, 6, 6, 2621438, 5, 131079, 2621439, 5, 8, 2555904, 5, 8, 2555905, 5, 8, 2555906, 5, 8, 2555907, 5, 8, 2555908, 5, 8, 2555909, 5, 8, 2555910, 5, 65543, 2686974, 5, 196614, 2686975, 5, 262152, 2621440, 5, 8, 2621441, 5, 8, 2621442, 5, 8, 2621443, 5, 8, 2621444, 5, 8, 2621445, 5, 8, 2621446, 5, 6, 2752510, 5, 131076, 2752511, 5, 8, 2686976, 5, 8, 2686977, 5, 8, 2686978, 5, 327689, 2686979, 5, 8, 2686980, 5, 8, 2686981, 5, 8, 2686982, 5, 65543, 2818046, 5, 131078, 2818047, 5, 8, 2752512, 5, 8, 2752513, 5, 8, 2752514, 5, 8, 2752515, 5, 8, 2752516, 5, 8, 2752517, 5, 8, 2752518, 5, 65542, 2883582, 5, 458753, 2883583, 5, 196610, 2818048, 5, 2, 2818049, 5, 65539, 2818050, 5, 65538, 2818051, 5, 65539, 2818052, 5, 3, 2818053, 5, 196610, 2818054, 5, 458754 )
+script = ExtResource( 26 )
+__meta__ = {
+"_edit_bone_": true,
+"_edit_lock_": true
+}
+
+[node name="VineTileMap" type="TileMap" parent="Layer1"]
+material = SubResource( 11 )
+z_index = 1
+format = 1
+
+[node name="BlobTileMap" type="TileMap" parent="Layer1"]
+light_mask = 32
+material = SubResource( 12 )
+tile_set = ExtResource( 15 )
+cell_size = Vector2( 4, 4 )
+cell_quadrant_size = 2
+occluder_light_mask = 32
+format = 1
+tile_data = PoolIntArray( 3669697, 0, 0 )
+script = ExtResource( 16 )
+
+[node name="Environment" type="Node2D" parent="Layer1"]
+visible = false
+z_index = -20
+script = ExtResource( 21 )
+
+[node name="Bushes1" type="TextureRect" parent="Layer1/Environment"]
+material = SubResource( 13 )
+margin_left = 4.0
+margin_top = 156.0
+margin_right = 118.0
+margin_bottom = 196.0
+texture = ExtResource( 23 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Stalactites1" type="TextureRect" parent="Layer1/Environment"]
+material = SubResource( 8 )
+margin_left = 143.0
+margin_top = 221.0
+margin_right = 151.0
+margin_bottom = 237.0
+texture = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Swapper" type="AnimationPlayer" parent="."]
+anims/swap_to_0 = ExtResource( 24 )
+anims/swap_to_1 = ExtResource( 25 )
+
+[node name="SoundEffect" type="AudioStreamPlayer" parent="Swapper"]
+stream = ExtResource( 27 )
+volume_db = -10.0
+
+[node name="DustParticles" type="Particles2D" parent="."]
+position = Vector2( 160, 90 )
+z_index = 1
+local_coords = false
+process_material = SubResource( 16 )
+script = ExtResource( 17 )
+
+[node name="LightParticles" type="Particles2D" parent="."]
+position = Vector2( 160, 90 )
+z_index = 1
+amount = 2
+lifetime = 7.0
+local_coords = false
+process_material = SubResource( 19 )
+texture = ExtResource( 18 )
+script = ExtResource( 17 )
+
+[node name="EndPositions" type="Node2D" parent="."]
+
+[node name="EndPosition9" type="Position2D" parent="EndPositions"]
+position = Vector2( 776, 207 )
+script = ExtResource( 19 )
+
+[node name="EndPosition10" type="Position2D" parent="EndPositions"]
+position = Vector2( 776, 223 )
+script = ExtResource( 19 )
+
+[node name="EndPosition11" type="Position2D" parent="EndPositions"]
+position = Vector2( 776, 239 )
+script = ExtResource( 19 )
+
+[node name="EndPosition12" type="Position2D" parent="EndPositions"]
+position = Vector2( 776, 255 )
+script = ExtResource( 19 )
+
+[node name="EndPosition13" type="Position2D" parent="EndPositions"]
+position = Vector2( 776, 271 )
+script = ExtResource( 19 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.1, 0.1 )
+motion_offset = Vector2( 320, 180 )
+motion_mirroring = Vector2( 640, 360 )
+
+[node name="background" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+centered = false
+
+[editable path="Player"]
+[editable path="Player/AnimatedSprite"]

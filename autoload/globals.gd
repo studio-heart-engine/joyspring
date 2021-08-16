@@ -5,15 +5,15 @@ var has_played_startup_animation = false
 var levels_completed = [0]
 var curr_state = "Legend-Opening"
 var prev_state = ""
-var total_levels = 27
+var total_levels = 50
 var peak_level = 12
 var started_peak_zoom = false
 var finished_peak_zoom = false
 
 var time_of_day = 0  # 0-indexed
-var time_of_day_start = [0, 10, 30]
+var time_of_day_start = [0, 10, 39]
 var bg_num = 1  # 1-indexed
-var bg_num_start = [0, 5, 10, 13, 23, 30, 40]
+var bg_num_start = [0, 5, 10, 19, 28, 39, 44]
 var bg_offset = 320  # Motion offset for parallax
 
 var configurable_keys = ['jump', 'up', 'down', 'left', 'right', 'dash', 'wall', 'float', 'swap']
@@ -52,9 +52,10 @@ func on_joy_collected(joy_name):
 func save_game():
 	var save = File.new()
 	var data = {'levels_completed': levels_completed,
-				'cape': cape,
-				'joy_collected': joy_collected,
-				'master_volume': master_volume}
+			'cape': cape,
+			'joy_collected': joy_collected,
+			'master_volume': master_volume,
+			'version': 'release'}
 	save.open('user://game.save', File.WRITE)
 	save.store_line(to_json(data))
 	save.close()
@@ -71,6 +72,12 @@ func load_game():
 		return
 	var data = parse_json(line)
 	save.close()
+	if not data.has('version'):
+		var new_save = File.new()
+		new_save.open('user://game_demo.save', File.WRITE)
+		new_save.store_line(to_json(data))
+		new_save.close()
+		return
 	if data.has('levels_completed'):
 		levels_completed = data['levels_completed']
 	if data.has('cape'):
@@ -166,5 +173,5 @@ func set_bg():
 	if level_num <= 12:  # Before and at peak
 		bg_offset = int(320 + (60 / peak_level) * level_num)  # 320 to 380
 	else:
-		bg_offset = int(380 - (260 / (total_levels - peak_level)) * (level_num - peak_level))  # 380 to 120
+		bg_offset = int(380 - (100 / (total_levels - peak_level)) * (level_num - peak_level))  # 380 to 120
 	Events.emit_signal('bg_num_changed')
