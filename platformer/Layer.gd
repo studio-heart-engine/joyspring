@@ -116,14 +116,14 @@ func get_collision_tile(dir, collision_on='TextureTileMap'):
 	var player = get_node("../Player")
 	var tilemap = $TileMap
 	var texturetilemap = $TextureTileMap
-	var collision_tilemap = texturetilemap if collision_on == 'TextureTileMap' else $TileMap
+	var collision_tilemap = texturetilemap if collision_on == 'TextureTileMap' else tilemap
 	var cell = tilemap.world_to_map(player.global_position + dir)
 	var tile_id = collision_tilemap.get_cellv(cell)
 #	var tile_id = texturetilemap.get_cellv(cell)
 	for platform in $MovingPlatforms.get_children():
 		tilemap = get_node("MovingPlatforms/" + platform.get_name() + "/Path2D/PathFollow2D/TileMap")
 		texturetilemap = get_node("MovingPlatforms/" + platform.get_name() + "/Path2D/PathFollow2D/TextureTileMap")
-		collision_tilemap = texturetilemap if collision_on == 'TextureTileMap' else $TileMap
+		collision_tilemap = texturetilemap if collision_on == 'TextureTileMap' else tilemap
 		var path = get_node("MovingPlatforms/" + platform.get_name() + "/Path2D/PathFollow2D")
 		cell = tilemap.world_to_map(player.global_position - platform.position - path.position + dir)
 		if tile_id == -1:
