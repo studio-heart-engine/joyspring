@@ -23,9 +23,9 @@ func handle_input(event):
 	elif self.input_direction.y == 1:
 		if owner.get_parent().climb_enabled:
 			emit_signal("finished", "slide")
-	if globals.unique_jump and event.is_action_pressed("jump"):
+	elif globals.unique_jump and event.is_action_pressed("jump"):
 		owner.velocity.x = -wall_direction * INITIAL_WALL_JUMP_SPEED
 		emit_signal("finished", "jump")
-	if self.input_direction.x == -wall_direction:
+	elif self.input_direction.x == -wall_direction:
 		emit_signal("finished", "fall")
 	

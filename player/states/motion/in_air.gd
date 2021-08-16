@@ -46,7 +46,8 @@ func update(delta):
 		if owner.get_parent().climb_enabled:
 #			on_wall_timer.start()
 			owner.can_wall_climb = true
-			emit_signal("finished", get_wall_state())
+			emit_signal("finished", 'cling')
+#			emit_signal("finished", get_wall_state())
 	
 	.update(delta)
 
