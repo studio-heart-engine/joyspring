@@ -2,7 +2,8 @@ extends Node
 
 
 onready var current_song = null
-onready var tween = $Tween
+onready var tween_start = $TweenStart
+onready var tween_end = $TweenEnd
 
 var loop_start = {
 	"Silence": 0.0,
@@ -97,39 +98,33 @@ func play(song=""):
 
 	if current_song != previous_song and previous_song != null:
 		# fade out
-#		tween.interpolate_property(
-#			previous_song, "volume_db", -20, -80, 2,
-#			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
-		tween.interpolate_property(
+		tween_end.interpolate_property(
 			previous_song, "volume_db",
 			volumes[previous_song.name], volumes[previous_song.name] - 60,
 			2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT
 		)
-		tween.start()
-		previous_song.stop()
+		tween_end.start()
 		
 		# fade in
-#		tween.interpolate_property(
-#			current_song, "volume_db", -30, -20, 2,
-#			Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
-		tween.interpolate_property(
+		tween_start.interpolate_property(
 			current_song, "volume_db",
 			volumes[current_song.name] - 20, volumes[current_song.name],
 			2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT
 		)
-		tween.start()
+		tween_start.start()
+		
 		current_song.play()
-
 	elif not current_song.playing:
 		if loop_start[current_song.get_name()] == 0.0:
 			# fade in
-#			tween.interpolate_property(
-#				current_song, "volume_db", -30, -20, 2,
-#				Tween.TRANS_LINEAR,Tween.EASE_IN_OUT) 
-			tween.interpolate_property(
+			tween_start.interpolate_property(
 				current_song, "volume_db",
 				volumes[current_song.name] - 20, volumes[current_song.name],
 				2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT
 			)
-			tween.start()
+			tween_start.start()
 		current_song.play(loop_start[current_song.get_name()])
+
+
+func _on_TweenEnd_tween_completed(object, key):
+	object.stop()
