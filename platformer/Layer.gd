@@ -38,7 +38,6 @@ func update_shader(mode):
 			get_node('MovingPlatforms/' + child.get_name() + '/Dots').show()
 		$TileMap.material.shader = null
 		$TextureTileMap.material.shader = null
-		$VineTileMap.material.shader = null
 		$BlobTileMap.material.shader = null
 		for child in $Environment.get_children():
 			child.material.shader = null
@@ -97,8 +96,6 @@ func update_shader(mode):
 		$TileMap.material.set_shader_param('color', Color(possible_colors[globals.bg_num - 1]))
 		$TextureTileMap.material.shader = solid_shader
 		$TextureTileMap.material.set_shader_param('color', Color(possible_colors[globals.bg_num - 1]))
-		$VineTileMap.material.shader = solid_shader
-		$VineTileMap.material.set_shader_param('color', Color(possible_colors[globals.bg_num - 1]))
 		$BlobTileMap.material.shader = solid_shader
 		$BlobTileMap.material.set_shader_param('color', Color(possible_colors[globals.bg_num - 1]))
 		for child in $Environment.get_children():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=2]
+[gd_scene load_steps=66 format=2]
 
 [ext_resource path="res://platformer/Platformer.gd" type="Script" id=1]
 [ext_resource path="res://graphics/sprites/blobs/Thorn.tscn" type="PackedScene" id=2]
@@ -72,19 +72,17 @@ shader_param/mask = ExtResource( 12 )
 
 [sub_resource type="ShaderMaterial" id=9]
 
-[sub_resource type="ShaderMaterial" id=10]
-
-[sub_resource type="Curve2D" id=11]
+[sub_resource type="Curve2D" id=10]
 resource_local_to_scene = true
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 152, 48, 0, 0, 0, 0, 0, 0 )
 }
 
+[sub_resource type="ShaderMaterial" id=11]
+
 [sub_resource type="ShaderMaterial" id=12]
 
-[sub_resource type="ShaderMaterial" id=13]
-
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=13]
 length = 3.19998
 loop = true
 tracks/0/type = "value"
@@ -100,7 +98,7 @@ tracks/0/keys = {
 "values": [ 0.0, 1 ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="Animation" id=14]
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Path2D/PathFollow2D:unit_offset")
@@ -115,7 +113,7 @@ tracks/0/keys = {
 "values": [ 0.0, 0.99 ]
 }
 
-[sub_resource type="Animation" id=16]
+[sub_resource type="Animation" id=15]
 length = 6.20094
 loop = true
 tracks/0/type = "value"
@@ -131,6 +129,8 @@ tracks/0/keys = {
 "values": [ 0.0, 1.0 ]
 }
 
+[sub_resource type="ShaderMaterial" id=16]
+
 [sub_resource type="ShaderMaterial" id=17]
 
 [sub_resource type="ShaderMaterial" id=18]
@@ -143,18 +143,14 @@ tracks/0/keys = {
 
 [sub_resource type="ShaderMaterial" id=22]
 
-[sub_resource type="ShaderMaterial" id=23]
-
-[sub_resource type="ShaderMaterial" id=24]
-
-[sub_resource type="Gradient" id=25]
+[sub_resource type="Gradient" id=23]
 offsets = PoolRealArray( 0, 0.305011, 0.640523, 1 )
 colors = PoolColorArray( 0.27451, 0.27451, 0.27451, 0, 0.470588, 0.470588, 0.470588, 1, 0.470588, 0.470588, 0.470588, 1, 0.27451, 0.27451, 0.27451, 0 )
 
-[sub_resource type="GradientTexture" id=26]
-gradient = SubResource( 25 )
+[sub_resource type="GradientTexture" id=24]
+gradient = SubResource( 23 )
 
-[sub_resource type="ParticlesMaterial" id=27]
+[sub_resource type="ParticlesMaterial" id=25]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -164,16 +160,16 @@ initial_velocity = 8.0
 angular_velocity = 4.57384e-41
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-color_ramp = SubResource( 26 )
+color_ramp = SubResource( 24 )
 
-[sub_resource type="Gradient" id=28]
+[sub_resource type="Gradient" id=26]
 offsets = PoolRealArray( 0, 0.30719, 0.359477, 0.381264, 0.405229, 0.43573, 1 )
 colors = PoolColorArray( 0.388235, 0.388235, 0.388235, 0, 1, 1, 1, 0.109804, 0.996078, 0.996078, 0.996078, 0.137255, 0.992157, 0.992157, 0.992157, 0.0980392, 0.988235, 0.988235, 0.988235, 0.12549, 0.984314, 0.984314, 0.984314, 0.0941176, 0.937255, 0.937255, 0.937255, 0 )
 
-[sub_resource type="GradientTexture" id=29]
-gradient = SubResource( 28 )
+[sub_resource type="GradientTexture" id=27]
+gradient = SubResource( 26 )
 
-[sub_resource type="ParticlesMaterial" id=30]
+[sub_resource type="ParticlesMaterial" id=28]
 emission_shape = 2
 emission_box_extents = Vector3( 160, 90, 1 )
 flag_disable_z = true
@@ -185,7 +181,7 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 0.05
 scale_random = 0.05
-color_ramp = SubResource( 29 )
+color_ramp = SubResource( 27 )
 
 [node name="Level_48" type="Node2D"]
 script = ExtResource( 1 )
@@ -198,16 +194,16 @@ light_mask = 1
 position = Vector2( 16, 112 )
 z_index = 100
 
-[node name="Light2D" parent="Player" index="2"]
+[node name="Light2D" parent="Player" index="1"]
 texture_scale = 0.05
 
-[node name="Camera" parent="Player" index="3"]
+[node name="Camera" parent="Player" index="2"]
 visible = true
 limit_top = -24
 limit_right = 792
 limit_bottom = 456
 
-[node name="Hitbox" parent="Player" index="6"]
+[node name="Hitbox" parent="Player" index="5"]
 collision_layer = 2147483649
 collision_mask = 30
 
@@ -1152,13 +1148,8 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="VineTileMap" type="TileMap" parent="Layer0"]
-material = SubResource( 5 )
-z_index = 1
-format = 1
-
 [node name="BlobTileMap" type="TileMap" parent="Layer0"]
-material = SubResource( 6 )
+material = SubResource( 5 )
 tile_set = ExtResource( 15 )
 cell_size = Vector2( 4, 4 )
 cell_quadrant_size = 2
@@ -1171,7 +1162,7 @@ z_index = -20
 script = ExtResource( 21 )
 
 [node name="Bushes3" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 7 )
+material = SubResource( 6 )
 margin_left = 571.0
 margin_top = 216.0
 margin_right = 685.0
@@ -1182,7 +1173,7 @@ __meta__ = {
 }
 
 [node name="Bushes4" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 7 )
+material = SubResource( 6 )
 margin_left = 615.0
 margin_top = 215.0
 margin_right = 729.0
@@ -1193,7 +1184,7 @@ __meta__ = {
 }
 
 [node name="Rocks4" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 8 )
+material = SubResource( 7 )
 margin_left = 231.0
 margin_top = 159.0
 margin_right = 303.0
@@ -1204,7 +1195,7 @@ __meta__ = {
 }
 
 [node name="Stalactites1" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 9 )
+material = SubResource( 8 )
 margin_left = 224.0
 margin_top = 102.0
 margin_right = 232.0
@@ -1215,7 +1206,7 @@ __meta__ = {
 }
 
 [node name="Stalactites2" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 9 )
+material = SubResource( 8 )
 margin_left = 209.0
 margin_top = 101.0
 margin_right = 217.0
@@ -1226,7 +1217,7 @@ __meta__ = {
 }
 
 [node name="Stalactites3" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 9 )
+material = SubResource( 8 )
 margin_left = 294.0
 margin_top = 118.0
 margin_right = 302.0
@@ -1237,7 +1228,7 @@ __meta__ = {
 }
 
 [node name="Stalactites4" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 9 )
+material = SubResource( 8 )
 margin_left = 257.0
 margin_top = 309.0
 margin_right = 265.0
@@ -1248,7 +1239,7 @@ __meta__ = {
 }
 
 [node name="Stalactites5" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 9 )
+material = SubResource( 8 )
 margin_left = 304.0
 margin_top = 326.0
 margin_right = 312.0
@@ -1259,7 +1250,7 @@ __meta__ = {
 }
 
 [node name="Trees1" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 10 )
+material = SubResource( 9 )
 margin_left = 624.0
 margin_top = 158.0
 margin_right = 720.0
@@ -1270,7 +1261,7 @@ __meta__ = {
 }
 
 [node name="Trees2" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 10 )
+material = SubResource( 9 )
 margin_left = 679.0
 margin_top = 167.0
 margin_right = 775.0
@@ -1282,7 +1273,7 @@ __meta__ = {
 
 [node name="Layer1" type="Node2D" parent="."]
 light_mask = 0
-z_index = -5
+z_index = -1
 script = ExtResource( 3 )
 
 [node name="Blebs" type="Node2D" parent="Layer1"]
@@ -1863,30 +1854,30 @@ __meta__ = {
 position = Vector2( 16, 296 )
 
 [node name="Path2D" parent="Layer1/MovingPlatforms/MovingPlatform" index="0"]
-curve = SubResource( 11 )
+curve = SubResource( 10 )
 
 [node name="TileMap" parent="Layer1/MovingPlatforms/MovingPlatform/Path2D/PathFollow2D" index="0"]
 light_mask = 32
-material = SubResource( 12 )
+material = SubResource( 11 )
 collision_layer = 512
 collision_mask = 32
 occluder_light_mask = 32
 tile_data = PoolIntArray( 0, 0, 327680, 1, 0, 196608, 2, 0, 0, 3, 0, 65536, 4, 0, 65537, 5, 0, 327682, 65536, 0, 458752, 65537, 0, 65538, 65538, 0, 196610, 65539, 0, 196611, 65540, 0, 196611, 65541, 0, 393218 )
 
 [node name="TextureTileMap" parent="Layer1/MovingPlatforms/MovingPlatform/Path2D/PathFollow2D" index="1"]
-material = SubResource( 13 )
+material = SubResource( 12 )
 tile_data = PoolIntArray( 0, 7, 327680, 1, 7, 196608, 2, 7, 0, 3, 5, 65536, 4, 7, 65537, 5, 7, 327682, 65536, 7, 458752, 65537, 7, 65538, 65538, 7, 196610, 65539, 7, 196611, 65540, 5, 196611, 65541, 5, 393218 )
 
 [node name="AnimationPlayer" parent="Layer1/MovingPlatforms/MovingPlatform" index="1"]
-anims/follow-loop = SubResource( 14 )
-anims/follow-ping-pong = SubResource( 15 )
-anims/follow_loop = SubResource( 16 )
+anims/follow-loop = SubResource( 13 )
+anims/follow-ping-pong = SubResource( 14 )
+anims/follow_loop = SubResource( 15 )
 
 [node name="TileMap" type="TileMap" parent="Layer1"]
 visible = false
 modulate = Color( 0, 0, 0, 1 )
 light_mask = 32
-material = SubResource( 17 )
+material = SubResource( 16 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -1904,7 +1895,7 @@ __meta__ = {
 
 [node name="TextureTileMap" type="TileMap" parent="Layer1"]
 light_mask = 32
-material = SubResource( 18 )
+material = SubResource( 17 )
 z_index = 1
 tile_set = ExtResource( 10 )
 cell_size = Vector2( 8, 8 )
@@ -1920,14 +1911,9 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="VineTileMap" type="TileMap" parent="Layer1"]
-material = SubResource( 19 )
-z_index = 1
-format = 1
-
 [node name="BlobTileMap" type="TileMap" parent="Layer1"]
 light_mask = 32
-material = SubResource( 20 )
+material = SubResource( 18 )
 tile_set = ExtResource( 15 )
 cell_size = Vector2( 4, 4 )
 cell_quadrant_size = 2
@@ -1941,7 +1927,7 @@ z_index = -20
 script = ExtResource( 21 )
 
 [node name="Bushes1" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 21 )
+material = SubResource( 19 )
 margin_left = 668.0
 margin_top = 313.0
 margin_right = 782.0
@@ -1952,7 +1938,7 @@ __meta__ = {
 }
 
 [node name="Bushes2" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 21 )
+material = SubResource( 19 )
 margin_left = 564.0
 margin_top = 278.0
 margin_right = 678.0
@@ -1963,7 +1949,7 @@ __meta__ = {
 }
 
 [node name="Rocks1" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 22 )
+material = SubResource( 20 )
 margin_left = 158.0
 margin_top = 158.0
 margin_right = 230.0
@@ -1974,7 +1960,7 @@ __meta__ = {
 }
 
 [node name="Rocks2" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 22 )
+material = SubResource( 20 )
 margin_left = 207.0
 margin_top = 159.0
 margin_right = 279.0
@@ -1985,7 +1971,7 @@ __meta__ = {
 }
 
 [node name="Stalactites1" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 23 )
+material = SubResource( 21 )
 margin_left = 163.0
 margin_top = 142.0
 margin_right = 171.0
@@ -1996,7 +1982,7 @@ __meta__ = {
 }
 
 [node name="Stalactites2" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 23 )
+material = SubResource( 21 )
 margin_left = 178.0
 margin_top = 140.0
 margin_right = 186.0
@@ -2007,7 +1993,7 @@ __meta__ = {
 }
 
 [node name="Stalactites3" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 23 )
+material = SubResource( 21 )
 margin_left = 230.0
 margin_top = 148.0
 margin_right = 238.0
@@ -2018,7 +2004,7 @@ __meta__ = {
 }
 
 [node name="Stalactites4" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 23 )
+material = SubResource( 21 )
 margin_left = 113.0
 margin_top = 141.0
 margin_right = 121.0
@@ -2029,7 +2015,7 @@ __meta__ = {
 }
 
 [node name="Stalactites5" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 23 )
+material = SubResource( 21 )
 margin_left = 201.0
 margin_top = 279.0
 margin_right = 209.0
@@ -2040,7 +2026,7 @@ __meta__ = {
 }
 
 [node name="Trees3" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 24 )
+material = SubResource( 22 )
 margin_left = 510.0
 margin_top = 179.0
 margin_right = 606.0
@@ -2062,7 +2048,7 @@ volume_db = -10.0
 position = Vector2( 160, 90 )
 z_index = 1
 local_coords = false
-process_material = SubResource( 27 )
+process_material = SubResource( 25 )
 script = ExtResource( 17 )
 
 [node name="LightParticles" type="Particles2D" parent="."]
@@ -2071,7 +2057,7 @@ z_index = 1
 amount = 2
 lifetime = 7.0
 local_coords = false
-process_material = SubResource( 30 )
+process_material = SubResource( 28 )
 texture = ExtResource( 18 )
 script = ExtResource( 17 )
 

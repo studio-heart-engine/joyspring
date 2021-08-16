@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://platformer/TileMap.gd" type="Script" id=1]
 [ext_resource path="res://platformer/Layer.gd" type="Script" id=2]
@@ -69,10 +69,6 @@ shader_param/mask = ExtResource( 5 )
 
 [sub_resource type="ShaderMaterial" id=13]
 
-[sub_resource type="ShaderMaterial" id=14]
-
-[sub_resource type="ShaderMaterial" id=15]
-
 [node name="Level_24" type="Node2D"]
 script = ExtResource( 3 )
 __meta__ = {
@@ -84,16 +80,16 @@ light_mask = 1
 position = Vector2( 24, 120 )
 z_index = 100
 
-[node name="Light2D" parent="Player" index="2"]
+[node name="Light2D" parent="Player" index="1"]
 texture_scale = 0.05
 
-[node name="Camera" parent="Player" index="3"]
+[node name="Camera" parent="Player" index="2"]
 visible = true
 limit_top = -48
 limit_right = 1424
 limit_bottom = 184
 
-[node name="Hitbox" parent="Player" index="6"]
+[node name="Hitbox" parent="Player" index="5"]
 collision_layer = 2147483649
 collision_mask = 30
 
@@ -835,13 +831,8 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="VineTileMap" type="TileMap" parent="Layer0"]
-material = SubResource( 5 )
-z_index = 1
-format = 1
-
 [node name="BlobTileMap" type="TileMap" parent="Layer0"]
-material = SubResource( 6 )
+material = SubResource( 5 )
 tile_set = ExtResource( 20 )
 cell_size = Vector2( 4, 4 )
 cell_quadrant_size = 2
@@ -854,7 +845,7 @@ z_index = -20
 script = ExtResource( 10 )
 
 [node name="Bushes1" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 7 )
+material = SubResource( 6 )
 margin_left = 16.0
 margin_top = 88.0
 margin_right = 130.0
@@ -865,7 +856,7 @@ __meta__ = {
 }
 
 [node name="Bushes2" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 7 )
+material = SubResource( 6 )
 margin_left = 72.0
 margin_top = 88.0
 margin_right = 186.0
@@ -876,7 +867,7 @@ __meta__ = {
 }
 
 [node name="Bushes3" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 7 )
+material = SubResource( 6 )
 margin_left = 296.0
 margin_top = 96.0
 margin_right = 410.0
@@ -887,7 +878,7 @@ __meta__ = {
 }
 
 [node name="Rocks1" type="TextureRect" parent="Layer0/Environment"]
-material = SubResource( 8 )
+material = SubResource( 7 )
 margin_left = 160.0
 margin_top = 72.0
 margin_right = 232.0
@@ -1508,7 +1499,7 @@ __meta__ = {
 visible = false
 modulate = Color( 0, 0, 0, 1 )
 light_mask = 32
-material = SubResource( 9 )
+material = SubResource( 8 )
 z_index = 1
 tile_set = ExtResource( 19 )
 cell_size = Vector2( 8, 8 )
@@ -1526,7 +1517,7 @@ __meta__ = {
 
 [node name="TextureTileMap" type="TileMap" parent="Layer1"]
 light_mask = 32
-material = SubResource( 10 )
+material = SubResource( 9 )
 z_index = 1
 tile_set = ExtResource( 19 )
 cell_size = Vector2( 8, 8 )
@@ -1542,14 +1533,9 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="VineTileMap" type="TileMap" parent="Layer1"]
-material = SubResource( 11 )
-z_index = 1
-format = 1
-
 [node name="BlobTileMap" type="TileMap" parent="Layer1"]
 light_mask = 32
-material = SubResource( 12 )
+material = SubResource( 10 )
 tile_set = ExtResource( 20 )
 cell_size = Vector2( 4, 4 )
 cell_quadrant_size = 2
@@ -1563,7 +1549,7 @@ z_index = -20
 script = ExtResource( 10 )
 
 [node name="Bushes1" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 13 )
+material = SubResource( 11 )
 margin_left = 176.0
 margin_top = 56.0
 margin_right = 290.0
@@ -1574,7 +1560,7 @@ __meta__ = {
 }
 
 [node name="Bushes2" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 13 )
+material = SubResource( 11 )
 margin_left = 136.0
 margin_top = 48.0
 margin_right = 250.0
@@ -1585,7 +1571,7 @@ __meta__ = {
 }
 
 [node name="Bushes3" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 13 )
+material = SubResource( 11 )
 margin_left = 32.0
 margin_top = 64.0
 margin_right = 146.0
@@ -1596,7 +1582,7 @@ __meta__ = {
 }
 
 [node name="Rocks1" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 14 )
+material = SubResource( 12 )
 margin_left = 16.0
 margin_top = 48.0
 margin_right = 88.0
@@ -1607,7 +1593,7 @@ __meta__ = {
 }
 
 [node name="Rocks3" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 14 )
+material = SubResource( 12 )
 margin_left = 1360.0
 margin_top = 88.0
 margin_right = 1432.0
@@ -1618,7 +1604,7 @@ __meta__ = {
 }
 
 [node name="Rocks2" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 14 )
+material = SubResource( 12 )
 margin_left = 360.0
 margin_top = 104.0
 margin_right = 432.0
@@ -1629,7 +1615,7 @@ __meta__ = {
 }
 
 [node name="Trees1" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 15 )
+material = SubResource( 13 )
 margin_left = 168.0
 margin_top = -16.0
 margin_right = 264.0
@@ -1640,7 +1626,7 @@ __meta__ = {
 }
 
 [node name="Trees2" type="TextureRect" parent="Layer1/Environment"]
-material = SubResource( 15 )
+material = SubResource( 13 )
 margin_left = 208.0
 margin_top = -8.0
 margin_right = 304.0
