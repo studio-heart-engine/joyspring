@@ -31,8 +31,10 @@ func update_shader(mode):
 		for child in $MovingBlobs.get_children():
 			get_node('MovingBlobs/' + child.get_name() + '/Path2D/PathFollow2D/Blob/NoiseOffset/Outline').material.shader = outline_shader
 			get_node('MovingBlobs/' + child.get_name() + '/Path2D/PathFollow2D/Blob/NoiseOffset/Sprite').material.shader = null
+			get_node('MovingBlobs/' + child.get_name() + '/Dots').show()
 		for child in $MovingPlatforms.get_children():
 			get_node('MovingPlatforms/' + child.get_name() + '/Path2D/PathFollow2D/TextureTileMap').material.shader = null
+			get_node('MovingPlatforms/' + child.get_name() + '/Dots').show()
 		$TileMap.material.shader = null
 		$TextureTileMap.material.shader = null
 		$VineTileMap.material.shader = null
@@ -85,11 +87,13 @@ func update_shader(mode):
 			get_node('MovingBlobs/' + child.get_name() + '/Path2D/PathFollow2D/Blob/NoiseOffset/Sprite').material.set_shader_param(
 				'color', Color(possible_colors[globals.bg_num - 1])
 			)
+			get_node('MovingBlobs/' + child.get_name() + '/Dots').hide()
 		for child in $MovingPlatforms.get_children():
 			get_node('MovingPlatforms/' + child.get_name() + '/Path2D/PathFollow2D/TextureTileMap').material.shader = solid_shader
 			get_node('MovingPlatforms/' + child.get_name() + '/Path2D/PathFollow2D/TextureTileMap').material.set_shader_param(
 				'color', Color(possible_colors[globals.bg_num - 1])
 			)
+			get_node('MovingPlatforms/' + child.get_name() + '/Dots').hide()
 		$TileMap.material.shader = solid_shader
 		$TileMap.material.set_shader_param('color', Color(possible_colors[globals.bg_num - 1]))
 		$TextureTileMap.material.shader = solid_shader

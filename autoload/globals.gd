@@ -51,6 +51,11 @@ func on_joy_collected(joy_name):
 
 func save_game():
 	var save = File.new()
+#	var data = {'levels_completed': levels_completed,
+#			'cape': cape,
+#			'joy_collected': joy_collected,
+#			'master_volume': master_volume,
+#			'version': 'release'}
 	var data = {'levels_completed': levels_completed,
 				'cape': cape,
 				'joy_collected': joy_collected,
@@ -71,6 +76,8 @@ func load_game():
 		return
 	var data = parse_json(line)
 	save.close()
+#	if not data.has('version'):
+#		return
 	if data.has('levels_completed'):
 		levels_completed = data['levels_completed']
 	if data.has('cape'):

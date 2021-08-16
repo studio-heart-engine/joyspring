@@ -2,13 +2,14 @@ tool
 extends Node2D
 
 export (int) var speed = 50
+onready var Dot = preload("res://graphics/particles/pathDot.tscn")
+
 
 
 func _ready():
-
 	var tilemap = $Path2D/PathFollow2D/TileMap
 	tilemap.modulate = Color(0, 0, 0)
-	tilemap.material = tilemap.material.duplicate()
+	$Path2D/PathFollow2D/TextureTileMap.material = $Path2D/PathFollow2D/TextureTileMap.material.duplicate()
 	
 	if self.get_parent().get_parent().get_name() == 'Layer0':
 		tilemap.collision_layer = pow(2, 4)
@@ -34,6 +35,22 @@ func _ready():
 	track.loop = true
 	$AnimationPlayer.add_animation("follow_loop", track)
 	if not Engine.editor_hint:
+		set_dots()
 		$AnimationPlayer.play("follow_loop")
 	else:
 		$AnimationPlayer.stop()
+
+func set_dots():
+	var path_follow = $Path2D/PathFollow2D
+	var last_offset = 0
+	while path_follow.unit_offset < 1:
+		var dot = Dot.instance()
+		dot.position = path_follow.position
+		$Dots.call_deferred('add_child', dot)
+		path_follow.offset += 10
+		
+		# Loop detection
+		if path_follow.offset - last_offset != 10:
+			break
+		last_offset = path_follow.offset
+	path_follow.unit_offset = 0
