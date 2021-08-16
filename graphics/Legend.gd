@@ -29,11 +29,14 @@ func play_ending():
 func start():
 	$AnimationPlayer.stop(true)
 	if mode == 'opening':
-		var curr_level = globals.levels_completed[-1] + 1
-		curr_level = str(curr_level).pad_zeros(2)
-		if not File.new().file_exists('res://platformer/levels/Level_' + curr_level + '.tscn'):
-			SceneChanger.change_scene_to(load('res://platformer/levels/Level_50.tscn'))
+		if globals.start_level != -1:
+			SceneChanger.change_scene_to(load('res://platformer/levels/Level_' + str(globals.start_level).pad_zeros(2) + '.tscn'))
 		else:
-			SceneChanger.change_scene_to(load('res://platformer/levels/Level_' + curr_level + '.tscn'))
+			var curr_level = globals.levels_completed[-1] + 1
+			curr_level = str(curr_level).pad_zeros(2)
+			if not File.new().file_exists('res://platformer/levels/Level_' + curr_level + '.tscn'):
+				SceneChanger.change_scene_to(load('res://platformer/levels/Level_50.tscn'))
+			else:
+				SceneChanger.change_scene_to(load('res://platformer/levels/Level_' + curr_level + '.tscn'))
 	elif mode == 'ending':
 		SceneChanger.change_scene_to(load('res://gui/End.tscn'))

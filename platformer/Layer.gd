@@ -28,7 +28,7 @@ func update_shader(mode):
 			get_node('Joys/' + child.get_name() + '/Offset/Light2D').energy = 0.6
 		for child in $Gravel.get_children():
 			get_node('Gravel/' + child.get_name() + '/Sprite').material.shader = null
-			get_node('Gravel/' + child.get_name() + '/weak-rock-outline').material.shader = null
+			get_node('Gravel/' + child.get_name() + '/weak-rock-outline').show()
 		for child in $MovingBlobs.get_children():
 			get_node('MovingBlobs/' + child.get_name() + '/Path2D/PathFollow2D/Blob/NoiseOffset/Outline').material.shader = outline_shader
 			get_node('MovingBlobs/' + child.get_name() + '/Path2D/PathFollow2D/Blob/NoiseOffset/Sprite').material.shader = null
@@ -79,10 +79,7 @@ func update_shader(mode):
 			get_node('Gravel/' + child.get_name() + '/Sprite').material.set_shader_param(
 				'color', Color(possible_colors[globals.bg_num - 1])
 			)
-			get_node('Gravel/' + child.get_name() + '/weak-rock-outline').material.shader = solid_shader
-			get_node('Gravel/' + child.get_name() + '/weak-rock-outline').material.set_shader_param(
-				'color', Color(possible_colors[globals.bg_num - 1])
-			)
+			get_node('Gravel/' + child.get_name() + '/weak-rock-outline').hide()
 		for child in $MovingBlobs.get_children():
 			get_node('MovingBlobs/' + child.get_name() + '/Path2D/PathFollow2D/Blob/NoiseOffset/Outline').material.shader = null
 			get_node('MovingBlobs/' + child.get_name() + '/Path2D/PathFollow2D/Blob/NoiseOffset/Sprite').material.shader = solid_shader

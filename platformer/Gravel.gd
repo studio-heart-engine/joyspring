@@ -12,7 +12,6 @@ func _ready():
 	Events.connect('time_of_day_changed', self, 'update_image')
 	$CollisionShape2D.shape = $CollisionShape2D.shape.duplicate()
 	
-	$"weak-rock-outline".material = $"weak-rock-outline".material.duplicate()
 	$Sprite.material = $Sprite.material.duplicate()
 	
 	for i in range(1, 4):

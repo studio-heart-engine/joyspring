@@ -9,6 +9,7 @@ var total_levels = 50
 var peak_level = 12
 var started_peak_zoom = false
 var finished_peak_zoom = false
+var start_level = -1
 
 var time_of_day = 0  # 0-indexed
 var time_of_day_start = [0, 10, 39]
@@ -56,6 +57,8 @@ func save_game():
 			'joy_collected': joy_collected,
 			'master_volume': master_volume,
 			'version': 'release'}
+	if curr_state.left(6) == 'Level_':
+		data['curr_level'] = curr_state.right(6)
 	save.open('user://game.save', File.WRITE)
 	save.store_line(to_json(data))
 	save.close()
@@ -89,6 +92,8 @@ func load_game():
 			joy_collected.append([])
 	if data.has('master_volume'):
 		master_volume = int(data['master_volume'])
+	if data.has('curr_level'):
+		start_level = int(data['curr_level'])
 
 func reset_game():
 	var dir = Directory.new()
