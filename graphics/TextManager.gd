@@ -74,22 +74,10 @@ func _ready():
 		get_node(tutorial_text.name + '/Label')._ready()
 		j += 1
 	tutorial_file.close()
-
-	# Load select
-	for k in range(1, globals.total_levels + 1):
-		var select_text = text_pin_scene.instance()
-		select_text.name = 'Select' + str(k)
-		select_text.set_script(text_pin_script)
-		select_text.set_colors()
-		self.add_child(select_text)
-		get_node(select_text.name + '/Label').text = str(k)
 	
 	text_set = true
 
 func check_dialogue(level, ids):
-	if level == 'LevelSelect':
-		$Tutorial0.play()
-		return
 	var player = get_node("../ViewportContainer/Viewport/" + level + "/Player")
 	for child in get_children():
 		if child.get_name().substr(0, 8) != 'Dialogue' and child.get_name().substr(0, 8) != 'Tutorial':
@@ -121,7 +109,7 @@ func check_dialogue(level, ids):
 					$Timer.start(1.5)
 				if child.get_name() == 'Dialogue13':
 					$Timer.start(0.7)
-		elif level == 'Level_F10':  # TODO: Change to 'Level_50' after integration
+		elif level == 'Level_50':
 			if player.position.x > (trigger_pos.position + text_pos.position).x + 12 and \
 			   not child.showed:
 				child.play()

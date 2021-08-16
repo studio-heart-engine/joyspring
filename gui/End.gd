@@ -23,4 +23,4 @@ func begin():
 	$AnimationPlayer.play("start-fall")
 	yield($AnimationPlayer, "animation_finished")
 	
-	SceneChanger.change_scene_to(load('res://gui/LevelSelect.tscn'))
+	SceneChanger.change_scene_to(load('res://platformer/levels/Level_01.tscn'))

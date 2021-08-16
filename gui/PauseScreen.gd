@@ -122,13 +122,6 @@ func _on_LevelSelectButton_pressed():
 	$MarginContainer2.hide()
 	$MarginContainer4.show()
 	$MarginContainer/VBoxContainer/QuitButton.hide()
-	
-#	if get_parent().name.substr(0, 5) == 'Level':
-#		get_parent().emit_signal('level_exited')
-#	PlayerData.score = 0
-#	SceneChanger.change_scene_to(load("res://gui/LevelSelect.tscn"))
-#	yield($"/root/SceneChanger/AnimationPlayer", "animation_finished")
-#	resume()
 
 func _on_ControlsButton_pressed():
 	$Click.play()
