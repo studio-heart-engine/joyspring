@@ -26,6 +26,8 @@ func update(delta):
 	if not owner.move_and_collide(Vector2.DOWN): # walked off ledge
 		emit_signal("finished", "fall")
 	elif Input.is_action_pressed("wall") and is_near_wall():
+		if self.input_direction.y == 1:
+			return
 		if owner.get_parent().climb_enabled:
 #			on_wall_timer.start()
 			owner.can_wall_climb = true

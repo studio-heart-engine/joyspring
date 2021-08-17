@@ -128,8 +128,9 @@ func set_looking_right(value):
 	is_looking_right = value
 	sprite.scale.x = 1 if value else -1
 
-#func _process(delta):
-#	print(current_state)
+func _process(delta):
+	if current_state != "slide" and $States/Slide/SoundEffect.is_playing():  # Just in case
+		$States/Slide/SoundEffect.stop()
 
 var TIME_OF_DAY = ['Evening', 'Midnight', 'Dawn']
 

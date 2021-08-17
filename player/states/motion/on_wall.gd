@@ -13,7 +13,6 @@ export var INITIAL_WALL_JUMP_SPEED = 50
 
 
 func enter():
-	
 	if not $"../../..".climb_enabled:
 		emit_signal("finished", "previous")
 
@@ -43,7 +42,10 @@ func handle_input(event):
 		owner.move_and_collide(Vector2(-wall_direction, 0))
 	
 	if event.is_action_released("wall") and owner.current_state != "slide":
-		emit_signal("finished", "slide")
+		if is_near_floor():
+			emit_signal("finished", "fall")
+		else:
+			emit_signal("finished", "slide")
 
 
 func get_wall_direction():

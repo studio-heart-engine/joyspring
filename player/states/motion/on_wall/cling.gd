@@ -16,7 +16,6 @@ func update(delta):
 #	if on_wall_timer.time_left < 1 and not on_wall_timer.is_stopped() and not blink_anim_player.is_playing():
 #		start_blink()
 
-
 func handle_input(event):
 	.handle_input(event)
 
@@ -24,7 +23,9 @@ func handle_input(event):
 		if owner.get_parent().climb_enabled:
 			emit_signal("finished", "climb")
 	elif self.input_direction.y == 1:
-		if owner.get_parent().climb_enabled:
+		if is_near_floor():
+			emit_signal("finished", "fall")
+		elif owner.get_parent().climb_enabled:
 			emit_signal("finished", "slide")
 	elif globals.unique_jump and event.is_action_pressed("jump"):
 		owner.velocity.x = -wall_direction * INITIAL_WALL_JUMP_SPEED
