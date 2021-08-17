@@ -35,6 +35,7 @@ func _ready():
 	track.loop = true
 	$AnimationPlayer.add_animation("follow_loop", track)
 	if not Engine.editor_hint:
+		$Dots.material = $Dots.material.duplicate()
 		set_dots()
 		$AnimationPlayer.play("follow_loop")
 	else:

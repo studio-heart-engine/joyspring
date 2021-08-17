@@ -27,7 +27,8 @@ func _ready():
 		
 		$Path2D/PathFollow2D/Blob/NoiseOffset/Outline.light_mask = pow(2, 5)
 		$Path2D/PathFollow2D/Blob/NoiseOffset/Sprite.light_mask = pow(2, 5)
-
+	
+	$Dots.material = $Dots.material.duplicate()
 	set_dots()
 	var path_len = $Path2D.curve.get_baked_length()
 	var speed = 50
