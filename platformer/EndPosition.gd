@@ -7,6 +7,8 @@ onready var player = $"../../Player"
 func _process(delta):
 	if self.get_parent().get_parent().level_complete:
 		return
+	if self.get_parent().get_parent().get_name() == 'Level_12' and not globals.finished_peak_zoom:
+		return
 	if position.distance_to(player.position) <= RADIUS:
 		self.get_parent().get_parent().level_complete = true
 		Events.emit_signal('level_completed', get_parent().get_parent().level_index)
