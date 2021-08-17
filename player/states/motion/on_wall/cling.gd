@@ -10,6 +10,9 @@ func update(delta):
 	.update(delta)
 	if not is_near_wall():
 		emit_signal("finished", "fall")
+	elif self.input_direction.y == -1:
+		if owner.get_parent().climb_enabled:
+			emit_signal("finished", "climb")
 #	if on_wall_timer.time_left < 1 and not on_wall_timer.is_stopped() and not blink_anim_player.is_playing():
 #		start_blink()
 
