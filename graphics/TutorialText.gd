@@ -69,7 +69,9 @@ var XBOX_BUTTONS = {
 	"Face Button Top": "Y",
 	"Face Button Right": "B",
 	"Face Button Left": "X",
-	"Face Button Bottom": "A"
+	"Face Button Bottom": "A",
+	"R": "Right Trigger",
+	"L": "Left Trigger"
 }
 var PS4_BUTTONS = {
 	"Face Button Top": "Triangle",
@@ -86,7 +88,7 @@ func get_control_text(key):
 			var ret = Input.get_joy_button_string(globals.controller_controls[key])
 			if Input.get_joy_name(0) == 'XInput Gamepad':
 				if ret in XBOX_BUTTONS.keys():
-					ret = XBOX_BUTTONS[text]
+					ret = XBOX_BUTTONS[ret]
 			return ret
 	else:
 		return OS.get_scancode_string(globals.keyboard_controls[key])
