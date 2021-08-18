@@ -9,7 +9,7 @@ var triggered = false
 func _process(delta):
 	if triggered:
 		return
-	if (not zoomed) and (position.distance_to(player.position) <= RADIUS):
+	if (not zoomed) and (position.distance_to(player.position) <= RADIUS) and not globals.finished_peak_zoom:
 		globals.started_peak_zoom = true
 		Events.emit_signal('zoom_out')
 		zoomed = true
