@@ -12,9 +12,22 @@ onready var volume_label = $MarginContainer/VBoxContainer/Buttons/Column2/VBoxCo
 
 var margincontainer2_showed = false
 
+var XBOX_BUTTONS = {
+	"Face Button Top": "Y",
+	"Face Button Right": "B",
+	"Face Button Left": "X",
+	"Face Button Bottom": "A"
+}
+var PS4_BUTTONS = {
+	"Face Button Top": "Triangle",
+	"Face Button Right": "Circle",
+	"Face Button Left": "Square",
+	"Face Button Bottom": "Cross"
+}
+
 func _ready():
 	Events.connect("input_method_changed", self, "reload_controls")
-	
+
 	var button_script = load('res://gui/KeybindButton.gd')
 	if globals.using_controller:
 		controls = globals.controller_controls.duplicate()
@@ -28,24 +41,29 @@ func _ready():
 #		hbox.set_h_size_flags(Control.SIZE_EXPAND_FILL)
 		label.set_h_size_flags(Control.SIZE_EXPAND_FILL)
 		button.set_h_size_flags(Control.SIZE_EXPAND_FILL)
-		
+	
+		button.set_script(button_script)
 		label.text = key
 		if controls[key] != null:
 			if globals.using_controller:
-				button.text = OS.get_joy_button_string(controls[key])
+				if key in ["up", "down", "left", "right"]:
+					button.text = Input.get_joy_axis_string(controls[key])
+				else:
+					button.text = Input.get_joy_button_string(controls[key])
+					button.set_face_button_name()
 			else:
 				button.text = OS.get_scancode_string(controls[key])
 		else:
 			button.text = 'Unassigned'
 		
-		button.set_script(button_script)
 		button.key = key
 		button.value = controls[key]
 		button.menu = self
 		button.toggle_mode = true
 		button.focus_mode = Control.FOCUS_NONE
-		if globals.using_controller and key in ["up", "down", "left", "right"]:
-			button.disabled = true  # Prevent player from reassigning joypad axis
+		if globals.using_controller:
+			button.set('custom_colors/font_color_disabled', Color('ffffff'))
+			button.disabled = true  # Prevent player from reassigning controller buttons
 		
 		var font = load('res://graphics/font.tres').duplicate()
 		font.size = 40
@@ -154,6 +172,8 @@ func change_bind(key, value):
 	$Tick.play()
 	controls[key] = value
 	for k in controls.keys():
+#		if globals.using_controller and k in ["up", "down", "left", "right"]:
+#			continue
 		if k != key and value != null and controls[k] == value:
 			if (key == 'dash' and k == 'float') or (key == 'float' and k == 'dash'):
 				continue

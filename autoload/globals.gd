@@ -38,11 +38,15 @@ func _ready():
 			joy_collected.append([])
 		for i in range(10):
 			cape.append('normal')
+		load_default_controls()
+		if len(Input.get_connected_joypads()) > 0:
+			using_controller = true
 		load_controls()
 		set_controls()
 		load_game()
 		set_time_of_day()
 		set_bg()
+		Events.emit_signal("input_method_changed")
 
 
 func on_level_completed(level_index):
@@ -105,7 +109,6 @@ func reset_game():
 	Events.emit_signal('quit_game')
 	
 func load_controls():
-	load_default_controls()
 	config_file = ConfigFile.new()
 	if config_file.load('user://keybinds.ini') == OK:
 		for key in config_file.get_section_keys('keyboard_controls'):
@@ -125,6 +128,7 @@ func load_controls():
 func load_default_controls():
 	for key in configurable_keys:
 		var actionlist = InputMap.get_action_list(key)
+		print(actionlist)
 		keyboard_controls[key] = actionlist[0].scancode
 		if key in ["up", "down", "left", "right"]:
 			controller_controls[key] = actionlist[1].axis
@@ -133,28 +137,28 @@ func load_default_controls():
 
 func set_controls():
 	if using_controller:
-		for key in controller_controls.keys():
-			var actionlist = InputMap.get_action_list(key)
-			if !actionlist.empty():
-				InputMap.action_erase_event(key, actionlist[0])
-			if controller_controls[key] != null:
-				if key in ["up", "down", "left", "right"]:
-					var new_value = InputEventJoypadMotion.new()
-					new_value.set_axis(controller_controls[key])
-					InputMap.action_add_event(key, new_value)
-				else:
-					var new_value = InputEventJoypadButton.new()
-					new_value.set_button_index(controller_controls[key])
-					InputMap.action_add_event(key, new_value)
-	else:
-		for key in keyboard_controls.keys():
-			var actionlist = InputMap.get_action_list(key)
-			if !actionlist.empty():
-				InputMap.action_erase_event(key, actionlist[0])
-			if keyboard_controls[key] != null:
-				var new_value = InputEventKey.new()
-				new_value.set_scancode(keyboard_controls[key])
-				InputMap.action_add_event(key, new_value)
+		return
+#		for key in controller_controls.keys():
+#			var actionlist = InputMap.get_action_list(key)
+#			if !actionlist.empty():
+#				InputMap.action_erase_event(key, actionlist[0])
+#			if controller_controls[key] != null:
+#				if key in ["up", "down", "left", "right"]:
+#					var new_value = InputEventJoypadMotion.new()
+#					new_value.set_axis(controller_controls[key])
+#					InputMap.action_add_event(key, new_value)
+#				else:
+#					var new_value = InputEventJoypadButton.new()
+#					new_value.set_button_index(controller_controls[key])
+#					InputMap.action_add_event(key, new_value)
+	for key in keyboard_controls.keys():
+		var actionlist = InputMap.get_action_list(key)
+		if !actionlist.empty():
+			InputMap.action_erase_event(key, actionlist[0])
+		if keyboard_controls[key] != null:
+			var new_value = InputEventKey.new()
+			new_value.set_scancode(keyboard_controls[key])
+			InputMap.action_add_event(key, new_value)
 
 func save_controls():
 	var controls

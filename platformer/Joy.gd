@@ -104,9 +104,9 @@ func _on_Hitbox_area_entered(area):
 	$Offset/Hitbox.set_deferred("monitoring", false)
 	Events.emit_signal("joy_collected", self.name)
 	$SoundEffect.play()
-	get_parent().call_deferred("remove_child", self)
-	
-	$"../../../Player/Cape/Joys".call_deferred("add_child", self)
+	if self != null:
+		get_parent().call_deferred("remove_child", self)
+		$"../../../Player/Cape/Joys".call_deferred("add_child", self)
 	if not already_collected:
 	#	$"../../../Player/Cape/Joys".cape_size += 1
 		globals.cape.append(texture_theme)
@@ -126,8 +126,9 @@ func follow(target_pos, min_dist, max_dist, speed):
 	
 	if mag <= max_dist and not is_on_cape:
 		if already_collected:
-			get_parent().call_deferred("remove_child", self)
-			self.queue_free()
+			if self != null:
+				get_parent().call_deferred("remove_child", self)
+				self.queue_free()
 		else:
 			self.is_on_cape = true
 			Events.emit_signal("joy_attached_to_cape")
