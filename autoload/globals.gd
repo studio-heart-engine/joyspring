@@ -164,14 +164,15 @@ func set_controls():
 					var new_value = InputEventJoypadButton.new()
 					new_value.set_button_index(controller_controls[key])
 					InputMap.action_add_event(key, new_value)
-	for key in keyboard_controls.keys():
-		var actionlist = InputMap.get_action_list(key)
-		if !actionlist.empty():
-			InputMap.action_erase_event(key, actionlist[0])
-		if keyboard_controls[key] != null:
-			var new_value = InputEventKey.new()
-			new_value.set_scancode(keyboard_controls[key])
-			InputMap.action_add_event(key, new_value)
+	else:
+		for key in keyboard_controls.keys():
+			var actionlist = InputMap.get_action_list(key)
+			if !actionlist.empty():
+				InputMap.action_erase_event(key, actionlist[0])
+			if keyboard_controls[key] != null:
+				var new_value = InputEventKey.new()
+				new_value.set_scancode(keyboard_controls[key])
+				InputMap.action_add_event(key, new_value)
 
 func save_controls():
 	var controls
