@@ -12,6 +12,7 @@ signal begin_cape_regrow
 signal swap_layers
 signal layer_swapped
 signal keybind_changed
+signal input_method_changed
 signal time_of_day_changed
 signal bg_num_changed
 

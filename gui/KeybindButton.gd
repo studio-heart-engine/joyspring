@@ -14,7 +14,13 @@ func _input(event):
 			menu.change_bind(key, value)
 			pressed = false
 			waiting_input = false
-		if event is InputEventMouseButton:
+		elif event is InputEventJoypadButton:
+			value = event.button_index
+			text = OS.get_joy_button_string(value)
+			menu.change_bind(key, value)
+			pressed = false
+			waiting_input = false
+		elif event is InputEventMouseButton:
 			if value != null:
 				text = OS.get_scancode_string(value)
 			else:

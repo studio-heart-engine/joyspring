@@ -2,7 +2,7 @@ extends CanvasLayer
 
 var menu = 'main'
 
-var keybinds
+var controls
 var buttons = {}
 
 onready var control_container = $MarginContainer/VBoxContainer/Controls
@@ -13,9 +13,14 @@ onready var volume_label = $MarginContainer/VBoxContainer/Buttons/Column2/VBoxCo
 var margincontainer2_showed = false
 
 func _ready():
+	Events.connect("input_method_changed", "reload_controls")
+	
 	var button_script = load('res://gui/KeybindButton.gd')
-	keybinds = globals.keybinds.duplicate()
-	for key in keybinds.keys():
+	if globals.using_controller:
+		controls = globals.controller_controls.duplicate()
+	else:
+		controls = globals.keyboard_controls.duplicate()
+	for key in controls.keys():
 #		var hbox = HBoxContainer.new()
 		var label = Label.new()
 		var button = Button.new()
@@ -25,17 +30,22 @@ func _ready():
 		button.set_h_size_flags(Control.SIZE_EXPAND_FILL)
 		
 		label.text = key
-		if keybinds[key] != null:
-			button.text = OS.get_scancode_string(keybinds[key])
+		if controls[key] != null:
+			if globals.using_controller:
+				button.text = OS.get_joy_button_string(controls[key])
+			else:
+				button.text = OS.get_scancode_string(controls[key])
 		else:
 			button.text = 'Unassigned'
 		
 		button.set_script(button_script)
 		button.key = key
-		button.value = keybinds[key]
+		button.value = controls[key]
 		button.menu = self
 		button.toggle_mode = true
 		button.focus_mode = Control.FOCUS_NONE
+		if globals.using_controller and key in ["up", "down", "left", "right"]:
+			button.disabled = true  # Prevent player from reassigning joypad axis
 		
 		var font = load('res://graphics/font.tres').duplicate()
 		font.size = 40
@@ -142,20 +152,35 @@ func _on_ControlsButton2_pressed():
 
 func change_bind(key, value):
 	$Tick.play()
-	keybinds[key] = value
-	for k in keybinds.keys():
-		if k != key and value != null and keybinds[k] == value:
+	controls[key] = value
+	for k in controls.keys():
+		if k != key and value != null and controls[k] == value:
 			if (key == 'dash' and k == 'float') or (key == 'float' and k == 'dash'):
 				continue
 			if (key == 'jump' and k == 'up') or (key == 'up' and k == 'jump'):
 				continue
-			keybinds[k] = null
+			controls[k] = null
 			buttons[k].text = 'Unassigned'
 
-	globals.keybinds = keybinds.duplicate()
+	globals.controls = controls.duplicate()
 	globals.set_controls()
 	globals.save_controls()
 	Events.emit_signal('keybind_changed')
+
+func reload_controls():
+	if globals.using_controller:
+		controls = globals.controller_controls.duplicate()
+	else:
+		controls = globals.keyboard_controls.duplicate()
+	for child in control_container.get_children():
+		if child is Label:
+			continue
+		if controls[child.key] != null:
+			if globals.using_controller:
+				child.text = OS.get_joy_button_string(controls[child.key])
+			else:
+				child.text = OS.get_scancode_string(controls[child.key])
+		child.value = controls[child.key]
 
 #func _on_MenuButton_pressed():
 #	$Click.play()

@@ -19,8 +19,10 @@ var bg_offset = 320  # Motion offset for parallax
 
 var configurable_keys = ['jump', 'up', 'down', 'left', 'right', 'dash', 'wall', 'float', 'swap']
 var config_file
-var keybinds = {}
+var keyboard_controls = {}
+var controller_controls = {}
 var unique_jump = false  # true if jump is different from up
+var using_controller = false
 
 var cape = []
 var joy_collected = []
@@ -31,6 +33,7 @@ func _ready():
 	if not Engine.editor_hint:
 		Events.connect('level_completed', self, 'on_level_completed')
 		Events.connect('joy_collected', self, 'on_joy_collected')
+		Input.connect("joy_connection_changed", self, "_on_joy_connection_changed")
 		for i in range(total_levels + 1):
 			joy_collected.append([])
 		for i in range(10):
@@ -105,40 +108,82 @@ func load_controls():
 	load_default_controls()
 	config_file = ConfigFile.new()
 	if config_file.load('user://keybinds.ini') == OK:
-		for key in config_file.get_section_keys('keybinds'):
-			var value = config_file.get_value('keybinds', key)
+		for key in config_file.get_section_keys('keyboard_controls'):
+			var value = config_file.get_value('keyboard_controls', key)
 			if str(value) != '':
-				keybinds[key] = value
+				keyboard_controls[key] = value
 			else:
-				keybinds[key] = null
+				keyboard_controls[key] = null
+		for key in config_file.get_section_keys('controller_controls'):
+			var value = config_file.get_value('controller_controls', key)
+			if str(value) != '':
+				controller_controls[key] = value
+			else:
+				controller_controls[key] = null
 	save_controls()
 
 func load_default_controls():
 	for key in configurable_keys:
 		var actionlist = InputMap.get_action_list(key)
-		keybinds[key] = actionlist[0].scancode
+		keyboard_controls[key] = actionlist[0].scancode
+		controller_controls[key] = actionlist[1].scancode
 
 func set_controls():
-	for key in keybinds.keys():
-		var actionlist = InputMap.get_action_list(key)
-		if !actionlist.empty():
-			InputMap.action_erase_event(key, actionlist[0])
-		if keybinds[key] != null:
-			var new_value = InputEventKey.new()
-			new_value.set_scancode(keybinds[key])
-			InputMap.action_add_event(key, new_value)
+	if using_controller:
+		for key in controller_controls.keys():
+			var actionlist = InputMap.get_action_list(key)
+			if !actionlist.empty():
+				InputMap.action_erase_event(key, actionlist[0])
+			if controller_controls[key] != null:
+				if key in ["up", "down", "left", "right"]:
+					var new_value = InputEventJoypadMotion.new()
+					new_value.set_axis(controller_controls[key])
+					InputMap.action_add_event(key, new_value)
+				else:
+					var new_value = InputEventJoypadButton.new()
+					new_value.set_button_index(controller_controls[key])
+					InputMap.action_add_event(key, new_value)
+	else:
+		for key in keyboard_controls.keys():
+			var actionlist = InputMap.get_action_list(key)
+			if !actionlist.empty():
+				InputMap.action_erase_event(key, actionlist[0])
+			if keyboard_controls[key] != null:
+				var new_value = InputEventKey.new()
+				new_value.set_scancode(keyboard_controls[key])
+				InputMap.action_add_event(key, new_value)
 
 func save_controls():
-	if keybinds['up'] != keybinds['jump']:
+	var controls
+	if using_controller:
+		controls = controller_controls
+	else:
+		controls = keyboard_controls
+	if controls['up'] != controls['jump']:
 		unique_jump = true
 	else:
 		unique_jump = false
-	for key in keybinds.keys():
-		if keybinds[key] != null:
-			config_file.set_value('keybinds', key, keybinds[key])
+	for key in keyboard_controls.keys():
+		if keyboard_controls[key] != null:
+			config_file.set_value('keyboard_controls', key, keyboard_controls[key])
 		else:
-			config_file.set_value('keybinds', key, '')
+			config_file.set_value('keyboard_controls', key, '')
+	for key in controller_controls.keys():
+		if controller_controls[key] != null:
+			config_file.set_value('controller_controls', key, controller_controls[key])
+		else:
+			config_file.set_value('controller_controls', key, '')
 	config_file.save('user://keybinds.ini')
+
+func _on_joy_connection_changed(device_id, connected):
+	if connected:
+		using_controller = true
+	else:
+		using_controller = false
+	print('reloading controls')
+	load_controls()
+	set_controls()
+	Events.emit_signal("input_method_changed")
 
 func set_time_of_day():
 	if curr_state.substr(0, 5) != 'Level':
