@@ -12,18 +12,6 @@ onready var volume_label = $MarginContainer/VBoxContainer/Buttons/Column2/VBoxCo
 
 var margincontainer2_showed = false
 
-var XBOX_BUTTONS = {
-	"Face Button Top": "Y",
-	"Face Button Right": "B",
-	"Face Button Left": "X",
-	"Face Button Bottom": "A"
-}
-var PS4_BUTTONS = {
-	"Face Button Top": "Triangle",
-	"Face Button Right": "Circle",
-	"Face Button Left": "Square",
-	"Face Button Bottom": "Cross"
-}
 
 func _ready():
 	Events.connect("input_method_changed", self, "reload_controls")

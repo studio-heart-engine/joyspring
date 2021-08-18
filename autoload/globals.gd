@@ -29,6 +29,21 @@ var joy_collected = []
 
 var master_volume = 3
 
+var XBOX_BUTTONS = {
+	"Face Button Top": "Y",
+	"Face Button Right": "B",
+	"Face Button Left": "X",
+	"Face Button Bottom": "A",
+	"R": "Right Trigger",
+	"L": "Left Trigger"
+}
+var PS4_BUTTONS = {
+	"Face Button Top": "Triangle",
+	"Face Button Right": "Circle",
+	"Face Button Left": "Square",
+	"Face Button Bottom": "Cross"
+}
+
 func _ready():
 	if not Engine.editor_hint:
 		Events.connect('level_completed', self, 'on_level_completed')

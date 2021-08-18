@@ -65,21 +65,6 @@ func update_text():
 			keybind_text = get_control_text("float")
 		self.text = template_text.replace('[float]', keybind_text)
 
-var XBOX_BUTTONS = {
-	"Face Button Top": "Y",
-	"Face Button Right": "B",
-	"Face Button Left": "X",
-	"Face Button Bottom": "A",
-	"R": "Right Trigger",
-	"L": "Left Trigger"
-}
-var PS4_BUTTONS = {
-	"Face Button Top": "Triangle",
-	"Face Button Right": "Circle",
-	"Face Button Left": "Square",
-	"Face Button Bottom": "Cross"
-}
-
 func get_control_text(key):
 	if globals.using_controller:
 		if key in ["up", "down", "left", "right"]:
@@ -87,8 +72,8 @@ func get_control_text(key):
 		else:
 			var ret = Input.get_joy_button_string(globals.controller_controls[key])
 			if Input.get_joy_name(0) == 'XInput Gamepad':
-				if ret in XBOX_BUTTONS.keys():
-					ret = XBOX_BUTTONS[ret]
+				if ret in globals.XBOX_BUTTONS.keys():
+					ret = globals.XBOX_BUTTONS[ret]
 			return ret
 	else:
 		return OS.get_scancode_string(globals.keyboard_controls[key])

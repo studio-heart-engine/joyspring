@@ -6,18 +6,6 @@ var menu
 
 var waiting_input = false
 
-var XBOX_BUTTONS = {
-	"Face Button Top": "Y",
-	"Face Button Right": "B",
-	"Face Button Left": "X",
-	"Face Button Bottom": "A"
-}
-var PS4_BUTTONS = {
-	"Face Button Top": "Triangle",
-	"Face Button Right": "Circle",
-	"Face Button Left": "Square",
-	"Face Button Bottom": "Cross"
-}
 
 func _input(event):
 	if waiting_input:
@@ -54,5 +42,5 @@ func _toggled(button_pressed):
 
 func set_face_button_name():
 	if Input.get_joy_name(0) == 'XInput Gamepad':
-		if text in XBOX_BUTTONS.keys():
-			text = XBOX_BUTTONS[text]
+		if text in globals.XBOX_BUTTONS.keys():
+			text = globals.XBOX_BUTTONS[text]
