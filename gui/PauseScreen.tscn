@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://gui/PauseScreen.gd" type="Script" id=1]
 [ext_resource path="res://graphics/font.tres" type="DynamicFont" id=2]
@@ -7,6 +7,10 @@
 [ext_resource path="res://platformer/levelSnapshots/level_1.png" type="Texture" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="DynamicFont" id=4]
+size = 36
+font_data = ExtResource( 4 )
 
 [sub_resource type="Animation" id=2]
 resource_name = "show"
@@ -64,17 +68,10 @@ margin_bottom = 900.0
 custom_constants/separation = 20
 alignment = 1
 
-[node name="Controls" type="GridContainer" parent="MarginContainer/VBoxContainer"]
-margin_top = 332.0
-margin_right = 1600.0
-margin_bottom = 332.0
-custom_constants/hseparation = 70
-columns = 2
-
 [node name="Buttons" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-margin_top = 352.0
+margin_top = 250.0
 margin_right = 1600.0
-margin_bottom = 484.0
+margin_bottom = 382.0
 
 [node name="Column1" type="MarginContainer" parent="MarginContainer/VBoxContainer/Buttons"]
 margin_right = 798.0
@@ -226,9 +223,9 @@ flat = true
 
 [node name="QuitButton" type="Button" parent="MarginContainer/VBoxContainer"]
 margin_left = 768.0
-margin_top = 504.0
+margin_top = 402.0
 margin_right = 832.0
-margin_bottom = 568.0
+margin_bottom = 466.0
 size_flags_horizontal = 4
 custom_styles/focus = SubResource( 1 )
 custom_fonts/font = ExtResource( 2 )
@@ -240,6 +237,50 @@ flat = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 486.0
+margin_right = 1600.0
+margin_bottom = 650.0
+
+[node name="Controls" type="GridContainer" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+margin_right = 1600.0
+custom_constants/hseparation = 70
+columns = 2
+
+[node name="Padding" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+margin_top = 4.0
+margin_right = 1600.0
+margin_bottom = 48.0
+custom_fonts/font = SubResource( 4 )
+custom_colors/font_color = Color( 1, 1, 1, 0.784314 )
+align = 1
+
+[node name="ResetControlsButton" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+margin_left = 707.0
+margin_top = 52.0
+margin_right = 893.0
+margin_bottom = 116.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.286275, 0.286275, 0.286275, 1 )
+custom_colors/font_color_pressed = Color( 0.168627, 0.168627, 0.168627, 1 )
+text = "Reset Controls"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+margin_top = 120.0
+margin_right = 1600.0
+margin_bottom = 164.0
+custom_fonts/font = SubResource( 4 )
+custom_colors/font_color = Color( 1, 1, 1, 0.470588 )
+align = 1
 
 [node name="MarginContainer2" type="MarginContainer" parent="."]
 margin_left = 30.0
@@ -401,6 +442,7 @@ pitch_scale = 3.0
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/Volume/VolumeDownButton" to="." method="_on_VolumeDownButton_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/Volume/VolumeUpButton" to="." method="_on_VolumeUpButton_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/VBoxContainer/ResetControlsButton" to="." method="_on_ResetControlsButton_pressed"]
 [connection signal="pressed" from="MarginContainer2/VBoxContainer/SettingsButton" to="." method="_on_SettingsButton_pressed"]
 [connection signal="pressed" from="MarginContainer2/VBoxContainer/ControlsButton" to="." method="_on_ControlsButton2_pressed"]
 [connection signal="pressed" from="MarginContainer4/VBoxContainer/HBoxContainer/LevelDownButton" to="." method="_on_LevelDownButton_pressed"]

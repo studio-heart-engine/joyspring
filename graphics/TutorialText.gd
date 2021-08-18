@@ -68,7 +68,8 @@ func update_text():
 func get_control_text(key):
 	if globals.using_controller:
 		if key in ["up", "down", "left", "right"]:
-			return Input.get_joy_axis_string(globals.controller_controls[key])
+			return "Left Joystick " + key.capitalize()
+#			return Input.get_joy_axis_string(globals.controller_controls[key])
 		else:
 			var ret = Input.get_joy_button_string(globals.controller_controls[key])
 			if Input.get_joy_name(0) == 'XInput Gamepad':

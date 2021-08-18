@@ -5,7 +5,7 @@ var menu = 'main'
 var controls
 var buttons = {}
 
-onready var control_container = $MarginContainer/VBoxContainer/Controls
+onready var control_container = $MarginContainer/VBoxContainer/VBoxContainer/Controls
 onready var button_container = $MarginContainer/VBoxContainer/Buttons
 
 onready var volume_label = $MarginContainer/VBoxContainer/Buttons/Column2/VBoxContainer/Volume/RichTextLabel
@@ -49,9 +49,9 @@ func _ready():
 		button.menu = self
 		button.toggle_mode = true
 		button.focus_mode = Control.FOCUS_NONE
-		if globals.using_controller:
+		if globals.using_controller and key in ["up", "down", "left", "right"]:
 			button.set('custom_colors/font_color_disabled', Color('ffffff'))
-			button.disabled = true  # Prevent player from reassigning controller buttons
+			button.disabled = true  # Prevent player from reassigning joystick
 		
 		var font = load('res://graphics/font.tres').duplicate()
 		font.size = 40
@@ -79,7 +79,7 @@ func _ready():
 	
 	button_container.show()
 	$MarginContainer/VBoxContainer/QuitButton.show()
-	control_container.hide()
+	$MarginContainer/VBoxContainer/VBoxContainer.hide()
 	$MarginContainer2.hide()
 	$MarginContainer3.hide()
 	$MarginContainer4.hide()
@@ -95,6 +95,8 @@ func _ready():
 
 	volume_label.set_bbcode("[color=#ffce43]" + "Volume".left(globals.master_volume) + "[/color]" + "Volume".right(globals.master_volume))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear2db(float(globals.master_volume) / 9))
+	
+	reload_controls()
 
 
 func _process(delta):
@@ -116,7 +118,7 @@ func _on_SettingsButton_pressed():
 			menu = 'main'
 			button_container.show()
 			$MarginContainer/VBoxContainer/QuitButton.show()
-			control_container.hide()
+			$MarginContainer/VBoxContainer/VBoxContainer.hide()
 			$MarginContainer2.hide()
 			$MarginContainer3.show()
 			$MarginContainer4.hide()
@@ -145,7 +147,7 @@ func _on_ControlsButton_pressed():
 	button_container.hide()
 	$MarginContainer/VBoxContainer/QuitButton.hide()
 	$MarginContainer2.hide()
-	control_container.show()
+	$MarginContainer/VBoxContainer/VBoxContainer.show()
 	$MarginContainer3.hide()
 	$MarginContainer4.hide()
 #	$MarginContainer/VBoxContainer/HBoxContainer.hide()
@@ -160,8 +162,8 @@ func change_bind(key, value):
 	$Tick.play()
 	controls[key] = value
 	for k in controls.keys():
-#		if globals.using_controller and k in ["up", "down", "left", "right"]:
-#			continue
+		if globals.using_controller and k in ["up", "down", "left", "right"]:
+			continue
 		if k != key and value != null and controls[k] == value:
 			if (key == 'dash' and k == 'float') or (key == 'float' and k == 'dash'):
 				continue
@@ -179,6 +181,8 @@ func change_bind(key, value):
 	Events.emit_signal('keybind_changed')
 
 func reload_controls():
+	$MarginContainer/VBoxContainer/VBoxContainer/Label.text = "Input Method: " + \
+		("Controller" if globals.using_controller else "Keyboard")
 	if globals.using_controller:
 		controls = globals.controller_controls.duplicate()
 	else:
@@ -300,3 +304,9 @@ func _on_LevelButton_pressed():
 func update_level():
 	$MarginContainer4/VBoxContainer/HBoxContainer/LevelButton.text = str(cur_level).pad_zeros(2)
 	$MarginContainer4/VBoxContainer/HBoxContainer2/TextureRect.texture = load('res://platformer/levelSnapshots/level_' + str(cur_level) + '.png')
+
+
+func _on_ResetControlsButton_pressed():
+	globals.load_default_controls()
+	globals.set_controls()
+	Events.emit_signal("keybind_changed")

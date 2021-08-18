@@ -6,6 +6,8 @@ var menu
 
 var waiting_input = false
 
+func _ready():
+	Events.connect("keybind_changed", self, "reload_value")
 
 func _input(event):
 	if waiting_input:
@@ -15,15 +17,14 @@ func _input(event):
 			menu.change_bind(key, value)
 			pressed = false
 			waiting_input = false
-#		elif event is InputEventJoypadButton:
-#			value = event.button_index
-#			text = Input.get_joy_button_string(value)
-#			set_face_button_name()
-#			menu.change_bind(key, value)
-#			pressed = false
-#			waiting_input = false
-#		elif event is InputEventMouseButton or event is InputEventJoypadMotion:
-		elif event is InputEventMouseButton:
+		elif event is InputEventJoypadButton:
+			value = event.button_index
+			text = Input.get_joy_button_string(value)
+			set_face_button_name()
+			menu.change_bind(key, value)
+			pressed = false
+			waiting_input = false
+		elif event is InputEventMouseButton or event is InputEventJoypadMotion:
 			if value != null:
 				if globals.using_controller:
 					text = Input.get_joy_button_string(value)
@@ -44,3 +45,20 @@ func set_face_button_name():
 	if Input.get_joy_name(0) == 'XInput Gamepad':
 		if text in globals.XBOX_BUTTONS.keys():
 			text = globals.XBOX_BUTTONS[text]
+
+func reload_value():
+	if text.left(13) == 'Left Joystick':
+		return
+	if globals.using_controller:
+		value = globals.controller_controls[key]
+		if value == null:
+			text = 'Unassigned'
+		else:
+			text = Input.get_joy_button_string(value)
+			set_face_button_name()
+	else:
+		value = globals.keyboard_controls[key]
+		if value == null:
+			text = 'Unassigned'
+		else:
+			text = OS.get_scancode_string(value)
