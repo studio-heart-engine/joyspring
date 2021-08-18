@@ -19,6 +19,7 @@ func get_locked():
 	return locked
 
 func _ready():
+	return
 	self.locked = true
 	set_locked(-1)
 	level_index = int(name.right(9))

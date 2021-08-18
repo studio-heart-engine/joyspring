@@ -1,14 +1,8 @@
 tool
 extends Node2D
 
-#export (Texture) var texture
 export (String) var shape
 
-#var possible_colors = [
-#	"#f82f68",
-#	"#f82fa2",
-#	"#e841cf"
-#]
 var possible_colors = [['#c97d54', '#c96254', '#d24b61', '#c9377b'],
 					   ['#aee64d', '#83d464', '#57be7c', '#5aa98c'],
 					   ['#71d8cf', '#5fc0c9', '#4ea1be', '#4a89bb']]

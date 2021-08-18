@@ -13,6 +13,8 @@ onready var cape_joys
 
 var sound_effects = []
 
+var Joy = preload('res://platformer/Joy.tscn')
+
 func _ready():
 	cape_shrink_timer.connect("timeout", self, "shrink_cape")
 	cape_shrink_timer.set_wait_time(CAPE_SHRINK_TIME_PER_JOY)
@@ -53,7 +55,7 @@ func regrow_cape():
 	if n == len(globals.cape):
 		cape_regrow_timer.stop()
 	else:
-		var joy = load('res://platformer/Joy.tscn').instance()
+		var joy = Joy.instance()
 		cape_joys.add_child(joy)
 		joy.position = owner.position
 #		if globals.cape[n] != 'normal':

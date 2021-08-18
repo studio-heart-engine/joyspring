@@ -105,8 +105,9 @@ func _on_Hitbox_area_entered(area):
 	Events.emit_signal("joy_collected", self.name)
 	$SoundEffect.play()
 	if self != null:
-		get_parent().call_deferred("remove_child", self)
-		$"../../../Player/Cape/Joys".call_deferred("add_child", self)
+		call_deferred("reparent")
+#		get_parent().call_deferred("remove_child", self)
+#		new_parent.call_deferred("add_child", self)
 	if not already_collected:
 	#	$"../../../Player/Cape/Joys".cape_size += 1
 		globals.cape.append(texture_theme)
@@ -149,3 +150,8 @@ func hide_light():
 
 func set_collision(val):
 	$Offset/Hitbox/CollisionShape2D.disabled = (not val)
+
+func reparent():
+	var new_parent = $"../../../Player/Cape/Joys"
+	get_parent().remove_child(self)
+	new_parent.add_child(self)
