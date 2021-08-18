@@ -188,10 +188,14 @@ func reload_controls():
 			continue
 		if controls[child.key] != null:
 			if globals.using_controller:
-				child.text = OS.get_joy_button_string(controls[child.key])
+				child.text = Input.get_joy_button_string(controls[child.key])
+				if Input.get_joy_name(0) == 'XInput Gamepad':
+					if child.text in globals.XBOX_BUTTONS.keys():
+						child.text = globals.XBOX_BUTTONS[child.text]
 			else:
 				child.text = OS.get_scancode_string(controls[child.key])
 		child.value = controls[child.key]
+	
 
 #func _on_MenuButton_pressed():
 #	$Click.play()

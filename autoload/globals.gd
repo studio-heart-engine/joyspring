@@ -143,7 +143,6 @@ func load_controls():
 func load_default_controls():
 	for key in configurable_keys:
 		var actionlist = InputMap.get_action_list(key)
-		print(actionlist)
 		keyboard_controls[key] = actionlist[0].scancode
 		if key in ["up", "down", "left", "right"]:
 			controller_controls[key] = actionlist[1].axis
@@ -152,20 +151,19 @@ func load_default_controls():
 
 func set_controls():
 	if using_controller:
-		return
-#		for key in controller_controls.keys():
-#			var actionlist = InputMap.get_action_list(key)
-#			if !actionlist.empty():
-#				InputMap.action_erase_event(key, actionlist[0])
-#			if controller_controls[key] != null:
-#				if key in ["up", "down", "left", "right"]:
-#					var new_value = InputEventJoypadMotion.new()
-#					new_value.set_axis(controller_controls[key])
-#					InputMap.action_add_event(key, new_value)
-#				else:
-#					var new_value = InputEventJoypadButton.new()
-#					new_value.set_button_index(controller_controls[key])
-#					InputMap.action_add_event(key, new_value)
+		for key in controller_controls.keys():
+			var actionlist = InputMap.get_action_list(key)
+			if !actionlist.empty():
+				InputMap.action_erase_event(key, actionlist[0])
+			if controller_controls[key] != null:
+				if key in ["up", "down", "left", "right"]:
+					var new_value = InputEventJoypadMotion.new()
+					new_value.set_axis(controller_controls[key])
+					InputMap.action_add_event(key, new_value)
+				else:
+					var new_value = InputEventJoypadButton.new()
+					new_value.set_button_index(controller_controls[key])
+					InputMap.action_add_event(key, new_value)
 	for key in keyboard_controls.keys():
 		var actionlist = InputMap.get_action_list(key)
 		if !actionlist.empty():
