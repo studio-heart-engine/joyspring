@@ -13,7 +13,7 @@ onready var volume_label = $MarginContainer/VBoxContainer/Buttons/Column2/VBoxCo
 var margincontainer2_showed = false
 
 func _ready():
-	Events.connect("input_method_changed", "reload_controls")
+	Events.connect("input_method_changed", self, "reload_controls")
 	
 	var button_script = load('res://gui/KeybindButton.gd')
 	if globals.using_controller:
@@ -162,7 +162,10 @@ func change_bind(key, value):
 			controls[k] = null
 			buttons[k].text = 'Unassigned'
 
-	globals.controls = controls.duplicate()
+	if globals.using_controller:
+		globals.controller_controls = controls.duplicate()
+	else:
+		globals.keyboard_controls = controls.duplicate()
 	globals.set_controls()
 	globals.save_controls()
 	Events.emit_signal('keybind_changed')

@@ -126,7 +126,10 @@ func load_default_controls():
 	for key in configurable_keys:
 		var actionlist = InputMap.get_action_list(key)
 		keyboard_controls[key] = actionlist[0].scancode
-		controller_controls[key] = actionlist[1].scancode
+		if key in ["up", "down", "left", "right"]:
+			controller_controls[key] = actionlist[1].axis
+		else:
+			controller_controls[key] = actionlist[1].button_index
 
 func set_controls():
 	if using_controller:
