@@ -10,7 +10,7 @@ func _ready():
 		play_ending()
 
 func _input(event):
-	if event.is_action_pressed("ui_select"):
+	if event is InputEventKey and event.pressed:
 		start()
 
 func _on_AnimationPlayer_animation_finished(anim_name):
