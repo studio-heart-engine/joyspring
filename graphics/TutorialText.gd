@@ -72,9 +72,6 @@ func get_control_text(key):
 #			return Input.get_joy_axis_string(globals.controller_controls[key])
 		else:
 			var ret = Input.get_joy_button_string(globals.controller_controls[key])
-			if Input.get_joy_name(0) == 'XInput Gamepad':
-				if ret in globals.XBOX_BUTTONS.keys():
-					ret = globals.XBOX_BUTTONS[ret]
-			return ret
+			return globals.update_joy_button_name(ret)
 	else:
 		return OS.get_scancode_string(globals.keyboard_controls[key])

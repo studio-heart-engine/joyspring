@@ -224,6 +224,14 @@ func _on_joy_connection_changed(device_id, connected):
 	set_controls()
 	Events.emit_signal("input_method_changed")
 
+func update_joy_button_name(button_name):
+	if Input.get_joy_name(0) == 'XInput Gamepad':
+		if button_name in XBOX_BUTTONS.keys():
+			return XBOX_BUTTONS[button_name]
+	if Input.get_joy_name(0) == 'PS4 Controller':
+		if button_name in PS4_BUTTONS.keys():
+			return PS4_BUTTONS[button_name]
+
 func set_time_of_day():
 	if curr_state.substr(0, 5) != 'Level':
 		return

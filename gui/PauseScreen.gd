@@ -195,9 +195,7 @@ func reload_controls():
 		if controls[child.key] != null:
 			if globals.using_controller:
 				child.text = Input.get_joy_button_string(controls[child.key])
-				if Input.get_joy_name(0) == 'XInput Gamepad':
-					if child.text in globals.XBOX_BUTTONS.keys():
-						child.text = globals.XBOX_BUTTONS[child.text]
+				child.text = globals.update_joy_button_name(child.text)
 			else:
 				child.text = OS.get_scancode_string(controls[child.key])
 		child.value = controls[child.key]

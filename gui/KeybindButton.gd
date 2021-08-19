@@ -42,9 +42,7 @@ func _toggled(button_pressed):
 		set_text('Press Any Key')
 
 func set_face_button_name():
-	if Input.get_joy_name(0) == 'XInput Gamepad':
-		if text in globals.XBOX_BUTTONS.keys():
-			text = globals.XBOX_BUTTONS[text]
+	text = globals.update_joy_button_name(text)
 
 func reload_value():
 	if text.left(13) == 'Left Joystick':
