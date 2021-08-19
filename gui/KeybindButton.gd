@@ -11,13 +11,13 @@ func _ready():
 
 func _input(event):
 	if waiting_input:
-		if event is InputEventKey:
+		if event is InputEventKey and not globals.using_controller:
 			value = event.scancode
 			text = OS.get_scancode_string(value)
 			menu.change_bind(key, value)
 			pressed = false
 			waiting_input = false
-		elif event is InputEventJoypadButton:
+		elif event is InputEventJoypadButton and globals.using_controls:
 			value = event.button_index
 			text = Input.get_joy_button_string(value)
 			set_face_button_name()

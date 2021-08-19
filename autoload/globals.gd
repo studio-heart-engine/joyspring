@@ -40,7 +40,9 @@ var PS4_BUTTONS = {
 	"Face Button Top": "Triangle",
 	"Face Button Right": "Circle",
 	"Face Button Left": "Square",
-	"Face Button Bottom": "Cross"
+	"Face Button Bottom": "Cross",
+	"R": "Right Trigger",
+	"L": "Left Trigger"
 }
 var joystick_axis = {
 	"up": 1,
@@ -74,6 +76,7 @@ func _ready():
 				controller_controls[key] = "IMMUTABLE"
 			else:
 				controller_controls[key] = actionlist[1].button_index
+		
 		save_controls('user://keybinds_default.ini')
 		load_default_controls()
 		load_controls()
@@ -231,6 +234,7 @@ func update_joy_button_name(button_name):
 	if Input.get_joy_name(0) == 'PS4 Controller':
 		if button_name in PS4_BUTTONS.keys():
 			return PS4_BUTTONS[button_name]
+	return button_name
 
 func set_time_of_day():
 	if curr_state.substr(0, 5) != 'Level':
