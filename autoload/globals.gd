@@ -18,10 +18,12 @@ var bg_num_start = [0, 5, 10, 19, 28, 39, 44]
 var bg_offset = 320  # Motion offset for parallax
 
 var configurable_keys = ['jump', 'up', 'down', 'left', 'right', 'dash', 'wall', 'float', 'swap']
+var config_file
 var keyboard_controls = {}
 var controller_controls = {}
 var unique_jump = false  # true if jump is different from up
 var using_controller = false
+var joypad_id = null
 
 var cape = []
 var joy_collected = []
@@ -69,15 +71,6 @@ func _ready():
 		if len(Input.get_connected_joypads()) > 0:
 			using_controller = true
 
-		for key in configurable_keys:
-			var actionlist = InputMap.get_action_list(key)
-			keyboard_controls[key] = actionlist[0].scancode
-			if key in ["up", "down", "left", "right"]:
-				controller_controls[key] = "IMMUTABLE"
-			else:
-				controller_controls[key] = actionlist[1].button_index
-		
-		save_controls('user://keybinds_default.ini')
 		load_default_controls()
 		load_controls()
 		set_controls()
@@ -147,7 +140,7 @@ func reset_game():
 	Events.emit_signal('quit_game')
 	
 func load_controls(config_filepath='user://keybinds.ini'):
-	var config_file = ConfigFile.new()
+	config_file = ConfigFile.new()
 	if config_file.load(config_filepath) == OK:
 		for key in config_file.get_section_keys('keyboard_controls'):
 			var value = config_file.get_value('keyboard_controls', key)
@@ -167,7 +160,14 @@ func load_controls(config_filepath='user://keybinds.ini'):
 	save_controls()
 
 func load_default_controls():
-	load_controls('user://keybinds_default.ini')
+#	for key in configurable_keys:
+#		var actionlist = InputMap.get_action_list(key)
+#		keyboard_controls[key] = actionlist[0].scancode
+#		if key in ["up", "down", "left", "right"]:
+#			controller_controls[key] = "IMMUTABLE"
+#		else:
+#			controller_controls[key] = actionlist[1].button_index
+	load_controls('res://keybinds_default.ini')
 
 func set_controls():
 	if using_controller:
@@ -204,21 +204,22 @@ func save_controls(config_filepath='user://keybinds.ini'):
 			unique_jump = true
 		else:
 			unique_jump = false
-	var config_file = ConfigFile.new()
-	if config_file.load(config_filepath) == OK:
-		for key in keyboard_controls.keys():
-			if keyboard_controls[key] != null:
-				config_file.set_value('keyboard_controls', key, keyboard_controls[key])
-			else:
-				config_file.set_value('keyboard_controls', key, '')
-		for key in controller_controls.keys():
-			if controller_controls[key] != null:
-				config_file.set_value('controller_controls', key, controller_controls[key])
-			else:
-				config_file.set_value('controller_controls', key, '')
-		config_file.save(config_filepath)
+#	config_file = ConfigFile.new()
+#	if config_file.load(config_filepath) == OK:
+	for key in keyboard_controls.keys():
+		if keyboard_controls[key] != null:
+			config_file.set_value('keyboard_controls', key, keyboard_controls[key])
+		else:
+			config_file.set_value('keyboard_controls', key, '')
+	for key in controller_controls.keys():
+		if controller_controls[key] != null:
+			config_file.set_value('controller_controls', key, controller_controls[key])
+		else:
+			config_file.set_value('controller_controls', key, '')
+	config_file.save(config_filepath)
 
 func _on_joy_connection_changed(device_id, connected):
+	joypad_id = device_id
 	if connected:
 		using_controller = true
 	else:
@@ -228,10 +229,10 @@ func _on_joy_connection_changed(device_id, connected):
 	Events.emit_signal("input_method_changed")
 
 func update_joy_button_name(button_name):
-	if Input.get_joy_name(0) == 'XInput Gamepad':
+	if Input.get_joy_name(joypad_id) == 'XInput Gamepad':
 		if button_name in XBOX_BUTTONS.keys():
 			return XBOX_BUTTONS[button_name]
-	if Input.get_joy_name(0) == 'PS4 Controller':
+	if Input.get_joy_name(joypad_id) == 'PS4 Controller':
 		if button_name in PS4_BUTTONS.keys():
 			return PS4_BUTTONS[button_name]
 	return button_name
