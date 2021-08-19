@@ -193,6 +193,7 @@ func reload_controls():
 		if child.key in ["up", "down", "left", "right"]:
 			if globals.using_controller:
 				child.text = "Left Joystick " + child.key.capitalize()
+				child.set('custom_colors/font_color_disabled', Color('ffffff'))
 				child.disabled = true
 				continue
 			else:
@@ -204,8 +205,7 @@ func reload_controls():
 			else:
 				child.text = OS.get_scancode_string(controls[child.key])
 		child.value = controls[child.key]
-	
-	
+
 
 #func _on_MenuButton_pressed():
 #	$Click.play()
