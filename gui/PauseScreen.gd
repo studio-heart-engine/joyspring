@@ -35,7 +35,7 @@ func _ready():
 		if controls[key] != null:
 			if globals.using_controller:
 				if key in ["up", "down", "left", "right"]:
-					button.text = Input.get_joy_axis_string(controls[key])
+					button.text = "Left Joystick " + key.capitalize()
 				else:
 					button.text = Input.get_joy_button_string(controls[key])
 					button.set_face_button_name()
@@ -189,6 +189,8 @@ func reload_controls():
 		controls = globals.keyboard_controls.duplicate()
 	for child in control_container.get_children():
 		if child is Label:
+			continue
+		if child.key in ["up", "down", "left", "right"]:
 			continue
 		if controls[child.key] != null:
 			if globals.using_controller:
