@@ -17,7 +17,7 @@ func _input(event):
 			menu.change_bind(key, value)
 			pressed = false
 			waiting_input = false
-		elif event is InputEventJoypadButton and globals.using_controls:
+		elif event is InputEventJoypadButton and globals.using_controller:
 			value = event.button_index
 			text = Input.get_joy_button_string(value)
 			set_face_button_name()
@@ -45,9 +45,9 @@ func set_face_button_name():
 	text = globals.update_joy_button_name(text)
 
 func reload_value():
-	if text.left(13) == 'Left Joystick':
-		return
 	if globals.using_controller:
+		if text.left(13) == 'Left Joystick':
+			return
 		value = globals.controller_controls[key]
 		if value == null:
 			text = 'Unassigned'

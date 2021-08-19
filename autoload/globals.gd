@@ -23,7 +23,7 @@ var keyboard_controls = {}
 var controller_controls = {}
 var unique_jump = false  # true if jump is different from up
 var using_controller = false
-var joypad_id = null
+var joypad_id = 0
 
 var cape = []
 var joy_collected = []
