@@ -10,7 +10,7 @@ func _ready():
 		play_ending()
 
 func _input(event):
-	if event is InputEventKey and event.pressed:
+	if (event is InputEventKey or event is InputEventJoypadButton) and event.pressed:
 		start()
 
 func _on_AnimationPlayer_animation_finished(anim_name):
