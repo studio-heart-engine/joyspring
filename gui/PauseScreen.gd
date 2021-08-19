@@ -190,9 +190,13 @@ func reload_controls():
 	for child in control_container.get_children():
 		if child is Label:
 			continue
-		if globals.using_controller:
-			if child.key in ["up", "down", "left", "right"]:
+		if child.key in ["up", "down", "left", "right"]:
+			if globals.using_controller:
 				child.text = "Left Joystick " + child.key.capitalize()
+				child.disabled = true
+				continue
+			else:
+				child.disabled = false
 		if controls[child.key] != null:
 			if globals.using_controller:
 				child.text = Input.get_joy_button_string(controls[child.key])
@@ -200,6 +204,7 @@ func reload_controls():
 			else:
 				child.text = OS.get_scancode_string(controls[child.key])
 		child.value = controls[child.key]
+	
 	
 
 #func _on_MenuButton_pressed():
