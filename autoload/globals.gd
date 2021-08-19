@@ -194,12 +194,13 @@ func save_controls(config_filepath='user://keybinds.ini'):
 	var controls
 	if using_controller:
 		controls = controller_controls
-	else:
-		controls = keyboard_controls
-	if controls['up'] != controls['jump']:
 		unique_jump = true
 	else:
-		unique_jump = false
+		controls = keyboard_controls
+		if controls['up'] != controls['jump']:
+			unique_jump = true
+		else:
+			unique_jump = false
 	var config_file = ConfigFile.new()
 	if config_file.load(config_filepath) == OK:
 		for key in keyboard_controls.keys():
