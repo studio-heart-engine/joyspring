@@ -10,7 +10,7 @@ func _ready():
 
 
 func _input(event):
-	if event.is_action_pressed("ui_select"):
+	if (event is InputEventKey or event is InputEventJoypadButton) and event.pressed:
 		globals.curr_state = 'EndTransition'
 		begin()
 
