@@ -157,6 +157,13 @@ func load_controls(config_filepath='user://keybinds.ini'):
 					controller_controls[key] = value
 			else:
 				controller_controls[key] = null
+	if using_controller:
+		unique_jump = true
+	else:
+		if keyboard_controls['up'] != keyboard_controls['jump']:
+			unique_jump = true
+		else:
+			unique_jump = false
 
 func load_default_controls():
 #	for key in configurable_keys:
