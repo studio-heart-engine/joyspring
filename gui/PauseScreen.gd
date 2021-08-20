@@ -315,4 +315,5 @@ func update_level():
 func _on_ResetControlsButton_pressed():
 	globals.load_default_controls()
 	globals.set_controls()
+	globals.save_controls()
 	Events.emit_signal("keybind_changed")
