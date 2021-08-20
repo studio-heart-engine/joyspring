@@ -157,7 +157,6 @@ func load_controls(config_filepath='user://keybinds.ini'):
 					controller_controls[key] = value
 			else:
 				controller_controls[key] = null
-	save_controls()
 
 func load_default_controls():
 #	for key in configurable_keys:
